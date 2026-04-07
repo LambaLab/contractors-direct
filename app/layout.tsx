@@ -22,7 +22,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Contractors Direct',
     description: 'AI-powered renovation management for the UAE. Get a real quote in minutes.',
-    images: [{ url: '/og-image.png', width: 1200, height: 630 }],
+    images: [{ url: '/og-image.png', width: 1080, height: 1080 }],
     type: 'website',
   },
   twitter: {
