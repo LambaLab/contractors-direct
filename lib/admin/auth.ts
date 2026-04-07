@@ -3,7 +3,12 @@ import { createServerClient } from '@supabase/ssr'
 import { cookies } from 'next/headers'
 import type { Database } from '@/lib/supabase/types'
 
-const SUPER_ADMIN_EMAIL = 'nagi@contractorsdirect.com'
+const SUPER_ADMIN_EMAILS = [
+  'nagisalloum@gmail.com',
+  'david@contractors.direct',
+  'matt@contractors.direct',
+  'barry@contractors.direct',
+]
 
 /**
  * Check if an email is an authorized admin.
@@ -11,7 +16,7 @@ const SUPER_ADMIN_EMAIL = 'nagi@contractorsdirect.com'
  */
 export async function isAdminEmail(email: string): Promise<boolean> {
   const normalized = email.toLowerCase()
-  if (normalized === SUPER_ADMIN_EMAIL) return true
+  if (SUPER_ADMIN_EMAILS.includes(normalized)) return true
 
   try {
     const supabase = createServiceClient()
@@ -32,7 +37,7 @@ export async function isAdminEmail(email: string): Promise<boolean> {
  */
 export async function getAdminRole(email: string): Promise<'super_admin' | 'admin' | null> {
   const normalized = email.toLowerCase()
-  if (normalized === SUPER_ADMIN_EMAIL) return 'super_admin'
+  if (SUPER_ADMIN_EMAILS.includes(normalized)) return 'super_admin'
 
   try {
     const supabase = createServiceClient()
