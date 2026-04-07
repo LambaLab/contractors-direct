@@ -22,13 +22,8 @@ export async function GET() {
     return NextResponse.json({ error: error.message }, { status: 500 })
   }
 
-  // Filter: only leads with messages or non-zero confidence
+  // Return all leads, stripping the joined chat_messages
   const filtered = (data ?? [])
-    .filter((p: any) => {
-      const hasMessages = Array.isArray(p.chat_messages) && p.chat_messages.length > 0
-      const hasConfidence = p.confidence_score > 0
-      return hasMessages || hasConfidence
-    })
     .map(({ chat_messages: _, ...lead }: any) => lead)
 
   return NextResponse.json(filtered)

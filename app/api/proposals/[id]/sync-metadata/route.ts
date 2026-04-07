@@ -35,7 +35,11 @@ export async function POST(
   if (typeof confidenceScore === 'number') update.confidence_score = confidenceScore
   if (Array.isArray(scope)) update.scope = scope
   if (typeof brief === 'string' && brief) update.brief = brief
-  if (metadata && typeof metadata === 'object') update.metadata = metadata
+  if (metadata && typeof metadata === 'object') {
+    update.metadata = metadata
+    if (metadata.projectName) update.project_name = metadata.projectName
+    if (metadata.projectOverview) update.project_overview = metadata.projectOverview
+  }
 
   if (Object.keys(update).length === 0) {
     return NextResponse.json({ success: true })

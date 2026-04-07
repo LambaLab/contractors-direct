@@ -986,7 +986,7 @@ export function useIntakeChat({ proposalId, idea }: Props) {
                 // Auto-sync proposal metadata to Supabase (even without email verification)
                 // so the admin dashboard can see the lead as soon as AI starts analyzing it.
                 const storedSession = getStoredSession()
-                if (storedSession?.sessionId && newScore > 0) {
+                if (storedSession?.sessionId) {
                   fetch(`/api/proposals/${proposalId}/sync-metadata`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
