@@ -1,0 +1,1290 @@
+'use client'
+
+import { useState, useEffect, useCallback, useRef } from 'react'
+import { calculatePriceRange, applyComplexityAdjustment, tightenPriceRange, type PriceRange } from '@/lib/pricing/engine'
+import { expandWithDependencies } from '@/lib/scope/dependencies'
+import type { QuickReplies } from '@/lib/intake-types'
+import { getStoredSession } from '@/lib/session'
+import { createClient } from '@/lib/supabase/client'
+
+export type ChatMessage = {
+  id: string
+  role: 'user' | 'assistant' | 'admin'
+  content: string
+  displayContent?: string  // For user bubbles: shown text may differ from content sent to the API
+  question?: string        // The question for this turn (shown as rows card header)
+  capabilityCards?: string[]
+  quickReplies?: QuickReplies
+  sourceQuickReplies?: QuickReplies  // For user messages created by row selection: the original QR offered
+  sourceQuestion?: string            // The question text that was shown when this row was selected
+  isPause?: boolean                  // true = this turn is a conversation checkpoint (breather)
+  createdAt?: number                 // Date.now() when the message was created
+  // Scope divider fields
+  isScopeStart?: boolean             // true = scope-start divider
+  isScopeComplete?: boolean          // true = scope-complete divider
+  scopeId?: string                   // which scope item this divider is for
+  scopePosition?: number             // 1-based position in queue
+  scopeTotal?: number                // total scope items in queue
+  scopeSummary?: string              // completion summary text
+  // Checklist card data (for ScopeProgressCard)
+  checklistCompleted?: string[]      // IDs of completed scope items at this point
+  checklistCurrent?: string          // ID of scope item currently being probed
+  checklistQueue?: string[]          // IDs of remaining scope items in order
+  hidden?: boolean                   // true = don't render (e.g. auto-continue messages)
+  isAutoContinue?: boolean           // true = auto-continue response (suppress bubble text, show only question card)
+  isOverview?: boolean               // true = stage-setting card (all scope items shown, none active yet)
+}
+
+type UpdateProposalInput = {
+  detected_scope: string[]
+  confidence_score_delta: number
+  complexity_multiplier: number
+  updated_brief: string
+  follow_up_question: string
+  question?: string
+  project_overview?: string
+  capability_cards?: string[]
+  quick_replies?: QuickReplies
+  scope_summaries?: { [scopeId: string]: string }
+  suggest_pause?: boolean
+  suggest_resume?: boolean
+  project_name?: string
+  // Phase tracking
+  current_phase?: 'discovery' | 'deep_dive' | 'wrap_up'
+  current_scope?: string
+  scope_complete?: boolean
+  scope_queue?: string[]
+}
+
+type ApiMessage = { role: 'user' | 'assistant'; content: string }
+
+// Normalize QR style: force list style for 3+ options regardless of what the AI
+// specified. Also defaults missing/invalid style to 'list'. This is the definitive
+// safety net — the AI (Haiku) sometimes sends pills for 3+ options, or omits the
+// style field entirely. Both cases should render as the full card with rows.
+function normalizeQRStyle(qr: QuickReplies | undefined): QuickReplies | undefined {
+  if (!qr) return qr
+  const hasMultipleOptions = Array.isArray(qr.options) && qr.options.length >= 3
+  // Force list for 3+ options regardless of AI's style choice
+  if (hasMultipleOptions && qr.style !== 'list') {
+    return { ...qr, style: 'list' }
+  }
+  // Default missing style
+  if (!qr.style) {
+    return { ...qr, style: hasMultipleOptions ? 'list' : 'pills' }
+  }
+  return qr
+}
+
+// Merge consecutive same-role messages into one. This is necessary because
+// bubble_split creates two assistant messages (reaction + transition_text),
+// which are persisted as separate rows in Supabase. The Claude API requires
+// strictly alternating user/assistant messages and rejects consecutive same-role.
+function mergeConsecutiveMessages(msgs: ApiMessage[]): ApiMessage[] {
+  const merged: ApiMessage[] = []
+  for (const msg of msgs) {
+    const last = merged[merged.length - 1]
+    if (last && last.role === msg.role) {
+      last.content = last.content + '\n\n' + msg.content
+    } else {
+      merged.push({ ...msg })
+    }
+  }
+  return merged
+}
+
+type Props = {
+  proposalId: string
+  idea: string
+}
+
+const MSGS_KEY = (pid: string) => `cd_msgs_${pid}`
+const PROPOSAL_KEY = (pid: string) => `cd_proposal_${pid}`
+const EMAIL_VERIFIED_KEY = (pid: string) => `cd_email_verified_${pid}`
+const SYNCED_COUNT_KEY   = (pid: string) => `cd_synced_count_${pid}`
+const PAUSED_KEY = (pid: string) => `cd_paused_${pid}`
+const PAUSED_QR_KEY = (pid: string) => `cd_paused_qr_${pid}`
+const PHASE_KEY = (pid: string) => `cd_phase_${pid}`
+
+export function useIntakeChat({ proposalId, idea }: Props) {
+  const [messages, setMessages] = useState<ChatMessage[]>([])
+  const [detectedScope, setDetectedScope] = useState<string[]>([])
+  const [confidenceScore, setConfidenceScore] = useState(0)
+  const [complexityMultiplier, setComplexityMultiplier] = useState(1.0)
+  const [priceRange, setPriceRange] = useState<PriceRange>({ min: 0, max: 0 })
+  const [isStreaming, setIsStreaming] = useState(false)
+  const [projectOverview, setProjectOverview] = useState('')
+  const [scopeSummaries, setScopeSummaries] = useState<{ [scopeId: string]: string }>({})
+  const [projectName, setProjectName] = useState('')
+  const [isPaused, setIsPaused] = useState(false)
+  const [pausedQuestion, setPausedQuestion] = useState<string | null>(null)
+  // Phase tracking for 3-phase conversation flow
+  const [currentPhase, setCurrentPhase] = useState<'discovery' | 'deep_dive' | 'wrap_up'>('discovery')
+  const [currentScope, setCurrentScope] = useState('')
+  const [scopeQueue, setScopeQueue] = useState<string[]>([])
+  const [completedScope, setCompletedScope] = useState<string[]>([])
+  const prevScopeRef = useRef('')
+  const sendMessageRef = useRef<((content: string, displayContent?: string) => void) | null>(null)
+  // When true, the paused question's QR card is temporarily revealed (user tapped peek card)
+  // This stays true until the user answers, then auto-hides back to paused state
+  const [questionRevealed, setQuestionRevealed] = useState(false)
+  // Store the stripped QR so we can silently restore it on resume
+  const pausedQRRef = useRef<{ question: string; quickReplies: QuickReplies; messageId: string } | null>(null)
+  const [lastSyncedAt, setLastSyncedAt] = useState<number | null>(null)
+  const [isAdminActive, setIsAdminActive] = useState(false)
+
+  const messagesRef = useRef<ChatMessage[]>([])
+  const confidenceRef = useRef(0)
+  const detectedScopeRef = useRef<string[]>([])
+  const complexityRef = useRef(1.0)
+  const projectOverviewRef = useRef('')
+  const scopeSummariesRef = useRef<{ [scopeId: string]: string }>({})
+  const lastPauseTurn = useRef(-999)  // turn index of the last checkpoint (-999 = never)
+  const turnCount = useRef(0)         // increments each time a tool_result is processed
+  const isPausedRef = useRef(false)
+  const currentPhaseRef = useRef<'discovery' | 'deep_dive' | 'wrap_up'>('discovery')
+  const currentScopeRef = useRef('')
+  const scopeQueueRef = useRef<string[]>([])
+  const completedScopeRef = useRef<string[]>([])
+  const streamIdRef = useRef<string>('')  // ID of the currently-active stream; used to prevent
+                                          // stale streams from clobbering newer state
+
+  useEffect(() => { messagesRef.current = messages }, [messages])
+  useEffect(() => { confidenceRef.current = confidenceScore }, [confidenceScore])
+  useEffect(() => { detectedScopeRef.current = detectedScope }, [detectedScope])
+  useEffect(() => { complexityRef.current = complexityMultiplier }, [complexityMultiplier])
+  useEffect(() => { projectOverviewRef.current = projectOverview }, [projectOverview])
+  useEffect(() => { scopeSummariesRef.current = scopeSummaries }, [scopeSummaries])
+  useEffect(() => { isPausedRef.current = isPaused }, [isPaused])
+  useEffect(() => { currentPhaseRef.current = currentPhase }, [currentPhase])
+  useEffect(() => { currentScopeRef.current = currentScope }, [currentScope])
+  useEffect(() => { scopeQueueRef.current = scopeQueue }, [scopeQueue])
+  useEffect(() => { completedScopeRef.current = completedScope }, [completedScope])
+
+  // Subscribe to admin takeover broadcast signals
+  useEffect(() => {
+    if (!proposalId) return
+    const supabase = createClient()
+    const channel = supabase.channel(`proposal:${proposalId}`, {
+      config: { presence: { key: 'client' } },
+    })
+
+    channel
+      .on('broadcast', { event: 'admin_status' }, (payload) => {
+        const type = payload.payload?.type
+        if (type === 'admin_joined') {
+          setIsAdminActive(true)
+          // Show system message
+          setMessages((prev) => [
+            ...prev,
+            {
+              id: crypto.randomUUID(),
+              role: 'admin' as const,
+              content: '[Admin] has joined the chat',
+              createdAt: Date.now(),
+            },
+          ])
+        } else if (type === 'admin_left') {
+          setIsAdminActive(false)
+          setMessages((prev) => [
+            ...prev,
+            {
+              id: crypto.randomUUID(),
+              role: 'admin' as const,
+              content: '[Admin] has left the chat. AI assistant resumed.',
+              createdAt: Date.now(),
+            },
+          ])
+        }
+      })
+      // Listen for admin messages via broadcast (postgres_changes is blocked
+      // by RLS since the client has no Supabase auth session)
+      .on('broadcast', { event: 'admin_message' }, (payload) => {
+        const msg = payload.payload as { id: string; content: string; created_at: string }
+        if (msg?.content) {
+          setMessages((prev) => {
+            if (prev.some((m) => m.id === msg.id)) return prev
+            return [
+              ...prev,
+              {
+                id: msg.id,
+                role: 'admin' as const,
+                content: msg.content,
+                createdAt: new Date(msg.created_at).getTime(),
+              },
+            ]
+          })
+        }
+      })
+      .subscribe(async (status) => {
+        if (status === 'SUBSCRIBED') {
+          await channel.track({ user_type: 'client' })
+        }
+      })
+
+    // Reconnect the realtime channel when the tab regains focus after being idle.
+    // Supabase websocket may silently disconnect after prolonged background.
+    function handleVisibilityChange() {
+      if (document.visibilityState === 'visible') {
+        const state = channel.state
+        if (state !== 'joined' && state !== 'joining') {
+          channel.subscribe(async (status) => {
+            if (status === 'SUBSCRIBED') {
+              await channel.track({ user_type: 'client' })
+            }
+          })
+        }
+      }
+    }
+    document.addEventListener('visibilitychange', handleVisibilityChange)
+
+    return () => {
+      document.removeEventListener('visibilitychange', handleVisibilityChange)
+      supabase.removeChannel(channel)
+    }
+  }, [proposalId])
+
+  // Persist messages to localStorage after every update.
+  // Also auto-saves to Supabase when email is verified and streaming is complete.
+  useEffect(() => {
+    if (messages.length > 0 && proposalId) {
+      localStorage.setItem(MSGS_KEY(proposalId), JSON.stringify(messages))
+
+      if (!isStreaming && localStorage.getItem(EMAIL_VERIFIED_KEY(proposalId))) {
+        const storedSession = getStoredSession()
+        if (storedSession?.sessionId) {
+          const syncedCount = parseInt(
+            localStorage.getItem(SYNCED_COUNT_KEY(proposalId)) ?? '0',
+            10
+          )
+          const newMessages = messages.slice(syncedCount)
+          if (newMessages.length > 0) {
+            const newCount = messages.length
+            // Include lead metadata so Supabase has it for cross-device restore
+            let syncBrief: string | undefined
+            let syncScope: string[] | undefined
+            let syncConfidence: number | undefined
+            let syncMetadata: Record<string, unknown> | undefined
+            try {
+              const p = JSON.parse(localStorage.getItem(PROPOSAL_KEY(proposalId)) ?? '{}')
+              if (typeof p.brief === 'string' && p.brief) syncBrief = p.brief
+              if (Array.isArray(p.detectedScope)) syncScope = p.detectedScope
+              else if (Array.isArray(p.activeScope)) syncScope = p.activeScope
+              if (typeof p.confidenceScore === 'number') syncConfidence = p.confidenceScore
+              // Rich metadata for full-fidelity restore
+              syncMetadata = {
+                ...(typeof p.projectName === 'string' && p.projectName ? { projectName: p.projectName } : {}),
+                ...(typeof p.projectOverview === 'string' && p.projectOverview ? { projectOverview: p.projectOverview } : {}),
+                ...(p.scopeSummaries && typeof p.scopeSummaries === 'object' ? { scopeSummaries: p.scopeSummaries } : {}),
+              }
+            } catch { /* ignore */ }
+
+            // Capture the last assistant message's QR state for restore.
+            // Guard: only save if options are populated — skeleton QR ({ style: 'list', options: [] })
+            // from partial_question can still be on the message if the page reloaded mid-stream.
+            const lastAssistant = [...messages].reverse().find(m => m.role === 'assistant' && !m.isPause)
+            const lastQR = lastAssistant?.quickReplies
+            if (lastQR && Array.isArray(lastQR.options) && lastQR.options.length > 0 && syncMetadata) {
+              syncMetadata.lastQuestion = lastAssistant.question || undefined
+              syncMetadata.lastQuickReplies = lastQR
+            }
+
+            fetch('/api/intake/sync-messages', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                proposalId,
+                sessionId: storedSession.sessionId,
+                messages: newMessages.map((m) => ({ role: m.role, content: m.content })),
+                brief: syncBrief,
+                modules: syncScope,
+                confidenceScore: syncConfidence,
+                metadata: syncMetadata,
+              }),
+            })
+              .then(() => {
+                localStorage.setItem(SYNCED_COUNT_KEY(proposalId), String(newCount))
+                setLastSyncedAt(Date.now())
+              })
+              .catch((e) => console.error('Auto-save error:', e))
+          }
+        }
+      }
+    }
+  }, [messages, proposalId, isStreaming]) // eslint-disable-line react-hooks/exhaustive-deps
+
+  // NOTE: Proposal state is saved inline (not via a reactive effect) to avoid a
+  // mount-order bug: a reactive effect would fire before the restore effect and
+  // overwrite the stored data with empty defaults before it could be read back.
+
+  // Auto-send the idea on mount (fires once) — or restore stored messages
+  useEffect(() => {
+    if (!proposalId) return
+
+    // Check for stored messages first
+    const stored = localStorage.getItem(MSGS_KEY(proposalId))
+    if (stored) {
+      try {
+        const parsed: ChatMessage[] = JSON.parse(stored)
+        if (parsed.length > 0) {
+          messagesRef.current = parsed
+          setMessages(parsed)
+
+          // Also restore proposal state so the panel isn't blank on reload
+          const storedProposal = localStorage.getItem(PROPOSAL_KEY(proposalId))
+          if (storedProposal) {
+            try {
+              const p = JSON.parse(storedProposal)
+              const scopeItems: string[] = Array.isArray(p.detectedScope) ? p.detectedScope : (Array.isArray(p.activeScope) ? p.activeScope : [])
+              const score: number = typeof p.confidenceScore === 'number' ? p.confidenceScore : 0
+              const multiplier: number = typeof p.complexityMultiplier === 'number' ? p.complexityMultiplier : 1.0
+              detectedScopeRef.current = scopeItems
+              confidenceRef.current = score
+              complexityRef.current = multiplier
+              setDetectedScope(scopeItems)
+              setConfidenceScore(score)
+              setComplexityMultiplier(multiplier)
+              setPriceRange(computePriceRange(scopeItems, multiplier, score))
+              if (typeof p.projectOverview === 'string' && p.projectOverview) setProjectOverview(p.projectOverview)
+              if (p.scopeSummaries && typeof p.scopeSummaries === 'object') setScopeSummaries(p.scopeSummaries)
+              if (typeof p.projectName === 'string' && p.projectName) setProjectName(p.projectName)
+            } catch {
+              // Ignore — non-critical, proposal panel will just be empty
+            }
+          }
+
+          // Restore phase state from localStorage
+          const storedPhase = localStorage.getItem(PHASE_KEY(proposalId))
+          if (storedPhase) {
+            try {
+              const ph = JSON.parse(storedPhase)
+              if (ph.currentPhase) {
+                setCurrentPhase(ph.currentPhase)
+                currentPhaseRef.current = ph.currentPhase
+              }
+              if (typeof ph.currentScope === 'string') {
+                setCurrentScope(ph.currentScope)
+                currentScopeRef.current = ph.currentScope
+                prevScopeRef.current = ph.currentScope
+              }
+              if (Array.isArray(ph.scopeQueue)) {
+                setScopeQueue(ph.scopeQueue)
+                scopeQueueRef.current = ph.scopeQueue
+              }
+              if (Array.isArray(ph.completedScope)) {
+                setCompletedScope(ph.completedScope)
+                completedScopeRef.current = ph.completedScope
+              }
+            } catch { /* ignore */ }
+          }
+
+          // Restore turnCount and lastPauseTurn from message history so the
+          // checkpoint logic doesn't immediately trigger after a page refresh.
+          // Each non-pause assistant message roughly corresponds to one tool_result turn.
+          let restoredTurnCount = 0
+          let restoredLastPauseTurn = -999
+          for (const m of parsed) {
+            if (m.role === 'assistant' && !m.isPause) restoredTurnCount++
+            if (m.isPause) restoredLastPauseTurn = restoredTurnCount
+          }
+          turnCount.current = restoredTurnCount
+          lastPauseTurn.current = restoredLastPauseTurn
+
+          // Restore paused state
+          if (localStorage.getItem(PAUSED_KEY(proposalId)) === 'true') {
+            setIsPaused(true)
+            isPausedRef.current = true
+            // Restore paused question + QR data for the peek card and silent resume
+            try {
+              const savedQR = localStorage.getItem(PAUSED_QR_KEY(proposalId))
+              if (savedQR) {
+                const qrData = JSON.parse(savedQR)
+                if (qrData.question) setPausedQuestion(qrData.question)
+                if (qrData.question && qrData.quickReplies) {
+                  pausedQRRef.current = qrData
+                }
+              }
+            } catch { /* ignore */ }
+          }
+
+          return // Skip auto-send — conversation already exists
+        }
+      } catch {
+        // Ignore parse errors, fall through to auto-send
+      }
+    }
+
+    // No stored messages — auto-send the idea or show welcome message
+    if (!idea.trim()) {
+      // New empty lead — simulate typing then reveal the welcome message
+      const welcomeId = crypto.randomUUID()
+      const emptyWelcome: ChatMessage = {
+        id: welcomeId,
+        role: 'assistant',
+        content: '',
+        createdAt: Date.now(),
+      }
+      // Step 1: Show empty bubble with typing indicator
+      const t1 = setTimeout(() => {
+        messagesRef.current = [emptyWelcome]
+        setMessages([emptyWelcome])
+        setIsStreaming(true)
+      }, 10)
+      // Step 2: Fill in the content after a realistic typing delay
+      const t2 = setTimeout(() => {
+        const welcome: ChatMessage = {
+          ...emptyWelcome,
+          content: "What would you like to build? Describe your idea in the chat below and I'll help you shape it into a lead.",
+        }
+        messagesRef.current = [welcome]
+        setMessages([welcome])
+        setIsStreaming(false)
+      }, 1200)
+      return () => { clearTimeout(t1); clearTimeout(t2) }
+    }
+
+    const userMessage: ChatMessage = { id: crypto.randomUUID(), role: 'user', content: idea, createdAt: Date.now() }
+    messagesRef.current = [userMessage]
+    setMessages([userMessage])
+
+    streamAIResponse([{ role: 'user', content: idea }])
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps
+
+  function computePriceRange(scopeItems: string[], multiplier: number, score: number): PriceRange {
+    // Pass 0 for sizeSqft until we have property details — pricing engine handles flat rates
+    const base = calculatePriceRange(scopeItems, 0)
+    const adjusted = applyComplexityAdjustment(base, multiplier)
+    return tightenPriceRange(adjusted, score)
+  }
+
+  // Streams from /api/intake/chat with the given API message history.
+  // Adds an empty assistant message first, then fills it in as tokens arrive.
+  async function streamAIResponse(apiMessages: ApiMessage[], opts?: { isAutoContinue?: boolean }) {
+    const isAutoContinue = opts?.isAutoContinue ?? false
+    // Capture a unique ID for this stream invocation so stale streams (still draining
+    // after the user submitted a new message) can be identified and their side-effects
+    // suppressed without cancelling the HTTP request itself.
+    const myStreamId = crypto.randomUUID()
+    streamIdRef.current = myStreamId
+    setIsStreaming(true)
+    const assistantMessage: ChatMessage = { id: crypto.randomUUID(), role: 'assistant', content: '', isAutoContinue, createdAt: Date.now() }
+    // activeBubbleId tracks the ID of the assistant message currently receiving text events.
+    // It starts as bubble 1 and is reassigned to bubble 2 when a bubble_split event arrives
+    // (i.e. when the AI produces transition_text for a topic pivot). All setMessages guards
+    // use this variable so stale streams can never corrupt a different message.
+    let activeBubbleId = assistantMessage.id
+    let partialResultApplied = false  // tracks if partial_result already built bubbleContent
+    setMessages((prev) => [...prev, assistantMessage])
+
+    try {
+      const res = await fetch('/api/intake/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          messages: apiMessages,
+          currentScope: detectedScopeRef.current,
+          confidenceScore: confidenceRef.current,
+          paused: isPausedRef.current,
+          currentPhase: currentPhaseRef.current,
+          currentScopeItem: currentScopeRef.current,
+          scopeQueue: scopeQueueRef.current,
+          completedScope: completedScopeRef.current,
+          turnCount: turnCount.current,
+        }),
+      })
+
+      if (!res.body) throw new Error('No response body')
+
+      const reader = res.body.getReader()
+      const decoder = new TextDecoder()
+      let buffer = ''
+
+      while (true) {
+        const { done, value } = await reader.read()
+        if (done) break
+
+        buffer += decoder.decode(value, { stream: true })
+        const lines = buffer.split('\n')
+        buffer = lines.pop() ?? ''
+
+        for (const line of lines) {
+          if (!line.startsWith('data: ')) continue
+          const raw = line.slice(6)
+          if (!raw.trim()) continue
+
+          let parsed: { event: string; data: Record<string, unknown> }
+          try {
+            parsed = JSON.parse(raw)
+          } catch {
+            console.warn('Failed to parse SSE line:', raw)
+            continue
+          }
+
+          const { event, data } = parsed
+
+          if (event === 'text') {
+            setMessages((prev) => {
+              const last = prev[prev.length - 1]
+              // Guard: only update the specific assistant message for this stream.
+              // If the user submitted before this event arrived, last.id will be a
+              // different message and we must not corrupt it.
+              if (last?.id !== activeBubbleId) return prev
+              return [...prev.slice(0, -1), { ...last, content: last.content + (data.text as string) }]
+            })
+          } else if (event === 'error') {
+            // Route explicitly signalled an error (e.g. Anthropic API failure).
+            // Show a visible message immediately instead of leaving an empty bubble.
+            const msg = typeof data.message === 'string' ? data.message : ''
+            console.error('SSE error from route:', msg)
+            setMessages((prev) => {
+              const last = prev[prev.length - 1]
+              if (last?.id !== activeBubbleId) return prev
+              return [...prev.slice(0, -1), { ...last, content: 'Something went wrong. Please try again.' }]
+            })
+          } else if (event === 'bubble_split') {
+            // The AI produced a non-empty transition_text — create a second assistant
+            // message bubble and redirect all subsequent text events into it.
+            // The stale-stream guard prevents an old stream from injecting a spurious
+            // second bubble into a newer stream's conversation.
+            if (streamIdRef.current !== myStreamId) continue
+            const bubble2: ChatMessage = { id: crypto.randomUUID(), role: 'assistant', content: '', createdAt: Date.now() }
+            activeBubbleId = bubble2.id
+            setMessages((prev) => [...prev, bubble2])
+          } else if (event === 'partial_question') {
+            // When paused, skip — no QR skeleton should flash
+            if (isPausedRef.current) continue
+            // question field is complete but quick_replies is still generating.
+            // Show the QR card skeleton immediately so the user sees something.
+            const questionText = typeof data.question === 'string' ? data.question.trim() : ''
+            if (questionText) {
+              setMessages((prev) => {
+                const last = prev[prev.length - 1]
+                if (last?.id !== activeBubbleId) return prev
+                return [...prev.slice(0, -1), {
+                  ...last,
+                  question: questionText,
+                  quickReplies: { style: 'list' as const, options: [] },
+                }]
+              })
+            }
+          } else if (event === 'partial_result') {
+            // When paused, only allow pills-style QR through (for intent-based action buttons)
+            if (isPausedRef.current && (data.quick_replies as QuickReplies | undefined)?.style !== 'pills') continue
+            // question + quick_replies are now complete in the server's JSON buffer.
+            // Show the QR card immediately — the heavy metadata fields (project_overview,
+            // scope_summaries) are still generating but aren't needed for interactivity.
+            const questionText = typeof data.question === 'string' ? data.question.trim() : ''
+            const rawQR = data.quick_replies as QuickReplies | undefined
+            const validQR =
+              rawQR && Array.isArray(rawQR.options) && rawQR.options.length > 0 ? rawQR : undefined
+            const updatedQR = normalizeQRStyle(validQR)
+
+            if (updatedQR) {
+              const isListQR = updatedQR.style === 'list'
+              setMessages((prev) => {
+                const last = prev[prev.length - 1]
+                if (last?.id !== activeBubbleId) return prev  // user already moved on
+                const base = (last.content || '').replace(/"+\s*$/, '')  // strip trailing quotes
+                const bubbleContent =
+                  !isListQR && questionText
+                    ? base ? `${base}\n\n${questionText}` : questionText
+                    : base
+                return [...prev.slice(0, -1), {
+                  ...last,
+                  content: bubbleContent,
+                  question: isListQR ? (questionText || undefined) : undefined,
+                  quickReplies: updatedQR,
+                  // suggest_pause is best-effort — may or may not be in the buffer yet.
+                  // tool_result will set isPause correctly; partial_result only sets it
+                  // when the field was already present to avoid a jarring re-render.
+                  isPause: data.suggest_pause === true || undefined,
+                }]
+              })
+              partialResultApplied = true
+              // Mark this stream done so the QR card and input become interactive.
+              // The Anthropic stream is still open generating metadata fields, but
+              // there's nothing left the user needs to wait for.
+              if (streamIdRef.current === myStreamId) setIsStreaming(false)
+            }
+          } else if (event === 'partial_scopes') {
+            // detected_scope is complete in the server buffer — update the panel now,
+            // before the heavy project_overview / scope_summaries fields finish.
+            // tool_result will overwrite these with identical values; no double-counting.
+            const rawScope = data.detected_scope
+            if (Array.isArray(rawScope)) {
+              const earlyScope = expandWithDependencies(rawScope as string[])
+              setDetectedScope(earlyScope)
+            }
+          } else if (event === 'tool_result') {
+            const input = data.input as UpdateProposalInput
+            // Auto-expand to include required dependencies (e.g. payments -> auth + database)
+            // UNION with existing scope — the AI may only send new or currently-relevant
+            // scope items each turn, so we must accumulate across the entire conversation.
+            const aiScope = Array.isArray(input?.detected_scope) ? input.detected_scope : []
+            const merged = Array.from(new Set([...detectedScopeRef.current, ...aiScope]))
+            const newScope = expandWithDependencies(merged)
+            const newMultiplier = typeof input?.complexity_multiplier === 'number' ? input.complexity_multiplier : 1.0
+            const delta = typeof input?.confidence_score_delta === 'number' ? input.confidence_score_delta : 0
+            const newScore = Math.max(0, Math.min(85, confidenceRef.current + delta))
+
+            setDetectedScope(newScope)
+            setConfidenceScore(newScore)
+            setComplexityMultiplier(newMultiplier)
+            setPriceRange(computePriceRange(newScope, newMultiplier, newScore))
+            if (input?.project_overview && input.project_overview.trim()) {
+              setProjectOverview(input.project_overview.trim())
+            }
+            if (input?.scope_summaries && typeof input.scope_summaries === 'object') {
+              setScopeSummaries(prev => ({ ...prev, ...input.scope_summaries }))
+            }
+            if (input?.project_name && input.project_name.trim()) {
+              setProjectName(input.project_name.trim())
+            }
+
+            // Auto-resume: AI detected user agreed to resume structured Q&A.
+            // Unpause immediately so the NEXT user message triggers normal Q&A flow.
+            // We also fire a synthetic "Continue" message so the user doesn't have
+            // to type anything — the next question appears automatically.
+            if (isPausedRef.current && input?.suggest_resume === true) {
+              setIsPaused(false)
+              isPausedRef.current = false
+              if (proposalId) {
+                localStorage.removeItem(PAUSED_KEY(proposalId))
+                localStorage.removeItem(PAUSED_QR_KEY(proposalId))
+              }
+              // Defer the resume message so this tool_result's state updates settle first
+              setTimeout(() => {
+                sendMessage('Continue with intake questions', 'Resumed auto-questions')
+              }, 100)
+            }
+
+            // Checkpoint (breather) — hybrid client + AI decision.
+            // In discovery phase: client triggers at confidence >= 60% as safety net.
+            // In deep_dive phase: AI drives checkpoints via suggest_pause on scope_complete turns.
+            // In wrap_up phase: AI sets suggest_pause for the final checkpoint.
+            turnCount.current++
+            const turnsSinceLast = turnCount.current - lastPauseTurn.current
+            const aiWantsPause = input?.suggest_pause === true
+            const phase = input?.current_phase || currentPhaseRef.current
+            const clientWantsPause = (phase === 'discovery' && newScore >= 60 && turnsSinceLast >= 6)
+              // Safety net: wrap_up phase should ALWAYS show pills
+              || phase === 'wrap_up'
+            const isPauseThisTurn = (aiWantsPause || clientWantsPause) && turnsSinceLast >= 4
+            if (isPauseThisTurn) lastPauseTurn.current = turnCount.current
+
+            setMessages((prev) => {
+              const last = prev[prev.length - 1]
+              const userAlreadyResponded = last?.id !== activeBubbleId
+              const followUp = typeof input?.follow_up_question === 'string' ? input.follow_up_question : ''
+              const questionText = typeof input?.question === 'string' ? input.question.trim() : ''
+              // Validate quick_replies — empty options array is as bad as no quick_replies
+              // (QuickReplies component would render only "Type something", which is confusing)
+              const rawQR = input?.quick_replies
+              const validQR = rawQR && Array.isArray(rawQR.options) && rawQR.options.length > 0
+                ? rawQR
+                : undefined
+              const updatedQR = normalizeQRStyle(validQR)
+
+              if (isPauseThisTurn) {
+                // PAUSE TURN: always create the checkpoint, even if the user responded
+                // before tool_result arrived (after partial_result set isStreaming=false).
+                // Find the original assistant bubble to use as the reaction bubble.
+                const bubbleIdx = prev.findIndex(m => m.id === activeBubbleId)
+                const bubble = bubbleIdx !== -1 ? prev[bubbleIdx] : null
+                const reactionBubble: ChatMessage = bubble
+                  ? { ...bubble, content: (bubble.content || followUp).replace(/"+\s*$/, ''), question: undefined, quickReplies: undefined, isPause: undefined }
+                  : { id: crypto.randomUUID(), role: 'assistant' as const, content: followUp.replace(/"+\s*$/, ''), createdAt: Date.now() }
+                const checkpointContent = aiWantsPause && questionText
+                  ? questionText
+                  : 'Good progress so far. Your lead is shaping up nicely. Want to take a look at what we\'ve built, keep going to sharpen the details, or save this for later?'
+                const checkpointMsg: ChatMessage = {
+                  id: crypto.randomUUID(),
+                  role: 'assistant',
+                  content: checkpointContent,
+                  isPause: true,
+                  createdAt: Date.now(),
+                }
+                if (bubbleIdx !== -1) {
+                  // Replace the original bubble with reaction + checkpoint
+                  return [...prev.slice(0, bubbleIdx), reactionBubble, checkpointMsg, ...prev.slice(bubbleIdx + 1)]
+                }
+                // Bubble not found (shouldn't happen) — just append
+                return [...prev, checkpointMsg]
+              }
+
+              // Guard: if the user already responded (after a partial_result), don't
+              // overwrite the new stream's state.
+              if (userAlreadyResponded) return prev
+
+              // Normal turn
+              // When paused, strip list QR and question — but allow pills through (intent actions)
+              const effectiveQR = isPausedRef.current
+                ? (updatedQR?.style === 'pills' ? updatedQR : undefined)
+                : updatedQR
+              const effectiveQuestion = isPausedRef.current ? undefined : questionText
+
+              // Preserve partial_result's QR if tool_result has no valid QR.
+              // The full JSON parse can sometimes lose quick_replies (e.g. model
+              // generates an invalid structure, or the options array is empty in the
+              // final parse even though partial extraction found valid options).
+              let finalQR = effectiveQR ?? (partialResultApplied ? last.quickReplies : undefined)
+              const finalQuestion = effectiveQuestion || (partialResultApplied ? last.question : undefined)
+
+              // Fallback: AI provided a question but no quick_replies. Create a minimal
+              // list QR so the question shows in the card header with a free-text input,
+              // instead of being buried as a paragraph in the bubble.
+              if (!finalQR && finalQuestion && !isPausedRef.current) {
+                finalQR = { style: 'list' as const, options: [], allowCustom: true } as QuickReplies
+              }
+
+              const isListFinal = finalQR?.style === 'list' ||
+                (finalQR && Array.isArray(finalQR.options) && finalQR.options.length >= 3)
+
+              // For list QR: question goes in the rows card header (message.question), not in the bubble
+              // For no QR or pills QR: question is appended to bubble content so it's visible
+              // Skip appending if partial_result already built the content (avoids duplicate question)
+              // Strip trailing quotes — the AI sometimes wraps follow_up_question in
+              // literal escaped quotes which the streaming parser correctly unescapes
+              // but shouldn't be displayed.
+              let base = (last.content || followUp).replace(/"+\s*$/, '')
+              // Defense: when a list QR is shown, the question lives in the card header.
+              // Strip any question sentences (ending with ?) from the bubble to avoid
+              // showing a question in both the bubble and the card — even if the AI
+              // rephrased the question differently in follow_up_question.
+              if (isListFinal && finalQuestion) {
+                // Remove sentences ending with ? (handles both exact match and rephrased questions)
+                base = base.replace(/[^.!?\n]*\?/g, '').replace(/\n\n\s*$/, '').replace(/\s{2,}/g, ' ').trim()
+              }
+              const bubbleContent = !isListFinal && finalQuestion && !partialResultApplied
+                ? (base ? `${base}\n\n${finalQuestion}` : finalQuestion)
+                : base
+              // Ensure bubble always has content — empty bubbles get filtered from API
+              // messages which can create invalid consecutive same-role messages (400 error).
+              const safeContent = bubbleContent || finalQuestion || followUp || '...'
+
+              return [...prev.slice(0, -1), {
+                ...last,
+                content: safeContent,
+                question: isListFinal ? (finalQuestion || undefined) : undefined,
+                quickReplies: finalQR,
+                isPause: undefined,
+              }]
+            })
+
+            // ── Stale-stream guard ──
+            // If a newer stream has started (user clicked QR after partial_result),
+            // skip ALL remaining side effects (phase tracking, divider insertion,
+            // localStorage persistence). The newer stream's tool_result will handle them.
+            // Only allow: proposal metadata updates (already done above) and isStreaming reset.
+            const isStaleStream = streamIdRef.current !== myStreamId
+
+            // Mark streaming done — guard against resetting a newer stream's flag.
+            if (!isStaleStream) setIsStreaming(false)
+
+            if (isStaleStream) {
+
+              // Still persist proposal data (scope, score, overview) since those are
+              // cumulative and safe to apply from any stream. But skip everything else.
+              if (proposalId) {
+                try {
+                  const savedOverview = (input?.project_overview && input.project_overview.trim())
+                    ? input.project_overview.trim()
+                    : projectOverviewRef.current
+                  const savedSummaries = (input?.scope_summaries && typeof input.scope_summaries === 'object')
+                    ? { ...scopeSummariesRef.current, ...input.scope_summaries }
+                    : scopeSummariesRef.current
+                  const savedProjectName = (input?.project_name && input.project_name.trim())
+                    ? input.project_name.trim()
+                    : ''
+                  const savedBrief = (input?.updated_brief && input.updated_brief.trim())
+                    ? input.updated_brief.trim()
+                    : undefined
+                  localStorage.setItem(PROPOSAL_KEY(proposalId), JSON.stringify({
+                    detectedScope: newScope,
+                    confidenceScore: newScore,
+                    complexityMultiplier: newMultiplier,
+                    projectOverview: savedOverview,
+                    scopeSummaries: savedSummaries,
+                    projectName: savedProjectName || undefined,
+                    brief: savedBrief,
+                  }))
+                } catch { /* Ignore QuotaExceededError */ }
+              }
+              continue  // Skip phase tracking, dividers, and phase persistence
+            }
+
+            // When paused and the AI sends a new list QR (which we stripped above),
+            // save it for the peek card so the user sees the next question peeking.
+            if (isPausedRef.current && !isPauseThisTurn) {
+              const qText = typeof input?.question === 'string' ? input.question.trim() : ''
+              const rawQRPeek = input?.quick_replies
+              const validQRPeek = rawQRPeek && Array.isArray(rawQRPeek.options) && rawQRPeek.options.length > 0 ? rawQRPeek : undefined
+              const normQR = normalizeQRStyle(validQRPeek)
+              if (normQR?.style === 'list' && qText) {
+                const qrData = { question: qText, quickReplies: normQR, messageId: activeBubbleId }
+                pausedQRRef.current = qrData
+                setPausedQuestion(qText)
+                if (proposalId) {
+                  try { localStorage.setItem(PAUSED_QR_KEY(proposalId), JSON.stringify(qrData)) } catch { /* ignore */ }
+                }
+              }
+            }
+
+            // ── Phase tracking: update state from AI's phase fields ──
+            // Client-side enforcement: if AI stays in discovery past turn 7,
+            // force transition to deep_dive using detected scope.
+            let effectivePhase = input?.current_phase || currentPhaseRef.current
+            let effectiveScope = typeof input?.current_scope === 'string' ? input.current_scope : ''
+            let effectiveQueue = Array.isArray(input?.scope_queue) ? input.scope_queue : scopeQueueRef.current
+
+            if (effectivePhase === 'discovery' && turnCount.current >= 4 && detectedScopeRef.current.length >= 2) {
+              console.log('[Phase] Client forcing transition to deep_dive after', turnCount.current, 'turns')
+              effectivePhase = 'deep_dive'
+              const items = [...detectedScopeRef.current]
+              const coreFirst = ['mobile_app', 'web_app']
+              const sorted = [
+                ...items.filter(m => coreFirst.includes(m)),
+                ...items.filter(m => !coreFirst.includes(m)),
+              ]
+              effectiveQueue = sorted
+              effectiveScope = sorted[0] || ''
+            }
+
+            if (effectivePhase) setCurrentPhase(effectivePhase as 'discovery' | 'deep_dive' | 'wrap_up')
+            if (effectiveScope) setCurrentScope(effectiveScope)
+            if (effectiveQueue.length > 0) setScopeQueue(effectiveQueue)
+
+            // Extract question/followUp for stage-setting detection (used by both
+            // scope-start insertion and auto-continue below)
+            const stageQuestionText = typeof input?.question === 'string' ? input.question.trim() : ''
+            const stageFollowUp = typeof input?.follow_up_question === 'string' ? input.follow_up_question : ''
+
+            // Scope-start divider: insert when AI moves to a new scope item
+            const newItem = effectiveScope
+
+            if (newItem && newItem !== prevScopeRef.current && !input?.scope_complete) {
+              // Auto-complete the previous scope item when transitioning to a new one.
+              // The AI doesn't always send scope_complete: true explicitly, so we
+              // infer completion from the scope transition itself.
+              const prevItem = prevScopeRef.current
+              if (prevItem && !completedScopeRef.current.includes(prevItem)) {
+                setCompletedScope(prev => prev.includes(prevItem) ? prev : [...prev, prevItem])
+                completedScopeRef.current = [...completedScopeRef.current, prevItem]
+              }
+
+              const queueArr = Array.isArray(input?.scope_queue) ? input.scope_queue : effectiveQueue
+              const totalItems = queueArr.length + completedScopeRef.current.length
+              // Stage-setting turn: first scope transition = overview card (always show checklist
+              // on the very first deep-dive entry, regardless of whether AI set question to "")
+              const isStageSettingTurn = completedScopeRef.current.length === 0 && prevScopeRef.current === ''
+              const scopeStartMsg: ChatMessage = {
+                id: crypto.randomUUID(),
+                role: 'assistant',
+                content: '',
+                isScopeStart: true,
+                isOverview: isStageSettingTurn,
+                scopeId: newItem,
+                scopePosition: completedScopeRef.current.length + 1,
+                scopeTotal: totalItems || undefined,
+                createdAt: Date.now(),
+                checklistCompleted: [...completedScopeRef.current],
+                checklistCurrent: isStageSettingTurn ? '' : newItem,
+                checklistQueue: isStageSettingTurn
+                  ? [newItem, ...queueArr.filter(id => id !== newItem && !completedScopeRef.current.includes(id))]
+                  : queueArr.filter(id => id !== newItem && !completedScopeRef.current.includes(id)),
+              }
+              setMessages(prev => {
+                const bubbleIdx = prev.findIndex(m => m.id === activeBubbleId)
+                if (isStageSettingTurn) {
+                  // Stage-setting: insert card AFTER the intro bubble
+                  if (bubbleIdx >= 0) {
+                    return [...prev.slice(0, bubbleIdx + 1), scopeStartMsg, ...prev.slice(bubbleIdx + 1)]
+                  }
+                  return [...prev, scopeStartMsg]
+                }
+                // Normal scope transition: insert card BEFORE the bubble
+                if (bubbleIdx > 0) {
+                  return [...prev.slice(0, bubbleIdx), scopeStartMsg, ...prev.slice(bubbleIdx)]
+                }
+                return [...prev.slice(0, -1), scopeStartMsg, prev[prev.length - 1]]
+              })
+              prevScopeRef.current = newItem
+            }
+
+            // Scope-complete divider: insert when AI signals a scope item is done
+            if (input?.scope_complete === true && newItem) {
+              setCompletedScope(prev => prev.includes(newItem) ? prev : [...prev, newItem])
+              completedScopeRef.current = completedScopeRef.current.includes(newItem)
+                ? [...completedScopeRef.current]
+                : [...completedScopeRef.current, newItem]
+              const newCompleted = completedScopeRef.current
+              const remainingQueue = effectiveQueue.filter(id => id !== newItem && !newCompleted.includes(id))
+              const nextItem = remainingQueue[0] || ''
+
+              // Advance currentScope to the next scope item so the AI knows where
+              // to continue on the "Keep going" turn. Without this, the system
+              // prompt tells the AI current_scope = the completed item, which
+              // confuses it into thinking it's done and jumping to wrap_up.
+              if (nextItem) {
+                setCurrentScope(nextItem)
+                currentScopeRef.current = nextItem
+                setScopeQueue(remainingQueue)
+                scopeQueueRef.current = remainingQueue
+              }
+
+              const scopeCompleteMsg: ChatMessage = {
+                id: crypto.randomUUID(),
+                role: 'assistant',
+                content: '', // ScopeProgressCard renders its own content
+                isScopeComplete: true,
+                isPause: true,
+                scopeId: newItem,
+                scopeSummary: stageFollowUp.replace(/[^.!?\n]*\?/g, '').trim() || '',
+                createdAt: Date.now(),
+                checklistCompleted: newCompleted,
+                checklistCurrent: nextItem,
+                checklistQueue: remainingQueue,
+              }
+              setMessages(prev => [...prev, scopeCompleteMsg])
+              prevScopeRef.current = newItem
+            }
+
+            // Save proposal state inline so it survives page reload.
+            if (proposalId) {
+              try {
+                const savedOverview = (input?.project_overview && input.project_overview.trim())
+                  ? input.project_overview.trim()
+                  : projectOverviewRef.current
+                const savedSummaries = (input?.scope_summaries && typeof input.scope_summaries === 'object')
+                  ? { ...scopeSummariesRef.current, ...input.scope_summaries }
+                  : scopeSummariesRef.current
+                const savedProjectName = (input?.project_name && input.project_name.trim())
+                  ? input.project_name.trim()
+                  : ''
+                const savedBrief = (input?.updated_brief && input.updated_brief.trim())
+                  ? input.updated_brief.trim()
+                  : undefined
+                localStorage.setItem(PROPOSAL_KEY(proposalId), JSON.stringify({
+                  detectedScope: newScope,
+                  confidenceScore: newScore,
+                  complexityMultiplier: newMultiplier,
+                  projectOverview: savedOverview,
+                  scopeSummaries: savedSummaries,
+                  projectName: savedProjectName || undefined,
+                  brief: savedBrief,
+                }))
+                // Persist phase state for cross-refresh restoration
+                // Use refs to avoid stale closure values
+                const phaseState = {
+                  currentPhase: effectivePhase || 'discovery',
+                  currentScope: currentScopeRef.current || effectiveScope,
+                  scopeQueue: scopeQueueRef.current.length > 0 ? scopeQueueRef.current : effectiveQueue,
+                  completedScope: completedScopeRef.current,
+                }
+                localStorage.setItem(PHASE_KEY(proposalId), JSON.stringify(phaseState))
+
+                // Auto-sync proposal metadata to Supabase (even without email verification)
+                // so the admin dashboard can see the lead as soon as AI starts analyzing it.
+                const storedSession = getStoredSession()
+                if (storedSession?.sessionId && newScore > 0) {
+                  fetch(`/api/proposals/${proposalId}/sync-metadata`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                      sessionId: storedSession.sessionId,
+                      confidenceScore: newScore,
+                      modules: newScope,
+                      brief: savedBrief,
+                      metadata: {
+                        ...(savedProjectName ? { projectName: savedProjectName } : {}),
+                        ...(savedOverview ? { projectOverview: savedOverview } : {}),
+                      },
+                    }),
+                  }).catch(() => { /* best-effort, ignore errors */ })
+                }
+              } catch { /* Ignore QuotaExceededError */ }
+            }
+
+            // Stage-setting auto-continue: if AI transitioned to deep_dive with
+            // an empty question (stage-setting turn), auto-trigger the first
+            // deep-dive question after a brief delay.
+            if (effectivePhase === 'deep_dive' && newItem && !stageQuestionText && !input?.scope_complete) {
+              // Build complete message history: original messages + this assistant response + continue
+              const assistantContent = stageFollowUp || 'Here is what we will scope out.'
+              const autoMessages: ApiMessage[] = [
+                ...apiMessages,
+                { role: 'assistant', content: assistantContent },
+                { role: 'user', content: 'Continue' },
+              ]
+              setTimeout(() => {
+                streamAIResponse(autoMessages, { isAutoContinue: true })
+              }, 1500)
+            }
+          }
+        }
+      }
+    } catch (err) {
+      console.error('Chat error:', err)
+      setMessages((prev) => {
+        const last = prev[prev.length - 1]
+        if (last?.role !== 'assistant') return prev
+        return [...prev.slice(0, -1), { ...last, content: 'Something went wrong. Please try again.' }]
+      })
+    } finally {
+      // Guard: if the stream closed without ever producing a tool_result (e.g. Vercel
+      // timeout, network drop), replace the empty bubble with a visible error.
+      // We check the message ID so a stale stream doesn't clobber a newer one that
+      // started after the user submitted while this stream was still draining.
+      setMessages((prev) => {
+        const last = prev[prev.length - 1]
+        if (last?.id === activeBubbleId && last.role === 'assistant' && !last.content.trim()) {
+          return [...prev.slice(0, -1), { ...last, content: 'Something went wrong. Please try again.' }]
+        }
+        return prev
+      })
+      // Safety net — only reset if this is still the active stream; a newer stream
+      // may have started (e.g. user submitted after partial_result) in which case
+      // we must NOT clobber its isStreaming state.
+      if (streamIdRef.current === myStreamId) setIsStreaming(false)
+    }
+  }
+
+  const sendMessage = useCallback(async (content: string, displayContent?: string, sourceQuickReplies?: QuickReplies, sourceQuestion?: string) => {
+    if (isStreaming) return
+
+    // Ensure we always have non-empty content for the API.
+    // The AI sometimes generates QR options with empty `value` but valid `label`.
+    // When the user clicks such an option, content is "" but displayContent has the label.
+    const safeContent = content || displayContent || 'continue'
+
+    const userMessage: ChatMessage = {
+      id: crypto.randomUUID(),
+      role: 'user',
+      content: safeContent,
+      displayContent: displayContent && displayContent !== safeContent ? displayContent : undefined,
+      sourceQuickReplies,
+      sourceQuestion,
+      createdAt: Date.now(),
+    }
+
+    // When admin is active, just add the user message but don't call AI
+    if (isAdminActive) {
+      setMessages((prev) => [...prev, userMessage])
+      return
+    }
+
+    const apiMessages = mergeConsecutiveMessages([
+      ...messagesRef.current
+        // Filter out synthetic messages that shouldn't be in API history:
+        // - Scope dividers (empty content, UI-only)
+        // - Pause checkpoints (synthetic breather prompts)
+        // - Admin messages (not part of AI conversation)
+        // - Any message with empty/missing content (Claude API rejects these)
+        .filter(m => !m.isScopeStart && !m.isScopeComplete && !m.isPause && m.role !== 'admin' && m.content)
+        .map((m): ApiMessage => ({ role: m.role === 'admin' ? 'user' : m.role, content: m.content })),
+      { role: 'user', content: safeContent },
+    ])
+
+    // If answering a revealed (temporarily shown) paused question, hide it back
+    // and clear the saved QR — the question is now answered.
+    if (questionRevealed) {
+      setQuestionRevealed(false)
+      pausedQRRef.current = null
+      if (proposalId) localStorage.removeItem(PAUSED_QR_KEY(proposalId))
+    }
+
+    setMessages((prev) => {
+      // Clear quickReplies and question from last assistant message
+      const cleared = prev.map((m, i) =>
+        i === prev.length - 1 && m.role === 'assistant' ? { ...m, quickReplies: undefined, question: undefined } : m
+      )
+      return [...cleared, userMessage]
+    })
+
+    await streamAIResponse(apiMessages)
+  }, [isStreaming, questionRevealed, proposalId]) // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Keep ref in sync so the stage-setting auto-continue can call sendMessage
+  sendMessageRef.current = sendMessage
+
+  function toggleScope(scopeId: string) {
+    const newScope = detectedScope.includes(scopeId)
+      ? detectedScope.filter((m) => m !== scopeId)
+      : [...detectedScope, scopeId]
+    setDetectedScope(newScope)
+    setPriceRange(computePriceRange(newScope, complexityMultiplier, confidenceScore))
+
+    // Save inline so scope toggles survive page reload
+    if (proposalId) {
+      try {
+        localStorage.setItem(PROPOSAL_KEY(proposalId), JSON.stringify({
+          detectedScope: newScope,
+          confidenceScore,
+          complexityMultiplier,
+          projectOverview,
+          scopeSummaries,
+        }))
+      } catch { /* Ignore */ }
+    }
+  }
+
+  const editMessage = useCallback(async (messageId: string, newContent: string, displayContent?: string) => {
+    if (isStreaming) return
+
+    const msgIndex = messagesRef.current.findIndex((m) => m.id === messageId)
+    if (msgIndex === -1) return
+    if (msgIndex === 0) return // Don't edit the original idea — use Reset to start over
+
+    const correctionMsg: ChatMessage = {
+      id: crypto.randomUUID(),
+      role: 'user',
+      content: `Actually, let me clarify my earlier answer: ${newContent}`,
+      displayContent,  // Clean display (question + new answer) for row re-selections
+      createdAt: Date.now(),
+    }
+
+    const kept = messagesRef.current.slice(0, msgIndex)
+    setMessages([...kept, correctionMsg])
+
+    const aiHistory = mergeConsecutiveMessages(
+      [...kept, correctionMsg]
+        .filter(m => !m.isScopeStart && !m.isScopeComplete && !m.isPause && m.role !== 'admin' && m.content)
+        .map((m): ApiMessage => ({ role: m.role as 'user' | 'assistant', content: m.content }))
+    )
+
+    await streamAIResponse(aiHistory)
+  }, [isStreaming]) // eslint-disable-line react-hooks/exhaustive-deps
+
+  const pauseQuestions = useCallback(() => {
+    setIsPaused(true)
+    isPausedRef.current = true
+    if (proposalId) localStorage.setItem(PAUSED_KEY(proposalId), 'true')
+    // Save the current question + QR before stripping, so we can restore silently on resume
+    setMessages((prev) => {
+      const idx = [...prev].reverse().findIndex(m => m.role === 'assistant' && !m.isPause)
+      if (idx === -1) return prev
+      const realIdx = prev.length - 1 - idx
+      const msg = prev[realIdx]
+      // Save the question text for the peek card + full QR for silent restore
+      if (msg.question) setPausedQuestion(msg.question)
+      if (msg.quickReplies && msg.question) {
+        const qrData = { question: msg.question, quickReplies: msg.quickReplies, messageId: msg.id }
+        pausedQRRef.current = qrData
+        // Persist to localStorage so peek card + silent restore survive page refresh
+        try { localStorage.setItem(PAUSED_QR_KEY(proposalId), JSON.stringify(qrData)) } catch { /* ignore */ }
+      }
+      if (!msg.quickReplies) return prev
+      return [
+        ...prev.slice(0, realIdx),
+        { ...msg, quickReplies: undefined, question: undefined },
+        ...prev.slice(realIdx + 1),
+      ]
+    })
+  }, [proposalId])
+
+  const resumeQuestions = useCallback(() => {
+    setIsPaused(false)
+    isPausedRef.current = false
+    setPausedQuestion(null)
+    if (proposalId) {
+      localStorage.removeItem(PAUSED_KEY(proposalId))
+      localStorage.removeItem(PAUSED_QR_KEY(proposalId))
+    }
+
+    const saved = pausedQRRef.current
+    if (saved) {
+      // Silent restore: put the question + QR back on the original message
+      setMessages((prev) => {
+        // Find the message to restore onto — try saved ID first, fall back to last assistant
+        let targetIdx = prev.findIndex(m => m.id === saved.messageId)
+        if (targetIdx === -1) {
+          const revIdx = [...prev].reverse().findIndex(m => m.role === 'assistant' && !m.isPause)
+          if (revIdx !== -1) targetIdx = prev.length - 1 - revIdx
+        }
+        if (targetIdx === -1) return prev
+        const msg = prev[targetIdx]
+        return [
+          ...prev.slice(0, targetIdx),
+          { ...msg, question: saved.question, quickReplies: saved.quickReplies },
+          ...prev.slice(targetIdx + 1),
+        ]
+      })
+      pausedQRRef.current = null
+    } else {
+      // No saved QR (e.g. restored from localStorage paused state) — ask AI to continue
+      sendMessage('Continue with intake questions', 'Continue')
+    }
+  }, [proposalId, sendMessage])
+
+  // Temporarily reveal the paused question's QR card so the user can answer it
+  // without fully resuming auto-questions. After answering, the card hides and
+  // the breather checkpoint remains.
+  const revealPausedQuestion = useCallback(() => {
+    const saved = pausedQRRef.current
+    if (!saved) return
+    // Restore QR on the original message
+    setMessages((prev) => {
+      let targetIdx = prev.findIndex(m => m.id === saved.messageId)
+      if (targetIdx === -1) {
+        const revIdx = [...prev].reverse().findIndex(m => m.role === 'assistant' && !m.isPause)
+        if (revIdx !== -1) targetIdx = prev.length - 1 - revIdx
+      }
+      if (targetIdx === -1) return prev
+      const msg = prev[targetIdx]
+      return [
+        ...prev.slice(0, targetIdx),
+        { ...msg, question: saved.question, quickReplies: saved.quickReplies },
+        ...prev.slice(targetIdx + 1),
+      ]
+    })
+    setPausedQuestion(null)  // hide peek card
+    setQuestionRevealed(true)  // override isPaused QR suppression
+  }, [])
+
+  const skipQuestion = useCallback(() => {
+    sendMessage('Skip this question and ask the next one', 'Skipped')
+  }, [sendMessage])
+
+  const reset = useCallback(() => {
+    // Clear stored messages and proposal state for this lead
+    if (proposalId) {
+      localStorage.removeItem(MSGS_KEY(proposalId))
+      localStorage.removeItem(PROPOSAL_KEY(proposalId))
+      localStorage.removeItem(PAUSED_KEY(proposalId))
+      localStorage.removeItem(PAUSED_QR_KEY(proposalId))
+      localStorage.removeItem(PHASE_KEY(proposalId))
+    }
+    // Reset refs synchronously
+    messagesRef.current = []
+    confidenceRef.current = 0
+    detectedScopeRef.current = []
+    complexityRef.current = 1.0
+    lastPauseTurn.current = -999
+    turnCount.current = 0
+    currentPhaseRef.current = 'discovery'
+    currentScopeRef.current = ''
+    scopeQueueRef.current = []
+    completedScopeRef.current = []
+    prevScopeRef.current = ''
+    // Reset state — blank slate
+    setMessages([])
+    setDetectedScope([])
+    setConfidenceScore(0)
+    setComplexityMultiplier(1.0)
+    setPriceRange({ min: 0, max: 0 })
+    setIsStreaming(false)
+    setProjectOverview('')
+    setScopeSummaries({})
+    setProjectName('')
+    setIsPaused(false)
+    isPausedRef.current = false
+    setPausedQuestion(null)
+    pausedQRRef.current = null
+    setCurrentPhase('discovery')
+    setCurrentScope('')
+    setScopeQueue([])
+    setCompletedScope([])
+  }, [proposalId]) // eslint-disable-line react-hooks/exhaustive-deps
+
+  return { messages, detectedScope, confidenceScore, priceRange, isStreaming, sendMessage, toggleScope, projectOverview, editMessage, reset, scopeSummaries, projectName, isPaused, pausedQuestion, questionRevealed, pauseQuestions, resumeQuestions, revealPausedQuestion, skipQuestion, lastSyncedAt, currentPhase, currentScope, scopeQueue, completedScope, isAdminActive }
+}

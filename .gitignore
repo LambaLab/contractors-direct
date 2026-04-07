@@ -32,6 +32,13 @@ yarn-error.log*
 
 # env files (can opt-in for committing if needed)
 .env*
+!.env.example
+
+# historical BOQ data (large PDFs, not for version control)
+Historical BOQ*
+
+# backup files
+*.lamba
 
 # vercel
 .vercel
