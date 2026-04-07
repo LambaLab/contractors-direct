@@ -15,6 +15,22 @@ export const viewport: Viewport = {
 export const metadata: Metadata = {
   title: 'Contractors Direct',
   description: 'AI-powered renovation management for the UAE. Get a real quote in minutes.',
+  icons: {
+    icon: '/favicon.ico',
+    apple: '/apple-touch-icon.png',
+  },
+  openGraph: {
+    title: 'Contractors Direct',
+    description: 'AI-powered renovation management for the UAE. Get a real quote in minutes.',
+    images: [{ url: '/og-image.png', width: 1200, height: 630 }],
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Contractors Direct',
+    description: 'AI-powered renovation management for the UAE. Get a real quote in minutes.',
+    images: ['/og-image.png'],
+  },
 }
 
 const ANTI_FLASH_SCRIPT = `
