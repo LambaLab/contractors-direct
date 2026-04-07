@@ -52,30 +52,35 @@ export default function BudgetTab({ leadId, leadEmail, leadSlug }: Props) {
 
     loadBudgets()
 
-    // Subscribe to realtime updates (e.g., user responds)
-    const channel = supabase
-      .channel(`budget:${leadId}`)
-      .on(
-        'postgres_changes',
-        {
-          event: '*',
-          schema: 'public',
-          table: 'budget_proposals',
-          filter: `proposal_id=eq.${leadId}`,
-        },
-        (payload) => {
-          if (payload.eventType === 'INSERT') {
-            setBudgets((prev) => [...prev, payload.new as BudgetLead])
-          } else if (payload.eventType === 'UPDATE') {
-            setBudgets((prev) =>
-              prev.map((b) => (b.id === (payload.new as BudgetLead).id ? payload.new as BudgetLead : b))
-            )
+    // Realtime updates (optional, degrades gracefully if not enabled)
+    let channel: ReturnType<typeof supabase.channel> | null = null
+    try {
+      channel = supabase
+        .channel(`budget:${leadId}`)
+        .on(
+          'postgres_changes',
+          {
+            event: '*',
+            schema: 'public',
+            table: 'budget_proposals',
+            filter: `lead_id=eq.${leadId}`,
+          },
+          (payload) => {
+            if (payload.eventType === 'INSERT') {
+              setBudgets((prev) => [...prev, payload.new as BudgetLead])
+            } else if (payload.eventType === 'UPDATE') {
+              setBudgets((prev) =>
+                prev.map((b) => (b.id === (payload.new as BudgetLead).id ? payload.new as BudgetLead : b))
+              )
+            }
           }
-        }
-      )
-      .subscribe()
+        )
+        .subscribe()
+    } catch {
+      // Realtime not configured yet, polling fallback
+    }
 
-    return () => { supabase.removeChannel(channel) }
+    return () => { if (channel) supabase.removeChannel(channel) }
   }, [leadId])
 
   async function handleSubmit(e: React.FormEvent) {

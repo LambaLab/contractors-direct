@@ -132,27 +132,30 @@ export default function ChatTab({ leadId }: Props) {
     }, 3000)
 
     // Broadcast channel for admin join/leave signaling + client presence
-    const broadcastChannel = supabase.channel(`lead:${leadId}`, {
-      config: { presence: { key: 'admin' } },
-    })
+    let broadcastChannel: ReturnType<typeof supabase.channel> | null = null
+    try {
+      broadcastChannel = supabase.channel(`lead:${leadId}`, {
+        config: { presence: { key: 'admin' } },
+      })
 
-    broadcastChannel
-      .on('presence', { event: 'sync' }, () => {
-        const state = broadcastChannel.presenceState()
-        // Check if there's a client present
-        const hasClient = Object.keys(state).some(key => key === 'client')
-        setClientOnline(hasClient)
-      })
-      .subscribe(async (status) => {
-        if (status === 'SUBSCRIBED') {
-          // Track admin presence
-          await broadcastChannel.track({ user_type: 'admin' })
-        }
-      })
+      broadcastChannel
+        .on('presence', { event: 'sync' }, () => {
+          const state = broadcastChannel!.presenceState()
+          const hasClient = Object.keys(state).some(key => key === 'client')
+          setClientOnline(hasClient)
+        })
+        .subscribe(async (status) => {
+          if (status === 'SUBSCRIBED') {
+            await broadcastChannel!.track({ user_type: 'admin' })
+          }
+        })
+    } catch {
+      // Realtime not configured yet
+    }
 
     return () => {
       clearInterval(pollInterval)
-      supabase.removeChannel(broadcastChannel)
+      if (broadcastChannel) supabase.removeChannel(broadcastChannel)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [leadId])
