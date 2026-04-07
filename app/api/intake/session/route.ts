@@ -73,7 +73,7 @@ async function createSessionAndLead(
 
   return NextResponse.json({
     sessionId: session.id,
-    leadId: lead.id,
+    proposalId: lead.id,
     userId: userId ?? session.id, // fallback: use session ID as pseudo-userId for client storage
   })
 }
