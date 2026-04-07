@@ -585,7 +585,7 @@ export default function IntakeOverlay({ initialMessage, onClose }: Props) {
                     if (e.key === 'Escape') { setNameInputValue(appName); setEditingName(false) }
                   }}
                   maxLength={20}
-                  className="font-heading font-bold text-xl tracking-widest text-[var(--ov-text,#ffffff)] bg-transparent border-b border-[var(--ov-accent-border,rgba(255,252,0,0.50))] outline-none uppercase w-36"
+                  className="font-heading font-bold text-xl tracking-widest text-[var(--ov-text,#ffffff)] bg-transparent border-b border-[var(--ov-accent-border,rgba(115,103,255,0.50))] outline-none uppercase w-36"
                 />
               ) : (
                 <button
@@ -655,7 +655,7 @@ export default function IntakeOverlay({ initialMessage, onClose }: Props) {
           {switchingProposal && (
             <div className="absolute inset-0 z-30 flex items-center justify-center bg-[var(--ov-bg,#1d1d1d)]/80 backdrop-blur-sm">
               <div className="flex flex-col items-center gap-3">
-                <div className="w-6 h-6 border-2 border-[var(--ov-text-muted,#727272)] border-t-[var(--ov-accent-strong,#fffc00)] rounded-full animate-spin" />
+                <div className="w-6 h-6 border-2 border-[var(--ov-text-muted,#727272)] border-t-[var(--ov-accent-strong,#7367ff)] rounded-full animate-spin" />
                 <span className="text-xs text-[var(--ov-text-muted,#727272)]">Loading lead…</span>
               </div>
             </div>

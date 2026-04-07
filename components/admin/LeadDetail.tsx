@@ -31,7 +31,7 @@ function getStatusStyle(status: string): { bg: string; text: string; dot: string
     case 'saved':
       return { bg: 'bg-zinc-100 dark:bg-zinc-800', text: 'text-zinc-600 dark:text-zinc-400', dot: 'bg-zinc-400', label }
     case 'pending_review':
-      return { bg: 'bg-yellow-50 dark:bg-yellow-500/10', text: 'text-yellow-700 dark:text-yellow-400', dot: 'bg-yellow-500', label }
+      return { bg: 'bg-purple-950 dark:bg-purple-9500/10', text: 'text-purple-700 dark:text-purple-400', dot: 'bg-purple-9500', label }
     case 'approved':
       return { bg: 'bg-emerald-50 dark:bg-emerald-500/10', text: 'text-emerald-700 dark:text-emerald-400', dot: 'bg-emerald-500', label }
     case 'budget_proposed':
@@ -114,7 +114,7 @@ export default function LeadDetail({ lead, onBack, onLeadUpdate, isMobileFullscr
           {scopeNames.length > 0 && (
             <div className="flex flex-wrap gap-1.5 px-4 pb-2">
               {scopeNames.map((name) => (
-                <span key={name} className="inline-flex items-center text-xs font-medium px-2 py-0.5 rounded bg-yellow-50 dark:bg-yellow-500/10 text-yellow-700 dark:text-yellow-400">
+                <span key={name} className="inline-flex items-center text-xs font-medium px-2 py-0.5 rounded bg-purple-950 dark:bg-purple-9500/10 text-purple-700 dark:text-purple-400">
                   {name}
                 </span>
               ))}
@@ -135,7 +135,7 @@ export default function LeadDetail({ lead, onBack, onLeadUpdate, isMobileFullscr
               >
                 {tab.label}
                 {activeTab === tab.value && (
-                  <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-yellow-500 dark:bg-yellow-400" />
+                  <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-purple-9500 dark:bg-purple-400" />
                 )}
               </button>
             ))}
@@ -201,7 +201,7 @@ export default function LeadDetail({ lead, onBack, onLeadUpdate, isMobileFullscr
               {scopeNames.length > 0 && (
                 <div className="flex flex-wrap gap-1">
                   {scopeNames.map((name) => (
-                    <span key={name} className="inline-flex items-center text-[10px] font-medium px-1.5 py-px rounded bg-yellow-50 dark:bg-yellow-500/10 text-yellow-700 dark:text-yellow-400">
+                    <span key={name} className="inline-flex items-center text-[10px] font-medium px-1.5 py-px rounded bg-purple-950 dark:bg-purple-9500/10 text-purple-700 dark:text-purple-400">
                       {name}
                     </span>
                   ))}
@@ -224,7 +224,7 @@ export default function LeadDetail({ lead, onBack, onLeadUpdate, isMobileFullscr
               >
                 {tab.label}
                 {activeTab === tab.value && (
-                  <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-yellow-500 dark:bg-yellow-400" />
+                  <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-purple-9500 dark:bg-purple-400" />
                 )}
               </button>
             ))}

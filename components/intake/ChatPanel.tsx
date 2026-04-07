@@ -269,7 +269,7 @@ export default function ChatPanel({ messages, isStreaming, onSend, onEdit, onReq
                 </span>
               </button>
             )}
-            <div className="flex items-center gap-2 bg-[var(--ov-input-bg,rgba(255,255,255,0.05))] border border-[var(--ov-border,rgba(255,255,255,0.10))] rounded-xl p-3 focus-within:border-[var(--ov-focus-ring,rgba(255,252,0,0.30))] transition-colors relative z-[1]">
+            <div className="flex items-center gap-2 bg-[var(--ov-input-bg,rgba(255,255,255,0.05))] border border-[var(--ov-border,rgba(255,255,255,0.10))] rounded-xl p-3 focus-within:border-[var(--ov-focus-ring,rgba(115,103,255,0.30))] transition-colors relative z-[1]">
               <textarea
                 ref={textareaRef}
                 value={input}
@@ -286,7 +286,7 @@ export default function ChatPanel({ messages, isStreaming, onSend, onEdit, onReq
                 <button
                   onClick={() => isPaused ? onResumeQuestions?.() : onPauseQuestions?.()}
                   disabled={isStreaming}
-                  className="w-8 h-8 rounded-lg flex items-center justify-center text-[var(--ov-text-muted,#727272)] hover:text-[var(--ov-accent-strong,#fffc00)] hover:bg-[var(--ov-surface-subtle,rgba(255,255,255,0.08))] transition-all flex-shrink-0 cursor-pointer disabled:opacity-30 disabled:cursor-not-allowed"
+                  className="w-8 h-8 rounded-lg flex items-center justify-center text-[var(--ov-text-muted,#727272)] hover:text-[var(--ov-accent-strong,#7367ff)] hover:bg-[var(--ov-surface-subtle,rgba(255,255,255,0.08))] transition-all flex-shrink-0 cursor-pointer disabled:opacity-30 disabled:cursor-not-allowed"
                   aria-label={isPaused ? 'Resume Auto-questions' : 'Pause Auto-questions'}
                   title={isPaused ? 'Resume Auto-questions' : 'Pause Auto-questions'}
                 >

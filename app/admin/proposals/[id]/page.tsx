@@ -26,7 +26,7 @@ export default async function AdminProposalDetailPage({ params }: { params: Prom
           ← Back to queue
         </Link>
         <span className={`text-xs px-3 py-1.5 rounded-full ${
-          proposal.status === 'pending_review' ? 'bg-brand-yellow/10 text-brand-yellow' :
+          proposal.status === 'pending_review' ? 'bg-brand-purple/10 text-brand-purple' :
           proposal.status === 'approved' ? 'bg-brand-green/10 text-brand-green' :
           'bg-white/5 text-brand-gray-mid'
         }`}>

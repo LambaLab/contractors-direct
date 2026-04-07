@@ -14,22 +14,22 @@ type Props = {
 }
 
 const cardStyles: Record<string, string> = {
-  confirmed: 'bg-[var(--ov-accent-bg,rgba(255,252,0,0.05))] border-[var(--ov-accent-border,rgba(255,252,0,0.30))]',
-  current: 'bg-[var(--ov-accent-bg,rgba(255,252,0,0.05))] border-[var(--ov-accent-border,rgba(255,252,0,0.20))] border-dashed',
+  confirmed: 'bg-[var(--ov-accent-bg,rgba(115,103,255,0.05))] border-[var(--ov-accent-border,rgba(115,103,255,0.30))]',
+  current: 'bg-[var(--ov-accent-bg,rgba(115,103,255,0.05))] border-[var(--ov-accent-border,rgba(115,103,255,0.20))] border-dashed',
   detected: 'bg-[var(--ov-surface-subtle,rgba(255,255,255,0.03))] border-[var(--ov-border,rgba(255,255,255,0.10))] border-dashed',
   inactive: 'bg-[var(--ov-surface-subtle,rgba(255,255,255,0.02))] border-[var(--ov-border,rgba(255,255,255,0.05))] opacity-50',
 }
 
 const iconBgStyles: Record<string, string> = {
-  confirmed: 'bg-[var(--ov-accent-bg,rgba(255,252,0,0.15))]',
-  current: 'bg-[var(--ov-accent-bg,rgba(255,252,0,0.10))]',
+  confirmed: 'bg-[var(--ov-accent-bg,rgba(115,103,255,0.15))]',
+  current: 'bg-[var(--ov-accent-bg,rgba(115,103,255,0.10))]',
   detected: 'bg-[var(--ov-surface-subtle,rgba(255,255,255,0.05))]',
   inactive: 'bg-[var(--ov-surface-subtle,rgba(255,255,255,0.05))]',
 }
 
 const iconColorStyles: Record<string, string> = {
-  confirmed: 'text-[var(--ov-accent-strong,#fffc00)]',
-  current: 'text-[var(--ov-accent-strong,#fffc00)]',
+  confirmed: 'text-[var(--ov-accent-strong,#7367ff)]',
+  current: 'text-[var(--ov-accent-strong,#7367ff)]',
   detected: 'text-[var(--ov-text-muted,#727272)]',
   inactive: 'text-[var(--ov-text-muted,#727272)]',
 }

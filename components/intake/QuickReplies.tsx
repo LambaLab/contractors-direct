@@ -100,8 +100,8 @@ export default function QuickReplies({ quickReplies, onSelect, disabled, questio
               disabled={disabled}
               className={`px-3 py-1.5 rounded-full border text-sm transition-all cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed ${
                 isChecked
-                  ? 'bg-[var(--ov-accent-strong,#fffc00)] text-[var(--ov-bubble-user-text,#1d1d1d)] border-[var(--ov-accent-strong,#fffc00)] font-medium'
-                  : 'bg-[var(--ov-surface-subtle,rgba(255,255,255,0.05))] text-[var(--ov-text,#ffffff)] border-[var(--ov-border,rgba(255,255,255,0.10))] hover:border-[var(--ov-accent-border,rgba(255,252,0,0.40))]'
+                  ? 'bg-[var(--ov-accent-strong,#7367ff)] text-[var(--ov-bubble-user-text,#1d1d1d)] border-[var(--ov-accent-strong,#7367ff)] font-medium'
+                  : 'bg-[var(--ov-surface-subtle,rgba(255,255,255,0.05))] text-[var(--ov-text,#ffffff)] border-[var(--ov-border,rgba(255,255,255,0.10))] hover:border-[var(--ov-accent-border,rgba(115,103,255,0.40))]'
               }`}
             >
               {opt.icon && <span className="mr-1">{opt.icon}</span>}
@@ -113,7 +113,7 @@ export default function QuickReplies({ quickReplies, onSelect, disabled, questio
           <button
             onClick={() => setShowCustomInput(true)}
             disabled={disabled}
-            className="px-3 py-1.5 rounded-full border border-[var(--ov-border,rgba(255,255,255,0.10))] bg-[var(--ov-surface-subtle,rgba(255,255,255,0.05))] text-[var(--ov-text-muted,#727272)] text-sm hover:border-[var(--ov-accent-border,rgba(255,252,0,0.40))] transition-all cursor-pointer disabled:cursor-not-allowed"
+            className="px-3 py-1.5 rounded-full border border-[var(--ov-border,rgba(255,255,255,0.10))] bg-[var(--ov-surface-subtle,rgba(255,255,255,0.05))] text-[var(--ov-text-muted,#727272)] text-sm hover:border-[var(--ov-accent-border,rgba(115,103,255,0.40))] transition-all cursor-pointer disabled:cursor-not-allowed"
           >
             ✏️ Other...
           </button>
@@ -209,7 +209,7 @@ export default function QuickReplies({ quickReplies, onSelect, disabled, questio
                   <button
                     onClick={() => isPaused ? onResumeQuestions?.() : onPauseQuestions?.()}
                     disabled={disabled}
-                    className="inline-flex items-center gap-1.5 text-xs text-[var(--ov-text-muted,#727272)] hover:text-[var(--ov-accent-strong,#fffc00)] transition-colors cursor-pointer disabled:cursor-not-allowed disabled:opacity-50"
+                    className="inline-flex items-center gap-1.5 text-xs text-[var(--ov-text-muted,#727272)] hover:text-[var(--ov-accent-strong,#7367ff)] transition-colors cursor-pointer disabled:cursor-not-allowed disabled:opacity-50"
                   >
                     {isPaused ? <Play className="w-3 h-3" /> : <Pause className="w-3 h-3" />}
                     {isPaused ? 'Resume Auto-questions' : 'Pause Auto-questions'}
@@ -300,7 +300,7 @@ export default function QuickReplies({ quickReplies, onSelect, disabled, questio
             <div className="flex items-start gap-3 flex-1 min-w-0">
               {multiSelect && (
                 <div className={`mt-0.5 w-4 h-4 rounded flex-shrink-0 border flex items-center justify-center ${
-                  isChecked ? 'bg-[var(--ov-accent-strong,#fffc00)] border-[var(--ov-accent-strong,#fffc00)]' : 'border-[var(--ov-border,rgba(255,255,255,0.30))]'
+                  isChecked ? 'bg-[var(--ov-accent-strong,#7367ff)] border-[var(--ov-accent-strong,#7367ff)]' : 'border-[var(--ov-border,rgba(255,255,255,0.30))]'
                 }`}>
                   {isChecked && <span className="text-[var(--ov-bubble-user-text,#1d1d1d)] text-[10px] font-bold">✓</span>}
                 </div>
@@ -354,7 +354,7 @@ export default function QuickReplies({ quickReplies, onSelect, disabled, questio
                 onClick={() => isPaused ? onResumeQuestions?.() : onPauseQuestions?.()}
                 disabled={disabled}
                 title={isPaused ? 'Resume Auto-questions' : 'Pause Auto-questions'}
-                className="inline-flex items-center gap-1.5 text-xs text-[var(--ov-text-muted,#727272)] hover:text-[var(--ov-accent-strong,#fffc00)] transition-colors cursor-pointer disabled:cursor-not-allowed disabled:opacity-50"
+                className="inline-flex items-center gap-1.5 text-xs text-[var(--ov-text-muted,#727272)] hover:text-[var(--ov-accent-strong,#7367ff)] transition-colors cursor-pointer disabled:cursor-not-allowed disabled:opacity-50"
               >
                 {isPaused ? <Play className="w-3 h-3" /> : <Pause className="w-3 h-3" />}
                 {isPaused ? 'Resume Auto-questions' : 'Pause Auto-questions'}

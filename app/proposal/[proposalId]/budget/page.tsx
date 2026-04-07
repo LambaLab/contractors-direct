@@ -91,7 +91,7 @@ export default function BudgetResponsePage() {
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <div className="w-6 h-6 border-2 border-brand-purple/30 border-t-brand-yellow rounded-full animate-spin" />
+        <div className="w-6 h-6 border-2 border-brand-purple/30 border-t-brand-purple rounded-full animate-spin" />
       </div>
     )
   }

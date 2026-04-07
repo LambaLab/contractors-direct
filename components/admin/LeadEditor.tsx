@@ -183,7 +183,7 @@ export default function LeadEditor({ lead, onUpdate }: Props) {
     }
 
     // Edit mode
-    const baseClass = 'w-full resize-y bg-muted/20 dark:bg-muted/10 rounded-lg p-3 outline-none border border-border/60 focus:border-yellow-400 dark:focus:border-yellow-500/40 transition-colors placeholder:text-muted-foreground/40 text-foreground'
+    const baseClass = 'w-full resize-y bg-muted/20 dark:bg-muted/10 rounded-lg p-3 outline-none border border-border/60 focus:border-purple-400 dark:focus:border-purple-9500/40 transition-colors placeholder:text-muted-foreground/40 text-foreground'
 
     switch (key) {
       case 'brief':
@@ -239,7 +239,7 @@ export default function LeadEditor({ lead, onUpdate }: Props) {
                 size="sm"
                 onClick={handleSaveAll}
                 disabled={saving || !hasChanges}
-                className="text-xs cursor-pointer h-7 bg-yellow-500 hover:bg-yellow-600 text-black"
+                className="text-xs cursor-pointer h-7 bg-purple-9500 hover:bg-purple-600 text-black"
               >
                 {saving ? 'Saving...' : 'Save changes'}
               </Button>
@@ -274,7 +274,7 @@ export default function LeadEditor({ lead, onUpdate }: Props) {
                   onClick={() => setActiveSection(section.key)}
                   className={`w-full text-left px-4 py-2.5 text-sm transition-colors cursor-pointer border-l-2 ${
                     isActive
-                      ? 'text-foreground font-medium bg-yellow-50/80 dark:bg-yellow-500/5 border-l-yellow-500'
+                      ? 'text-foreground font-medium bg-purple-950/80 dark:bg-purple-9500/5 border-l-purple-9500'
                       : 'text-muted-foreground hover:text-foreground hover:bg-muted/50 border-l-transparent'
                   }`}
                 >
@@ -311,7 +311,7 @@ export default function LeadEditor({ lead, onUpdate }: Props) {
                 onClick={() => setMobileOpenSection(isOpen ? null : section.key)}
                 className={`w-full flex items-center justify-between px-5 py-3.5 text-base transition-colors cursor-pointer ${
                   isOpen
-                    ? 'text-foreground font-medium bg-yellow-50/80 dark:bg-yellow-500/5'
+                    ? 'text-foreground font-medium bg-purple-950/80 dark:bg-purple-9500/5'
                     : 'text-muted-foreground hover:text-foreground hover:bg-muted/50'
                 }`}
               >
@@ -376,7 +376,7 @@ function ScopeContent({
             key={scopeId}
             className={`rounded-xl border overflow-hidden transition-all ${
               isOpen
-                ? 'border-yellow-200 dark:border-yellow-500/20 bg-yellow-50/30 dark:bg-yellow-500/5'
+                ? 'border-purple-800 dark:border-purple-9500/20 bg-purple-950/30 dark:bg-purple-9500/5'
                 : 'border-border/60 bg-muted/20 dark:bg-muted/10'
             }`}
           >
@@ -386,12 +386,12 @@ function ScopeContent({
             >
               <div className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 transition-colors ${
                 isOpen
-                  ? 'bg-yellow-100 dark:bg-yellow-500/15'
+                  ? 'bg-purple-900 dark:bg-purple-9500/15'
                   : 'bg-muted/60 dark:bg-muted/30'
               }`}>
                 <IconComponent className={`w-4 h-4 transition-colors ${
                   isOpen
-                    ? 'text-yellow-600 dark:text-yellow-400'
+                    ? 'text-purple-600 dark:text-purple-400'
                     : 'text-muted-foreground'
                 }`} />
               </div>
@@ -417,7 +417,7 @@ function ScopeContent({
               >
                 <div className="overflow-hidden">
                   <div className="px-3 pb-3">
-                    <div className="h-px bg-yellow-200/50 dark:bg-yellow-500/10 mb-2" />
+                    <div className="h-px bg-purple-800/50 dark:bg-purple-9500/10 mb-2" />
                     <p className="text-sm md:text-xs text-muted-foreground leading-relaxed">{summary}</p>
                   </div>
                 </div>

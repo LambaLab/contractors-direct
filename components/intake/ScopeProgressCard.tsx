@@ -100,7 +100,7 @@ export default function ScopeProgressCard({
                   isOverview
                     ? ''
                     : status === 'current'
-                      ? 'bg-[var(--ov-accent-bg,rgba(255,252,0,0.06))] border-l-2 border-[var(--ov-accent-strong,#fffc00)]'
+                      ? 'bg-[var(--ov-accent-bg,rgba(115,103,255,0.06))] border-l-2 border-[var(--ov-accent-strong,#7367ff)]'
                       : status === 'done'
                         ? 'opacity-60'
                         : 'opacity-40',
@@ -113,7 +113,7 @@ export default function ScopeProgressCard({
                   ) : status === 'done' ? (
                     <Check className="w-4 h-4 text-green-400" />
                   ) : status === 'current' ? (
-                    <ArrowRight className="w-4 h-4 text-[var(--ov-accent-strong,#fffc00)]" />
+                    <ArrowRight className="w-4 h-4 text-[var(--ov-accent-strong,#7367ff)]" />
                   ) : (
                     <Circle className="w-3.5 h-3.5 text-[var(--ov-text-muted,#727272)]" />
                   )}
@@ -125,7 +125,7 @@ export default function ScopeProgressCard({
                   isOverview
                     ? 'bg-[var(--ov-surface-subtle,rgba(255,255,255,0.08))]'
                     : status === 'current'
-                      ? 'bg-[var(--ov-accent-bg,rgba(255,252,0,0.15))]'
+                      ? 'bg-[var(--ov-accent-bg,rgba(115,103,255,0.15))]'
                       : 'bg-[var(--ov-surface-subtle,rgba(255,255,255,0.05))]',
                 ].join(' ')}>
                   <IconComponent className={[
@@ -133,7 +133,7 @@ export default function ScopeProgressCard({
                     isOverview
                       ? 'text-[var(--ov-text,#ffffff)]/70'
                       : status === 'current'
-                        ? 'text-[var(--ov-accent-strong,#fffc00)]'
+                        ? 'text-[var(--ov-accent-strong,#7367ff)]'
                         : status === 'done'
                           ? 'text-green-400'
                           : 'text-[var(--ov-text-muted,#727272)]',
@@ -186,7 +186,7 @@ export default function ScopeProgressCard({
               <button
                 type="button"
                 onClick={() => onRequestViewProposal?.()}
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm transition-colors cursor-pointer border border-[var(--ov-border,rgba(255,255,255,0.12))] text-[var(--ov-text,#ffffff)] hover:border-[var(--ov-accent-border,rgba(255,252,0,0.50))] hover:text-[var(--ov-accent-strong,#fffc00)]"
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm transition-colors cursor-pointer border border-[var(--ov-border,rgba(255,255,255,0.12))] text-[var(--ov-text,#ffffff)] hover:border-[var(--ov-accent-border,rgba(115,103,255,0.50))] hover:text-[var(--ov-accent-strong,#7367ff)]"
               >
                 <span className="leading-none text-base">📋</span>
                 View proposal

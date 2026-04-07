@@ -171,7 +171,7 @@ export default function TrackerTab({ leadId }: Props) {
   if (generating) {
     return (
       <div className="flex flex-col items-center justify-center py-16 gap-3">
-        <Loader2 className="w-6 h-6 animate-spin text-yellow-500" />
+        <Loader2 className="w-6 h-6 animate-spin text-purple-9500" />
         <p className="text-sm text-muted-foreground">Generating task breakdown...</p>
       </div>
     )

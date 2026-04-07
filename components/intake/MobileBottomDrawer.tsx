@@ -193,7 +193,7 @@ const MobileBottomDrawer = forwardRef<MobileBottomDrawerHandle, Props>(function 
             aria-label={open ? 'Close proposal' : 'Open proposal'}
           >
             <span className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-medium border border-[var(--ov-border,rgba(255,255,255,0.10))] text-[var(--ov-text,#ffffff)]">
-              View Proposal <span className="text-[var(--ov-accent-strong,#fffc00)]">{confidenceScore}%</span>
+              View Proposal <span className="text-[var(--ov-accent-strong,#7367ff)]">{confidenceScore}%</span>
             </span>
             <ChevronUp
               className={`w-4 h-4 text-[var(--ov-text,#ffffff)] transition-transform duration-200 ${

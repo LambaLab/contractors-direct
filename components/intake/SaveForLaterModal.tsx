@@ -179,7 +179,7 @@ export default function SaveForLaterModal({ proposalId, sessionId, projectName, 
               onChange={e => { setEmail(e.target.value); setError('') }}
               onKeyDown={e => { if (e.key === 'Enter' && isValidEmail && !loading) handleSendCode() }}
               placeholder="your@email.com"
-              className="w-full px-4 py-3 rounded-xl bg-[var(--ov-input-bg,rgba(255,255,255,0.05))] border border-[var(--ov-border,rgba(255,255,255,0.10))] text-[var(--ov-text,#ffffff)] placeholder:text-[var(--ov-text-muted,#727272)] text-sm outline-none focus:border-[var(--ov-focus-ring,rgba(255,252,0,0.40))] transition-colors"
+              className="w-full px-4 py-3 rounded-xl bg-[var(--ov-input-bg,rgba(255,255,255,0.05))] border border-[var(--ov-border,rgba(255,255,255,0.10))] text-[var(--ov-text,#ffffff)] placeholder:text-[var(--ov-text-muted,#727272)] text-sm outline-none focus:border-[var(--ov-focus-ring,rgba(115,103,255,0.40))] transition-colors"
             />
 
             {error && <p className="text-xs text-red-400">{error}</p>}
@@ -234,8 +234,8 @@ export default function SaveForLaterModal({ proposalId, sessionId, projectName, 
                     'w-11 h-14 text-center text-xl font-bold rounded-xl border outline-none transition-colors',
                     'bg-[var(--ov-input-bg,rgba(255,255,255,0.05))] text-[var(--ov-text,#ffffff)]',
                     digit
-                      ? 'border-[var(--ov-accent-border,rgba(255,252,0,0.60))]'
-                      : 'border-[var(--ov-border,rgba(255,255,255,0.10))] focus:border-[var(--ov-focus-ring,rgba(255,252,0,0.40))]',
+                      ? 'border-[var(--ov-accent-border,rgba(115,103,255,0.60))]'
+                      : 'border-[var(--ov-border,rgba(255,255,255,0.10))] focus:border-[var(--ov-focus-ring,rgba(115,103,255,0.40))]',
                   ].join(' ')}
                 />
               ))}
@@ -268,8 +268,8 @@ export default function SaveForLaterModal({ proposalId, sessionId, projectName, 
         {step === 'success' && (
           <>
             <div className="flex items-center gap-3">
-              <div className="w-9 h-9 rounded-full bg-[var(--ov-accent-bg,rgba(255,252,0,0.15))] flex items-center justify-center flex-shrink-0">
-                <Check className="w-5 h-5 text-[var(--ov-accent-strong,#fffc00)]" />
+              <div className="w-9 h-9 rounded-full bg-[var(--ov-accent-bg,rgba(115,103,255,0.15))] flex items-center justify-center flex-shrink-0">
+                <Check className="w-5 h-5 text-[var(--ov-accent-strong,#7367ff)]" />
               </div>
               <h2 className="text-base font-semibold text-[var(--ov-text,#ffffff)]">You're all set</h2>
             </div>

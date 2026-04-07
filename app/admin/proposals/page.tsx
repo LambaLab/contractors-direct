@@ -20,7 +20,7 @@ export default async function AdminProposalsPage() {
           <Link
             key={p.id}
             href={`/admin/proposals/${p.id}`}
-            className="flex items-center justify-between p-4 bg-white/5 border border-white/5 rounded-xl hover:border-brand-yellow/30 transition-colors"
+            className="flex items-center justify-between p-4 bg-white/5 border border-white/5 rounded-xl hover:border-brand-purple/30 transition-colors"
           >
             <div className="space-y-1">
               <p className="text-sm text-brand-white line-clamp-1">{p.brief || 'No brief yet'}</p>
@@ -30,7 +30,7 @@ export default async function AdminProposalsPage() {
             </div>
             <div className="text-right space-y-1">
               <span className={`text-xs px-2 py-1 rounded-full ${
-                p.status === 'pending_review' ? 'bg-brand-yellow/10 text-brand-yellow' :
+                p.status === 'pending_review' ? 'bg-brand-purple/10 text-brand-purple' :
                 p.status === 'approved' ? 'bg-brand-green/10 text-brand-green' :
                 'bg-white/5 text-brand-gray-mid'
               }`}>

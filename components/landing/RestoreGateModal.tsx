@@ -190,7 +190,7 @@ export default function RestoreGateModal({ restoreData, onRestoreSuccess, onStar
               onChange={e => { setEmail(e.target.value); setError('') }}
               onKeyDown={e => { if (e.key === 'Enter' && isValidEmail && !loading) handleSendCode() }}
               placeholder="your@email.com"
-              className="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white placeholder:text-[#727272] text-sm outline-none focus:border-[rgba(255,252,0,0.40)] transition-colors"
+              className="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white placeholder:text-[#727272] text-sm outline-none focus:border-[rgba(115,103,255,0.40)] transition-colors"
             />
 
             {error && <p className="text-xs text-red-400">{error}</p>}
@@ -253,8 +253,8 @@ export default function RestoreGateModal({ restoreData, onRestoreSuccess, onStar
                     'w-11 h-14 text-center text-xl font-bold rounded-xl border outline-none transition-colors',
                     'bg-white/5 text-white',
                     digit
-                      ? 'border-[rgba(255,252,0,0.60)]'
-                      : 'border-white/10 focus:border-[rgba(255,252,0,0.40)]',
+                      ? 'border-[rgba(115,103,255,0.60)]'
+                      : 'border-white/10 focus:border-[rgba(115,103,255,0.40)]',
                   ].join(' ')}
                 />
               ))}

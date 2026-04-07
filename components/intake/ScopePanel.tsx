@@ -172,7 +172,7 @@ export default function ScopePanel({
                 PROJECT SCOPE
               </h2>
               {confirmedScope.length > 0 && (
-                <span className="text-[10px] bg-[var(--ov-accent-bg,rgba(255,252,0,0.15))] text-[var(--ov-accent-strong,#fffc00)] px-1.5 py-0.5 rounded-full font-medium">
+                <span className="text-[10px] bg-[var(--ov-accent-bg,rgba(115,103,255,0.15))] text-[var(--ov-accent-strong,#7367ff)] px-1.5 py-0.5 rounded-full font-medium">
                   {confirmedScope.length}
                 </span>
               )}

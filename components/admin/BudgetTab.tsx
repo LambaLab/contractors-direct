@@ -118,7 +118,7 @@ export default function BudgetTab({ leadId, leadEmail, leadSlug }: Props) {
     switch (status) {
       case 'pending':
         return (
-          <Badge variant="outline" className="border-yellow-500 text-yellow-600 dark:text-yellow-400 gap-1">
+          <Badge variant="outline" className="border-purple-9500 text-purple-600 dark:text-purple-400 gap-1">
             <Icon className="w-3.5 h-3.5" />
             {label}
           </Badge>
@@ -187,7 +187,7 @@ export default function BudgetTab({ leadId, leadEmail, leadSlug }: Props) {
                   )}
 
                   {budget.internal_notes && (
-                    <p className="text-xs text-yellow-500/60 italic">Internal: {budget.internal_notes}</p>
+                    <p className="text-xs text-purple-9500/60 italic">Internal: {budget.internal_notes}</p>
                   )}
 
                   {budget.status === 'countered' && budget.counter_amount && (
@@ -229,8 +229,8 @@ export default function BudgetTab({ leadId, leadEmail, leadSlug }: Props) {
         </h3>
 
         {!leadEmail && (
-          <Card className="border-yellow-500/20 bg-yellow-500/5">
-            <CardContent className="p-3 text-xs text-yellow-500">
+          <Card className="border-purple-9500/20 bg-purple-9500/5">
+            <CardContent className="p-3 text-xs text-purple-9500">
               No email on file. The client won't receive an email notification.
             </CardContent>
           </Card>

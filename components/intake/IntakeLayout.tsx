@@ -161,11 +161,11 @@ export default function IntakeLayout({ proposalId, initialMessage, onStateChange
         {/* Draggable divider — only rendered when proposal is open */}
         {proposalOpen && (
           <div
-            className="w-1 cursor-col-resize flex-shrink-0 relative bg-[var(--ov-surface-subtle,rgba(255,255,255,0.05))] hover:bg-[var(--ov-accent-border,rgba(255,252,0,0.30))] active:bg-[var(--ov-accent-strong,rgba(255,252,0,0.50))] transition-colors group"
+            className="w-1 cursor-col-resize flex-shrink-0 relative bg-[var(--ov-surface-subtle,rgba(255,255,255,0.05))] hover:bg-[var(--ov-accent-border,rgba(115,103,255,0.30))] active:bg-[var(--ov-accent-strong,rgba(115,103,255,0.50))] transition-colors group"
             onMouseDown={handleDividerMouseDown}
           >
             {/* Drag handle: small pill indicator centred on the divider */}
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-1 h-5 rounded-full bg-[var(--ov-border,rgba(255,255,255,0.20))] group-hover:bg-[var(--ov-accent-strong,rgba(255,252,0,0.70))] transition-colors pointer-events-none" />
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-1 h-5 rounded-full bg-[var(--ov-border,rgba(255,255,255,0.20))] group-hover:bg-[var(--ov-accent-strong,rgba(115,103,255,0.70))] transition-colors pointer-events-none" />
           </div>
         )}
 
