@@ -33,6 +33,7 @@ export default function AdminLoginPage() {
 
 function AdminLoginContent() {
   const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
   const [loading, setLoading] = useState(false)
   const [googleLoading, setGoogleLoading] = useState(false)
   const [sent, setSent] = useState(false)
@@ -40,6 +41,26 @@ function AdminLoginContent() {
   const searchParams = useSearchParams()
 
   const callbackError = searchParams.get('error')
+
+  async function handlePasswordLogin(e: React.FormEvent) {
+    e.preventDefault()
+    setLoading(true)
+    setError(null)
+    const supabase = createClient()
+
+    const { error: signInError } = await supabase.auth.signInWithPassword({
+      email: email.trim().toLowerCase(),
+      password,
+    })
+
+    if (signInError) {
+      setError('Invalid email or password')
+      setLoading(false)
+      return
+    }
+
+    window.location.href = '/admin'
+  }
 
   async function handleGoogleLogin() {
     setGoogleLoading(true)
@@ -122,8 +143,8 @@ function AdminLoginContent() {
                 </div>
               </div>
 
-              {/* Magic link form */}
-              <form onSubmit={handleMagicLink} className="space-y-3">
+              {/* Password login */}
+              <form onSubmit={handlePasswordLogin} className="space-y-3">
                 <div className="space-y-2">
                   <Label htmlFor="email">Email</Label>
                   <Input
@@ -135,13 +156,24 @@ function AdminLoginContent() {
                     placeholder="admin@contractorsdirect.com"
                   />
                 </div>
+                <div className="space-y-2">
+                  <Label htmlFor="password">Password</Label>
+                  <Input
+                    id="password"
+                    type="password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    required
+                    placeholder="Enter password"
+                  />
+                </div>
 
                 {error && (
                   <p className="text-xs text-destructive text-center">{error}</p>
                 )}
 
-                <Button type="submit" className="w-full" disabled={loading || !email.trim()}>
-                  {loading ? 'Sending...' : 'Send Magic Link'}
+                <Button type="submit" className="w-full" disabled={loading || !email.trim() || !password}>
+                  {loading ? 'Signing in...' : 'Sign In'}
                 </Button>
               </form>
             </div>
