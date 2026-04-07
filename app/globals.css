@@ -117,6 +117,30 @@
   --sidebar-ring: oklch(0.556 0 0);
 }
 
+@theme inline {
+  /* Brand colors from design system */
+  --color-brand-dark: #0d0d0c;
+  --color-brand-white: #FAFAF9;
+  --color-brand-yellow: #fffc00;
+  --color-brand-gray-mid: #888780;
+  --color-brand-green: #1D9E75;
+  --color-brand-purple: #7F77DD;
+  --color-brand-amber: #BA7517;
+  --color-brand-coral: #D85A30;
+}
+
+/* Light mode overrides for the intake overlay */
+.intake-light {
+  --ov-text: #1A1916;
+  --ov-text-muted: #888780;
+  --ov-surface-subtle: rgba(0, 0, 0, 0.03);
+  --ov-border: rgba(0, 0, 0, 0.08);
+  --ov-input-bg: rgba(0, 0, 0, 0.04);
+  --ov-accent-border: rgba(180, 160, 0, 0.40);
+  --ov-accent-strong: rgba(180, 160, 0, 0.60);
+  --ov-focus-ring: rgba(180, 160, 0, 0.25);
+}
+
 @layer base {
   * {
     @apply border-border outline-ring/50;
@@ -126,5 +150,14 @@
   }
   html {
     @apply font-sans;
+  }
+
+  /* Hide scrollbar utility */
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
   }
 }
