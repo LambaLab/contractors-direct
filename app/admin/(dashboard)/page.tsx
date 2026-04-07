@@ -266,7 +266,7 @@ function AdminDashboardContent() {
                       </span>
                     )}
                     {activeTab === tab.value && (
-                      <Check className="w-3.5 h-3.5 text-purple-9500" />
+                      <Check className="w-3.5 h-3.5 text-purple-500" />
                     )}
                   </div>
                 </DropdownMenuItem>
@@ -352,7 +352,7 @@ function AdminDashboardContent() {
                         <div className="relative">
                           <Filter className="h-4 w-4" />
                           {statusFilter !== 'all' && (
-                            <span className="absolute -top-1 -right-1 w-2 h-2 rounded-full bg-purple-9500" />
+                            <span className="absolute -top-1 -right-1 w-2 h-2 rounded-full bg-purple-500" />
                           )}
                         </div>
                       </SelectTrigger>
@@ -428,7 +428,7 @@ function AdminDashboardContent() {
             className="w-1 shrink-0 cursor-col-resize relative bg-border hover:bg-purple-400/50 active:bg-purple-400/70 transition-colors group -ml-px"
             onMouseDown={handleDividerMouseDown}
           >
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-1 h-6 rounded-full bg-muted-foreground/20 group-hover:bg-purple-9500/60 transition-colors pointer-events-none" />
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-1 h-6 rounded-full bg-muted-foreground/20 group-hover:bg-purple-500/60 transition-colors pointer-events-none" />
           </div>
         )}
 
@@ -529,7 +529,7 @@ function AdminDashboardContent() {
                       <div className="relative">
                         <Filter className="h-[18px] w-[18px]" />
                         {statusFilter !== 'all' && (
-                          <span className="absolute -top-1 -right-1 w-2 h-2 rounded-full bg-purple-9500" />
+                          <span className="absolute -top-1 -right-1 w-2 h-2 rounded-full bg-purple-500" />
                         )}
                       </div>
                     </SelectTrigger>
@@ -582,7 +582,7 @@ function AdminDashboardContent() {
                     onClick={() => { setActiveTab(tab.value); setMobileServiceOpen(false) }}
                     className={`w-full flex items-center justify-between px-4 py-3.5 rounded-xl text-base transition-colors cursor-pointer ${
                       activeTab === tab.value
-                        ? 'bg-purple-950/80 dark:bg-purple-9500/5 text-foreground font-medium'
+                        ? 'bg-purple-950/80 dark:bg-purple-500/5 text-foreground font-medium'
                         : 'text-muted-foreground hover:bg-muted/50 hover:text-foreground'
                     }`}
                   >
@@ -599,7 +599,7 @@ function AdminDashboardContent() {
                       )}
                     </span>
                     {activeTab === tab.value && (
-                      <Check className="w-5 h-5 text-purple-9500" />
+                      <Check className="w-5 h-5 text-purple-500" />
                     )}
                   </button>
                 ))}

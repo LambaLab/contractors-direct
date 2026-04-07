@@ -17,7 +17,7 @@ function getStatusStyle(status: string): { bg: string; text: string; dot: string
     case 'saved':
       return { bg: 'bg-zinc-100 dark:bg-zinc-800', text: 'text-zinc-600 dark:text-zinc-400', dot: 'bg-zinc-400' }
     case 'pending_review':
-      return { bg: 'bg-purple-950 dark:bg-purple-9500/10', text: 'text-purple-700 dark:text-purple-400', dot: 'bg-purple-9500' }
+      return { bg: 'bg-purple-950 dark:bg-purple-500/10', text: 'text-purple-700 dark:text-purple-400', dot: 'bg-purple-500' }
     case 'approved':
       return { bg: 'bg-emerald-50 dark:bg-emerald-500/10', text: 'text-emerald-700 dark:text-emerald-400', dot: 'bg-emerald-500' }
     case 'budget_proposed':
@@ -66,7 +66,7 @@ export default function LeadListItem({ lead, isSelected, onClick, isFullWidth }:
         onClick={onClick}
         className={`w-full text-left px-4 lg:px-6 py-3 border-b transition-colors cursor-pointer group ${
           isSelected
-            ? 'bg-purple-950/80 dark:bg-purple-9500/5 border-l-2 border-l-purple-9500'
+            ? 'bg-purple-950/80 dark:bg-purple-500/5 border-l-2 border-l-purple-500'
             : 'hover:bg-muted/50 border-l-2 border-l-transparent'
         }`}
       >
@@ -121,7 +121,7 @@ export default function LeadListItem({ lead, isSelected, onClick, isFullWidth }:
       onClick={onClick}
       className={`w-full text-left px-4 py-3.5 md:py-3 border-b transition-colors cursor-pointer group ${
         isSelected
-          ? 'bg-purple-950/80 dark:bg-purple-9500/5 border-l-2 border-l-purple-9500'
+          ? 'bg-purple-950/80 dark:bg-purple-500/5 border-l-2 border-l-purple-500'
           : 'hover:bg-muted/50 border-l-2 border-l-transparent'
       }`}
     >
