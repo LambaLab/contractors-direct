@@ -110,7 +110,7 @@ export default function AuthGateModal({ proposalId, onClose, theme }: Props) {
               <button
                 type="submit"
                 disabled={step === 'loading' || !phone.trim()}
-                className="w-full py-3 bg-brand-yellow text-brand-dark font-medium rounded-xl hover:bg-brand-yellow/90 transition-all disabled:opacity-50 flex items-center justify-center gap-2 text-sm"
+                className="w-full py-3 bg-brand-purple text-white font-medium rounded-xl hover:bg-brand-purple/90 transition-all disabled:opacity-50 flex items-center justify-center gap-2 text-sm"
               >
                 {step === 'loading' ? (
                   <Loader2 className="w-4 h-4 animate-spin" />

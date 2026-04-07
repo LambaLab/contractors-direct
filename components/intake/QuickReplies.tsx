@@ -126,12 +126,12 @@ export default function QuickReplies({ quickReplies, onSelect, disabled, questio
               onChange={(e) => setCustomValue(e.target.value)}
               onKeyDown={(e) => e.key === 'Enter' && handleCustomSubmit()}
               placeholder="Type your answer..."
-              className="flex-1 bg-[var(--ov-input-bg,rgba(255,255,255,0.05))] border border-[var(--ov-border,rgba(255,255,255,0.10))] rounded-xl px-3 py-2 text-sm text-[var(--ov-text,#ffffff)] placeholder:text-[var(--ov-text-muted,#727272)] outline-none focus:border-brand-yellow/50"
+              className="flex-1 bg-[var(--ov-input-bg,rgba(255,255,255,0.05))] border border-[var(--ov-border,rgba(255,255,255,0.10))] rounded-xl px-3 py-2 text-sm text-[var(--ov-text,#ffffff)] placeholder:text-[var(--ov-text-muted,#727272)] outline-none focus:border-brand-purple/50"
             />
             <button
               onClick={handleCustomSubmit}
               disabled={disabled || !customValue.trim()}
-              className="px-3 py-2 bg-brand-yellow text-brand-dark rounded-xl text-sm font-medium disabled:opacity-40 cursor-pointer disabled:cursor-not-allowed"
+              className="px-3 py-2 bg-brand-purple text-white rounded-xl text-sm font-medium disabled:opacity-40 cursor-pointer disabled:cursor-not-allowed"
             >
               Send
             </button>
@@ -141,7 +141,7 @@ export default function QuickReplies({ quickReplies, onSelect, disabled, questio
           <button
             onClick={handleMultiConfirm}
             disabled={disabled}
-            className="w-full mt-2 py-2 bg-brand-yellow text-brand-dark font-medium rounded-xl text-sm transition-all hover:bg-brand-yellow/90 disabled:opacity-50 cursor-pointer disabled:cursor-not-allowed"
+            className="w-full mt-2 py-2 bg-brand-purple text-white font-medium rounded-xl text-sm transition-all hover:bg-brand-purple/90 disabled:opacity-50 cursor-pointer disabled:cursor-not-allowed"
           >
             Continue →
           </button>
@@ -174,12 +174,12 @@ export default function QuickReplies({ quickReplies, onSelect, disabled, questio
                   onChange={(e) => setCustomValue(e.target.value)}
                   onKeyDown={(e) => e.key === 'Enter' && handleCustomSubmit()}
                   placeholder="Type your answer..."
-                  className="flex-1 bg-[var(--ov-input-bg,rgba(255,255,255,0.05))] border border-[var(--ov-border,rgba(255,255,255,0.10))] rounded-lg px-3 py-2 text-sm text-[var(--ov-text,#ffffff)] placeholder:text-[var(--ov-text-muted,#727272)] outline-none focus:border-brand-yellow/50"
+                  className="flex-1 bg-[var(--ov-input-bg,rgba(255,255,255,0.05))] border border-[var(--ov-border,rgba(255,255,255,0.10))] rounded-lg px-3 py-2 text-sm text-[var(--ov-text,#ffffff)] placeholder:text-[var(--ov-text-muted,#727272)] outline-none focus:border-brand-purple/50"
                 />
                 <button
                   onClick={handleCustomSubmit}
                   disabled={disabled || !customValue.trim()}
-                  className="px-3 py-2 bg-brand-yellow text-brand-dark rounded-lg text-sm font-medium disabled:opacity-40 cursor-pointer disabled:cursor-not-allowed"
+                  className="px-3 py-2 bg-brand-purple text-white rounded-lg text-sm font-medium disabled:opacity-40 cursor-pointer disabled:cursor-not-allowed"
                 >
                   Send
                 </button>
@@ -263,12 +263,12 @@ export default function QuickReplies({ quickReplies, onSelect, disabled, questio
                     onChange={(e) => setCustomValue(e.target.value)}
                     onKeyDown={(e) => e.key === 'Enter' && handleCustomSubmit()}
                     placeholder="Type your answer..."
-                    className="flex-1 bg-[var(--ov-input-bg,rgba(255,255,255,0.05))] border border-[var(--ov-border,rgba(255,255,255,0.10))] rounded-lg px-3 py-2 text-sm text-[var(--ov-text,#ffffff)] placeholder:text-[var(--ov-text-muted,#727272)] outline-none focus:border-brand-yellow/50"
+                    className="flex-1 bg-[var(--ov-input-bg,rgba(255,255,255,0.05))] border border-[var(--ov-border,rgba(255,255,255,0.10))] rounded-lg px-3 py-2 text-sm text-[var(--ov-text,#ffffff)] placeholder:text-[var(--ov-text-muted,#727272)] outline-none focus:border-brand-purple/50"
                   />
                   <button
                     onClick={handleCustomSubmit}
                     disabled={disabled || !customValue.trim()}
-                    className="px-3 py-2 bg-brand-yellow text-brand-dark rounded-lg text-sm font-medium disabled:opacity-40 cursor-pointer disabled:cursor-not-allowed"
+                    className="px-3 py-2 bg-brand-purple text-white rounded-lg text-sm font-medium disabled:opacity-40 cursor-pointer disabled:cursor-not-allowed"
                   >
                     Send
                   </button>
@@ -325,7 +325,7 @@ export default function QuickReplies({ quickReplies, onSelect, disabled, questio
           <button
             onClick={handleMultiConfirm}
             disabled={disabled}
-            className="w-full py-2 bg-brand-yellow text-brand-dark font-medium rounded-xl text-sm transition-all hover:bg-brand-yellow/90 disabled:opacity-50 cursor-pointer disabled:cursor-not-allowed"
+            className="w-full py-2 bg-brand-purple text-white font-medium rounded-xl text-sm transition-all hover:bg-brand-purple/90 disabled:opacity-50 cursor-pointer disabled:cursor-not-allowed"
           >
             Continue →
           </button>

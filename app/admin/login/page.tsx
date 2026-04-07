@@ -83,7 +83,7 @@ function AdminLoginContent() {
     <div className="min-h-screen bg-muted flex items-center justify-center p-4">
       <Card className="w-full max-w-sm">
         <CardHeader className="text-center">
-          <CardTitle className="font-bebas text-3xl tracking-wide">CONTRACTORS DIRECT</CardTitle>
+          <CardTitle className="font-heading font-bold text-3xl tracking-wide">CONTRACTORS DIRECT</CardTitle>
           <CardDescription>Admin Dashboard</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">

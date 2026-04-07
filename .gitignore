@@ -46,3 +46,4 @@ Historical BOQ*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+supabase/.temp/

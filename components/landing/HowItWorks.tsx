@@ -20,13 +20,13 @@ export default function HowItWorks() {
   return (
     <section className="py-24 px-4 border-t border-white/5">
       <div className="max-w-5xl mx-auto">
-        <h2 className="font-bebas text-5xl md:text-6xl text-center text-brand-white mb-16">
+        <h2 className="font-heading font-bold text-5xl md:text-6xl text-center text-brand-white mb-16">
           HOW IT WORKS
         </h2>
         <div className="grid md:grid-cols-3 gap-8">
           {STEPS.map((step) => (
             <div key={step.number} className="space-y-4">
-              <span className="font-bebas text-7xl text-brand-yellow/20">{step.number}</span>
+              <span className="font-heading font-bold text-7xl text-brand-purple/20">{step.number}</span>
               <h3 className="text-xl font-bold text-brand-white">{step.title}</h3>
               <p className="text-brand-gray-mid leading-relaxed">{step.description}</p>
             </div>

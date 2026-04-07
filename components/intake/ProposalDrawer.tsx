@@ -148,7 +148,7 @@ export default function ProposalDrawer({
                 <div className="flex items-center gap-2 mt-1.5">
                   <div className={`flex-1 h-1.5 rounded-full overflow-hidden ${isLight ? 'bg-black/5' : 'bg-white/10'}`}>
                     <div
-                      className="h-full bg-brand-yellow rounded-full transition-all duration-500"
+                      className="h-full bg-brand-purple rounded-full transition-all duration-500"
                       style={{ width: `${Math.min(currentConfidence, 100)}%` }}
                     />
                   </div>
@@ -173,7 +173,7 @@ export default function ProposalDrawer({
               </div>
 
               {/* CTA to save email */}
-              <div className={`rounded-lg p-4 text-center ${isLight ? 'bg-[rgba(0,0,0,0.03)] border border-[rgba(0,0,0,0.08)]' : 'bg-brand-yellow/5 border border-brand-yellow/10'}`}>
+              <div className={`rounded-lg p-4 text-center ${isLight ? 'bg-[rgba(0,0,0,0.03)] border border-[rgba(0,0,0,0.08)]' : 'bg-brand-purple/5 border border-brand-purple/10'}`}>
                 <p className={`text-xs mb-3 ${isLight ? 'text-[#1a1a1a]/70' : 'text-white/60'}`}>
                   Save your email to pick up where you left off on any device.
                 </p>
@@ -182,7 +182,7 @@ export default function ProposalDrawer({
                   className={`w-full py-2 px-3 rounded-lg text-sm font-medium transition-colors cursor-pointer ${
                     isLight
                       ? 'bg-[#1A1A1A] text-white hover:bg-[#333]'
-                      : 'bg-brand-yellow text-brand-dark hover:bg-brand-yellow/90'
+                      : 'bg-brand-purple text-white hover:bg-brand-purple/90'
                   }`}
                 >
                   Save project for later
@@ -223,7 +223,7 @@ export default function ProposalDrawer({
                             ${isActive
                               ? isLight
                                 ? 'bg-[rgba(0,0,0,0.04)] border-l-2 border-[#1A1A1A]'
-                                : 'bg-brand-yellow/10 border-l-2 border-brand-yellow'
+                                : 'bg-brand-purple/10 border-l-2 border-brand-purple'
                               : isLight
                                 ? 'hover:bg-black/[0.03] border-l-2 border-transparent'
                                 : 'hover:bg-white/5 border-l-2 border-transparent'
@@ -235,7 +235,7 @@ export default function ProposalDrawer({
                           <div className="flex items-center gap-2 mt-1">
                             <div className={`flex-1 h-1 rounded-full overflow-hidden ${isLight ? 'bg-black/5' : 'bg-white/10'}`}>
                               <div
-                                className="h-full bg-brand-yellow rounded-full transition-all"
+                                className="h-full bg-brand-purple rounded-full transition-all"
                                 style={{ width: `${Math.min(p.confidenceScore, 100)}%` }}
                               />
                             </div>

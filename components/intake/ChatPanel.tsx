@@ -296,7 +296,7 @@ export default function ChatPanel({ messages, isStreaming, onSend, onEdit, onReq
               <button
                 onClick={handleSubmit}
                 disabled={!input.trim() || isStreaming}
-                className="w-8 h-8 bg-brand-yellow rounded-lg flex items-center justify-center disabled:opacity-30 hover:bg-brand-yellow/90 transition-all active:scale-95 flex-shrink-0 cursor-pointer disabled:cursor-not-allowed"
+                className="w-8 h-8 bg-brand-purple rounded-lg flex items-center justify-center disabled:opacity-30 hover:bg-brand-purple/90 transition-all active:scale-95 flex-shrink-0 cursor-pointer disabled:cursor-not-allowed"
                 aria-label="Send message"
               >
                 <ArrowRight className="w-4 h-4 text-brand-dark" />

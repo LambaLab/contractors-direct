@@ -103,7 +103,7 @@ export default function TeamModal({ open, onOpenChange }: Props) {
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-lg">
         <DialogHeader>
-          <DialogTitle className="font-bebas text-xl tracking-wide">TEAM MEMBERS</DialogTitle>
+          <DialogTitle className="font-heading font-bold text-xl tracking-wide">TEAM MEMBERS</DialogTitle>
         </DialogHeader>
 
         {/* Content */}

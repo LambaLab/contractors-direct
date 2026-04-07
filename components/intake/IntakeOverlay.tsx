@@ -1,8 +1,7 @@
 'use client'
 
 import { useCallback, useEffect, useRef, useState } from 'react'
-import { CloudCheck, Menu, Minus, Sun, Moon, X } from 'lucide-react'
-import { useTheme } from '@/hooks/useTheme'
+import { CloudCheck, Menu, Minus, X } from 'lucide-react'
 import IntakeLayout from './IntakeLayout'
 import MinimizedBar from './MinimizedBar'
 import SaveForLaterModal from './SaveForLaterModal'
@@ -27,7 +26,7 @@ type Props = {
 }
 
 export default function IntakeOverlay({ initialMessage, onClose }: Props) {
-  const { theme, toggleTheme } = useTheme()
+  const theme = 'dark' as const
   const [session, setSession] = useState<SessionData | null>(null)
   const [sessionError, setSessionError] = useState(false)
   const retryCountRef = useRef(0)
@@ -523,7 +522,7 @@ export default function IntakeOverlay({ initialMessage, onClose }: Props) {
 
       {/* Loading / error states — only shown when not minimized and session not ready */}
       {!minimized && sessionError && (
-        <div className={`fixed inset-0 z-50 flex items-center justify-center transition-opacity duration-300 ${theme === 'light' ? 'bg-[#F5F4F0] intake-light' : 'bg-brand-dark'} ${mounted ? 'opacity-100' : 'opacity-0'}`}>
+        <div className={`fixed inset-0 z-50 flex items-center justify-center transition-opacity duration-300 bg-brand-dark ${mounted ? 'opacity-100' : 'opacity-0'}`}>
           <div className="text-center space-y-4">
             {retryCountRef.current < maxAutoRetries ? (
               <>
@@ -540,7 +539,7 @@ export default function IntakeOverlay({ initialMessage, onClose }: Props) {
                 <p className="text-[var(--ov-text,#ffffff)]">Couldn&apos;t connect. Check your connection and try again.</p>
                 <button
                   onClick={handleRetry}
-                  className="px-4 py-2 bg-brand-yellow text-brand-dark text-sm font-medium rounded-lg hover:bg-brand-yellow/90 transition-colors cursor-pointer"
+                  className="px-4 py-2 bg-brand-purple text-white text-sm font-medium rounded-lg hover:bg-brand-purple/90 transition-colors cursor-pointer"
                 >
                   Try again
                 </button>
@@ -551,16 +550,16 @@ export default function IntakeOverlay({ initialMessage, onClose }: Props) {
       )}
 
       {!minimized && !session && !sessionError && (
-        <div className={`fixed inset-0 z-50 flex items-center justify-center transition-opacity duration-300 ${theme === 'light' ? 'bg-[#F5F4F0] intake-light' : 'bg-brand-dark'} ${mounted ? 'opacity-100' : 'opacity-0'}`}>
+        <div className={`fixed inset-0 z-50 flex items-center justify-center transition-opacity duration-300 bg-brand-dark ${mounted ? 'opacity-100' : 'opacity-0'}`}>
           <SessionLoadingScreen idea={initialMessage} />
         </div>
       )}
 
       {/* Full overlay — always mounted once session is ready, hidden via CSS when minimized */}
       {session && (
-        <div className={`fixed inset-0 z-50 flex flex-col transition-opacity duration-300 ${theme === 'light' ? 'bg-[#F5F4F0] intake-light' : 'bg-brand-dark'} ${mounted ? 'opacity-100' : 'opacity-0'} ${minimized ? 'hidden' : ''}`}>
+        <div className={`fixed inset-0 z-50 flex flex-col transition-opacity duration-300 bg-brand-dark ${mounted ? 'opacity-100' : 'opacity-0'} ${minimized ? 'hidden' : ''}`}>
           {/* Top bar */}
-          <div className={`flex items-center justify-between px-4 py-3 border-b flex-shrink-0 ${theme === 'light' ? 'border-[rgba(0,0,0,0.08)]' : 'border-white/5'}`}>
+          <div className={`flex items-center justify-between px-4 py-3 border-b flex-shrink-0 border-white/5`}>
 
             {/* Left: Hamburger + Project name */}
             <div className="flex items-center gap-2">
@@ -568,10 +567,7 @@ export default function IntakeOverlay({ initialMessage, onClose }: Props) {
               <button
                 onClick={() => setDrawerOpen(true)}
                 className={`w-8 h-8 rounded-lg flex items-center justify-center transition-colors cursor-pointer
-                  ${theme === 'light'
-                    ? 'hover:bg-black/5 text-[var(--ov-text-muted,#727272)] hover:text-[var(--ov-text,#1a1a1a)]'
-                    : 'hover:bg-white/10 text-[var(--ov-text-muted,#727272)] hover:text-[var(--ov-text,#ffffff)]'
-                  }`}
+                  hover:bg-white/10 text-[var(--ov-text-muted,#7a7a7a)] hover:text-[var(--ov-text,#f0f0f0)]`}
                 aria-label="Open proposals drawer"
               >
                 <Menu className="w-4 h-4" />
@@ -589,12 +585,12 @@ export default function IntakeOverlay({ initialMessage, onClose }: Props) {
                     if (e.key === 'Escape') { setNameInputValue(appName); setEditingName(false) }
                   }}
                   maxLength={20}
-                  className="font-bebas text-xl tracking-widest text-[var(--ov-text,#ffffff)] bg-transparent border-b border-[var(--ov-accent-border,rgba(255,252,0,0.50))] outline-none uppercase w-36"
+                  className="font-heading font-bold text-xl tracking-widest text-[var(--ov-text,#ffffff)] bg-transparent border-b border-[var(--ov-accent-border,rgba(255,252,0,0.50))] outline-none uppercase w-36"
                 />
               ) : (
                 <button
                   onClick={() => { setNameInputValue(appName); setEditingName(true) }}
-                  className={`font-bebas text-xl tracking-widest cursor-pointer group flex items-center gap-1.5 transition-all
+                  className={`font-heading font-bold text-xl tracking-widest cursor-pointer group flex items-center gap-1.5 transition-all
                     ${appName
                       ? 'text-[var(--ov-text,#ffffff)] hover:opacity-75'
                       : 'text-[var(--ov-text-muted,#727272)] border-b border-dashed border-[var(--ov-text-muted,rgba(114,114,114,0.4))] pb-0.5'
@@ -641,17 +637,10 @@ export default function IntakeOverlay({ initialMessage, onClose }: Props) {
                 {proposalOpen ? (
                   'Hide proposal'
                 ) : (
-                  <>View Proposal <span className="text-[var(--ov-accent-strong,#fffc00)]">{liveConfidenceScore}%</span></>
+                  <>View Proposal <span className="text-brand-purple">{liveConfidenceScore}%</span></>
                 )}
               </button>
 
-              <button
-                onClick={toggleTheme}
-                className="w-8 h-8 rounded-lg bg-[var(--ov-surface-subtle,rgba(255,255,255,0.05))] hover:bg-[var(--ov-input-bg,rgba(255,255,255,0.10))] flex items-center justify-center text-[var(--ov-text-muted,#727272)] hover:text-[var(--ov-text,#ffffff)] transition-colors cursor-pointer"
-                aria-label={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
-              >
-                {theme === 'dark' ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
-              </button>
               <button
                 onClick={handleCloseOrMinimize}
                 className="w-8 h-8 rounded-lg bg-[var(--ov-surface-subtle,rgba(255,255,255,0.05))] hover:bg-[var(--ov-input-bg,rgba(255,255,255,0.10))] flex items-center justify-center text-[var(--ov-text-muted,#727272)] hover:text-[var(--ov-text,#ffffff)] transition-colors cursor-pointer"

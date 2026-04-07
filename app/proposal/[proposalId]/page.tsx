@@ -39,11 +39,11 @@ export default async function ProposalPage({
   return (
     <div className="min-h-screen flex items-center justify-center px-4">
       <div className="max-w-md w-full text-center space-y-6">
-        <div className="w-16 h-16 bg-brand-yellow/10 rounded-2xl flex items-center justify-center mx-auto">
+        <div className="w-16 h-16 bg-brand-purple/10 rounded-2xl flex items-center justify-center mx-auto">
           <span className="text-3xl">📋</span>
         </div>
         <div className="space-y-2">
-          <h1 className="font-bebas text-4xl text-brand-white">YOUR PROPOSAL IS IN REVIEW</h1>
+          <h1 className="font-heading font-bold text-4xl text-brand-white">YOUR PROPOSAL IS IN REVIEW</h1>
           <p className="text-brand-gray-mid leading-relaxed">
             Our team is reviewing your AI-generated proposal to make sure everything is accurate.
             You&apos;ll receive an email when it&apos;s ready — usually within 24 hours.

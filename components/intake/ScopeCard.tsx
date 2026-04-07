@@ -100,7 +100,7 @@ export default function ScopeCard({ scopeId, status, detectedScope, onToggle, su
       >
         <div className="overflow-hidden">
           <div className="px-3 pb-3">
-            <div className="h-px bg-brand-yellow/10 mb-3" />
+            <div className="h-px bg-brand-purple/10 mb-3" />
             <p className="text-xs text-[var(--ov-text-muted,#727272)] leading-relaxed">
               {summary}
             </p>

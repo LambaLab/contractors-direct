@@ -35,7 +35,7 @@ export default async function AdminProposalDetailPage({ params }: { params: Prom
       </div>
 
       <div>
-        <h1 className="font-bebas text-4xl text-brand-white mb-2">PROPOSAL REVIEW</h1>
+        <h1 className="font-heading font-bold text-4xl text-brand-white mb-2">PROPOSAL REVIEW</h1>
         <p className="text-brand-gray-mid">{proposal.brief || 'No brief'}</p>
       </div>
 
@@ -56,7 +56,7 @@ export default async function AdminProposalDetailPage({ params }: { params: Prom
 
       {proposal.prd && (
         <section className="space-y-3">
-          <h2 className="font-bebas text-2xl text-brand-white">PRD</h2>
+          <h2 className="font-heading font-bold text-2xl text-brand-white">PRD</h2>
           <div className="text-sm text-brand-gray-mid leading-relaxed whitespace-pre-wrap bg-white/5 border border-white/5 rounded-xl p-4">
             {proposal.prd}
           </div>

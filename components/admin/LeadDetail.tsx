@@ -154,7 +154,7 @@ export default function LeadDetail({ lead, onBack, onLeadUpdate, isMobileFullscr
               </Button>
 
               <div className="flex-1 min-w-0 flex items-center gap-2.5">
-                <h2 className="font-bebas text-xl text-foreground truncate">
+                <h2 className="font-heading font-bold text-xl text-foreground truncate">
                   {getProjectName(lead)}
                 </h2>
                 <span className={`inline-flex items-center gap-1.5 text-[10px] font-medium px-2 py-0.5 rounded-full uppercase tracking-wide shrink-0 ${status.bg} ${status.text}`}>

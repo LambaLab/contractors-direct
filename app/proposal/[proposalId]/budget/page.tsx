@@ -91,7 +91,7 @@ export default function BudgetResponsePage() {
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <div className="w-6 h-6 border-2 border-brand-yellow/30 border-t-brand-yellow rounded-full animate-spin" />
+        <div className="w-6 h-6 border-2 border-brand-purple/30 border-t-brand-yellow rounded-full animate-spin" />
       </div>
     )
   }
@@ -121,7 +121,7 @@ export default function BudgetResponsePage() {
           <div className="w-16 h-16 bg-brand-green/10 rounded-full flex items-center justify-center mx-auto">
             <Check className="w-8 h-8 text-brand-green" />
           </div>
-          <h1 className="font-bebas text-3xl text-brand-white">{msg.title}</h1>
+          <h1 className="font-heading font-bold text-3xl text-brand-white">{msg.title}</h1>
           <p className="text-sm text-brand-gray-mid">{msg.desc}</p>
         </div>
       </div>
@@ -133,7 +133,7 @@ export default function BudgetResponsePage() {
       <div className="w-full max-w-lg space-y-8">
         {/* Header */}
         <div className="text-center space-y-2">
-          <h1 className="font-bebas text-3xl text-brand-white tracking-wide">CONTRACTORS DIRECT</h1>
+          <h1 className="font-heading font-bold text-3xl text-brand-white tracking-wide">CONTRACTORS DIRECT</h1>
           <p className="text-sm text-brand-gray-mid">Budget Proposal</p>
         </div>
 
@@ -251,7 +251,7 @@ export default function BudgetResponsePage() {
             <button
               onClick={handleSubmit}
               disabled={submitting}
-              className="w-full py-3.5 bg-brand-yellow text-brand-dark font-medium rounded-xl hover:bg-brand-yellow/90 transition-all disabled:opacity-50 text-sm cursor-pointer disabled:cursor-not-allowed"
+              className="w-full py-3.5 bg-brand-purple text-white font-medium rounded-xl hover:bg-brand-purple/90 transition-all disabled:opacity-50 text-sm cursor-pointer disabled:cursor-not-allowed"
             >
               {submitting ? 'Submitting...' : action === 'accepted' ? 'Accept Budget' : action === 'countered' ? 'Send Counter-Proposal' : 'Request a Call'}
             </button>

@@ -147,8 +147,8 @@ export default function RestoreGateModal({ restoreData, onRestoreSuccess, onStar
       <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/70 backdrop-blur-md">
         <div className="relative w-full max-w-sm bg-[#1a1a1a] border border-white/10 rounded-2xl shadow-2xl p-6 space-y-5">
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-full bg-brand-yellow/15 flex items-center justify-center flex-shrink-0">
-              <Lightbulb className="w-5 h-5 text-brand-yellow" />
+            <div className="w-9 h-9 rounded-full bg-brand-purple/15 flex items-center justify-center flex-shrink-0">
+              <Lightbulb className="w-5 h-5 text-brand-purple" />
             </div>
             <h2 className="text-base font-semibold text-white">Project not saved</h2>
           </div>
@@ -159,7 +159,7 @@ export default function RestoreGateModal({ restoreData, onRestoreSuccess, onStar
 
           <button
             onClick={onStartNew}
-            className="w-full flex items-center justify-center gap-2 py-3 rounded-xl bg-brand-yellow text-brand-dark font-semibold text-sm hover:bg-brand-yellow/90 transition-all cursor-pointer"
+            className="w-full flex items-center justify-center gap-2 py-3 rounded-xl bg-brand-purple text-white font-semibold text-sm hover:bg-brand-purple/90 transition-all cursor-pointer"
           >
             Start a new project <ArrowRight className="w-4 h-4" />
           </button>
@@ -198,7 +198,7 @@ export default function RestoreGateModal({ restoreData, onRestoreSuccess, onStar
             <button
               onClick={handleSendCode}
               disabled={!isValidEmail || loading}
-              className="w-full flex items-center justify-center gap-2 py-3 rounded-xl bg-brand-yellow text-brand-dark font-semibold text-sm disabled:opacity-40 hover:bg-brand-yellow/90 transition-all cursor-pointer disabled:cursor-not-allowed"
+              className="w-full flex items-center justify-center gap-2 py-3 rounded-xl bg-brand-purple text-white font-semibold text-sm disabled:opacity-40 hover:bg-brand-purple/90 transition-all cursor-pointer disabled:cursor-not-allowed"
             >
               {loading ? 'Sending...' : <><span>Send code</span><ArrowRight className="w-4 h-4" /></>}
             </button>
@@ -265,7 +265,7 @@ export default function RestoreGateModal({ restoreData, onRestoreSuccess, onStar
             <button
               onClick={handleVerify}
               disabled={!otpComplete || loading}
-              className="w-full flex items-center justify-center gap-2 py-3 rounded-xl bg-brand-yellow text-brand-dark font-semibold text-sm disabled:opacity-40 hover:bg-brand-yellow/90 transition-all cursor-pointer disabled:cursor-not-allowed"
+              className="w-full flex items-center justify-center gap-2 py-3 rounded-xl bg-brand-purple text-white font-semibold text-sm disabled:opacity-40 hover:bg-brand-purple/90 transition-all cursor-pointer disabled:cursor-not-allowed"
             >
               {loading ? 'Verifying...' : <><span>Verify & restore</span><ArrowRight className="w-4 h-4" /></>}
             </button>

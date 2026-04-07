@@ -30,7 +30,7 @@ export default function ProposalView({ proposal }: Props) {
           <div className="w-16 h-16 bg-brand-green/20 rounded-full flex items-center justify-center mx-auto">
             <span className="text-brand-green text-2xl">&#10003;</span>
           </div>
-          <h1 className="font-bebas text-4xl text-brand-white">PROPOSAL ACCEPTED!</h1>
+          <h1 className="font-heading font-bold text-4xl text-brand-white">PROPOSAL ACCEPTED!</h1>
           <p className="text-brand-gray-mid">We&apos;ll be in touch shortly to kick off your project.</p>
         </div>
       </div>
@@ -47,13 +47,13 @@ export default function ProposalView({ proposal }: Props) {
         <div className="inline-flex items-center gap-2 bg-brand-green/10 border border-brand-green/20 rounded-full px-3 py-1 text-xs text-brand-green">
           &#10003; Reviewed by Contractors Direct team
         </div>
-        <h1 className="font-bebas text-5xl md:text-6xl text-brand-white">YOUR PROJECT PROPOSAL</h1>
+        <h1 className="font-heading font-bold text-5xl md:text-6xl text-brand-white">YOUR PROJECT PROPOSAL</h1>
         <p className="text-brand-gray-mid">{proposal.brief}</p>
 
         <div className="flex items-center gap-6 p-4 bg-white/5 border border-white/5 rounded-xl">
           <div>
             <p className="text-xs text-brand-gray-mid">Estimated cost</p>
-            <p className="font-bebas text-3xl text-brand-yellow">
+            <p className="font-heading font-bold text-3xl text-brand-purple">
               ${proposal.price_min.toLocaleString()}&ndash;${proposal.price_max.toLocaleString()}
             </p>
           </div>
@@ -66,7 +66,7 @@ export default function ProposalView({ proposal }: Props) {
 
       {proposal.prd && (
         <section className="space-y-4">
-          <h2 className="font-bebas text-3xl text-brand-white">PRODUCT REQUIREMENTS</h2>
+          <h2 className="font-heading font-bold text-3xl text-brand-white">PRODUCT REQUIREMENTS</h2>
           <div className="text-sm text-brand-gray-mid leading-relaxed whitespace-pre-wrap">
             {proposal.prd}
           </div>
@@ -75,7 +75,7 @@ export default function ProposalView({ proposal }: Props) {
 
       {proposal.technical_architecture && (
         <section className="space-y-4">
-          <h2 className="font-bebas text-3xl text-brand-white">TECHNICAL ARCHITECTURE</h2>
+          <h2 className="font-heading font-bold text-3xl text-brand-white">TECHNICAL ARCHITECTURE</h2>
           <div className="text-sm text-brand-gray-mid leading-relaxed whitespace-pre-wrap">
             {proposal.technical_architecture}
           </div>
@@ -84,7 +84,7 @@ export default function ProposalView({ proposal }: Props) {
 
       {taskBreakdown && taskBreakdown.length > 0 && (
         <section className="space-y-4">
-          <h2 className="font-bebas text-3xl text-brand-white">TASK BREAKDOWN</h2>
+          <h2 className="font-heading font-bold text-3xl text-brand-white">TASK BREAKDOWN</h2>
           <div className="space-y-4">
             {taskBreakdown.map((group, i) => (
               <div key={i} className="space-y-2">
@@ -93,7 +93,7 @@ export default function ProposalView({ proposal }: Props) {
                   <div key={j} className="flex items-start gap-3 p-3 bg-white/5 border border-white/5 rounded-lg">
                     <span className={`text-xs px-1.5 py-0.5 rounded font-mono flex-shrink-0 ${
                       task.complexity === 'L' ? 'bg-red-500/10 text-red-400' :
-                      task.complexity === 'M' ? 'bg-brand-yellow/10 text-brand-yellow' :
+                      task.complexity === 'M' ? 'bg-brand-purple/10 text-brand-purple' :
                       'bg-brand-green/10 text-brand-green'
                     }`}>{task.complexity}</span>
                     <div>
@@ -110,7 +110,7 @@ export default function ProposalView({ proposal }: Props) {
 
       {proposal.timeline && (
         <section className="space-y-4">
-          <h2 className="font-bebas text-3xl text-brand-white">TIMELINE</h2>
+          <h2 className="font-heading font-bold text-3xl text-brand-white">TIMELINE</h2>
           <div className="text-sm text-brand-gray-mid leading-relaxed whitespace-pre-wrap">
             {proposal.timeline}
           </div>
@@ -119,7 +119,7 @@ export default function ProposalView({ proposal }: Props) {
 
       {milestones && milestones.length > 0 && (
         <section className="space-y-4">
-          <h2 className="font-bebas text-3xl text-brand-white">MILESTONE PLAN</h2>
+          <h2 className="font-heading font-bold text-3xl text-brand-white">MILESTONE PLAN</h2>
           <div className="space-y-3">
             {milestones.map((m, i) => (
               <div key={i} className="p-4 bg-white/5 border border-white/5 rounded-xl">
@@ -130,7 +130,7 @@ export default function ProposalView({ proposal }: Props) {
                 <ul className="space-y-1">
                   {m.deliverables.map((d, j) => (
                     <li key={j} className="text-sm text-brand-gray-mid flex items-start gap-2">
-                      <span className="text-brand-yellow mt-0.5">&middot;</span>
+                      <span className="text-brand-purple mt-0.5">&middot;</span>
                       {d}
                     </li>
                   ))}
@@ -145,7 +145,7 @@ export default function ProposalView({ proposal }: Props) {
         <button
           onClick={handleAccept}
           disabled={accepting}
-          className="w-full py-4 bg-brand-yellow text-brand-dark font-bold rounded-xl hover:bg-brand-yellow/90 transition-all active:scale-[0.98] text-base disabled:opacity-50"
+          className="w-full py-4 bg-brand-purple text-white font-bold rounded-xl hover:bg-brand-purple/90 transition-all active:scale-[0.98] text-base disabled:opacity-50"
         >
           {accepting ? 'Processing...' : 'Accept Proposal & Start Project \u2192'}
         </button>

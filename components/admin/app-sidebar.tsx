@@ -30,24 +30,17 @@ export function AppSidebar({ adminRole, onTeamOpen }: Props) {
           <SidebarMenuItem>
             <SidebarMenuButton size="lg" asChild>
               <div>
-                <div className="flex aspect-square size-8 items-center justify-center rounded-lg overflow-hidden">
+                <div className="flex aspect-square size-8 items-center justify-center rounded-lg overflow-hidden bg-brand-charcoal">
                   <Image
-                    src="/light icon.png"
+                    src="/cd-logo.png"
                     alt="Contractors Direct"
                     width={32}
                     height={32}
-                    className="block dark:hidden object-contain"
-                  />
-                  <Image
-                    src="/dark icon.jpg"
-                    alt="Contractors Direct"
-                    width={32}
-                    height={32}
-                    className="hidden dark:block object-contain"
+                    className="object-contain"
                   />
                 </div>
                 <div className="grid flex-1 text-left text-sm leading-tight">
-                  <span className="truncate font-bebas text-lg tracking-wide">CONTRACTORS DIRECT</span>
+                  <span className="truncate font-heading font-bold text-lg tracking-wide">CONTRACTORS DIRECT</span>
                 </div>
               </div>
             </SidebarMenuButton>

@@ -34,7 +34,7 @@ function formatMessageTime(ts?: number): string | null {
 export default function MessageBubble({ message, isStreaming, onQuickReply, isLastMessage, onEdit, onStartRowEdit, isBeingReEdited, theme }: Props) {
   const isUser = message.role === 'user'
   const isAdmin = message.role === 'admin'
-  const iconSrc = theme === 'light' ? '/light icon.png' : '/dark icon.jpg'
+  const iconSrc = '/cd-logo.png'
 
   // User bubbles show displayContent when available (e.g. quick reply label instead of raw value)
   const rawContentRaw = isUser
@@ -120,7 +120,7 @@ export default function MessageBubble({ message, isStreaming, onQuickReply, isLa
                   if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); handleEditSave() }
                   if (e.key === 'Escape') handleEditCancel()
                 }}
-                className="w-full px-4 py-3 rounded-2xl text-sm leading-relaxed bg-brand-yellow/20 text-[var(--ov-text,#ffffff)] border border-brand-yellow/40 outline-none resize-none min-h-[60px]"
+                className="w-full px-4 py-3 rounded-2xl text-sm leading-relaxed bg-brand-purple/20 text-[var(--ov-text,#ffffff)] border border-brand-purple/40 outline-none resize-none min-h-[60px]"
               />
               <div className="flex gap-2 justify-end">
                 <button
@@ -132,7 +132,7 @@ export default function MessageBubble({ message, isStreaming, onQuickReply, isLa
                 <button
                   onClick={handleEditSave}
                   disabled={!editValue.trim() || isStreaming}
-                  className="flex items-center gap-1 text-xs text-brand-dark bg-brand-yellow hover:bg-brand-yellow/90 transition-colors px-2 py-1 rounded-lg disabled:opacity-40 cursor-pointer disabled:cursor-not-allowed"
+                  className="flex items-center gap-1 text-xs text-brand-dark bg-brand-purple hover:bg-brand-purple/90 transition-colors px-2 py-1 rounded-lg disabled:opacity-40 cursor-pointer disabled:cursor-not-allowed"
                 >
                   <Check className="w-3 h-3" /> Save
                 </button>

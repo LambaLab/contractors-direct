@@ -178,7 +178,7 @@ export default function ScopeProgressCard({
               <button
                 type="button"
                 onClick={() => onSend('__continue__', 'Keep going')}
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm transition-colors cursor-pointer bg-brand-yellow border border-brand-yellow text-brand-dark hover:bg-brand-yellow/90 font-medium"
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm transition-colors cursor-pointer bg-brand-purple border border-brand-purple text-brand-dark hover:bg-brand-purple/90 font-medium"
               >
                 <span className="leading-none text-base">💬</span>
                 Keep going

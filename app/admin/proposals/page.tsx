@@ -13,7 +13,7 @@ export default async function AdminProposalsPage() {
 
   return (
     <div className="min-h-screen p-6 max-w-4xl mx-auto">
-      <h1 className="font-bebas text-4xl text-brand-white mb-8">PROPOSAL QUEUE</h1>
+      <h1 className="font-heading font-bold text-4xl text-brand-white mb-8">PROPOSAL QUEUE</h1>
 
       <div className="space-y-3">
         {(proposals ?? []).map((p) => (

@@ -133,7 +133,7 @@ export default function ScopePanel({
             onClick={() => setProjectOpen(o => !o)}
             className="w-full flex items-center justify-between px-4 py-3 cursor-pointer hover:bg-[var(--ov-hover-bg,rgba(255,255,255,0.02))] transition-colors"
           >
-            <h2 className="font-bebas text-xs tracking-[0.15em] text-[var(--ov-text-muted,#727272)]">
+            <h2 className="font-heading font-bold text-xs tracking-[0.15em] text-[var(--ov-text-muted,#727272)]">
               PROJECT OVERVIEW
             </h2>
             <ChevronDown
@@ -168,7 +168,7 @@ export default function ScopePanel({
             className="w-full flex items-center justify-between px-4 py-3 cursor-pointer hover:bg-[var(--ov-hover-bg,rgba(255,255,255,0.02))] transition-colors"
           >
             <div className="flex items-center gap-2">
-              <h2 className="font-bebas text-xs tracking-[0.15em] text-[var(--ov-text-muted,#727272)]">
+              <h2 className="font-heading font-bold text-xs tracking-[0.15em] text-[var(--ov-text-muted,#727272)]">
                 PROJECT SCOPE
               </h2>
               {confirmedScope.length > 0 && (
@@ -275,7 +275,7 @@ export default function ScopePanel({
           <button
             type="button"
             onClick={() => setShowAuthGate(true)}
-            className="w-full py-2.5 bg-brand-yellow text-brand-dark font-medium rounded-xl hover:bg-brand-yellow/90 transition-all active:scale-[0.98] text-sm cursor-pointer"
+            className="w-full py-2.5 bg-brand-purple text-white font-medium rounded-xl hover:bg-brand-purple/90 transition-all active:scale-[0.98] text-sm cursor-pointer"
           >
             Submit Lead →
           </button>

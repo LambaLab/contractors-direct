@@ -187,7 +187,7 @@ export default function SaveForLaterModal({ proposalId, sessionId, projectName, 
             <button
               onClick={() => handleSendCode()}
               disabled={!isValidEmail || loading}
-              className="w-full flex items-center justify-center gap-2 py-3 rounded-xl bg-brand-yellow text-brand-dark font-semibold text-sm disabled:opacity-40 hover:bg-brand-yellow/90 transition-all cursor-pointer disabled:cursor-not-allowed"
+              className="w-full flex items-center justify-center gap-2 py-3 rounded-xl bg-brand-purple text-white font-semibold text-sm disabled:opacity-40 hover:bg-brand-purple/90 transition-all cursor-pointer disabled:cursor-not-allowed"
             >
               {loading ? 'Sending…' : <><span>Send code</span><ArrowRight className="w-4 h-4" /></>}
             </button>
@@ -246,7 +246,7 @@ export default function SaveForLaterModal({ proposalId, sessionId, projectName, 
             <button
               onClick={handleVerify}
               disabled={!otpComplete || loading}
-              className="w-full flex items-center justify-center gap-2 py-3 rounded-xl bg-brand-yellow text-brand-dark font-semibold text-sm disabled:opacity-40 hover:bg-brand-yellow/90 transition-all cursor-pointer disabled:cursor-not-allowed"
+              className="w-full flex items-center justify-center gap-2 py-3 rounded-xl bg-brand-purple text-white font-semibold text-sm disabled:opacity-40 hover:bg-brand-purple/90 transition-all cursor-pointer disabled:cursor-not-allowed"
             >
               {loading ? 'Verifying…' : <><span>Verify</span><ArrowRight className="w-4 h-4" /></>}
             </button>

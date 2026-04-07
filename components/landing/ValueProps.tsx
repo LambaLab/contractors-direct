@@ -22,14 +22,14 @@ export default function ValueProps() {
   return (
     <section className="py-24 px-4 border-t border-white/5">
       <div className="max-w-5xl mx-auto">
-        <h2 className="font-bebas text-5xl md:text-6xl text-center text-brand-white mb-16">
+        <h2 className="font-heading font-bold text-5xl md:text-6xl text-center text-brand-white mb-16">
           WHY CONTRACTORS DIRECT
         </h2>
         <div className="grid md:grid-cols-3 gap-8">
           {PROPS.map(({ icon: Icon, title, description }) => (
-            <div key={title} className="space-y-4 p-6 rounded-2xl border border-white/5 hover:border-brand-yellow/20 transition-colors">
-              <div className="w-12 h-12 bg-brand-yellow/10 rounded-xl flex items-center justify-center">
-                <Icon className="w-6 h-6 text-brand-yellow" />
+            <div key={title} className="space-y-4 p-6 rounded-2xl border border-white/5 hover:border-brand-purple/20 transition-colors">
+              <div className="w-12 h-12 bg-brand-purple/10 rounded-xl flex items-center justify-center">
+                <Icon className="w-6 h-6 text-brand-purple" />
               </div>
               <h3 className="text-lg font-bold text-brand-white">{title}</h3>
               <p className="text-brand-gray-mid leading-relaxed">{description}</p>

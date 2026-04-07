@@ -117,7 +117,7 @@ export default function ScopeDivider({ message, onSend, onRequestViewProposal, i
                 className={[
                   'inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm transition-colors cursor-pointer',
                   pill.primary
-                    ? 'bg-brand-yellow border border-brand-yellow text-brand-dark hover:bg-brand-yellow/90 font-medium'
+                    ? 'bg-brand-purple border border-brand-purple text-brand-dark hover:bg-brand-purple/90 font-medium'
                     : 'border border-[var(--ov-border,rgba(255,255,255,0.12))] text-[var(--ov-text,#ffffff)] hover:border-[var(--ov-accent-border,rgba(255,252,0,0.50))] hover:text-[var(--ov-accent-strong,#fffc00)]',
                 ].join(' ')}
               >
