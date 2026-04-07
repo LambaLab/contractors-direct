@@ -15,7 +15,6 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import { AppSidebar } from '@/components/admin/app-sidebar'
-import { ThemeToggle } from '@/components/admin/theme-toggle'
 import TeamModal from '@/components/admin/TeamModal'
 
 type Props = {
@@ -50,8 +49,6 @@ export function AdminLayoutShell({ children, adminEmail, adminRole }: Props) {
             <div id="header-service-slot" className="flex items-center" />
 
             <div className="ml-auto flex items-center gap-2">
-              <ThemeToggle />
-              <Separator orientation="vertical" className="mx-1 data-[orientation=vertical]:h-4" />
               <DropdownMenu>
                 <DropdownMenuTrigger>
                   <Avatar className="size-8 cursor-pointer">
