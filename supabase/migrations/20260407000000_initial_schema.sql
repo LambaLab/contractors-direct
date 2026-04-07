@@ -1,9 +1,6 @@
--- Enable UUID extension
-create extension if not exists "uuid-ossp";
-
 -- Intake Sessions (anonymous, pre-OTP)
 create table intake_sessions (
-  id uuid primary key default uuid_generate_v4(),
+  id uuid primary key default gen_random_uuid(),
   user_id uuid references auth.users(id) on delete cascade,
   created_at timestamptz default now(),
   updated_at timestamptz default now()
@@ -11,7 +8,7 @@ create table intake_sessions (
 
 -- Leads (intake results — draft until OTP verified)
 create table leads (
-  id uuid primary key default uuid_generate_v4(),
+  id uuid primary key default gen_random_uuid(),
   session_id uuid references intake_sessions(id) on delete cascade not null,
   user_id uuid references auth.users(id) on delete set null,
   status text not null default 'draft'
@@ -43,7 +40,7 @@ create table leads (
 
 -- Chat messages
 create table chat_messages (
-  id uuid primary key default uuid_generate_v4(),
+  id uuid primary key default gen_random_uuid(),
   lead_id uuid references leads(id) on delete cascade not null,
   role text not null check (role in ('user', 'assistant', 'admin')),
   content text not null,
@@ -53,7 +50,7 @@ create table chat_messages (
 
 -- BOQ drafts (AI-generated Bill of Quantities)
 create table boq_drafts (
-  id uuid primary key default uuid_generate_v4(),
+  id uuid primary key default gen_random_uuid(),
   lead_id uuid references leads(id) on delete cascade not null,
   version integer not null default 1,
   categories jsonb not null default '[]',
