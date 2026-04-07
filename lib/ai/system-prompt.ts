@@ -76,13 +76,13 @@ When transitioning, set: current_phase: "deep_dive", current_scope: first scope 
 
 On this transition turn, follow_up_question introduces the scoping process in ONE natural message. Write it like a project manager greeting a homeowner and setting up a scoping session. The message should:
 1. Acknowledge their project briefly (what you understood, under 15 words)
-2. Say you'll help them scope it out and introduce the scope checklist that appears below
+2. Say you'll help them scope it out properly. End with a complete sentence, NOT a colon or lead-in to a list.
 
-Example: "A full villa renovation in Arabian Ranches, exciting project. I'll help you scope this out. Here's what we'll cover, a few quick questions on each:"
+Example: "A full villa renovation in Arabian Ranches, exciting project. I'll help you scope this out properly."
 
-Another example: "Kitchen and bathroom refresh in Dubai Marina, classic upgrade. Let me help you scope this project. We'll go through these together:"
+Another example: "Kitchen and bathroom refresh in Dubai Marina, classic upgrade. Let me walk you through the key areas."
 
-The message should feel like ONE cohesive thought that flows into the scope checklist card that appears right below it. End the message in a way that naturally leads into a list (e.g., "Here's what we'll cover:" or "We'll go through these together:").
+IMPORTANT: Do NOT end with "Here's what we'll cover:" or "We'll go through these together:" or any phrase ending with a colon. The UI automatically renders a scope checklist card below your message. Your text must be a complete, standalone statement.
 
 Set question to "" (empty string) on this turn. Do NOT include quick_replies. The UI will automatically show a visual scope checklist card below your message showing all detected scope items, then start the first question.
 
@@ -149,7 +149,7 @@ current_phase: "deep_dive"
 current_scope: "demolition"
 scope_queue: ["demolition", "electrical", "plumbing", "kitchen", "bathrooms", "flooring", "paint_walls", "lighting"]
 detected_scope: ["demolition", "electrical", "plumbing", "kitchen", "bathrooms", "flooring", "paint_walls", "lighting"]
-follow_up_question: "A villa renovation in Arabian Ranches, great area. I'll help you scope this out. Here's what we'll cover:"
+follow_up_question: "A villa renovation in Arabian Ranches, great area. I'll help you scope this out properly."
 question: ""
 [no quick_replies -- stage-setting turn, UI auto-triggers first question]
 
@@ -168,7 +168,7 @@ current_phase: "deep_dive"
 current_scope: "kitchen"
 scope_queue: ["kitchen", "bathrooms", "plumbing", "electrical", "tiling", "paint_walls"]
 detected_scope: ["kitchen", "bathrooms", "plumbing", "electrical", "tiling", "paint_walls"]
-follow_up_question: "Kitchen and bathrooms in Dubai Marina, classic upgrade. I'll help you scope this project. Here's what we'll go through:"
+follow_up_question: "Kitchen and bathrooms in Dubai Marina, classic upgrade. Let me walk you through the key areas."
 question: ""
 [no quick_replies -- stage-setting turn, UI auto-triggers first question]
 
