@@ -2,7 +2,7 @@
 
 import { useEffect } from 'react'
 
-export default function AdminDashboardError({
+export default function GlobalError({
   error,
   reset,
 }: {
@@ -10,8 +10,6 @@ export default function AdminDashboardError({
   reset: () => void
 }) {
   useEffect(() => {
-    // ChunkLoadError means a new deployment invalidated cached chunks.
-    // A full page reload fetches fresh HTML with correct chunk references.
     if (
       error.name === 'ChunkLoadError' ||
       error.message?.includes('Failed to load chunk') ||
@@ -23,14 +21,13 @@ export default function AdminDashboardError({
 
   return (
     <div className="flex flex-col items-center justify-center min-h-[50vh] gap-4 p-8">
-      <h2 className="text-xl font-semibold text-foreground">Something went wrong</h2>
+      <h2 className="text-xl font-semibold">Something went wrong</h2>
       <pre className="text-xs text-red-400 bg-red-500/10 rounded-lg p-4 max-w-lg overflow-auto whitespace-pre-wrap">
         {error.message}
-        {error.stack && '\n\n' + error.stack.split('\n').slice(0, 5).join('\n')}
       </pre>
       <button
         onClick={() => window.location.reload()}
-        className="px-4 py-2 bg-brand-purple text-white rounded-lg hover:bg-brand-purple/90 transition-colors"
+        className="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-500 transition-colors"
       >
         Try again
       </button>
