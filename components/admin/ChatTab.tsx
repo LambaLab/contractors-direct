@@ -173,24 +173,38 @@ export default function ChatTab({ leadId }: Props) {
   }, [messages, scrollToBottom])
 
   async function handleJoinChat() {
-    const channel = broadcastChannelRef.current
-    if (!channel) return
-    await channel.send({
-      type: 'broadcast',
-      event: 'admin_status',
-      payload: { type: 'admin_joined' },
+    // Write to DB so client polling picks it up
+    await fetch('/api/admin/chat', {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ leadId, active: true }),
     })
+    // Also try broadcast for instant delivery
+    const channel = broadcastChannelRef.current
+    if (channel) {
+      channel.send({
+        type: 'broadcast',
+        event: 'admin_status',
+        payload: { type: 'admin_joined' },
+      })
+    }
     setIsJoined(true)
   }
 
   async function handleLeaveChat() {
-    const channel = broadcastChannelRef.current
-    if (!channel) return
-    await channel.send({
-      type: 'broadcast',
-      event: 'admin_status',
-      payload: { type: 'admin_left' },
+    await fetch('/api/admin/chat', {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ leadId, active: false }),
     })
+    const channel = broadcastChannelRef.current
+    if (channel) {
+      channel.send({
+        type: 'broadcast',
+        event: 'admin_status',
+        payload: { type: 'admin_left' },
+      })
+    }
     setIsJoined(false)
   }
 

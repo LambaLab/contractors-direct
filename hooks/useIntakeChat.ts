@@ -162,86 +162,124 @@ export function useIntakeChat({ proposalId, idea }: Props) {
   useEffect(() => { scopeQueueRef.current = scopeQueue }, [scopeQueue])
   useEffect(() => { completedScopeRef.current = completedScope }, [completedScope])
 
-  // Subscribe to admin takeover broadcast signals
+  // Poll for admin chat status (join/leave) and admin messages from DB.
+  // This is the reliable path; broadcast is kept as a bonus for instant delivery.
+  const adminPollTimestampRef = useRef<string | null>(null)
+  const wasAdminActiveRef = useRef(false)
+
   useEffect(() => {
     if (!proposalId) return
-    const supabase = createClient()
-    const channel = supabase.channel(`proposal:${proposalId}`, {
-      config: { presence: { key: 'client' } },
-    })
 
-    channel
-      .on('broadcast', { event: 'admin_status' }, (payload) => {
-        const type = payload.payload?.type
-        if (type === 'admin_joined') {
+    async function pollChatStatus() {
+      try {
+        const afterParam = adminPollTimestampRef.current
+          ? `?after=${encodeURIComponent(adminPollTimestampRef.current)}`
+          : ''
+        const res = await fetch(`/api/intake/chat-status/${proposalId}${afterParam}`)
+        if (!res.ok) return
+        const data = await res.json() as {
+          adminActive: boolean
+          messages: { id: string; role: string; content: string; created_at: string }[]
+        }
+
+        // Handle admin join/leave transitions
+        if (data.adminActive && !wasAdminActiveRef.current) {
           setIsAdminActive(true)
-          // Show system message
-          setMessages((prev) => [
-            ...prev,
-            {
+          setMessages((prev) => {
+            if (prev.some((m) => m.content === '[Admin] has joined the chat' && m.role === 'admin')) return prev
+            return [...prev, {
               id: crypto.randomUUID(),
               role: 'admin' as const,
               content: '[Admin] has joined the chat',
               createdAt: Date.now(),
-            },
-          ])
-        } else if (type === 'admin_left') {
+            }]
+          })
+        } else if (!data.adminActive && wasAdminActiveRef.current) {
           setIsAdminActive(false)
-          setMessages((prev) => [
-            ...prev,
-            {
+          setMessages((prev) => [...prev, {
+            id: crypto.randomUUID(),
+            role: 'admin' as const,
+            content: '[Admin] has left the chat. AI assistant resumed.',
+            createdAt: Date.now(),
+          }])
+        }
+        wasAdminActiveRef.current = data.adminActive
+
+        // Add any new admin messages
+        if (data.messages.length > 0) {
+          setMessages((prev) => {
+            let updated = prev
+            for (const msg of data.messages) {
+              if (!updated.some((m) => m.id === msg.id)) {
+                updated = [...updated, {
+                  id: msg.id,
+                  role: 'admin' as const,
+                  content: msg.content,
+                  createdAt: new Date(msg.created_at).getTime(),
+                }]
+              }
+            }
+            return updated
+          })
+          // Advance the poll timestamp to the latest message
+          const latest = data.messages[data.messages.length - 1]
+          if (latest) adminPollTimestampRef.current = latest.created_at
+        }
+      } catch { /* ignore polling errors */ }
+    }
+
+    // Initial poll
+    pollChatStatus()
+    // Poll every 2 seconds for responsiveness
+    const interval = setInterval(pollChatStatus, 2000)
+
+    // Also keep Supabase broadcast as bonus for instant delivery
+    const supabase = createClient()
+    let channel: ReturnType<typeof supabase.channel> | null = null
+    try {
+      channel = supabase.channel(`proposal:${proposalId}`, {
+        config: { presence: { key: 'client' } },
+      })
+      channel
+        .on('broadcast', { event: 'admin_status' }, (payload) => {
+          // Trigger an immediate poll to get the latest state from DB
+          pollChatStatus()
+          // Also handle inline for instant UX
+          const type = payload.payload?.type
+          if (type === 'admin_joined' && !wasAdminActiveRef.current) {
+            wasAdminActiveRef.current = true
+            setIsAdminActive(true)
+            setMessages((prev) => [...prev, {
+              id: crypto.randomUUID(),
+              role: 'admin' as const,
+              content: '[Admin] has joined the chat',
+              createdAt: Date.now(),
+            }])
+          } else if (type === 'admin_left' && wasAdminActiveRef.current) {
+            wasAdminActiveRef.current = false
+            setIsAdminActive(false)
+            setMessages((prev) => [...prev, {
               id: crypto.randomUUID(),
               role: 'admin' as const,
               content: '[Admin] has left the chat. AI assistant resumed.',
               createdAt: Date.now(),
-            },
-          ])
-        }
-      })
-      // Listen for admin messages via broadcast (postgres_changes is blocked
-      // by RLS since the client has no Supabase auth session)
-      .on('broadcast', { event: 'admin_message' }, (payload) => {
-        const msg = payload.payload as { id: string; content: string; created_at: string }
-        if (msg?.content) {
-          setMessages((prev) => {
-            if (prev.some((m) => m.id === msg.id)) return prev
-            return [
-              ...prev,
-              {
-                id: msg.id,
-                role: 'admin' as const,
-                content: msg.content,
-                createdAt: new Date(msg.created_at).getTime(),
-              },
-            ]
-          })
-        }
-      })
-      .subscribe(async (status) => {
-        if (status === 'SUBSCRIBED') {
-          await channel.track({ user_type: 'client' })
-        }
-      })
-
-    // Reconnect the realtime channel when the tab regains focus after being idle.
-    // Supabase websocket may silently disconnect after prolonged background.
-    function handleVisibilityChange() {
-      if (document.visibilityState === 'visible') {
-        const state = channel.state
-        if (state !== 'joined' && state !== 'joining') {
-          channel.subscribe(async (status) => {
-            if (status === 'SUBSCRIBED') {
-              await channel.track({ user_type: 'client' })
-            }
-          })
-        }
-      }
-    }
-    document.addEventListener('visibilitychange', handleVisibilityChange)
+            }])
+          }
+        })
+        .on('broadcast', { event: 'admin_message' }, () => {
+          // Trigger immediate poll to pick up the message from DB
+          pollChatStatus()
+        })
+        .subscribe(async (status) => {
+          if (status === 'SUBSCRIBED') {
+            await channel!.track({ user_type: 'client' })
+          }
+        })
+    } catch { /* Realtime not available */ }
 
     return () => {
-      document.removeEventListener('visibilitychange', handleVisibilityChange)
-      supabase.removeChannel(channel)
+      clearInterval(interval)
+      if (channel) supabase.removeChannel(channel)
     }
   }, [proposalId])
 
