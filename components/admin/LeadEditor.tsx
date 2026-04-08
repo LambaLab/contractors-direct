@@ -14,15 +14,12 @@ type Props = {
   onUpdate: (updated: Lead) => void
 }
 
-type SectionKey = 'brief' | 'overview' | 'scope' | 'prd' | 'techArch' | 'timeline' | 'adminNotes'
+type SectionKey = 'brief' | 'overview' | 'scope' | 'adminNotes'
 
 const SECTIONS: { key: SectionKey; label: string; sublabel?: string }[] = [
   { key: 'brief', label: 'Brief' },
   { key: 'overview', label: 'Overview' },
   { key: 'scope', label: 'Scope' },
-  { key: 'prd', label: 'PRD' },
-  { key: 'techArch', label: 'Architecture' },
-  { key: 'timeline', label: 'Timeline' },
   { key: 'adminNotes', label: 'Admin Notes', sublabel: 'Internal only' },
 ]
 
@@ -152,9 +149,6 @@ export default function LeadEditor({ lead, onUpdate }: Props) {
     switch (key) {
       case 'brief': return brief
       case 'overview': return projectOverview
-      case 'prd': return prd
-      case 'techArch': return techArch
-      case 'timeline': return timeline
       case 'adminNotes': return adminNotes
       default: return ''
     }
@@ -174,9 +168,7 @@ export default function LeadEditor({ lead, onUpdate }: Props) {
         return <p className="text-base md:text-sm text-muted-foreground/40 italic">No content yet</p>
       }
       return (
-        <p className={`whitespace-pre-wrap leading-relaxed text-foreground ${
-          key === 'prd' || key === 'techArch' ? 'font-mono text-sm md:text-xs' : 'text-base md:text-sm'
-        }`}>
+        <p className="whitespace-pre-wrap leading-relaxed text-foreground text-base md:text-sm">
           {value}
         </p>
       )
@@ -190,12 +182,6 @@ export default function LeadEditor({ lead, onUpdate }: Props) {
         return <textarea value={brief} onChange={(e) => handleFieldChange('brief', e.target.value)} className={`${baseClass} min-h-[120px] text-base md:text-sm leading-relaxed`} placeholder="2-4 sentence summary" />
       case 'overview':
         return <textarea value={projectOverview} onChange={(e) => handleFieldChange('projectOverview', e.target.value)} className={`${baseClass} min-h-[160px] text-base md:text-sm leading-relaxed`} placeholder="Detailed project description" />
-      case 'prd':
-        return <textarea value={prd} onChange={(e) => handleFieldChange('prd', e.target.value)} className={`${baseClass} min-h-[250px] font-mono text-sm md:text-xs leading-relaxed`} placeholder="Product requirements document" />
-      case 'techArch':
-        return <textarea value={techArch} onChange={(e) => handleFieldChange('technical_architecture', e.target.value)} className={`${baseClass} min-h-[200px] font-mono text-sm md:text-xs leading-relaxed`} placeholder="Architecture details" />
-      case 'timeline':
-        return <textarea value={timeline} onChange={(e) => handleFieldChange('timeline', e.target.value)} className={`${baseClass} min-h-[120px] text-base md:text-sm leading-relaxed`} placeholder="Project timeline" />
       case 'adminNotes':
         return <textarea value={adminNotes} onChange={(e) => handleFieldChange('admin_notes', e.target.value)} className={`${baseClass} min-h-[120px] text-base md:text-sm leading-relaxed bg-amber-50/50 dark:bg-amber-500/5`} placeholder="Internal notes, not visible to client" />
     }

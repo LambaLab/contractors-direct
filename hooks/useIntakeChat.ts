@@ -245,12 +245,12 @@ export function useIntakeChat({ proposalId, idea }: Props) {
   }, [proposalId])
 
   // Persist messages to localStorage after every update.
-  // Also auto-saves to Supabase when email is verified and streaming is complete.
+  // Auto-saves messages to localStorage and syncs to Supabase on every completed turn.
   useEffect(() => {
     if (messages.length > 0 && proposalId) {
       localStorage.setItem(MSGS_KEY(proposalId), JSON.stringify(messages))
 
-      if (!isStreaming && localStorage.getItem(EMAIL_VERIFIED_KEY(proposalId))) {
+      if (!isStreaming) {
         const storedSession = getStoredSession()
         if (storedSession?.sessionId) {
           const syncedCount = parseInt(

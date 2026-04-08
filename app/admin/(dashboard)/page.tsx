@@ -227,58 +227,17 @@ function AdminDashboardContent() {
     setLeads((prev) => prev.map((p) => (p.id === updated.id ? updated : p)))
   }
 
-  // Service dropdown to render into the header via portal
-  function renderServiceDropdown() {
+  // Lead count badge in header
+  function renderLeadCount() {
     if (!headerSlot) return null
-
-    const triggerButton = (
-      <button className="flex items-center gap-1.5 px-2 py-1 rounded-lg text-sm font-medium hover:bg-muted/60 transition-colors cursor-pointer text-muted-foreground">
-        {TYPE_TABS.find(t => t.value === activeTab)?.label}
-        {activeTab === 'build' && leads.length > 0 && (
+    return createPortal(
+      <span className="flex items-center gap-1.5 text-sm text-muted-foreground">
+        {leads.length > 0 && (
           <span className="text-[10px] px-1.5 py-0.5 rounded-full font-medium bg-purple-400/15 text-purple-600 dark:text-purple-400">
             {leads.length}
           </span>
         )}
-        <ChevronDown className="w-3 h-3 text-muted-foreground" />
-      </button>
-    )
-
-    return createPortal(
-      <>
-        {/* Desktop: dropdown */}
-        <div className="hidden md:block">
-          <DropdownMenu>
-            <DropdownMenuTrigger>
-              {triggerButton}
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="start" className="min-w-[140px]">
-              {TYPE_TABS.map((tab) => (
-                <DropdownMenuItem
-                  key={tab.value}
-                  onClick={() => setActiveTab(tab.value)}
-                  className="flex items-center justify-between gap-3 text-sm cursor-pointer"
-                >
-                  <span>{tab.label}</span>
-                  <div className="flex items-center gap-2">
-                    {tab.count && leads.length > 0 && (
-                      <span className="text-[10px] px-1.5 py-0.5 rounded-full font-medium bg-muted text-muted-foreground">
-                        {leads.length}
-                      </span>
-                    )}
-                    {activeTab === tab.value && (
-                      <Check className="w-3.5 h-3.5 text-purple-500" />
-                    )}
-                  </div>
-                </DropdownMenuItem>
-              ))}
-            </DropdownMenuContent>
-          </DropdownMenu>
-        </div>
-        {/* Mobile: tap opens bottom sheet */}
-        <div className="md:hidden" onClick={() => setMobileServiceOpen(true)}>
-          {triggerButton}
-        </div>
-      </>,
+      </span>,
       headerSlot
     )
   }
@@ -294,7 +253,7 @@ function AdminDashboardContent() {
   return (
     <>
       {/* Portal: service dropdown into header */}
-      {renderServiceDropdown()}
+      {renderLeadCount()}
 
       {/* --- Desktop layout --- */}
       <div ref={containerRef} className="hidden md:flex flex-1 min-h-0 overflow-hidden">
@@ -569,43 +528,6 @@ function AdminDashboardContent() {
             </div>
           </div>
 
-          {/* Mobile bottom sheet for service selection (triggered from header) */}
-          <Sheet open={mobileServiceOpen} onOpenChange={setMobileServiceOpen}>
-            <SheetContent side="bottom" className="rounded-t-2xl pb-8">
-              <SheetHeader>
-                <SheetTitle className="text-base font-semibold">Select Service</SheetTitle>
-              </SheetHeader>
-              <div className="space-y-1 px-4">
-                {TYPE_TABS.map((tab) => (
-                  <button
-                    key={tab.value}
-                    onClick={() => { setActiveTab(tab.value); setMobileServiceOpen(false) }}
-                    className={`w-full flex items-center justify-between px-4 py-3.5 rounded-xl text-base transition-colors cursor-pointer ${
-                      activeTab === tab.value
-                        ? 'bg-purple-950/80 dark:bg-purple-500/5 text-foreground font-medium'
-                        : 'text-muted-foreground hover:bg-muted/50 hover:text-foreground'
-                    }`}
-                  >
-                    <span className="flex items-center gap-2.5">
-                      {tab.label}
-                      {tab.count && leads.length > 0 && (
-                        <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${
-                          activeTab === tab.value
-                            ? 'bg-purple-400/15 text-purple-600 dark:text-purple-400'
-                            : 'bg-muted text-muted-foreground'
-                        }`}>
-                          {leads.length}
-                        </span>
-                      )}
-                    </span>
-                    {activeTab === tab.value && (
-                      <Check className="w-5 h-5 text-purple-500" />
-                    )}
-                  </button>
-                ))}
-              </div>
-            </SheetContent>
-          </Sheet>
           <div className="flex-1 min-h-0 overflow-y-auto">
             <LeadList
               leads={leads}

@@ -4,7 +4,9 @@ import { createServiceClient } from '@/lib/supabase/server'
 type MessageInput = { role: 'user' | 'assistant'; content: string }
 
 export async function POST(req: NextRequest) {
-  const { leadId, sessionId, messages, brief, scope, confidenceScore, metadata } = await req.json()
+  const body = await req.json()
+  const leadId = body.leadId || body.proposalId
+  const { sessionId, messages, brief, scope, confidenceScore, metadata } = body
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const supabaseAny = createServiceClient() as any
 
