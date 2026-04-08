@@ -36,6 +36,7 @@ export default function ChatTab({ leadId }: Props) {
   const messagesEndRef = useRef<HTMLDivElement>(null)
   const newMessageMarkerRef = useRef<HTMLDivElement>(null)
   const supabaseRef = useRef(createClient())
+  const broadcastChannelRef = useRef<ReturnType<ReturnType<typeof createClient>['channel']> | null>(null)
   const isNearBottomRef = useRef(true)
   const prevMessageCountRef = useRef(0)
 
@@ -132,21 +133,21 @@ export default function ChatTab({ leadId }: Props) {
     }, 3000)
 
     // Broadcast channel for admin join/leave signaling + client presence
-    let broadcastChannel: ReturnType<typeof supabase.channel> | null = null
     try {
-      broadcastChannel = supabase.channel(`proposal:${leadId}`, {
+      const broadcastChannel = supabase.channel(`proposal:${leadId}`, {
         config: { presence: { key: 'admin' } },
       })
+      broadcastChannelRef.current = broadcastChannel
 
       broadcastChannel
         .on('presence', { event: 'sync' }, () => {
-          const state = broadcastChannel!.presenceState()
+          const state = broadcastChannel.presenceState()
           const hasClient = Object.keys(state).some(key => key === 'client')
           setClientOnline(hasClient)
         })
         .subscribe(async (status) => {
           if (status === 'SUBSCRIBED') {
-            await broadcastChannel!.track({ user_type: 'admin' })
+            await broadcastChannel.track({ user_type: 'admin' })
           }
         })
     } catch {
@@ -155,7 +156,10 @@ export default function ChatTab({ leadId }: Props) {
 
     return () => {
       clearInterval(pollInterval)
-      if (broadcastChannel) supabase.removeChannel(broadcastChannel)
+      if (broadcastChannelRef.current) {
+        supabase.removeChannel(broadcastChannelRef.current)
+        broadcastChannelRef.current = null
+      }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [leadId])
@@ -169,8 +173,8 @@ export default function ChatTab({ leadId }: Props) {
   }, [messages, scrollToBottom])
 
   async function handleJoinChat() {
-    const supabase = supabaseRef.current
-    const channel = supabase.channel(`proposal:${leadId}`)
+    const channel = broadcastChannelRef.current
+    if (!channel) return
     await channel.send({
       type: 'broadcast',
       event: 'admin_status',
@@ -180,8 +184,8 @@ export default function ChatTab({ leadId }: Props) {
   }
 
   async function handleLeaveChat() {
-    const supabase = supabaseRef.current
-    const channel = supabase.channel(`proposal:${leadId}`)
+    const channel = broadcastChannelRef.current
+    if (!channel) return
     await channel.send({
       type: 'broadcast',
       event: 'admin_status',
@@ -210,13 +214,14 @@ export default function ChatTab({ leadId }: Props) {
       })
       setAdminMessage('')
 
-      const supabase = supabaseRef.current
-      const channel = supabase.channel(`proposal:${leadId}`)
-      await channel.send({
-        type: 'broadcast',
-        event: 'admin_message',
-        payload: { id: savedMsg.id, content, created_at: savedMsg.created_at },
-      })
+      const channel = broadcastChannelRef.current
+      if (channel) {
+        await channel.send({
+          type: 'broadcast',
+          event: 'admin_message',
+          payload: { id: savedMsg.id, content, created_at: savedMsg.created_at },
+        })
+      }
 
       // Always scroll to bottom after sending
       setTimeout(() => scrollToBottom(), 50)
