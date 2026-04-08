@@ -163,9 +163,9 @@ export function useIntakeChat({ proposalId, idea }: Props) {
   useEffect(() => { completedScopeRef.current = completedScope }, [completedScope])
 
   // Poll for admin chat status (join/leave) and admin messages from DB.
-  // This is the reliable path; broadcast is kept as a bonus for instant delivery.
   const adminPollTimestampRef = useRef<string | null>(null)
   const wasAdminActiveRef = useRef(false)
+  const joinMsgShownRef = useRef(false)
 
   useEffect(() => {
     if (!proposalId) return
@@ -182,58 +182,52 @@ export function useIntakeChat({ proposalId, idea }: Props) {
           messages: { id: string; role: string; content: string; created_at: string }[]
         }
 
-        // Handle admin join/leave transitions
+        // Handle admin join/leave transitions (only fire once per transition)
         if (data.adminActive && !wasAdminActiveRef.current) {
+          wasAdminActiveRef.current = true
+          joinMsgShownRef.current = true
           setIsAdminActive(true)
-          setMessages((prev) => {
-            if (prev.some((m) => m.content === '[Admin] has joined the chat' && m.role === 'admin')) return prev
-            return [...prev, {
-              id: crypto.randomUUID(),
-              role: 'admin' as const,
-              content: '[Admin] has joined the chat',
-              createdAt: Date.now(),
-            }]
-          })
+          setMessages((prev) => [...prev, {
+            id: `admin-joined-${Date.now()}`,
+            role: 'admin' as const,
+            content: '[Admin] has joined the chat',
+            createdAt: Date.now(),
+          }])
         } else if (!data.adminActive && wasAdminActiveRef.current) {
+          wasAdminActiveRef.current = false
+          joinMsgShownRef.current = false
           setIsAdminActive(false)
           setMessages((prev) => [...prev, {
-            id: crypto.randomUUID(),
+            id: `admin-left-${Date.now()}`,
             role: 'admin' as const,
             content: '[Admin] has left the chat. AI assistant resumed.',
             createdAt: Date.now(),
           }])
         }
-        wasAdminActiveRef.current = data.adminActive
 
-        // Add any new admin messages
+        // Add any new admin messages (dedup by ID)
         if (data.messages.length > 0) {
           setMessages((prev) => {
-            let updated = prev
-            for (const msg of data.messages) {
-              if (!updated.some((m) => m.id === msg.id)) {
-                updated = [...updated, {
-                  id: msg.id,
-                  role: 'admin' as const,
-                  content: msg.content,
-                  createdAt: new Date(msg.created_at).getTime(),
-                }]
-              }
-            }
-            return updated
+            const existingIds = new Set(prev.map((m) => m.id))
+            const newMsgs = data.messages.filter((msg) => !existingIds.has(msg.id))
+            if (newMsgs.length === 0) return prev
+            return [...prev, ...newMsgs.map((msg) => ({
+              id: msg.id,
+              role: 'admin' as const,
+              content: msg.content,
+              createdAt: new Date(msg.created_at).getTime(),
+            }))]
           })
-          // Advance the poll timestamp to the latest message
           const latest = data.messages[data.messages.length - 1]
           if (latest) adminPollTimestampRef.current = latest.created_at
         }
       } catch { /* ignore polling errors */ }
     }
 
-    // Initial poll
     pollChatStatus()
-    // Poll every 2 seconds for responsiveness
     const interval = setInterval(pollChatStatus, 2000)
 
-    // Also keep Supabase broadcast as bonus for instant delivery
+    // Broadcast as bonus for instant poll trigger only (no inline message handling)
     const supabase = createClient()
     let channel: ReturnType<typeof supabase.channel> | null = null
     try {
@@ -241,35 +235,8 @@ export function useIntakeChat({ proposalId, idea }: Props) {
         config: { presence: { key: 'client' } },
       })
       channel
-        .on('broadcast', { event: 'admin_status' }, (payload) => {
-          // Trigger an immediate poll to get the latest state from DB
-          pollChatStatus()
-          // Also handle inline for instant UX
-          const type = payload.payload?.type
-          if (type === 'admin_joined' && !wasAdminActiveRef.current) {
-            wasAdminActiveRef.current = true
-            setIsAdminActive(true)
-            setMessages((prev) => [...prev, {
-              id: crypto.randomUUID(),
-              role: 'admin' as const,
-              content: '[Admin] has joined the chat',
-              createdAt: Date.now(),
-            }])
-          } else if (type === 'admin_left' && wasAdminActiveRef.current) {
-            wasAdminActiveRef.current = false
-            setIsAdminActive(false)
-            setMessages((prev) => [...prev, {
-              id: crypto.randomUUID(),
-              role: 'admin' as const,
-              content: '[Admin] has left the chat. AI assistant resumed.',
-              createdAt: Date.now(),
-            }])
-          }
-        })
-        .on('broadcast', { event: 'admin_message' }, () => {
-          // Trigger immediate poll to pick up the message from DB
-          pollChatStatus()
-        })
+        .on('broadcast', { event: 'admin_status' }, () => pollChatStatus())
+        .on('broadcast', { event: 'admin_message' }, () => pollChatStatus())
         .subscribe(async (status) => {
           if (status === 'SUBSCRIBED') {
             await channel!.track({ user_type: 'client' })
@@ -335,7 +302,7 @@ export function useIntakeChat({ proposalId, idea }: Props) {
               body: JSON.stringify({
                 proposalId,
                 sessionId: storedSession.sessionId,
-                messages: newMessages.map((m) => ({ role: m.role, content: m.content })),
+                messages: newMessages.filter((m) => m.role !== 'admin').map((m) => ({ role: m.role, content: m.content })),
                 brief: syncBrief,
                 scope: syncScope,
                 confidenceScore: syncConfidence,
