@@ -69,6 +69,7 @@ function AdminDashboardContent() {
   const [loading, setLoading] = useState(true)
   const [searchQuery, setSearchQuery] = useState('')
   const [statusFilter, setStatusFilter] = useState<StatusFilter>('all')
+  const [hideZeroConfidence, setHideZeroConfidence] = useState(false)
   const [sortKey, setSortKey] = useState<SortKey>('newest')
   const [activeTab, setActiveTab] = useState<LeadType>('build')
   const [refreshing, setRefreshing] = useState(false)
@@ -302,31 +303,35 @@ function AdminDashboardContent() {
                 </Tooltip>
               )}
 
-              {/* Status filter icon */}
-              <Tooltip>
-                <TooltipTrigger>
-                  <div>
-                    <Select value={statusFilter} onValueChange={(v) => setStatusFilter(v as StatusFilter)}>
-                      <SelectTrigger className="h-8 w-8 p-0 border-0 shadow-none justify-center cursor-pointer rounded-lg hover:bg-accent [&>svg:last-child]:hidden">
-                        <div className="relative">
-                          <Filter className="h-4 w-4" />
-                          {statusFilter !== 'all' && (
-                            <span className="absolute -top-1 -right-1 w-2 h-2 rounded-full bg-purple-500" />
-                          )}
-                        </div>
-                      </SelectTrigger>
-                      <SelectContent>
-                        {STATUS_OPTIONS.map((opt) => (
-                          <SelectItem key={opt.value} value={opt.value} className="text-xs">
-                            {opt.label}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </div>
-                </TooltipTrigger>
-                <TooltipContent side="bottom">Filter</TooltipContent>
-              </Tooltip>
+              {/* Filter dropdown */}
+              <DropdownMenu>
+                <DropdownMenuTrigger className="h-8 w-8 shrink-0 cursor-pointer rounded-lg relative inline-flex items-center justify-center hover:bg-accent transition-colors">
+                  <Filter className="h-4 w-4" />
+                  {(statusFilter !== 'all' || hideZeroConfidence) && (
+                    <span className="absolute top-1 right-1 w-2 h-2 rounded-full bg-purple-500" />
+                  )}
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="start" className="w-44">
+                  {STATUS_OPTIONS.map((opt) => (
+                    <DropdownMenuItem
+                      key={opt.value}
+                      className="text-xs justify-between cursor-pointer"
+                      onClick={() => setStatusFilter(opt.value)}
+                    >
+                      {opt.label}
+                      {statusFilter === opt.value && <Check className="h-3.5 w-3.5 text-purple-500" />}
+                    </DropdownMenuItem>
+                  ))}
+                  <div className="h-px bg-border my-1" />
+                  <DropdownMenuItem
+                    className="text-xs justify-between cursor-pointer"
+                    onClick={() => setHideZeroConfidence((v) => !v)}
+                  >
+                    Hide 0% confidence
+                    {hideZeroConfidence && <Check className="h-3.5 w-3.5 text-purple-500" />}
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
 
               {/* Sort icon */}
               <Tooltip>
@@ -376,6 +381,7 @@ function AdminDashboardContent() {
               searchQuery={searchQuery}
               statusFilter={statusFilter}
               sortKey={sortKey}
+              hideZeroConfidence={hideZeroConfidence}
               isFullWidth={!selectedLead}
             />
           </div>
@@ -483,23 +489,34 @@ function AdminDashboardContent() {
                     <Search className="h-[18px] w-[18px]" />
                   </Button>
 
-                  <Select value={statusFilter} onValueChange={(v) => setStatusFilter(v as StatusFilter)}>
-                    <SelectTrigger className="h-9 w-9 p-0 border-0 shadow-none justify-center cursor-pointer rounded-lg hover:bg-accent [&>svg:last-child]:hidden">
-                      <div className="relative">
-                        <Filter className="h-[18px] w-[18px]" />
-                        {statusFilter !== 'all' && (
-                          <span className="absolute -top-1 -right-1 w-2 h-2 rounded-full bg-purple-500" />
-                        )}
-                      </div>
-                    </SelectTrigger>
-                    <SelectContent>
+                  <DropdownMenu>
+                    <DropdownMenuTrigger className="h-9 w-9 cursor-pointer rounded-lg relative inline-flex items-center justify-center hover:bg-accent transition-colors">
+                      <Filter className="h-[18px] w-[18px]" />
+                      {(statusFilter !== 'all' || hideZeroConfidence) && (
+                        <span className="absolute top-1 right-1 w-2 h-2 rounded-full bg-purple-500" />
+                      )}
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="start" className="w-44">
                       {STATUS_OPTIONS.map((opt) => (
-                        <SelectItem key={opt.value} value={opt.value} className="text-sm">
+                        <DropdownMenuItem
+                          key={opt.value}
+                          className="text-sm justify-between cursor-pointer"
+                          onClick={() => setStatusFilter(opt.value)}
+                        >
                           {opt.label}
-                        </SelectItem>
+                          {statusFilter === opt.value && <Check className="h-3.5 w-3.5 text-purple-500" />}
+                        </DropdownMenuItem>
                       ))}
-                    </SelectContent>
-                  </Select>
+                      <div className="h-px bg-border my-1" />
+                      <DropdownMenuItem
+                        className="text-sm justify-between cursor-pointer"
+                        onClick={() => setHideZeroConfidence((v) => !v)}
+                      >
+                        Hide 0% confidence
+                        {hideZeroConfidence && <Check className="h-3.5 w-3.5 text-purple-500" />}
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
 
                   <Select value={sortKey} onValueChange={(v) => setSortKey(v as SortKey)}>
                     <SelectTrigger className="h-9 w-9 p-0 border-0 shadow-none justify-center cursor-pointer rounded-lg hover:bg-accent [&>svg:last-child]:hidden">
@@ -536,6 +553,7 @@ function AdminDashboardContent() {
               searchQuery={searchQuery}
               statusFilter={statusFilter}
               sortKey={sortKey}
+              hideZeroConfidence={hideZeroConfidence}
             />
           </div>
         </div>

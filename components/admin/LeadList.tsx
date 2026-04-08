@@ -15,10 +15,11 @@ type Props = {
   searchQuery: string
   statusFilter: StatusFilter
   sortKey: SortKey
+  hideZeroConfidence?: boolean
   isFullWidth?: boolean
 }
 
-export default function LeadList({ leads, selectedId, onSelect, searchQuery, statusFilter, sortKey, isFullWidth }: Props) {
+export default function LeadList({ leads, selectedId, onSelect, searchQuery, statusFilter, sortKey, hideZeroConfidence, isFullWidth }: Props) {
   const filtered = useMemo(() => {
     let result = [...leads]
 
@@ -39,6 +40,10 @@ export default function LeadList({ leads, selectedId, onSelect, searchQuery, sta
       result = result.filter((p) => p.status === statusFilter)
     }
 
+    if (hideZeroConfidence) {
+      result = result.filter((p) => p.confidence_score > 0)
+    }
+
     result.sort((a, b) => {
       switch (sortKey) {
         case 'oldest':
@@ -54,7 +59,7 @@ export default function LeadList({ leads, selectedId, onSelect, searchQuery, sta
     })
 
     return result
-  }, [leads, searchQuery, statusFilter, sortKey])
+  }, [leads, searchQuery, statusFilter, sortKey, hideZeroConfidence])
 
   if (filtered.length === 0) {
     return <p className="text-sm text-muted-foreground text-center py-8">No leads found.</p>
