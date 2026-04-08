@@ -132,6 +132,7 @@ export function useIntakeChat({ proposalId, idea }: Props) {
   const pausedQRRef = useRef<{ question: string; quickReplies: QuickReplies; messageId: string } | null>(null)
   const [lastSyncedAt, setLastSyncedAt] = useState<number | null>(null)
   const [isAdminActive, setIsAdminActive] = useState(false)
+  const syncInProgressRef = useRef(false)
 
   const messagesRef = useRef<ChatMessage[]>([])
   const confidenceRef = useRef(0)
@@ -250,7 +251,7 @@ export function useIntakeChat({ proposalId, idea }: Props) {
     if (messages.length > 0 && proposalId) {
       localStorage.setItem(MSGS_KEY(proposalId), JSON.stringify(messages))
 
-      if (!isStreaming) {
+      if (!isStreaming && !syncInProgressRef.current) {
         const storedSession = getStoredSession()
         if (storedSession?.sessionId) {
           const syncedCount = parseInt(
@@ -260,6 +261,7 @@ export function useIntakeChat({ proposalId, idea }: Props) {
           const newMessages = messages.slice(syncedCount)
           if (newMessages.length > 0) {
             const newCount = messages.length
+            syncInProgressRef.current = true
             // Include lead metadata so Supabase has it for cross-device restore
             let syncBrief: string | undefined
             let syncScope: string[] | undefined
@@ -297,16 +299,19 @@ export function useIntakeChat({ proposalId, idea }: Props) {
                 sessionId: storedSession.sessionId,
                 messages: newMessages.map((m) => ({ role: m.role, content: m.content })),
                 brief: syncBrief,
-                modules: syncScope,
+                scope: syncScope,
                 confidenceScore: syncConfidence,
                 metadata: syncMetadata,
               }),
             })
-              .then(() => {
-                localStorage.setItem(SYNCED_COUNT_KEY(proposalId), String(newCount))
-                setLastSyncedAt(Date.now())
+              .then((res) => {
+                if (res.ok) {
+                  localStorage.setItem(SYNCED_COUNT_KEY(proposalId), String(newCount))
+                  setLastSyncedAt(Date.now())
+                }
               })
               .catch((e) => console.error('Auto-save error:', e))
+              .finally(() => { syncInProgressRef.current = false })
           }
         }
       }

@@ -134,7 +134,7 @@ export default function ChatTab({ leadId }: Props) {
     // Broadcast channel for admin join/leave signaling + client presence
     let broadcastChannel: ReturnType<typeof supabase.channel> | null = null
     try {
-      broadcastChannel = supabase.channel(`lead:${leadId}`, {
+      broadcastChannel = supabase.channel(`proposal:${leadId}`, {
         config: { presence: { key: 'admin' } },
       })
 
@@ -170,7 +170,7 @@ export default function ChatTab({ leadId }: Props) {
 
   async function handleJoinChat() {
     const supabase = supabaseRef.current
-    const channel = supabase.channel(`lead:${leadId}`)
+    const channel = supabase.channel(`proposal:${leadId}`)
     await channel.send({
       type: 'broadcast',
       event: 'admin_status',
@@ -181,7 +181,7 @@ export default function ChatTab({ leadId }: Props) {
 
   async function handleLeaveChat() {
     const supabase = supabaseRef.current
-    const channel = supabase.channel(`lead:${leadId}`)
+    const channel = supabase.channel(`proposal:${leadId}`)
     await channel.send({
       type: 'broadcast',
       event: 'admin_status',
@@ -211,7 +211,7 @@ export default function ChatTab({ leadId }: Props) {
       setAdminMessage('')
 
       const supabase = supabaseRef.current
-      const channel = supabase.channel(`lead:${leadId}`)
+      const channel = supabase.channel(`proposal:${leadId}`)
       await channel.send({
         type: 'broadcast',
         event: 'admin_message',
