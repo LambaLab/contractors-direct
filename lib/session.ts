@@ -106,7 +106,7 @@ async function createNewSession(attempt = 1): Promise<SessionData> {
 /** Validate a stored session still exists on the server. Returns true if valid. */
 export async function validateSession(proposalId: string): Promise<boolean> {
   try {
-    const res = await fetchWithTimeout(`/api/intake/${proposalId}/validate`, { method: 'GET' }, 10_000)
+    const res = await fetchWithTimeout(`/api/proposals/${proposalId}/validate`, { method: 'GET' }, 10_000)
     return res.ok
   } catch {
     // Network error or timeout — assume session might still be valid (offline scenario)
