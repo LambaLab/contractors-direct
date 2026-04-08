@@ -1,4 +1,5 @@
 import { redirect, notFound } from 'next/navigation'
+import { createServiceClient } from '@/lib/supabase/server'
 
 const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i
 
@@ -12,27 +13,42 @@ export default async function ProposalPage({
   const { proposalId } = await params
   const { t: token } = await searchParams
 
-  // --- Slug path: resolve via API and redirect ---
+  // --- Slug path: resolve directly via Supabase ---
   if (!UUID_RE.test(proposalId)) {
-    const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'
+    const supabase = createServiceClient()
 
-    const res = await fetch(`${appUrl}/api/proposals/by-slug/${proposalId}`, {
-      cache: 'no-store',
-    })
+    const { data: lead } = await supabase
+      .from('leads')
+      .select('id, slug')
+      .eq('slug', proposalId)
+      .single()
 
-    if (!res.ok) notFound()
-
-    const data = await res.json()
-
-    if (data.redirect && data.currentSlug) {
-      // Pass through the auth token if present
-      const tokenParam = token ? `?t=${token}` : ''
-      redirect(`/proposal/${data.currentSlug}${tokenParam}`)
+    if (lead) {
+      const tokenParam = token ? `&t=${token}` : ''
+      redirect(`/?c=${lead.id}${tokenParam}`)
     }
 
-    // Pass through the auth token so the landing page can auto-authenticate
-    const tokenParam = token ? `&t=${token}` : ''
-    redirect(`/?c=${data.proposalId}${tokenParam}`)
+    // Check slug history for renamed slugs
+    const { data: history } = await supabase
+      .from('lead_slug_history')
+      .select('lead_id')
+      .eq('slug', proposalId)
+      .single()
+
+    if (history) {
+      const { data: target } = await supabase
+        .from('leads')
+        .select('slug')
+        .eq('id', history.lead_id)
+        .single()
+
+      if (target?.slug) {
+        const tokenParam = token ? `?t=${token}` : ''
+        redirect(`/proposal/${target.slug}${tokenParam}`)
+      }
+    }
+
+    notFound()
   }
 
   // --- UUID path: show "in review" page ---
