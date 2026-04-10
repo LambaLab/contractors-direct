@@ -72,9 +72,7 @@ export async function POST(req: NextRequest) {
   const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? ''
   const slug = leadData?.slug
   const tokenParam = `t=${authToken}`
-  const leadUrl = slug
-    ? `${appUrl}/lead/${slug}?${tokenParam}`
-    : `${appUrl}/?c=${leadId}&${tokenParam}`
+  const leadUrl = `${appUrl}/?c=${leadId}&${tokenParam}`
   const { subject, html } = buildConfirmationEmail({ projectName: projectName ?? '', leadUrl })
 
   const { error: emailError } = await resend.emails.send({
