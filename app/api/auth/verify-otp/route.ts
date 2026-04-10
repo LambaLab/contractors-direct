@@ -52,6 +52,14 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Failed to save project. Please contact support.' }, { status: 500 })
   }
 
+  // Also insert into lead_emails for multi-email support
+  await supabase
+    .from('lead_emails')
+    .upsert(
+      { lead_id: leadId, email, is_primary: true, verified_at: new Date().toISOString() },
+      { onConflict: 'lead_id,email' }
+    )
+
   // Generate a one-time auth token for the email link (30-day expiry)
   const authToken = crypto.randomUUID()
   const tokenExpiry = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString()
