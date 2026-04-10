@@ -75,7 +75,7 @@ export default function MessageBubble({ message, isStreaming, onQuickReply, isLa
   // caught this, but defend at render level too).
   const qr = message.quickReplies
   const isCustomPickerStyle =
-    qr?.style === 'cards' || qr?.style === 'sqft' || qr?.style === 'budget'
+    qr?.style === 'cards' || qr?.style === 'sqft' || qr?.style === 'budget' || qr?.style === 'scope_grid'
   const shouldBeList = qr && (
     qr.style === 'list' ||
     (!isCustomPickerStyle && Array.isArray(qr.options) && qr.options.length >= 3)

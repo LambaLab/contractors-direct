@@ -734,7 +734,7 @@ export function useIntakeChat({ proposalId, idea }: Props) {
             // Auto-detect custom styles from question text (Haiku fallback)
             const detectedQR = autoDetectQRStyle(rawQR, questionText) ?? rawQR
             const validQR = detectedQR && (
-              detectedQR.style === 'sqft' || detectedQR.style === 'budget'
+              detectedQR.style === 'sqft' || detectedQR.style === 'budget' || detectedQR.style === 'scope_grid'
                 ? true
                 : (Array.isArray(detectedQR.options) && detectedQR.options.length > 0)
             )

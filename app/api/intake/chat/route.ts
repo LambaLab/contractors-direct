@@ -485,9 +485,10 @@ When suggesting to resume, always frame it as an invitation, not a demand. "Want
         const quickReplies = extractObjectField('quick_replies')
         if (quickReplies === null) return
 
-        // Validate quick_replies has at least one option
+        // Validate quick_replies has at least one option (except scope_grid/sqft/budget which use empty options)
         const options = quickReplies.options
-        if (!Array.isArray(options) || options.length === 0) {
+        const selfRendering = quickReplies.style === 'scope_grid' || quickReplies.style === 'sqft' || quickReplies.style === 'budget'
+        if (!selfRendering && (!Array.isArray(options) || options.length === 0)) {
           send('debug', { why: 'invalid_options', opts: JSON.stringify(options ?? null).slice(0, 100) })
           partialResultSent = true  // invalid QR -- don't retry; full tool_result will handle
           return
