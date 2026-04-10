@@ -880,10 +880,11 @@ export function useIntakeChat({ proposalId, idea }: Props) {
             const turnsSinceLast = turnCount.current - lastPauseTurn.current
             const aiWantsPause = input?.suggest_pause === true
             const phase = input?.current_phase || currentPhaseRef.current
+            const isUpgradeTransition = journeyModeRef.current === 'upgraded' && turnCount.current <= 2
             const clientWantsPause = (phase === 'discovery' && newScore >= 60 && turnsSinceLast >= 6)
               // Safety net: wrap_up phase should ALWAYS show pills
               || phase === 'wrap_up'
-            const isPauseThisTurn = (aiWantsPause || clientWantsPause) && turnsSinceLast >= 4
+            const isPauseThisTurn = !isUpgradeTransition && (aiWantsPause || clientWantsPause) && turnsSinceLast >= 4
             if (isPauseThisTurn) lastPauseTurn.current = turnCount.current
 
             setMessages((prev) => {

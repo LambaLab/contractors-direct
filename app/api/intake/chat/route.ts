@@ -59,6 +59,10 @@ export async function POST(req: NextRequest) {
           `Scope queue: ${queue.length > 0 ? queue.join(', ') : 'empty'}`,
           `Completed scopes: ${completed.length > 0 ? completed.join(', ') : 'none'}`,
           `Confidence: ${currentConfidence}%`,
+          // Remind AI to update project_overview on every qualifying turn
+          ...(turns >= 1 && phase !== 'triage' ? [
+            `\n-- IMPORTANT: You MUST set project_overview to a non-empty string on this turn. Summarize the project as understood so far (property type, location, size, condition, scope). Do NOT return an empty string for project_overview unless this is the triage turn.`,
+          ] : []),
           // Triage: first message, present the journey divider
           ...(phase === 'triage' && turns === 0 ? [
             `\n-- TURN 0 INSTRUCTION: This is the user's first message. You are in Phase 0 Triage. Present the journey divider. Set current_phase: "triage". Acknowledge their project idea in 1 sentence, then ask "How detailed would you like to go?" with cards-style quick_replies: Quick Estimate and Full Consultation. Do NOT ask any qualifying questions yet.`,

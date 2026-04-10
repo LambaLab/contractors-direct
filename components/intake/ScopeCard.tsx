@@ -14,30 +14,30 @@ type Props = {
 }
 
 const cardStyles: Record<string, string> = {
-  confirmed: 'bg-[var(--ov-accent-bg,rgba(115,103,255,0.05))] border-[var(--ov-accent-border,rgba(115,103,255,0.30))]',
-  current: 'bg-[var(--ov-accent-bg,rgba(115,103,255,0.05))] border-[var(--ov-accent-border,rgba(115,103,255,0.20))] border-dashed',
-  detected: 'bg-[var(--ov-surface-subtle,rgba(255,255,255,0.03))] border-[var(--ov-border,rgba(255,255,255,0.10))] border-dashed',
-  inactive: 'bg-[var(--ov-surface-subtle,rgba(255,255,255,0.02))] border-[var(--ov-border,rgba(255,255,255,0.05))] opacity-50',
+  confirmed: 'bg-[var(--ov-accent-bg,rgba(115,103,255,0.08))] border-[var(--ov-accent-border,rgba(115,103,255,0.30))]',
+  current: 'bg-[var(--ov-accent-bg,rgba(115,103,255,0.08))] border-[var(--ov-accent-border,rgba(115,103,255,0.25))] border-dashed',
+  detected: 'bg-[var(--ov-accent-bg,rgba(115,103,255,0.05))] border-[var(--ov-accent-border,rgba(115,103,255,0.15))]',
+  inactive: 'bg-[var(--ov-surface-subtle,rgba(255,255,255,0.02))] border-[var(--ov-border,rgba(255,255,255,0.05))] opacity-40',
 }
 
 const iconBgStyles: Record<string, string> = {
-  confirmed: 'bg-[var(--ov-accent-bg,rgba(115,103,255,0.15))]',
-  current: 'bg-[var(--ov-accent-bg,rgba(115,103,255,0.10))]',
-  detected: 'bg-[var(--ov-surface-subtle,rgba(255,255,255,0.05))]',
+  confirmed: 'bg-[var(--ov-accent-bg,rgba(115,103,255,0.20))]',
+  current: 'bg-[var(--ov-accent-bg,rgba(115,103,255,0.15))]',
+  detected: 'bg-[var(--ov-accent-bg,rgba(115,103,255,0.10))]',
   inactive: 'bg-[var(--ov-surface-subtle,rgba(255,255,255,0.05))]',
 }
 
 const iconColorStyles: Record<string, string> = {
   confirmed: 'text-[var(--ov-accent-strong,#7367ff)]',
   current: 'text-[var(--ov-accent-strong,#7367ff)]',
-  detected: 'text-[var(--ov-text-muted,#727272)]',
+  detected: 'text-[var(--ov-accent-strong,#7367ff)]/70',
   inactive: 'text-[var(--ov-text-muted,#727272)]',
 }
 
 const textStyles: Record<string, string> = {
   confirmed: 'text-[var(--ov-text,#ffffff)]',
   current: 'text-[var(--ov-text,#ffffff)]',
-  detected: 'text-[var(--ov-text,#ffffff)]/70',
+  detected: 'text-[var(--ov-text,#ffffff)]',
   inactive: 'text-[var(--ov-text-muted,#727272)]',
 }
 
