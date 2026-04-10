@@ -8,6 +8,7 @@
 type CardImageEntry = {
   imageUrl: string
   imageAlt: string
+  subtitle?: string
 }
 
 const CARD_IMAGES: Record<string, CardImageEntry> = {
@@ -21,15 +22,15 @@ const CARD_IMAGES: Record<string, CardImageEntry> = {
   warehouse:     { imageUrl: '/intake/cards/property-type/warehouse.jpg', imageAlt: 'Clean modern warehouse interior' },
 
   // Condition — residential (Phase 1, Q4)
-  new:               { imageUrl: '/intake/cards/condition-residential/new.jpg', imageAlt: 'Newly finished modern interior' },
-  needs_refresh:     { imageUrl: '/intake/cards/condition-residential/needs-refresh.jpg', imageAlt: 'Lived-in apartment interior' },
-  major_renovation:  { imageUrl: '/intake/cards/condition-residential/major-renovation.jpg', imageAlt: 'Dated kitchen ready for renovation' },
-  shell:             { imageUrl: '/intake/cards/condition-residential/shell.jpg', imageAlt: 'Bare concrete shell interior' },
+  new:               { imageUrl: '/intake/cards/condition-residential/new.jpg', imageAlt: 'Newly finished modern interior', subtitle: 'Recently finished, move-in ready' },
+  needs_refresh:     { imageUrl: '/intake/cards/condition-residential/needs-refresh.jpg', imageAlt: 'Lived-in apartment interior', subtitle: 'Liveable but dated, needs updating' },
+  major_renovation:  { imageUrl: '/intake/cards/condition-residential/major-renovation.jpg', imageAlt: 'Dated kitchen ready for renovation', subtitle: 'Worn out, needs a full overhaul' },
+  shell:             { imageUrl: '/intake/cards/condition-residential/shell.jpg', imageAlt: 'Bare concrete shell interior', subtitle: 'Bare concrete, everything from scratch' },
 
   // Condition — commercial (Phase 1, Q4)
-  fitted:          { imageUrl: '/intake/cards/condition-commercial/fitted.jpg', imageAlt: 'Fully fitted office space' },
-  semi_fitted:     { imageUrl: '/intake/cards/condition-commercial/semi-fitted.jpg', imageAlt: 'Partially fitted commercial space' },
-  shell_and_core:  { imageUrl: '/intake/cards/condition-commercial/shell-and-core.jpg', imageAlt: 'Shell and core commercial space' },
+  fitted:          { imageUrl: '/intake/cards/condition-commercial/fitted.jpg', imageAlt: 'Fully fitted office space', subtitle: 'Finished and functional, just needs your touch' },
+  semi_fitted:     { imageUrl: '/intake/cards/condition-commercial/semi-fitted.jpg', imageAlt: 'Partially fitted commercial space', subtitle: 'Some basics in place, needs build-out' },
+  shell_and_core:  { imageUrl: '/intake/cards/condition-commercial/shell-and-core.jpg', imageAlt: 'Shell and core commercial space', subtitle: 'Bare space, needs the full solution' },
 
   // Style preference (Phase 2)
   Modern:               { imageUrl: '/intake/cards/style/modern.jpg', imageAlt: 'Modern minimalist living room' },
@@ -61,10 +62,17 @@ const CARD_IMAGES: Record<string, CardImageEntry> = {
  * QR to the UI.
  */
 export function enrichCardOption(
-  option: { value: string; imageUrl?: string; imageAlt?: string }
-): { imageUrl?: string; imageAlt?: string } {
+  option: { value: string; imageUrl?: string; imageAlt?: string; description?: string }
+): { imageUrl?: string; imageAlt?: string; description?: string } {
   if (option.imageUrl) return { imageUrl: option.imageUrl, imageAlt: option.imageAlt }
   const entry = CARD_IMAGES[option.value]
-  if (entry) return entry
+  if (entry) {
+    return {
+      imageUrl: entry.imageUrl,
+      imageAlt: entry.imageAlt,
+      // Use the curated subtitle as the card description if the AI didn't provide one
+      ...(!option.description && entry.subtitle ? { description: entry.subtitle } : {}),
+    }
+  }
   return {}
 }
