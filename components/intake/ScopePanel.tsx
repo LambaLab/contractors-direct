@@ -336,7 +336,7 @@ export default function ScopePanel({
       <div className="flex-shrink-0 border-t border-[var(--ov-border,rgba(255,255,255,0.05))] px-4 py-4 space-y-2">
 
         {/* Save Proposal — hidden when email is already verified */}
-        {!localStorage.getItem(`cd_email_verified_${proposalId}`) && (
+        {!emailVerified && (
           <button
             type="button"
             onClick={onSaveLater}
