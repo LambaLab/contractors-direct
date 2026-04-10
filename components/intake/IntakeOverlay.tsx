@@ -5,7 +5,8 @@ import { CloudCheck, Menu, Minus, X } from 'lucide-react'
 import IntakeLayout from './IntakeLayout'
 import MinimizedBar from './MinimizedBar'
 import SaveForLaterModal from './SaveForLaterModal'
-import ProposalDrawer, { type ProposalSummary } from './ProposalDrawer'
+import AddEmailModal from './AddEmailModal'
+import ProposalDrawer, { type ProposalSummary, type LeadEmail } from './ProposalDrawer'
 import {
   getOrCreateSession,
   getStoredSession,
@@ -57,6 +58,11 @@ export default function IntakeOverlay({ initialMessage, onClose }: Props) {
   const [showSaved, setShowSaved] = useState(false)
   const lastSyncedAtRef = useRef<number | null>(null)
   const [switchingProposal, setSwitchingProposal] = useState(false)
+
+  // Email management state
+  const [leadEmails, setLeadEmails] = useState<LeadEmail[]>([])
+  const [addEmailModalOpen, setAddEmailModalOpen] = useState(false)
+  const [sendingLink, setSendingLink] = useState(false)
 
   const updateSlug = useCallback(async (proposalId: string, name: string) => {
     try {
@@ -232,12 +238,25 @@ export default function IntakeOverlay({ initialMessage, onClose }: Props) {
     }
   }, [])
 
-  // Auto-fetch proposals when email becomes verified
+  // Fetch verified emails for the current lead
+  const fetchLeadEmails = useCallback(async (leadId: string) => {
+    try {
+      const res = await fetch(`/api/leads/${leadId}/emails`)
+      if (!res.ok) { setLeadEmails([]); return }
+      const data = await res.json()
+      setLeadEmails(data.emails ?? [])
+    } catch {
+      setLeadEmails([])
+    }
+  }, [])
+
+  // Auto-fetch proposals and emails when email becomes verified
   useEffect(() => {
     if (emailVerified && session) {
       fetchProposals(session.proposalId)
+      fetchLeadEmails(session.proposalId)
     }
-  }, [emailVerified, session, fetchProposals])
+  }, [emailVerified, session, fetchProposals, fetchLeadEmails])
 
   // Refetch when drawer opens and data is stale
   useEffect(() => {
@@ -503,6 +522,43 @@ export default function IntakeOverlay({ initialMessage, onClose }: Props) {
     }
   }
 
+  // ── Email management handlers ──
+  async function handleRemoveEmail(emailId: string) {
+    if (!session) return
+    try {
+      const res = await fetch(`/api/leads/${session.proposalId}/emails/${emailId}`, { method: 'DELETE' })
+      if (res.ok) fetchLeadEmails(session.proposalId)
+    } catch (e) {
+      console.error('Remove email error:', e)
+    }
+  }
+
+  async function handleSetPrimary(emailId: string) {
+    if (!session) return
+    try {
+      const res = await fetch(`/api/leads/${session.proposalId}/emails/${emailId}`, { method: 'PATCH' })
+      if (res.ok) fetchLeadEmails(session.proposalId)
+    } catch (e) {
+      console.error('Set primary error:', e)
+    }
+  }
+
+  async function handleSendLink(emails: string[]) {
+    if (!session || emails.length === 0) return
+    setSendingLink(true)
+    try {
+      await fetch(`/api/leads/${session.proposalId}/emails/send-link`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ emails }),
+      })
+    } catch (e) {
+      console.error('Send link error:', e)
+    } finally {
+      setSendingLink(false)
+    }
+  }
+
   return (
     <>
       {/* MinimizedBar — always rendered when minimized */}
@@ -694,6 +750,15 @@ export default function IntakeOverlay({ initialMessage, onClose }: Props) {
               setSaveModalOpen(true)
             }}
             theme={theme}
+            leadEmails={leadEmails}
+            onAddEmail={() => {
+              setDrawerOpen(false)
+              setAddEmailModalOpen(true)
+            }}
+            onRemoveEmail={handleRemoveEmail}
+            onSetPrimary={handleSetPrimary}
+            onSendLink={handleSendLink}
+            sendingLink={sendingLink}
           />
         </div>
       )}
@@ -704,6 +769,16 @@ export default function IntakeOverlay({ initialMessage, onClose }: Props) {
           sessionId={session.sessionId}
           projectName={appName || undefined}
           onClose={handleSaveModalClose}
+        />
+      )}
+
+      {addEmailModalOpen && session && (
+        <AddEmailModal
+          leadId={session.proposalId}
+          onClose={() => setAddEmailModalOpen(false)}
+          onEmailAdded={() => {
+            fetchLeadEmails(session.proposalId)
+          }}
         />
       )}
     </>
