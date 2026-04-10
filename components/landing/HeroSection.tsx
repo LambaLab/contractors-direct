@@ -48,9 +48,9 @@ export default function HeroSection({ onIntakeChange, onIntakeClose }: HeroProps
 
     // Same-device restore: session already in localStorage
     const storedSession = getStoredSession()
-    const idea = storedSession?.proposalId === c ? getIdeaForSession(c) : null
-    if (idea) {
-      setInitialMessage(idea)
+    if (storedSession?.proposalId === c) {
+      const idea = getIdeaForSession(c)
+      if (idea) setInitialMessage(idea)
       setIntakeOpen(true)
       return
     }
