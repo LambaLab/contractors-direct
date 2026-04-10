@@ -13,6 +13,7 @@ export async function GET(
 
   const supabase = createServiceClient()
 
+  // Try lead_emails table first (multi-email support)
   const { data: emails, error } = await supabase
     .from('lead_emails')
     .select('id, email, is_primary, verified_at')
@@ -20,10 +21,27 @@ export async function GET(
     .order('is_primary', { ascending: false })
     .order('created_at', { ascending: true })
 
-  if (error) {
-    console.error('Fetch lead emails error:', error)
-    return NextResponse.json({ error: 'Failed to fetch emails' }, { status: 500 })
+  if (!error && emails && emails.length > 0) {
+    return NextResponse.json({ emails })
   }
 
-  return NextResponse.json({ emails: emails ?? [] })
+  // Fallback: read email from leads table directly
+  const { data: lead } = await supabase
+    .from('leads')
+    .select('id, email, saved_at')
+    .eq('id', leadId)
+    .single()
+
+  if (lead?.email) {
+    return NextResponse.json({
+      emails: [{
+        id: lead.id,
+        email: lead.email,
+        is_primary: true,
+        verified_at: lead.saved_at ?? new Date().toISOString(),
+      }],
+    })
+  }
+
+  return NextResponse.json({ emails: [] })
 }

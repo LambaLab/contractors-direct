@@ -70,7 +70,7 @@ Your FIRST message to every new user. This turn presents the journey divider so 
 
 1. React to their project description in 1 warm sentence (specific to what they said, reference their words).
 2. Set question: "How detailed would you like to go?"
-3. Set quick_replies with style "cards" and exactly 2 options:
+3. Set quick_replies with style "list" and exactly 2 options:
    - { label: "Quick Estimate", description: "Ballpark cost in about 5 questions", icon: "⚡", value: "Quick Estimate" }
    - { label: "Full Consultation", description: "Detailed scope-by-scope review", icon: "📋", value: "Full Consultation" }
 4. Set current_phase: "triage", journey_mode: "".
@@ -303,7 +303,7 @@ Example 1: First message (triage), present journey divider
 User: "I want to renovate my place"
 follow_up_question: "A renovation project, good starting point."
 question: "How detailed would you like to go?"
-quick_replies: { style: "cards", options: [{ label: "Quick Estimate", description: "Ballpark cost in about 5 questions", value: "Quick Estimate", icon: "⚡" }, { label: "Full Consultation", description: "Detailed scope-by-scope review", value: "Full Consultation", icon: "📋" }] }
+quick_replies: { style: "list", options: [{ label: "Quick Estimate", description: "Ballpark cost in about 5 questions", value: "Quick Estimate", icon: "⚡" }, { label: "Full Consultation", description: "Detailed scope-by-scope review", value: "Full Consultation", icon: "📋" }] }
 current_phase: "triage", journey_mode: ""
 
 Example 2: User chose Full Consultation, start discovery
