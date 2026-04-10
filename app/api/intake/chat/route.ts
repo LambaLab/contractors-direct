@@ -60,15 +60,17 @@ export async function POST(req: NextRequest) {
           ...(queue.filter(m => !completed.includes(m)).length > 0 && phase === 'deep_dive' ? [
             `\n-- There are ${queue.filter(m => !completed.includes(m)).length} scopes still in the queue that have NOT been discussed: ${queue.filter(m => !completed.includes(m)).join(', ')}. You MUST continue deep_dive with the next scope. Do NOT set current_phase to "wrap_up".`,
           ] : []),
-          // On turn 1, strongly nudge the AI to skip discovery and go straight to deep_dive
+          // Turn 1: stay in discovery and walk the Priority Question Checklist.
+          // The AI should start at item 1 (project type) unless the user's opening
+          // message already answers earlier items, in which case it jumps ahead.
           ...(phase === 'discovery' && turns === 0 ? [
-            `\n-- TURN 1 INSTRUCTION: This is the user's first message. You MUST skip discovery and go directly to deep_dive. Set current_phase: "deep_dive", detect scopes, set current_scope to the first one, and set scope_queue. Set question to "" (empty string) -- this is the stage-setting turn. The UI will auto-trigger the first question after showing the scope checklist card.`,
+            `\n-- TURN 1 INSTRUCTION: This is the user's first message. You are in Phase 1 Discovery. Walk the Priority Question Checklist in order (project type, location, ownership, condition, floor plans, size, budget, full scope). SKIP any items the user already answered in their opening message. Set current_phase: "discovery" and ask the FIRST unanswered checklist item. Do NOT jump to deep_dive yet, deep_dive only happens after item 8 (full scope probing).`,
           ] : []),
           // Force transition when discovery has gone too long
-          ...(phase === 'discovery' && turns >= 2 ? [
-            `\n-- IMPORTANT: You are on discovery turn ${turns + 1}. Discovery MUST end by turn 3. On THIS turn, set current_phase: "deep_dive", set current_scope to the first detected scope, and set scope_queue to the full ordered list. Do NOT list scope names in follow_up_question -- the UI shows a visual checklist card automatically.`,
+          ...(phase === 'discovery' && turns >= 8 ? [
+            `\n-- IMPORTANT: You are on discovery turn ${turns + 1}. Discovery should have ended by turn 9 (the Priority Checklist is 8 items + 1 upload handoff). On THIS turn, set current_phase: "deep_dive", set current_scope to the first detected scope, and set scope_queue to the full ordered list. Do NOT list scope names in follow_up_question, the UI shows a visual checklist card automatically.`,
           ] : []),
-          ...(phase === 'discovery' && turns >= 3 ? [
+          ...(phase === 'discovery' && turns >= 10 ? [
             `\n-- MANDATORY: You have exceeded the maximum discovery turns. You MUST set current_phase to "deep_dive" NOW. Do NOT set current_phase to "discovery".`,
           ] : []),
         ].join('\n'),

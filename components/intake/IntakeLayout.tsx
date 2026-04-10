@@ -6,6 +6,7 @@ import ScopePanel from './ScopePanel'
 import MobileBottomDrawer from './MobileBottomDrawer'
 import { useIntakeChat } from '@/hooks/useIntakeChat'
 import { formatPriceRange, isPricingVisible } from '@/lib/pricing/engine'
+import { getStoredSession } from '@/lib/session'
 
 type Props = {
   proposalId: string
@@ -44,7 +45,18 @@ export default function IntakeLayout({ proposalId, initialMessage, onStateChange
     skipQuestion,
     lastSyncedAt,
     currentScope,
+    handleFileUploaded,
+    handleFileUploadDone,
+    handleFileUploadSkipped,
   } = useIntakeChat({ proposalId, idea: initialMessage })
+
+  // Session ID for direct-to-Supabase file uploads. The stored session is
+  // created on first visit (see lib/session.ts) and persists across reloads.
+  // Lazy initializer reads localStorage once on mount, no effect needed.
+  const [sessionId] = useState<string | null>(() => {
+    if (typeof window === 'undefined') return null
+    return getStoredSession()?.sessionId ?? null
+  })
 
   const [chatWidthPct, setChatWidthPct] = useState(55)
   const isDragging = useRef(false)
@@ -155,6 +167,11 @@ export default function IntakeLayout({ proposalId, initialMessage, onStateChange
             onSkipQuestion={skipQuestion}
             confidenceScore={confidenceScore}
             emailVerified={emailVerified}
+            leadId={proposalId}
+            sessionId={sessionId ?? undefined}
+            onFileUploaded={handleFileUploaded}
+            onFileUploadDone={handleFileUploadDone}
+            onFileUploadSkipped={handleFileUploadSkipped}
           />
         </div>
 
@@ -215,6 +232,11 @@ export default function IntakeLayout({ proposalId, initialMessage, onStateChange
             onSkipQuestion={skipQuestion}
             confidenceScore={confidenceScore}
             emailVerified={emailVerified}
+            leadId={proposalId}
+            sessionId={sessionId ?? undefined}
+            onFileUploaded={handleFileUploaded}
+            onFileUploadDone={handleFileUploadDone}
+            onFileUploadSkipped={handleFileUploadSkipped}
           />
         </div>
         <MobileBottomDrawer

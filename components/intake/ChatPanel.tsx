@@ -6,8 +6,12 @@ import MessageBubble from './MessageBubble'
 import ScopeProgressCard from './ScopeProgressCard'
 import PauseCheckpoint from './PauseCheckpoint'
 import QuickReplies from './QuickReplies'
+import CardChoiceCarousel from './CardChoiceCarousel'
+import SqftPicker from './SqftPicker'
+import BudgetPicker from './BudgetPicker'
+import FileUploadWidget from './FileUploadWidget'
 import type { ChatMessage } from '@/hooks/useIntakeChat'
-import type { QuickReplies as QuickRepliesType } from '@/lib/intake-types'
+import type { QuickReplies as QuickRepliesType, UploadedFile } from '@/lib/intake-types'
 
 type Props = {
   messages: ChatMessage[]
@@ -27,9 +31,15 @@ type Props = {
   onSkipQuestion?: () => void
   confidenceScore?: number
   emailVerified?: boolean
+  // Upload widget wiring
+  leadId?: string
+  sessionId?: string
+  onFileUploaded?: (messageId: string, file: UploadedFile) => void
+  onFileUploadDone?: (messageId: string) => void
+  onFileUploadSkipped?: (messageId: string) => void
 }
 
-export default function ChatPanel({ messages, isStreaming, onSend, onEdit, onRequestViewProposal, onSaveLater, constrained = false, theme, isPaused, pausedQuestion, questionRevealed, onPauseQuestions, onResumeQuestions, onRevealPausedQuestion, onSkipQuestion, confidenceScore = 0, emailVerified }: Props) {
+export default function ChatPanel({ messages, isStreaming, onSend, onEdit, onRequestViewProposal, onSaveLater, constrained = false, theme, isPaused, pausedQuestion, questionRevealed, onPauseQuestions, onResumeQuestions, onRevealPausedQuestion, onSkipQuestion, confidenceScore = 0, emailVerified, leadId, sessionId, onFileUploaded, onFileUploadDone, onFileUploadSkipped }: Props) {
   const [input, setInput] = useState('')
   const [reEditingMessageId, setReEditingMessageId] = useState<string | null>(null)
   const [showScrollBtn, setShowScrollBtn] = useState(false)
@@ -97,17 +107,27 @@ export default function ChatPanel({ messages, isStreaming, onSend, onEdit, onReq
     el.style.height = `${el.scrollHeight}px`
   }
 
-  // Show the list QR card at the bottom for the last assistant message.
+  // Show the bottom QR card for the last assistant message.
+  // Four special styles get dedicated components dispatched in the bottom panel:
+  //   - 'cards'  → CardChoiceCarousel
+  //   - 'sqft'   → SqftPicker
+  //   - 'budget' → BudgetPicker
+  //   - everything else → list-style QuickReplies
   // Safety net: treat pills with 3+ options as list — normalizeQRStyle should have
-  // caught this upstream, but defend at render level to prevent pills from ever
-  // showing inline when they should be a card.
+  // caught this upstream, but defend at render level too.
   const lastMsg = messages[messages.length - 1]
   const lastQR = lastMsg?.role === 'assistant' && !lastMsg?.isPause && lastMsg.quickReplies && !!lastMsg.content
     ? lastMsg.quickReplies
     : null
-  const shouldBeList = lastQR && (lastQR.style === 'list' || (Array.isArray(lastQR.options) && lastQR.options.length >= 3))
+  const isCardsQR = lastQR?.style === 'cards'
+  const isSqftQR = lastQR?.style === 'sqft'
+  const isBudgetQR = lastQR?.style === 'budget'
+  const isCustomPicker = isCardsQR || isSqftQR || isBudgetQR
+  const shouldBeList = lastQR && !isCustomPicker && (lastQR.style === 'list' || (Array.isArray(lastQR.options) && lastQR.options.length >= 3))
   const listQR = shouldBeList
     ? { ...lastQR!, style: 'list' as const }
+    : isCustomPicker
+    ? lastQR
     : null
   const questionText = listQR ? (lastMsg?.question ?? undefined) : undefined
 
@@ -137,16 +157,38 @@ export default function ChatPanel({ messages, isStreaming, onSend, onEdit, onReq
           className="px-6 space-y-4 mx-auto w-full"
           style={{ maxWidth: '760px' }}
         >
-          {messages.filter(m => !m.hidden).map((msg, i) => (
+          {(() => {
+            const visible = messages.filter(m => !m.hidden)
+            return visible.map((msg, i) => {
+            // isLast must compare against the FILTERED array length, not
+            // messages.length — hidden reserved-signal user messages (e.g.
+            // __files_share_later__) would otherwise cause isLast to be false
+            // for the visually-last message, hiding pause checkpoint CTAs.
+            const isLastVisible = i === visible.length - 1
+            return (
             (msg.isScopeStart || msg.isScopeComplete) ? (
               <ScopeProgressCard
                 key={msg.id}
                 message={msg}
                 onSend={(val, display) => onSend(val, display)}
                 onRequestViewProposal={onRequestViewProposal}
-                isLast={i === messages.length - 1}
-                isStreaming={isStreaming && i === messages.length - 1}
+                isLast={isLastVisible}
+                isStreaming={isStreaming && isLastVisible}
               />
+            ) : msg.isFileUploadPrompt ? (
+              leadId && sessionId ? (
+                <FileUploadWidget
+                  key={msg.id}
+                  leadId={leadId}
+                  sessionId={sessionId}
+                  purpose={msg.uploadPurpose ?? 'floor_plans'}
+                  existingFiles={msg.uploadedFiles ?? []}
+                  completed={msg.uploadCompleted === true}
+                  onFileUploaded={(file) => onFileUploaded?.(msg.id, file)}
+                  onDone={() => onFileUploadDone?.(msg.id)}
+                  onSkip={() => onFileUploadSkipped?.(msg.id)}
+                />
+              ) : null
             ) : msg.isPause ? (
               // Hide breather checkpoint while a paused question is temporarily revealed
               questionRevealed ? null : <PauseCheckpoint
@@ -155,8 +197,8 @@ export default function ChatPanel({ messages, isStreaming, onSend, onEdit, onReq
                 onSend={(val, display) => onSend(val, display)}
                 onRequestViewProposal={onRequestViewProposal}
                 onSaveLater={onSaveLater}
-                isLast={i === messages.length - 1}
-                isStreaming={isStreaming && i === messages.length - 1}
+                isLast={isLastVisible}
+                isStreaming={isStreaming && isLastVisible}
                 emailVerified={emailVerified}
               />
             ) : msg.isAutoContinue && msg.role === 'assistant' ? (
@@ -168,7 +210,7 @@ export default function ChatPanel({ messages, isStreaming, onSend, onEdit, onReq
                 key={msg.id}
                 message={msg}
                 theme={theme}
-                isStreaming={isStreaming && i === messages.length - 1 && msg.role === 'assistant'}
+                isStreaming={isStreaming && isLastVisible && msg.role === 'assistant'}
                 onQuickReply={(value, label) => {
                   // Intercept reserved proposal-action values anywhere they appear.
                   // The AI occasionally generates these in regular turns — never let
@@ -179,13 +221,15 @@ export default function ChatPanel({ messages, isStreaming, onSend, onEdit, onReq
                   }
                   onSend(value, label)
                 }}
-                isLastMessage={i === messages.length - 1}
+                isLastMessage={isLastVisible}
                 onEdit={onEdit}
                 onStartRowEdit={setReEditingMessageId}
                 isBeingReEdited={msg.id === reEditingMessageId}
               />
             )
-          ))}
+            )
+            })
+          })()}
           <div ref={bottomRef} />
         </div>
       </div>
@@ -203,8 +247,11 @@ export default function ChatPanel({ messages, isStreaming, onSend, onEdit, onReq
         </div>
       )}
 
-      {/* Bottom area: list rows card (new question OR re-edit) OR regular textarea */}
-      <div className="flex-shrink-0 px-6 pb-4">
+      {/* Bottom area: list rows card (new question OR re-edit) OR regular textarea.
+          max-h caps the bottom panel so a tall QR card (e.g. card carousel, long
+          list of options) never consumes the whole viewport and pushes the chat
+          history off-screen. Inner content scrolls internally if it exceeds the cap. */}
+      <div className="flex-shrink-0 px-6 pb-4 max-h-[60vh] overflow-y-auto scrollbar-hide">
         <div
           className="mx-auto w-full"
           style={{ maxWidth: '760px' }}
@@ -222,33 +269,97 @@ export default function ChatPanel({ messages, isStreaming, onSend, onEdit, onReq
                 </button>
               </div>
             )}
-            <QuickReplies
-              quickReplies={activeQR}
-              onSelect={(value, label) => {
-                // Intercept reserved proposal actions — open the panel instead of sending.
-                if (value === '__view_proposal__' || value === '__submit__') {
-                  onRequestViewProposal?.()
-                  return
-                }
-                // displayContent is just the answer label — question is shown separately above the bubble
-                const answerDisplay = label || value
-                if (reEditingQR && reEditingMessageId) {
-                  // Re-edit: replace the old message and re-run AI
-                  onEdit?.(reEditingMessageId, value, answerDisplay)
-                  setReEditingMessageId(null)
-                } else {
-                  // Normal selection: new user message
-                  onSend(value, answerDisplay, activeQR, activeQuestion || undefined)
-                }
-              }}
-              disabled={isStreaming}
-              question={activeQuestion}
-              questionNumber={!reEditingQR ? questionNumber : undefined}
-              onSkipQuestion={!reEditingQR && confidenceScore >= 40 ? onSkipQuestion : undefined}
-              onPauseQuestions={!reEditingQR ? onPauseQuestions : undefined}
-              onResumeQuestions={!reEditingQR ? onResumeQuestions : undefined}
-              isPaused={isPaused}
-            />
+            {activeQR.style === 'cards' ? (
+              <CardChoiceCarousel
+                quickReplies={activeQR}
+                onSelect={(value, label) => {
+                  if (value === '__view_proposal__' || value === '__submit__') {
+                    onRequestViewProposal?.()
+                    return
+                  }
+                  const answerDisplay = label || value
+                  if (reEditingQR && reEditingMessageId) {
+                    onEdit?.(reEditingMessageId, value, answerDisplay)
+                    setReEditingMessageId(null)
+                  } else {
+                    onSend(value, answerDisplay, activeQR, activeQuestion || undefined)
+                  }
+                }}
+                disabled={isStreaming}
+                question={activeQuestion}
+                questionNumber={!reEditingQR ? questionNumber : undefined}
+                onSkipQuestion={!reEditingQR && confidenceScore >= 40 ? onSkipQuestion : undefined}
+                onPauseQuestions={!reEditingQR ? onPauseQuestions : undefined}
+                onResumeQuestions={!reEditingQR ? onResumeQuestions : undefined}
+                isPaused={isPaused}
+              />
+            ) : activeQR.style === 'sqft' ? (
+              <SqftPicker
+                onSelect={(value, label) => {
+                  const answerDisplay = label || value
+                  if (reEditingQR && reEditingMessageId) {
+                    onEdit?.(reEditingMessageId, value, answerDisplay)
+                    setReEditingMessageId(null)
+                  } else {
+                    onSend(value, answerDisplay, activeQR, activeQuestion || undefined)
+                  }
+                }}
+                disabled={isStreaming}
+                question={activeQuestion}
+                questionNumber={!reEditingQR ? questionNumber : undefined}
+                onSkipQuestion={!reEditingQR && confidenceScore >= 40 ? onSkipQuestion : undefined}
+                onPauseQuestions={!reEditingQR ? onPauseQuestions : undefined}
+                onResumeQuestions={!reEditingQR ? onResumeQuestions : undefined}
+                isPaused={isPaused}
+              />
+            ) : activeQR.style === 'budget' ? (
+              <BudgetPicker
+                onSelect={(value, label) => {
+                  const answerDisplay = label || value
+                  if (reEditingQR && reEditingMessageId) {
+                    onEdit?.(reEditingMessageId, value, answerDisplay)
+                    setReEditingMessageId(null)
+                  } else {
+                    onSend(value, answerDisplay, activeQR, activeQuestion || undefined)
+                  }
+                }}
+                disabled={isStreaming}
+                question={activeQuestion}
+                questionNumber={!reEditingQR ? questionNumber : undefined}
+                onSkipQuestion={!reEditingQR && confidenceScore >= 40 ? onSkipQuestion : undefined}
+                onPauseQuestions={!reEditingQR ? onPauseQuestions : undefined}
+                onResumeQuestions={!reEditingQR ? onResumeQuestions : undefined}
+                isPaused={isPaused}
+              />
+            ) : (
+              <QuickReplies
+                quickReplies={activeQR}
+                onSelect={(value, label) => {
+                  // Intercept reserved proposal actions — open the panel instead of sending.
+                  if (value === '__view_proposal__' || value === '__submit__') {
+                    onRequestViewProposal?.()
+                    return
+                  }
+                  // displayContent is just the answer label — question is shown separately above the bubble
+                  const answerDisplay = label || value
+                  if (reEditingQR && reEditingMessageId) {
+                    // Re-edit: replace the old message and re-run AI
+                    onEdit?.(reEditingMessageId, value, answerDisplay)
+                    setReEditingMessageId(null)
+                  } else {
+                    // Normal selection: new user message
+                    onSend(value, answerDisplay, activeQR, activeQuestion || undefined)
+                  }
+                }}
+                disabled={isStreaming}
+                question={activeQuestion}
+                questionNumber={!reEditingQR ? questionNumber : undefined}
+                onSkipQuestion={!reEditingQR && confidenceScore >= 40 ? onSkipQuestion : undefined}
+                onPauseQuestions={!reEditingQR ? onPauseQuestions : undefined}
+                onResumeQuestions={!reEditingQR ? onResumeQuestions : undefined}
+                isPaused={isPaused}
+              />
+            )}
           </>
         ) : (
           <>

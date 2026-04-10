@@ -50,12 +50,12 @@ export const UPDATE_PROPOSAL_TOOL: Anthropic.Tool = {
         properties: {
           style: {
             type: 'string' as const,
-            enum: ['list', 'pills'],
-            description: 'list = numbered items with descriptions (default for most decisions). pills = compact chips (simple/short answers like yes/no or platform choice).',
+            enum: ['list', 'pills', 'cards', 'sqft', 'budget'],
+            description: 'list = numbered items with descriptions (default for most decisions). pills = compact chips (simple/short answers like yes/no or platform choice). cards = swipeable image cards, ONLY for the 5 card-eligible questions listed in the system prompt (project type, current condition, style preference, flooring material, countertop material). sqft = a drag-scrub numeric picker, ONLY for Phase 1 Question 6 (property size in square feet). budget = a drag-scrub AED currency picker with preset tiers, ONLY for Phase 1 Question 7 (budget). Never invent new card, sqft, or budget questions.',
           },
           multiSelect: {
             type: 'boolean' as const,
-            description: 'true if the user can pick multiple answers (e.g. "which scope items do you need?")',
+            description: 'true if the user can pick multiple answers (e.g. "which scope items do you need?"). NOT supported for cards style.',
           },
           allowCustom: {
             type: 'boolean' as const,
@@ -68,8 +68,10 @@ export const UPDATE_PROPOSAL_TOOL: Anthropic.Tool = {
               properties: {
                 label: { type: 'string' as const, description: 'Short bold label (5 words max)' },
                 description: { type: 'string' as const, description: 'Subtitle for list style only (12 words max)' },
-                icon: { type: 'string' as const, description: 'Single emoji that represents this option. Required for every option.' },
+                icon: { type: 'string' as const, description: 'Single emoji that represents this option. Required for every option. Also used as fallback if imageUrl fails to load for cards style.' },
                 value: { type: 'string' as const, description: 'Text sent as user message when tapped' },
+                imageUrl: { type: 'string' as const, description: 'ONLY for cards style. Must be a whitelisted path from the system prompt (e.g. "/intake/cards/property-type/villa.jpg"). Never invent URLs.' },
+                imageAlt: { type: 'string' as const, description: 'ONLY for cards style. Short alt text for accessibility (e.g. "Modern Dubai villa exterior").' },
               },
               required: ['label', 'value', 'icon'],
             },
@@ -96,12 +98,12 @@ export const UPDATE_PROPOSAL_TOOL: Anthropic.Tool = {
       },
       property_type: {
         type: 'string',
-        enum: ['villa', 'apartment', 'townhouse', 'penthouse', 'office', ''],
-        description: 'Type of property being renovated. Empty string if not yet known.',
+        enum: ['villa', 'apartment', 'townhouse', 'penthouse', 'office', 'retail', 'warehouse', ''],
+        description: 'Type of property. Residential: villa, apartment, townhouse, penthouse. Commercial: office, retail, warehouse. Empty string if not yet known.',
       },
       location: {
         type: 'string',
-        description: 'UAE area/community (e.g. Dubai Marina, JBR, Arabian Ranches, Al Reem Island). Empty string if not yet known.',
+        description: 'UAE area/community (e.g. Dubai Marina, JBR, Arabian Ranches, Al Reem Island, DIFC). Empty string if not yet known.',
       },
       size_sqft: {
         type: 'number',
@@ -109,12 +111,39 @@ export const UPDATE_PROPOSAL_TOOL: Anthropic.Tool = {
       },
       condition: {
         type: 'string',
-        enum: ['new', 'needs_refresh', 'major_renovation', 'shell', ''],
-        description: 'Current condition of the property. Empty string if not yet known.',
+        enum: ['new', 'needs_refresh', 'major_renovation', 'shell', 'fitted', 'semi_fitted', 'shell_and_core', ''],
+        description: 'Current condition of the property. Residential uses: new, needs_refresh, major_renovation, shell. Commercial uses: fitted, semi_fitted, shell_and_core. Never mix the two vocabularies. Empty string if not yet known.',
       },
       style_preference: {
         type: 'string',
-        description: 'Chosen aesthetic style from the 8 style cards (Modern, Contemporary Arabic, Scandinavian, Industrial, Classic, Maximalist, Coastal, Minimalist). Empty string if not yet chosen.',
+        description: 'Chosen aesthetic style from the 8 style cards (Modern, Contemporary Arabic, Scandinavian, Industrial, Classic, Maximalist, Coastal, Minimalist). Empty string if not yet chosen. Not applicable to commercial fit-outs (leave empty).',
+      },
+      ownership: {
+        type: 'string',
+        enum: ['owned', 'leased', ''],
+        description: 'Whether the property is owned or leased. Captured in Phase 1 item 3. Empty string if not yet asked.',
+      },
+      budget_aed_stated: {
+        type: 'number',
+        description: 'User-stated budget in AED as a single number. Distinct from the AI-estimated price range. If the user gives a range like "150k to 200k", capture the midpoint (175000). If the user declines or says "not sure", set 0. 0 if not yet asked.',
+      },
+      has_floor_plans: {
+        type: 'string',
+        enum: ['yes', 'no', 'unknown', ''],
+        description: 'Whether the user has floor plans or CAD files available. "yes" if confirmed, "no" if they said none, "unknown" if they are not sure, "" if not yet asked. When set to "yes", the UI will auto-inject a file upload widget.',
+      },
+      wants_project_management: {
+        type: 'string',
+        enum: ['yes', 'no', ''],
+        description: 'Whether the user wants Contractors Direct project management services. ONLY asked when size_sqft is confirmed above 2000. "" if not yet asked or not applicable.',
+      },
+      contractor_quote_count: {
+        type: 'number',
+        description: 'Number of contractor quotes the user wants arranged. Default is 3 (offered by AI). Only set after the user explicitly confirms or adjusts the count. 0 if not yet asked.',
+      },
+      full_scope_notes: {
+        type: 'string',
+        description: 'Open-text notes from the Phase 1 "full scope of work" probing step. Capture any user-stated requirements, focus areas, or additional asks that do not map cleanly to a scope catalog item. Append-only within a session; never shorten. Empty string if not yet discussed.',
       },
       updated_brief: {
         type: 'string',

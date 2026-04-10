@@ -21,9 +21,16 @@ export default function QuickReplies({ quickReplies, onSelect, disabled, questio
   // Safety net: force list for 3+ options regardless of AI's style choice.
   // This is the last line of defence — normalizeQRStyle and ChatPanel should
   // have already converted, but if data somehow arrives uncorrected, catch it here.
-  const style = (quickReplies.style !== 'list' && Array.isArray(options) && options.length >= 3)
-    ? 'list' as const
-    : quickReplies.style
+  // Cards, sqft, and budget styles are handled upstream by ChatPanel dispatching
+  // to dedicated components; if any of them reach this component it's a bug, so
+  // we fall through to list.
+  const incomingStyle = quickReplies.style
+  const style =
+    incomingStyle === 'cards' || incomingStyle === 'sqft' || incomingStyle === 'budget'
+      ? ('list' as const)
+      : incomingStyle !== 'list' && Array.isArray(options) && options.length >= 3
+      ? ('list' as const)
+      : incomingStyle
   // Always show "Type something else..." for list style
   const effectiveAllowCustom = style === 'list' ? true : (allowCustom ?? false)
   const [selected, setSelected] = useState<string[]>([])

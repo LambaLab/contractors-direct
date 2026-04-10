@@ -18,6 +18,25 @@ type Props = {
   theme?: 'dark' | 'light'
 }
 
+function CardThumbnail({ src, alt }: { src: string; alt: string }) {
+  const [errored, setErrored] = useState(false)
+  if (errored) return null
+  return (
+    <div className="w-fit ml-auto mb-2 rounded-xl overflow-hidden border border-[var(--ov-bubble-user-border,#7367ff)]/50">
+      <div className="relative w-[180px] aspect-[4/3]">
+        <Image
+          src={src}
+          alt={alt}
+          fill
+          sizes="180px"
+          className="object-cover"
+          onError={() => setErrored(true)}
+        />
+      </div>
+    </div>
+  )
+}
+
 function formatMessageTime(ts?: number): string | null {
   if (!ts) return null
   const now = Date.now()
@@ -55,9 +74,23 @@ export default function MessageBubble({ message, isStreaming, onQuickReply, isLa
   // Safety net: treat pills with 3+ options as list (normalizeQRStyle should have
   // caught this, but defend at render level too).
   const qr = message.quickReplies
-  const shouldBeList = qr && (qr.style === 'list' || (Array.isArray(qr.options) && qr.options.length >= 3))
+  const isCustomPickerStyle =
+    qr?.style === 'cards' || qr?.style === 'sqft' || qr?.style === 'budget'
+  const shouldBeList = qr && (
+    qr.style === 'list' ||
+    (!isCustomPickerStyle && Array.isArray(qr.options) && qr.options.length >= 3)
+  )
   const isListQR = !isUser && shouldBeList && isLastMessage
-  const showInlineQR = message.quickReplies && isLastMessage && onQuickReply && !isListQR
+  const isCustomQR = !isUser && isCustomPickerStyle && isLastMessage
+  const showInlineQR = message.quickReplies && isLastMessage && onQuickReply && !isListQR && !isCustomQR
+
+  // When a user message came from selecting a card, surface the card's image
+  // alongside the label so the answer bubble shows what they actually picked.
+  const selectedCardOption =
+    isUser && message.sourceQuickReplies?.style === 'cards'
+      ? message.sourceQuickReplies.options.find((o) => o.value === message.content)
+      : undefined
+  const selectedCardImage = selectedCardOption?.imageUrl
 
   // Edit state uses displayContent for the initial value so user sees human-readable text
   const [isEditing, setIsEditing] = useState(false)
@@ -107,6 +140,17 @@ export default function MessageBubble({ message, isStreaming, onQuickReply, isLa
           <p className="text-[11px] text-[var(--ov-text-muted,#727272)] text-right leading-relaxed px-1 mb-1">
             {message.sourceQuestion}
           </p>
+        )}
+
+        {/* Card thumbnail: when the user picked a card, show the card image
+            above the answer bubble so the answer is visually grounded.
+            The CardThumbnail component silently hides itself if the image is
+            missing or fails to load, so the bubble still reads cleanly. */}
+        {isUser && selectedCardImage && !isEditing && selectedCardOption && (
+          <CardThumbnail
+            src={selectedCardImage}
+            alt={selectedCardOption.imageAlt || selectedCardOption.label}
+          />
         )}
 
         <div className={`relative group ${isUser ? 'w-fit ml-auto' : ''}`}>
@@ -165,7 +209,9 @@ export default function MessageBubble({ message, isStreaming, onQuickReply, isLa
             </div>
           )}
 
-          {/* Edit button — only for user messages, only when onEdit is provided, not while editing */}
+          {/* Edit button — always visible for user messages so it's discoverable
+              on mobile (no hover) and obvious on desktop. Kept subtle via low
+              opacity until hover. */}
           {isUser && !isEditing && (onEdit || onStartRowEdit) && (
             <button
               onClick={() => {
@@ -178,10 +224,11 @@ export default function MessageBubble({ message, isStreaming, onQuickReply, isLa
                   setIsEditing(true)
                 }
               }}
-              className="absolute -top-2 -left-8 opacity-0 group-hover:opacity-100 transition-opacity w-6 h-6 rounded-full bg-[var(--ov-surface-subtle,rgba(255,255,255,0.10))] hover:bg-[var(--ov-input-bg,rgba(255,255,255,0.20))] flex items-center justify-center cursor-pointer"
-              aria-label="Edit message"
+              className="absolute -top-1 -left-9 w-7 h-7 rounded-full bg-[var(--ov-surface-subtle,rgba(255,255,255,0.08))] border border-[var(--ov-border,rgba(255,255,255,0.08))] hover:bg-[var(--ov-input-bg,rgba(255,255,255,0.18))] hover:border-[var(--ov-accent-border,rgba(115,103,255,0.40))] flex items-center justify-center cursor-pointer opacity-60 hover:opacity-100 transition-all"
+              aria-label="Edit this answer"
+              title="Edit this answer"
             >
-              <Pencil className="w-3 h-3 text-brand-gray-mid" />
+              <Pencil className="w-3 h-3 text-[var(--ov-text-muted,#727272)]" />
             </button>
           )}
         </div>

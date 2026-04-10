@@ -3,7 +3,7 @@
 import { useState, useEffect, useCallback, useRef } from 'react'
 import { calculatePriceRange, applyComplexityAdjustment, tightenPriceRange, type PriceRange } from '@/lib/pricing/engine'
 import { expandWithDependencies } from '@/lib/scope/dependencies'
-import type { QuickReplies } from '@/lib/intake-types'
+import type { QuickReplies, UploadedFile } from '@/lib/intake-types'
 import { getStoredSession } from '@/lib/session'
 import { createClient } from '@/lib/supabase/client'
 
@@ -33,6 +33,11 @@ export type ChatMessage = {
   hidden?: boolean                   // true = don't render (e.g. auto-continue messages)
   isAutoContinue?: boolean           // true = auto-continue response (suppress bubble text, show only question card)
   isOverview?: boolean               // true = stage-setting card (all scope items shown, none active yet)
+  // File upload widget fields
+  isFileUploadPrompt?: boolean       // true = render the inline FileUploadWidget instead of a normal bubble
+  uploadPurpose?: 'floor_plans' | 'site_photos'  // which prompt triggered the widget
+  uploadedFiles?: UploadedFile[]     // files uploaded via this widget (for restore on reload)
+  uploadCompleted?: boolean          // true = user tapped "I'm done" or "Share later"; widget collapses
 }
 
 type UpdateProposalInput = {
@@ -54,6 +59,19 @@ type UpdateProposalInput = {
   current_scope?: string
   scope_complete?: boolean
   scope_queue?: string[]
+  // Core Four (existing)
+  property_type?: string
+  location?: string
+  size_sqft?: number
+  condition?: string
+  style_preference?: string
+  // Daniel-script qualifying fields (new)
+  ownership?: 'owned' | 'leased' | ''
+  budget_aed_stated?: number
+  has_floor_plans?: 'yes' | 'no' | 'unknown' | ''
+  wants_project_management?: 'yes' | 'no' | ''
+  contractor_quote_count?: number
+  full_scope_notes?: string
 }
 
 type ApiMessage = { role: 'user' | 'assistant'; content: string }
@@ -62,9 +80,28 @@ type ApiMessage = { role: 'user' | 'assistant'; content: string }
 // specified. Also defaults missing/invalid style to 'list'. This is the definitive
 // safety net — the AI (Haiku) sometimes sends pills for 3+ options, or omits the
 // style field entirely. Both cases should render as the full card with rows.
+//
+// EXCEPTIONS:
+// - 'cards' style is preserved even with 3+ options, because cards are an
+//   intentional visual treatment for the whitelisted question types. A cards-style
+//   QR must also have imageUrl OR icon on every option, otherwise we fall back to list.
+// - 'sqft' and 'budget' styles are preserved regardless of options — the picker
+//   components generate their own values and don't need option entries at all.
 function normalizeQRStyle(qr: QuickReplies | undefined): QuickReplies | undefined {
   if (!qr) return qr
   const hasMultipleOptions = Array.isArray(qr.options) && qr.options.length >= 3
+  if (qr.style === 'sqft' || qr.style === 'budget') {
+    // Force options to an empty array if the AI sent any, since the picker
+    // handles its own range.
+    return { ...qr, options: [] }
+  }
+  // Preserve 'cards' style only if every option has a usable imageUrl OR an icon
+  // to render as a fallback. If neither, fall through to list.
+  if (qr.style === 'cards') {
+    const usable = Array.isArray(qr.options) && qr.options.every((o) => !!o.imageUrl || !!o.icon)
+    if (usable) return qr
+    return { ...qr, style: 'list' as const }
+  }
   // Force list for 3+ options regardless of AI's style choice
   if (hasMultipleOptions && qr.style !== 'list') {
     return { ...qr, style: 'list' }
@@ -149,6 +186,24 @@ export function useIntakeChat({ proposalId, idea }: Props) {
   const completedScopeRef = useRef<string[]>([])
   const streamIdRef = useRef<string>('')  // ID of the currently-active stream; used to prevent
                                           // stale streams from clobbering newer state
+
+  // Daniel-script qualifying fields: accumulate across the conversation and
+  // persist into leads.metadata alongside the existing projectOverview etc.
+  const qualifyingFieldsRef = useRef<{
+    property_type?: string
+    location?: string
+    size_sqft?: number
+    condition?: string
+    style_preference?: string
+    ownership?: string
+    budget_aed_stated?: number
+    has_floor_plans?: string
+    wants_project_management?: string
+    contractor_quote_count?: number
+    full_scope_notes?: string
+  }>({})
+  // Guard so the file upload widget is only injected once per session.
+  const uploadWidgetInjectedRef = useRef(false)
 
   useEffect(() => { messagesRef.current = messages }, [messages])
   useEffect(() => { confidenceRef.current = confidenceScore }, [confidenceScore])
@@ -278,11 +333,12 @@ export function useIntakeChat({ proposalId, idea }: Props) {
               if (Array.isArray(p.detectedScope)) syncScope = p.detectedScope
               else if (Array.isArray(p.activeScope)) syncScope = p.activeScope
               if (typeof p.confidenceScore === 'number') syncConfidence = p.confidenceScore
-              // Rich metadata for full-fidelity restore
+              // Rich metadata for full-fidelity restore + Daniel-script qualifying fields
               syncMetadata = {
                 ...(typeof p.projectName === 'string' && p.projectName ? { projectName: p.projectName } : {}),
                 ...(typeof p.projectOverview === 'string' && p.projectOverview ? { projectOverview: p.projectOverview } : {}),
                 ...(p.scopeSummaries && typeof p.scopeSummaries === 'object' ? { scopeSummaries: p.scopeSummaries } : {}),
+                ...(p.qualifyingFields && typeof p.qualifyingFields === 'object' ? p.qualifyingFields : {}),
               }
             } catch { /* ignore */ }
 
@@ -399,6 +455,21 @@ export function useIntakeChat({ proposalId, idea }: Props) {
           }
           turnCount.current = restoredTurnCount
           lastPauseTurn.current = restoredLastPauseTurn
+
+          // Rehydrate qualifying fields so the sync-messages metadata stays
+          // accurate after page reload.
+          try {
+            const p = JSON.parse(localStorage.getItem(PROPOSAL_KEY(proposalId)) ?? '{}')
+            if (p.qualifyingFields && typeof p.qualifyingFields === 'object') {
+              qualifyingFieldsRef.current = p.qualifyingFields
+            }
+          } catch { /* ignore */ }
+
+          // If the upload widget was previously injected, flip the guard so we
+          // don't inject it twice.
+          if (parsed.some(m => m.isFileUploadPrompt)) {
+            uploadWidgetInjectedRef.current = true
+          }
 
           // Restore paused state
           if (localStorage.getItem(PAUSED_KEY(proposalId)) === 'true') {
@@ -585,8 +656,13 @@ export function useIntakeChat({ proposalId, idea }: Props) {
             // scope_summaries) are still generating but aren't needed for interactivity.
             const questionText = typeof data.question === 'string' ? data.question.trim() : ''
             const rawQR = data.quick_replies as QuickReplies | undefined
-            const validQR =
-              rawQR && Array.isArray(rawQR.options) && rawQR.options.length > 0 ? rawQR : undefined
+            const validQR = rawQR && (
+              rawQR.style === 'sqft' || rawQR.style === 'budget'
+                ? true
+                : (Array.isArray(rawQR.options) && rawQR.options.length > 0)
+            )
+              ? rawQR
+              : undefined
             const updatedQR = normalizeQRStyle(validQR)
 
             if (updatedQR) {
@@ -651,6 +727,51 @@ export function useIntakeChat({ proposalId, idea }: Props) {
               setProjectName(input.project_name.trim())
             }
 
+            // ── Accumulate Daniel-script qualifying fields ──
+            // These build up across the conversation and get persisted into
+            // leads.metadata via sync-messages. Only copy fields when the AI
+            // provides a non-empty/non-zero value; otherwise keep the previous.
+            {
+              const q = qualifyingFieldsRef.current
+              if (typeof input?.property_type === 'string' && input.property_type) q.property_type = input.property_type
+              if (typeof input?.location === 'string' && input.location) q.location = input.location
+              if (typeof input?.size_sqft === 'number' && input.size_sqft > 0) q.size_sqft = input.size_sqft
+              if (typeof input?.condition === 'string' && input.condition) q.condition = input.condition
+              if (typeof input?.style_preference === 'string' && input.style_preference) q.style_preference = input.style_preference
+              if (typeof input?.ownership === 'string' && input.ownership) q.ownership = input.ownership
+              if (typeof input?.budget_aed_stated === 'number' && input.budget_aed_stated > 0) q.budget_aed_stated = input.budget_aed_stated
+              if (typeof input?.has_floor_plans === 'string' && input.has_floor_plans) q.has_floor_plans = input.has_floor_plans
+              if (typeof input?.wants_project_management === 'string' && input.wants_project_management) q.wants_project_management = input.wants_project_management
+              if (typeof input?.contractor_quote_count === 'number' && input.contractor_quote_count > 0) q.contractor_quote_count = input.contractor_quote_count
+              if (typeof input?.full_scope_notes === 'string' && input.full_scope_notes) q.full_scope_notes = input.full_scope_notes
+            }
+
+            // ── File upload widget injection ──
+            // Fire once, when the AI first sets has_floor_plans to "yes" AND
+            // leaves the question field empty (our signal that the item-5 upload
+            // handoff is happening). The widget renders inline in the chat and
+            // the hook continues the conversation on __files_uploaded__ or
+            // __files_share_later__.
+            const emptyQuestion = !(typeof input?.question === 'string' && input.question.trim())
+            if (
+              !uploadWidgetInjectedRef.current &&
+              input?.has_floor_plans === 'yes' &&
+              emptyQuestion &&
+              !isPausedRef.current
+            ) {
+              uploadWidgetInjectedRef.current = true
+              const widgetMsg: ChatMessage = {
+                id: crypto.randomUUID(),
+                role: 'assistant',
+                content: '',
+                isFileUploadPrompt: true,
+                uploadPurpose: 'floor_plans',
+                uploadedFiles: [],
+                createdAt: Date.now(),
+              }
+              setMessages((prev) => [...prev, widgetMsg])
+            }
+
             // Auto-resume: AI detected user agreed to resume structured Q&A.
             // Unpause immediately so the NEXT user message triggers normal Q&A flow.
             // We also fire a synthetic "Continue" message so the user doesn't have
@@ -689,8 +810,14 @@ export function useIntakeChat({ proposalId, idea }: Props) {
               const questionText = typeof input?.question === 'string' ? input.question.trim() : ''
               // Validate quick_replies — empty options array is as bad as no quick_replies
               // (QuickReplies component would render only "Type something", which is confusing)
+              // EXCEPTION: 'sqft' style intentionally has empty options — the picker
+              // generates its own range, so don't discard it for lack of entries.
               const rawQR = input?.quick_replies
-              const validQR = rawQR && Array.isArray(rawQR.options) && rawQR.options.length > 0
+              const validQR = rawQR && (
+                rawQR.style === 'sqft'
+                  ? true
+                  : (Array.isArray(rawQR.options) && rawQR.options.length > 0)
+              )
                 ? rawQR
                 : undefined
               const updatedQR = normalizeQRStyle(validQR)
@@ -817,6 +944,7 @@ export function useIntakeChat({ proposalId, idea }: Props) {
                     scopeSummaries: savedSummaries,
                     projectName: savedProjectName || undefined,
                     brief: savedBrief,
+                    qualifyingFields: qualifyingFieldsRef.current,
                   }))
                 } catch { /* Ignore QuotaExceededError */ }
               }
@@ -828,7 +956,13 @@ export function useIntakeChat({ proposalId, idea }: Props) {
             if (isPausedRef.current && !isPauseThisTurn) {
               const qText = typeof input?.question === 'string' ? input.question.trim() : ''
               const rawQRPeek = input?.quick_replies
-              const validQRPeek = rawQRPeek && Array.isArray(rawQRPeek.options) && rawQRPeek.options.length > 0 ? rawQRPeek : undefined
+              const validQRPeek = rawQRPeek && (
+                rawQRPeek.style === 'sqft' || rawQRPeek.style === 'budget'
+                  ? true
+                  : (Array.isArray(rawQRPeek.options) && rawQRPeek.options.length > 0)
+              )
+                ? rawQRPeek
+                : undefined
               const normQR = normalizeQRStyle(validQRPeek)
               if (normQR?.style === 'list' && qText) {
                 const qrData = { question: qText, quickReplies: normQR, messageId: activeBubbleId }
@@ -847,7 +981,10 @@ export function useIntakeChat({ proposalId, idea }: Props) {
             let effectiveScope = typeof input?.current_scope === 'string' ? input.current_scope : ''
             let effectiveQueue = Array.isArray(input?.scope_queue) ? input.scope_queue : scopeQueueRef.current
 
-            if (effectivePhase === 'discovery' && turnCount.current >= 4 && detectedScopeRef.current.length >= 2) {
+            // Priority Question Checklist is 8 items + 1 upload handoff turn, so
+            // Phase 1 can legitimately take 9 turns. Only force transition if the
+            // AI is still in discovery past turn 10 AND has detected scope items.
+            if (effectivePhase === 'discovery' && turnCount.current >= 10 && detectedScopeRef.current.length >= 2) {
               console.log('[Phase] Client forcing transition to deep_dive after', turnCount.current, 'turns')
               effectivePhase = 'deep_dive'
               const items = [...detectedScopeRef.current]
@@ -1067,6 +1204,11 @@ export function useIntakeChat({ proposalId, idea }: Props) {
     // When the user clicks such an option, content is "" but displayContent has the label.
     const safeContent = content || displayContent || 'continue'
 
+    // Reserved signals from the file-upload widget are hidden from the chat UI,
+    // they still go to the AI as regular user messages but never render as bubbles.
+    const isReservedHidden =
+      safeContent === '__files_uploaded__' || safeContent === '__files_share_later__'
+
     const userMessage: ChatMessage = {
       id: crypto.randomUUID(),
       role: 'user',
@@ -1074,6 +1216,7 @@ export function useIntakeChat({ proposalId, idea }: Props) {
       displayContent: displayContent && displayContent !== safeContent ? displayContent : undefined,
       sourceQuickReplies,
       sourceQuestion,
+      hidden: isReservedHidden || undefined,
       createdAt: Date.now(),
     }
 
@@ -1138,6 +1281,57 @@ export function useIntakeChat({ proposalId, idea }: Props) {
     }
   }
 
+  /**
+   * Classify the flow impact of editing a particular user message.
+   *
+   * "High" impact = subsequent questions/answers are likely to depend on this
+   * answer and must be reset when it changes. "Low" impact = subsequent
+   * questions stand on their own and can be kept verbatim.
+   *
+   * The classification is driven by the QR style and values of the original
+   * message, since that's the strongest signal about what field was being set.
+   */
+  function classifyEditImpact(msg: ChatMessage): 'high' | 'low' {
+    const qr = msg.sourceQuickReplies
+    // Free-text messages (typed location, or the very first idea): assume high
+    // impact since we can't introspect what field they set.
+    if (!qr) return 'high'
+
+    // Numeric pickers are self-contained values that feed metadata only.
+    if (qr.style === 'sqft' || qr.style === 'budget') return 'low'
+
+    // Cards: check the first option to distinguish factual/flow-critical
+    // selections (property_type, condition, style, flooring, countertop) from
+    // nothing — currently all card questions are flow-critical so we reset.
+    if (qr.style === 'cards') {
+      const HIGH_IMPACT_VALUES = new Set<string>([
+        // property_type
+        'villa', 'apartment', 'townhouse', 'penthouse', 'office', 'retail', 'warehouse',
+        // condition (residential + commercial)
+        'new', 'needs_refresh', 'major_renovation', 'shell',
+        'fitted', 'semi_fitted', 'shell_and_core',
+        // style_preference
+        'Modern', 'Contemporary Arabic', 'Scandinavian', 'Industrial',
+        'Classic', 'Maximalist', 'Coastal', 'Minimalist',
+        // flooring / countertops
+        'marble', 'porcelain', 'engineered_wood', 'vinyl', 'natural_stone',
+        'quartz', 'porcelain_slab', 'granite',
+      ])
+      const firstValue = qr.options?.[0]?.value ?? ''
+      return HIGH_IMPACT_VALUES.has(firstValue) ? 'high' : 'low'
+    }
+
+    // Pills: binary yes/no, usually factual metadata (ownership, has_floor_plans,
+    // wants_project_management). Safe to keep subsequent messages.
+    if (qr.style === 'pills') return 'low'
+
+    // List: free-form options with suggestions (location, contractor count).
+    // Usually low impact.
+    if (qr.style === 'list') return 'low'
+
+    return 'high'
+  }
+
   const editMessage = useCallback(async (messageId: string, newContent: string, displayContent?: string) => {
     if (isStreaming) return
 
@@ -1145,24 +1339,48 @@ export function useIntakeChat({ proposalId, idea }: Props) {
     if (msgIndex === -1) return
     if (msgIndex === 0) return // Don't edit the original idea — use Reset to start over
 
-    const correctionMsg: ChatMessage = {
+    const originalMsg = messagesRef.current[msgIndex]
+    if (originalMsg.role !== 'user') return
+
+    // Build the replacement user message: same sourceQuickReplies/sourceQuestion
+    // so the edit is invisible (the bubble reads like a fresh answer), but with
+    // a new id + timestamp so React remounts correctly.
+    const replacedMsg: ChatMessage = {
+      ...originalMsg,
       id: crypto.randomUUID(),
-      role: 'user',
-      content: `Actually, let me clarify my earlier answer: ${newContent}`,
-      displayContent,  // Clean display (question + new answer) for row re-selections
+      content: newContent,
+      displayContent:
+        displayContent && displayContent !== newContent ? displayContent : undefined,
       createdAt: Date.now(),
     }
 
-    const kept = messagesRef.current.slice(0, msgIndex)
-    setMessages([...kept, correctionMsg])
+    const impact = classifyEditImpact(originalMsg)
 
-    const aiHistory = mergeConsecutiveMessages(
-      [...kept, correctionMsg]
-        .filter(m => !m.isScopeStart && !m.isScopeComplete && !m.isPause && m.role !== 'admin' && m.content)
-        .map((m): ApiMessage => ({ role: m.role as 'user' | 'assistant', content: m.content }))
+    if (impact === 'high') {
+      // HIGH IMPACT: reset all messages after the edit point and re-stream.
+      // This handles property_type changes, condition changes, scope answers
+      // that would otherwise leave the conversation inconsistent.
+      const kept = messagesRef.current.slice(0, msgIndex)
+      setMessages([...kept, replacedMsg])
+
+      const aiHistory = mergeConsecutiveMessages(
+        [...kept, replacedMsg]
+          .filter(m => !m.isScopeStart && !m.isScopeComplete && !m.isPause && m.role !== 'admin' && m.content)
+          .map((m): ApiMessage => ({ role: m.role as 'user' | 'assistant', content: m.content }))
+      )
+
+      await streamAIResponse(aiHistory)
+      return
+    }
+
+    // LOW IMPACT: replace the message in place and keep all subsequent messages.
+    // We don't re-stream — the next outgoing user message will naturally include
+    // the edited answer in its history. The existing assistant replies downstream
+    // of the edit may still reference the old value literally (e.g. "with your
+    // 250k budget..."), but the edit is propagated through metadata sync.
+    setMessages((prev) =>
+      prev.map((m, i) => (i === msgIndex ? replacedMsg : m))
     )
-
-    await streamAIResponse(aiHistory)
   }, [isStreaming]) // eslint-disable-line react-hooks/exhaustive-deps
 
   const pauseQuestions = useCallback(() => {
@@ -1255,6 +1473,42 @@ export function useIntakeChat({ proposalId, idea }: Props) {
     sendMessage('Skip this question and ask the next one', 'Skipped')
   }, [sendMessage])
 
+  // ── File upload widget handlers ──
+  // The widget posts files directly to Supabase Storage via signed URLs, then
+  // notifies the hook so we can persist file metadata on the correct ChatMessage
+  // and fire hidden reserved-signal messages to continue the AI conversation.
+
+  const handleFileUploaded = useCallback((messageId: string, file: UploadedFile) => {
+    setMessages((prev) =>
+      prev.map((m) =>
+        m.id === messageId
+          ? { ...m, uploadedFiles: [...(m.uploadedFiles ?? []), file] }
+          : m
+      )
+    )
+    // Accumulate into qualifyingFields.uploaded_files so sync-messages writes it
+    // to leads.metadata. Shape matches the server API route.
+    const q = qualifyingFieldsRef.current as Record<string, unknown>
+    const existing = Array.isArray(q.uploaded_files) ? (q.uploaded_files as UploadedFile[]) : []
+    q.uploaded_files = [...existing, file]
+  }, [])
+
+  const handleFileUploadDone = useCallback((messageId: string) => {
+    setMessages((prev) =>
+      prev.map((m) => (m.id === messageId ? { ...m, uploadCompleted: true } : m))
+    )
+    // Fire the hidden reserved signal so the AI continues to the next checklist item.
+    sendMessage('__files_uploaded__', undefined)
+  }, [sendMessage])
+
+  const handleFileUploadSkipped = useCallback((messageId: string) => {
+    setMessages((prev) =>
+      prev.map((m) => (m.id === messageId ? { ...m, uploadCompleted: true } : m))
+    )
+    ;(qualifyingFieldsRef.current as Record<string, unknown>).floor_plans_share_later = true
+    sendMessage('__files_share_later__', undefined)
+  }, [sendMessage])
+
   const reset = useCallback(() => {
     // Clear stored messages and proposal state for this lead
     if (proposalId) {
@@ -1276,6 +1530,8 @@ export function useIntakeChat({ proposalId, idea }: Props) {
     scopeQueueRef.current = []
     completedScopeRef.current = []
     prevScopeRef.current = ''
+    qualifyingFieldsRef.current = {}
+    uploadWidgetInjectedRef.current = false
     // Reset state — blank slate
     setMessages([])
     setDetectedScope([])
@@ -1296,5 +1552,34 @@ export function useIntakeChat({ proposalId, idea }: Props) {
     setCompletedScope([])
   }, [proposalId]) // eslint-disable-line react-hooks/exhaustive-deps
 
-  return { messages, detectedScope, confidenceScore, priceRange, isStreaming, sendMessage, toggleScope, projectOverview, editMessage, reset, scopeSummaries, projectName, isPaused, pausedQuestion, questionRevealed, pauseQuestions, resumeQuestions, revealPausedQuestion, skipQuestion, lastSyncedAt, currentPhase, currentScope, scopeQueue, completedScope, isAdminActive }
+  return {
+    messages,
+    detectedScope,
+    confidenceScore,
+    priceRange,
+    isStreaming,
+    sendMessage,
+    toggleScope,
+    projectOverview,
+    editMessage,
+    reset,
+    scopeSummaries,
+    projectName,
+    isPaused,
+    pausedQuestion,
+    questionRevealed,
+    pauseQuestions,
+    resumeQuestions,
+    revealPausedQuestion,
+    skipQuestion,
+    lastSyncedAt,
+    currentPhase,
+    currentScope,
+    scopeQueue,
+    completedScope,
+    isAdminActive,
+    handleFileUploaded,
+    handleFileUploadDone,
+    handleFileUploadSkipped,
+  }
 }
