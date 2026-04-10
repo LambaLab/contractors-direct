@@ -4,7 +4,12 @@ import { resend, FROM_EMAIL } from '@/lib/email/resend'
 import { buildConfirmationEmail } from '@/lib/email/templates/confirmation'
 
 export async function POST(req: NextRequest) {
-  const { email, otp, leadId, sessionId, projectName } = await req.json()
+  const body = await req.json()
+  const email = body.email
+  const otp = body.otp
+  const leadId = body.leadId || body.proposalId  // SaveForLaterModal sends proposalId
+  const sessionId = body.sessionId
+  const projectName = body.projectName
   if (!email || !otp || !leadId || !sessionId) {
     return NextResponse.json({ error: 'Missing fields' }, { status: 400 })
   }

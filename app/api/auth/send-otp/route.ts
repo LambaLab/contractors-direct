@@ -5,7 +5,10 @@ import { resend, FROM_EMAIL } from '@/lib/email/resend'
 import { buildOtpEmail } from '@/lib/email/templates/otp'
 
 export async function POST(req: NextRequest) {
-  const { email, leadId, sessionId } = await req.json()
+  const body = await req.json()
+  const email = body.email
+  const leadId = body.leadId || body.proposalId  // SaveForLaterModal sends proposalId
+  const sessionId = body.sessionId
   if (!email || !leadId || !sessionId) {
     return NextResponse.json({ error: 'Missing fields' }, { status: 400 })
   }
