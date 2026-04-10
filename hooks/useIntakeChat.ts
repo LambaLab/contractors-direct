@@ -120,6 +120,37 @@ function normalizeQRStyle(qr: QuickReplies | undefined): QuickReplies | undefine
   return qr
 }
 
+/**
+ * Auto-detect custom QR styles from question text. Haiku often ignores the
+ * style:'sqft' / style:'budget' / style:'cards' instructions and sends
+ * style:'list' instead. This function examines the question and overrides
+ * the style so the correct picker/carousel renders regardless.
+ */
+function autoDetectQRStyle(qr: QuickReplies | undefined, question: string): QuickReplies | undefined {
+  if (!qr) return qr
+  const q = question.toLowerCase()
+
+  // Sqft picker: question asks about size, square feet, how big
+  if (q.includes('square feet') || q.includes('sqft') || (q.includes('how big') && q.includes('space'))) {
+    if (qr.style !== 'sqft') return { ...qr, style: 'sqft' as const, options: [] }
+  }
+
+  // Budget picker: question asks about budget
+  if (q.includes('budget') || (q.includes('how much') && (q.includes('mind') || q.includes('spend')))) {
+    if (qr.style !== 'budget') return { ...qr, style: 'budget' as const, options: [] }
+  }
+
+  // Cards: question about project type (Q1) or condition (Q4)
+  if (q.includes('type of project') || q.includes('type of property') || q.includes('what kind of property')) {
+    if (qr.style !== 'cards') return { ...qr, style: 'cards' as const }
+  }
+  if (q.includes('current condition') || q.includes('condition of the space') || q.includes('state of the space')) {
+    if (qr.style !== 'cards') return { ...qr, style: 'cards' as const }
+  }
+
+  return qr
+}
+
 // Merge consecutive same-role messages into one. This is necessary because
 // bubble_split creates two assistant messages (reaction + transition_text),
 // which are persisted as separate rows in Supabase. The Claude API requires
@@ -663,12 +694,14 @@ export function useIntakeChat({ proposalId, idea }: Props) {
             // scope_summaries) are still generating but aren't needed for interactivity.
             const questionText = typeof data.question === 'string' ? data.question.trim() : ''
             const rawQR = data.quick_replies as QuickReplies | undefined
-            const validQR = rawQR && (
-              rawQR.style === 'sqft' || rawQR.style === 'budget'
+            // Auto-detect custom styles from question text (Haiku fallback)
+            const detectedQR = autoDetectQRStyle(rawQR, questionText) ?? rawQR
+            const validQR = detectedQR && (
+              detectedQR.style === 'sqft' || detectedQR.style === 'budget'
                 ? true
-                : (Array.isArray(rawQR.options) && rawQR.options.length > 0)
+                : (Array.isArray(detectedQR.options) && detectedQR.options.length > 0)
             )
-              ? rawQR
+              ? detectedQR
               : undefined
             const updatedQR = normalizeQRStyle(validQR)
 
@@ -715,7 +748,13 @@ export function useIntakeChat({ proposalId, idea }: Props) {
             // scope items each turn, so we must accumulate across the entire conversation.
             const aiScope = Array.isArray(input?.detected_scope) ? input.detected_scope : []
             const merged = Array.from(new Set([...detectedScopeRef.current, ...aiScope]))
-            const newScope = expandWithDependencies(merged)
+            // Mandatory scope items: every project includes these three at minimum.
+            // The AI prompt says to always include them, but Haiku sometimes forgets.
+            const MANDATORY = ['paint_walls', 'electrical', 'plumbing']
+            const withMandatory = merged.length > 0
+              ? Array.from(new Set([...merged, ...MANDATORY]))
+              : merged  // don't add mandatory if scope is completely empty (turn 1)
+            const newScope = expandWithDependencies(withMandatory)
             const newMultiplier = typeof input?.complexity_multiplier === 'number' ? input.complexity_multiplier : 1.0
             const delta = typeof input?.confidence_score_delta === 'number' ? input.confidence_score_delta : 0
             const newScore = Math.max(0, Math.min(85, confidenceRef.current + delta))
@@ -815,18 +854,21 @@ export function useIntakeChat({ proposalId, idea }: Props) {
               const userAlreadyResponded = last?.id !== activeBubbleId
               const followUp = typeof input?.follow_up_question === 'string' ? input.follow_up_question : ''
               const questionText = typeof input?.question === 'string' ? input.question.trim() : ''
-              // Validate quick_replies — empty options array is as bad as no quick_replies
-              // (QuickReplies component would render only "Type something", which is confusing)
-              // EXCEPTION: 'sqft' style intentionally has empty options — the picker
-              // generates its own range, so don't discard it for lack of entries.
+              // Auto-detect custom styles from question text (Haiku fallback).
+              // Then validate and normalize.
               const rawQR = input?.quick_replies
-              const validQR = rawQR && (
-                rawQR.style === 'sqft'
+              const detectedQR = autoDetectQRStyle(rawQR ?? undefined, questionText) ?? rawQR
+              const validQR = detectedQR && (
+                detectedQR.style === 'sqft' || detectedQR.style === 'budget'
                   ? true
-                  : (Array.isArray(rawQR.options) && rawQR.options.length > 0)
+                  : (Array.isArray(detectedQR.options) && detectedQR.options.length > 0)
               )
-                ? rawQR
-                : undefined
+                ? detectedQR
+                : // Fallback: if Haiku sent NO QR at all but the question matches a
+                  // custom picker pattern, create a synthetic QR so the picker renders.
+                  questionText && !rawQR
+                    ? autoDetectQRStyle({ style: 'list', options: [] }, questionText) ?? undefined
+                    : undefined
               const updatedQR = normalizeQRStyle(validQR)
 
               if (isPauseThisTurn) {
