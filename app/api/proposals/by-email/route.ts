@@ -9,22 +9,52 @@ export async function GET(req: NextRequest) {
 
   const supabase = await createServiceClient()
 
-  // Look up the anchor lead to get its email
-  const { data: anchor } = await supabase
-    .from('leads')
+  // Get all verified emails for this lead (from lead_emails table)
+  const { data: leadEmails } = await supabase
+    .from('lead_emails')
     .select('email')
-    .eq('id', leadId)
-    .single()
+    .eq('lead_id', leadId)
 
-  if (!anchor?.email) {
-    return NextResponse.json({ error: 'Lead not found or no email' }, { status: 404 })
+  // Fall back to leads.email if lead_emails has no entries (backward compat)
+  let userEmails: string[] = (leadEmails ?? []).map(e => e.email)
+
+  if (userEmails.length === 0) {
+    const { data: anchor } = await supabase
+      .from('leads')
+      .select('email')
+      .eq('id', leadId)
+      .single()
+
+    if (!anchor?.email) {
+      return NextResponse.json({ error: 'Lead not found or no email' }, { status: 404 })
+    }
+    userEmails = [anchor.email]
   }
 
-  // Fetch all leads for that email
+  // Find all leads that have any of these emails (via lead_emails)
+  const { data: linkedLeadIds } = await supabase
+    .from('lead_emails')
+    .select('lead_id')
+    .in('email', userEmails)
+
+  const leadIds = [...new Set((linkedLeadIds ?? []).map(l => l.lead_id))]
+
+  // Also check leads.email directly for backward compat
+  const { data: directLeads } = await supabase
+    .from('leads')
+    .select('id')
+    .in('email', userEmails)
+
+  const allLeadIds = [...new Set([...leadIds, ...(directLeads ?? []).map(l => l.id)])]
+
+  if (allLeadIds.length === 0) {
+    return NextResponse.json({ email: userEmails[0], proposals: [] })
+  }
+
   const { data: leads, error } = await supabase
     .from('leads')
     .select('id, confidence_score, saved_at, metadata, slug, brief')
-    .eq('email', anchor.email)
+    .in('id', allLeadIds)
     .order('saved_at', { ascending: false, nullsFirst: false })
 
   if (error) {
@@ -36,7 +66,7 @@ export async function GET(req: NextRequest) {
   )
 
   return NextResponse.json({
-    email: anchor.email,
+    email: userEmails[0],
     proposals: meaningful.map((p) => {
       const meta = (p.metadata && typeof p.metadata === 'object' && !Array.isArray(p.metadata))
         ? (p.metadata as Record<string, unknown>)
