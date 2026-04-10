@@ -259,14 +259,14 @@ export default function ScopePanel({
       {/* 4. Bottom action bar */}
       <div className="flex-shrink-0 border-t border-[var(--ov-border,rgba(255,255,255,0.05))] px-4 py-4 space-y-2">
 
-        {/* Save lead for Later — hidden when email is already verified */}
+        {/* Save Proposal — hidden when email is already verified */}
         {!localStorage.getItem(`cd_email_verified_${proposalId}`) && (
           <button
             type="button"
             onClick={onSaveLater}
             className="w-full py-2.5 rounded-xl border border-[var(--ov-border,rgba(255,255,255,0.10))] text-[var(--ov-text,#ffffff)] text-sm font-medium hover:bg-[var(--ov-hover-bg,rgba(255,255,255,0.03))] transition-colors cursor-pointer"
           >
-            Save lead for Later
+            Save Proposal
           </button>
         )}
 
