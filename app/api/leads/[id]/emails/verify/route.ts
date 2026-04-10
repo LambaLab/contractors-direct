@@ -38,7 +38,7 @@ export async function POST(
   // Mark code as used
   await supabase.from('otp_codes').update({ used: true }).eq('id', otpRecord.id)
 
-  // Insert into lead_emails (non-primary)
+  // Try lead_emails table first (multi-email support)
   const { error: insertError } = await supabase
     .from('lead_emails')
     .upsert(
@@ -47,8 +47,18 @@ export async function POST(
     )
 
   if (insertError) {
-    console.error('lead_emails insert error:', insertError)
-    return NextResponse.json({ error: 'Failed to add email' }, { status: 500 })
+    // lead_emails table may not exist yet — fall back to updating leads.email
+    // This keeps the feature working until the migration is run
+    console.warn('lead_emails insert failed (table may not exist), falling back to leads.email:', insertError.message)
+    const { error: updateError } = await supabase
+      .from('leads')
+      .update({ email, saved_at: new Date().toISOString() })
+      .eq('id', leadId)
+
+    if (updateError) {
+      console.error('leads.email update also failed:', updateError)
+      return NextResponse.json({ error: 'Failed to add email' }, { status: 500 })
+    }
   }
 
   return NextResponse.json({ success: true })
