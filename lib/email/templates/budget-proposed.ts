@@ -48,7 +48,7 @@ export function buildBudgetProposedEmail({ amount, projectName, clientNotes, bud
             ${notesSection}
 
             <!-- CTA -->
-            <a href="${budgetUrl}" style="display:block;text-align:center;background:#f5e642;color:#1a1a1a;font-weight:600;font-size:14px;padding:14px 24px;border-radius:10px;text-decoration:none;margin:0 0 24px;">
+            <a href="${budgetUrl}" style="display:block;text-align:center;background:#7F77DD;color:#ffffff;font-weight:600;font-size:14px;padding:14px 24px;border-radius:10px;text-decoration:none;margin:0 0 24px;">
               Review & Respond
             </a>
 

@@ -29,7 +29,7 @@ export function buildConfirmationEmail({ projectName, leadUrl }: ConfirmationEma
         <tr>
           <td style="padding:40px 40px 32px;">
             <p style="margin:0 0 16px;font-size:22px;font-weight:600;color:#ffffff;line-height:1.3;">
-              ${projectName ? `Your <span style="color:#f5e642;">${projectName}</span> project is saved.` : 'Your project is saved.'}
+              ${projectName ? `Your <span style="color:#7F77DD;">${projectName}</span> project is saved.` : 'Your project is saved.'}
             </p>
             <p style="margin:0 0 32px;font-size:14px;color:#a0a0a0;line-height:1.7;">
               We've saved your progress. Use the button below to come back and continue scoping, or submit when you're ready. The Contractors Direct team will be in touch once you submit.
@@ -38,9 +38,9 @@ export function buildConfirmationEmail({ projectName, leadUrl }: ConfirmationEma
             <!-- CTA Button -->
             <table cellpadding="0" cellspacing="0">
               <tr>
-                <td style="border-radius:10px;background:#f5e642;">
+                <td style="border-radius:10px;background:#7F77DD;">
                   <a href="${leadUrl}"
-                     style="display:inline-block;padding:14px 28px;font-size:14px;font-weight:600;color:#111111;text-decoration:none;letter-spacing:0.01em;">
+                     style="display:inline-block;padding:14px 28px;font-size:14px;font-weight:600;color:#ffffff;text-decoration:none;letter-spacing:0.01em;">
                     Open my project →
                   </a>
                 </td>
@@ -48,7 +48,7 @@ export function buildConfirmationEmail({ projectName, leadUrl }: ConfirmationEma
             </table>
 
             <p style="margin:24px 0 0;font-size:12px;color:#555555;line-height:1.6;">
-              Or copy this link: <a href="${leadUrl}" style="color:#f5e642;text-decoration:none;">${leadUrl}</a>
+              Or copy this link: <a href="${leadUrl}" style="color:#7F77DD;text-decoration:none;">${leadUrl}</a>
             </p>
           </td>
         </tr>

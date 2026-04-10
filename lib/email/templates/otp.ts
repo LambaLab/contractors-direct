@@ -32,7 +32,7 @@ export function buildOtpEmail({ code }: OtpEmailInput): EmailOutput {
 
             <!-- OTP Code -->
             <div style="text-align:center;background:#242424;border-radius:12px;padding:32px;margin:0 0 32px;">
-              <span style="font-size:56px;font-weight:700;color:#f5e642;letter-spacing:0.18em;font-family:'Courier New',monospace;">${code}</span>
+              <span style="font-size:56px;font-weight:700;color:#7F77DD;letter-spacing:0.18em;font-family:'Courier New',monospace;">${code}</span>
             </div>
 
             <p style="margin:0;font-size:12px;color:#555555;line-height:1.6;">
