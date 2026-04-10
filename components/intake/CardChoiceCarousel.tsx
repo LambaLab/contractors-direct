@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useCallback, useRef, useState } from 'react'
 import Image from 'next/image'
 import { Pause, Play } from 'lucide-react'
 import type { QuickReplies as QuickRepliesType, QuickReplyOption } from '@/lib/intake-types'
@@ -77,7 +77,45 @@ export default function CardChoiceCarousel({
   const [showCustomInput, setShowCustomInput] = useState(false)
   const [customValue, setCustomValue] = useState('')
 
+  // Click-and-drag horizontal scrolling
+  const scrollRef = useRef<HTMLDivElement>(null)
+  const dragState = useRef({ isDown: false, startX: 0, scrollLeft: 0, moved: false })
+
+  const onMouseDown = useCallback((e: React.MouseEvent) => {
+    const el = scrollRef.current
+    if (!el) return
+    dragState.current = {
+      isDown: true,
+      startX: e.pageX - el.offsetLeft,
+      scrollLeft: el.scrollLeft,
+      moved: false,
+    }
+    el.style.cursor = 'grabbing'
+  }, [])
+
+  const onMouseMove = useCallback((e: React.MouseEvent) => {
+    if (!dragState.current.isDown) return
+    const el = scrollRef.current
+    if (!el) return
+    e.preventDefault()
+    const x = e.pageX - el.offsetLeft
+    const walk = x - dragState.current.startX
+    if (Math.abs(walk) > 5) dragState.current.moved = true
+    el.scrollLeft = dragState.current.scrollLeft - walk
+  }, [])
+
+  const onMouseUp = useCallback(() => {
+    dragState.current.isDown = false
+    const el = scrollRef.current
+    if (el) el.style.cursor = ''
+  }, [])
+
   function handleSelect(opt: QuickReplyOption) {
+    // Suppress click if the user was dragging (moved > 5px)
+    if (dragState.current.moved) {
+      dragState.current.moved = false
+      return
+    }
     if (disabled) return
     onSelect(opt.value, opt.label)
   }
@@ -108,11 +146,16 @@ export default function CardChoiceCarousel({
           means the carousel is at most ~220px tall and the page stays scrollable. */}
       <div className="p-3">
         <div
+          ref={scrollRef}
+          onMouseDown={onMouseDown}
+          onMouseMove={onMouseMove}
+          onMouseUp={onMouseUp}
+          onMouseLeave={onMouseUp}
           className="
             flex gap-3 overflow-x-auto
             snap-x snap-mandatory scrollbar-hide
             -mx-3 px-3
-            pb-1
+            pb-1 cursor-grab select-none
           "
         >
           {options.map((opt) => (
