@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback, useRef } from 'react'
 import { calculatePriceRange, applyComplexityAdjustment, tightenPriceRange, type PriceRange } from '@/lib/pricing/engine'
 import { expandWithDependencies } from '@/lib/scope/dependencies'
 import type { QuickReplies, UploadedFile } from '@/lib/intake-types'
+import { enrichCardOption } from '@/lib/card-images'
 import { getStoredSession } from '@/lib/session'
 import { createClient } from '@/lib/supabase/client'
 
@@ -95,11 +96,17 @@ function normalizeQRStyle(qr: QuickReplies | undefined): QuickReplies | undefine
     // handles its own range.
     return { ...qr, options: [] }
   }
-  // Preserve 'cards' style only if every option has a usable imageUrl OR an icon
-  // to render as a fallback. If neither, fall through to list.
+  // Preserve 'cards' style. Enrich options with images from the static map
+  // so the AI doesn't need to output imageUrl/imageAlt in the tool JSON.
   if (qr.style === 'cards') {
-    const usable = Array.isArray(qr.options) && qr.options.every((o) => !!o.imageUrl || !!o.icon)
-    if (usable) return qr
+    const enriched = Array.isArray(qr.options)
+      ? qr.options.map((o) => {
+          const img = enrichCardOption(o)
+          return { ...o, ...img }
+        })
+      : qr.options
+    const usable = Array.isArray(enriched) && enriched.every((o) => !!o.imageUrl || !!o.icon)
+    if (usable) return { ...qr, options: enriched }
     return { ...qr, style: 'list' as const }
   }
   // Force list for 3+ options regardless of AI's style choice
