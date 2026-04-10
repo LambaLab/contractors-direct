@@ -145,6 +145,41 @@ export interface Database {
         }
         Relationships: []
       }
+      lead_emails: {
+        Row: {
+          id: string
+          lead_id: string
+          email: string
+          verified_at: string
+          is_primary: boolean
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          lead_id: string
+          email: string
+          verified_at?: string
+          is_primary?: boolean
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          lead_id?: string
+          email?: string
+          verified_at?: string
+          is_primary?: boolean
+          created_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "lead_emails_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "leads"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
       chat_messages: {
         Row: {
           id: string
