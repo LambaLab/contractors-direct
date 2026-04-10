@@ -896,7 +896,7 @@ export function useIntakeChat({ proposalId, idea }: Props) {
               const rawQR = input?.quick_replies
               const detectedQR = autoDetectQRStyle(rawQR ?? undefined, questionText) ?? rawQR
               const validQR = detectedQR && (
-                detectedQR.style === 'sqft' || detectedQR.style === 'budget'
+                detectedQR.style === 'sqft' || detectedQR.style === 'budget' || detectedQR.style === 'scope_grid'
                   ? true
                   : (Array.isArray(detectedQR.options) && detectedQR.options.length > 0)
               )
