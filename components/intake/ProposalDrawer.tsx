@@ -1,13 +1,20 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
-import { X, Plus, Loader2, MoreHorizontal, Trash2 } from 'lucide-react'
+import { X, Plus, Loader2, MoreHorizontal, Trash2, Mail, Send, Star, ChevronDown, ChevronUp } from 'lucide-react'
 
 export type ProposalSummary = {
   id: string
   projectName: string
   confidenceScore: number
   savedAt: string | null
+}
+
+export type LeadEmail = {
+  id: string
+  email: string
+  is_primary: boolean
+  verified_at: string
 }
 
 type Props = {
@@ -24,6 +31,13 @@ type Props = {
   onDeleteProposal: (id: string) => void
   onSaveEmail: () => void
   theme: 'dark' | 'light'
+  leadEmails?: LeadEmail[]
+  loadingEmails?: boolean
+  onAddEmail?: () => void
+  onRemoveEmail?: (emailId: string) => void
+  onSetPrimary?: (emailId: string) => void
+  onSendLink?: (emails: string[]) => void
+  sendingLink?: boolean
 }
 
 function relativeDate(iso: string | null): string {
@@ -53,10 +67,20 @@ export default function ProposalDrawer({
   onDeleteProposal,
   onSaveEmail,
   theme,
+  leadEmails = [],
+  onAddEmail,
+  onRemoveEmail,
+  onSetPrimary,
+  onSendLink,
+  sendingLink = false,
 }: Props) {
   const drawerRef = useRef<HTMLDivElement>(null)
   const [menuOpenId, setMenuOpenId] = useState<string | null>(null)
   const [confirmDeleteId, setConfirmDeleteId] = useState<string | null>(null)
+  const [emailSectionOpen, setEmailSectionOpen] = useState(true)
+  const [confirmRemoveEmailId, setConfirmRemoveEmailId] = useState<string | null>(null)
+  const [sendLinkOpen, setSendLinkOpen] = useState(false)
+  const [selectedSendEmails, setSelectedSendEmails] = useState<string[]>([])
 
   // Close on Escape
   useEffect(() => {
@@ -87,7 +111,7 @@ export default function ProposalDrawer({
   }, [menuOpenId])
 
   // Close menu and confirmation when drawer closes
-  useEffect(() => { if (!open) { setMenuOpenId(null); setConfirmDeleteId(null) } }, [open])
+  useEffect(() => { if (!open) { setMenuOpenId(null); setConfirmDeleteId(null); setConfirmRemoveEmailId(null); setSendLinkOpen(false); setSelectedSendEmails([]) } }, [open])
 
   const isLight = theme === 'light'
 
@@ -290,6 +314,129 @@ export default function ProposalDrawer({
             </div>
           )}
         </div>
+
+        {/* Email Management Section */}
+        {emailVerified && leadEmails.length > 0 && (
+          <div className={`flex-shrink-0 border-t px-4 py-3 space-y-2 ${isLight ? 'border-[rgba(0,0,0,0.08)]' : 'border-white/5'}`}>
+            <button
+              onClick={() => setEmailSectionOpen(o => !o)}
+              className={`w-full flex items-center justify-between text-xs font-medium cursor-pointer ${isLight ? 'text-[#999]' : 'text-[#666]'}`}
+            >
+              <span className="flex items-center gap-1.5">
+                <Mail className="w-3 h-3" />
+                Saved emails ({leadEmails.length})
+              </span>
+              {emailSectionOpen ? <ChevronUp className="w-3 h-3" /> : <ChevronDown className="w-3 h-3" />}
+            </button>
+
+            {emailSectionOpen && (
+              <div className="space-y-1.5 pt-1">
+                {leadEmails.map((le) => (
+                  <div
+                    key={le.id}
+                    className={`flex items-center gap-2 px-2 py-1.5 rounded-lg text-sm ${isLight ? 'bg-black/[0.02]' : 'bg-white/[0.03]'}`}
+                  >
+                    {le.is_primary && (
+                      <Star className={`w-3 h-3 flex-shrink-0 fill-current text-[#BA7517]`} />
+                    )}
+                    <span className={`flex-1 truncate text-xs ${isLight ? 'text-[#1a1a1a]' : 'text-white/80'}`}>
+                      {le.email}
+                    </span>
+                    {!le.is_primary && (
+                      <>
+                        <button
+                          onClick={() => onSetPrimary?.(le.id)}
+                          className={`p-0.5 rounded transition-colors cursor-pointer ${isLight ? 'text-[#999] hover:text-[#1a1a1a] hover:bg-black/5' : 'text-[#555] hover:text-white hover:bg-white/5'}`}
+                          title="Set as primary"
+                        >
+                          <Star className="w-3 h-3" />
+                        </button>
+                        {confirmRemoveEmailId === le.id ? (
+                          <div className="flex items-center gap-1">
+                            <button
+                              onClick={() => { onRemoveEmail?.(le.id); setConfirmRemoveEmailId(null) }}
+                              className="text-[10px] text-red-400 hover:text-red-300 cursor-pointer"
+                            >
+                              Remove
+                            </button>
+                            <button
+                              onClick={() => setConfirmRemoveEmailId(null)}
+                              className={`text-[10px] cursor-pointer ${isLight ? 'text-[#999]' : 'text-[#555]'}`}
+                            >
+                              Cancel
+                            </button>
+                          </div>
+                        ) : (
+                          <button
+                            onClick={() => setConfirmRemoveEmailId(le.id)}
+                            className={`p-0.5 rounded transition-colors cursor-pointer ${isLight ? 'text-[#ccc] hover:text-red-500' : 'text-[#444] hover:text-red-400'}`}
+                            title="Remove email"
+                          >
+                            <X className="w-3 h-3" />
+                          </button>
+                        )}
+                      </>
+                    )}
+                  </div>
+                ))}
+
+                <div className="flex gap-1.5 pt-1">
+                  <button
+                    onClick={() => onAddEmail?.()}
+                    className={`flex-1 flex items-center justify-center gap-1 py-1.5 rounded-lg text-xs font-medium transition-colors cursor-pointer
+                      ${isLight ? 'text-[#727272] hover:bg-black/[0.03] hover:text-[#1a1a1a] border border-[rgba(0,0,0,0.08)]' : 'text-[#888] hover:bg-white/5 hover:text-white border border-white/5'}`}
+                  >
+                    <Plus className="w-3 h-3" />
+                    Add email
+                  </button>
+                  <button
+                    onClick={() => setSendLinkOpen(o => !o)}
+                    disabled={sendingLink}
+                    className={`flex-1 flex items-center justify-center gap-1 py-1.5 rounded-lg text-xs font-medium transition-colors cursor-pointer
+                      ${isLight ? 'bg-[#1A1A1A] text-white hover:bg-[#333]' : 'bg-brand-purple text-white hover:bg-brand-purple/90'} disabled:opacity-40`}
+                  >
+                    <Send className="w-3 h-3" />
+                    {sendingLink ? 'Sending...' : 'Send link'}
+                  </button>
+                </div>
+
+                {/* Send link checkboxes */}
+                {sendLinkOpen && (
+                  <div className={`rounded-lg p-2.5 space-y-2 ${isLight ? 'bg-black/[0.03] border border-[rgba(0,0,0,0.08)]' : 'bg-white/[0.03] border border-white/5'}`}>
+                    <p className={`text-[11px] ${isLight ? 'text-[#999]' : 'text-[#666]'}`}>Select emails to send the project link to:</p>
+                    {leadEmails.map((le) => (
+                      <label key={le.id} className={`flex items-center gap-2 text-xs cursor-pointer ${isLight ? 'text-[#1a1a1a]' : 'text-white/80'}`}>
+                        <input
+                          type="checkbox"
+                          checked={selectedSendEmails.includes(le.email)}
+                          onChange={(e) => {
+                            setSelectedSendEmails(prev =>
+                              e.target.checked ? [...prev, le.email] : prev.filter(em => em !== le.email)
+                            )
+                          }}
+                          className="rounded border-white/20 accent-[#7F77DD]"
+                        />
+                        <span className="truncate">{le.email}</span>
+                      </label>
+                    ))}
+                    <button
+                      onClick={() => {
+                        onSendLink?.(selectedSendEmails)
+                        setSendLinkOpen(false)
+                        setSelectedSendEmails([])
+                      }}
+                      disabled={selectedSendEmails.length === 0 || sendingLink}
+                      className={`w-full py-1.5 rounded-lg text-xs font-medium transition-colors cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed
+                        ${isLight ? 'bg-[#1A1A1A] text-white hover:bg-[#333]' : 'bg-brand-purple text-white hover:bg-brand-purple/90'}`}
+                    >
+                      Send to {selectedSendEmails.length} email{selectedSendEmails.length !== 1 ? 's' : ''}
+                    </button>
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
+        )}
 
       </div>
 
