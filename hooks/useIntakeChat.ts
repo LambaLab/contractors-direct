@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect, useCallback, useRef } from 'react'
-import { calculatePriceRange, applyComplexityAdjustment, tightenPriceRange, type PriceRange } from '@/lib/pricing/engine'
+import { calculatePriceRange, applyComplexityAdjustment, tightenPriceRange, computeQuickBallpark, type PriceRange } from '@/lib/pricing/engine'
 import { expandWithDependencies } from '@/lib/scope/dependencies'
 import type { QuickReplies, UploadedFile } from '@/lib/intake-types'
 import { enrichCardOption } from '@/lib/card-images'
@@ -39,6 +39,14 @@ export type ChatMessage = {
   uploadPurpose?: 'floor_plans' | 'site_photos'  // which prompt triggered the widget
   uploadedFiles?: UploadedFile[]     // files uploaded via this widget (for restore on reload)
   uploadCompleted?: boolean          // true = user tapped "I'm done" or "Share later"; widget collapses
+  // Ballpark result card (quick estimate mode)
+  isBallpark?: boolean               // true = render BallparkResultCard instead of normal bubble
+  ballparkRange?: { min: number; max: number }
+  ballparkScopeIds?: string[]
+  ballparkPropertyType?: string
+  ballparkLocation?: string
+  ballparkSizeSqft?: number
+  ballparkCondition?: string
 }
 
 type UpdateProposalInput = {
@@ -56,7 +64,8 @@ type UpdateProposalInput = {
   suggest_resume?: boolean
   project_name?: string
   // Phase tracking
-  current_phase?: 'discovery' | 'deep_dive' | 'wrap_up'
+  journey_mode?: 'quick' | 'full' | ''
+  current_phase?: 'triage' | 'quick_discovery' | 'discovery' | 'deep_dive' | 'wrap_up'
   current_scope?: string
   scope_complete?: boolean
   scope_queue?: string[]
@@ -91,9 +100,9 @@ type ApiMessage = { role: 'user' | 'assistant'; content: string }
 function normalizeQRStyle(qr: QuickReplies | undefined): QuickReplies | undefined {
   if (!qr) return qr
   const hasMultipleOptions = Array.isArray(qr.options) && qr.options.length >= 3
-  if (qr.style === 'sqft' || qr.style === 'budget') {
-    // Force options to an empty array if the AI sent any, since the picker
-    // handles its own range.
+  if (qr.style === 'sqft' || qr.style === 'budget' || qr.style === 'scope_grid') {
+    // Force options to an empty array if the AI sent any, since the picker /
+    // grid component handles its own content.
     return { ...qr, options: [] }
   }
   // Preserve 'cards' style. Enrich options with images from the static map
@@ -138,6 +147,11 @@ function autoDetectQRStyle(qr: QuickReplies | undefined, question: string): Quic
   // Budget picker: question asks about budget
   if (q.includes('budget') || (q.includes('how much') && (q.includes('mind') || q.includes('spend')))) {
     if (qr.style !== 'budget') return { ...qr, style: 'budget' as const, options: [] }
+  }
+
+  // Scope grid: question asks about scope areas / what the project covers
+  if (q.includes('which areas') || q.includes('full scope') || q.includes('scope you have in mind') || q.includes('project cover')) {
+    if (qr.style !== 'scope_grid') return { ...qr, style: 'scope_grid' as const, options: [] }
   }
 
   // Cards: detect by question text OR by option values matching known card sets.
@@ -189,6 +203,7 @@ const SYNCED_COUNT_KEY   = (pid: string) => `cd_synced_count_${pid}`
 const PAUSED_KEY = (pid: string) => `cd_paused_${pid}`
 const PAUSED_QR_KEY = (pid: string) => `cd_paused_qr_${pid}`
 const PHASE_KEY = (pid: string) => `cd_phase_${pid}`
+const JOURNEY_MODE_KEY = (pid: string) => `cd_journey_mode_${pid}`
 
 export function useIntakeChat({ proposalId, idea }: Props) {
   const [messages, setMessages] = useState<ChatMessage[]>([])
@@ -202,8 +217,10 @@ export function useIntakeChat({ proposalId, idea }: Props) {
   const [projectName, setProjectName] = useState('')
   const [isPaused, setIsPaused] = useState(false)
   const [pausedQuestion, setPausedQuestion] = useState<string | null>(null)
-  // Phase tracking for 3-phase conversation flow
-  const [currentPhase, setCurrentPhase] = useState<'discovery' | 'deep_dive' | 'wrap_up'>('discovery')
+  // Journey mode: quick estimate vs full consultation
+  const [journeyMode, setJourneyMode] = useState<'' | 'quick' | 'full' | 'upgraded'>('')
+  // Phase tracking for conversation flow
+  const [currentPhase, setCurrentPhase] = useState<'triage' | 'quick_discovery' | 'discovery' | 'deep_dive' | 'wrap_up'>('triage')
   const [currentScope, setCurrentScope] = useState('')
   const [scopeQueue, setScopeQueue] = useState<string[]>([])
   const [completedScope, setCompletedScope] = useState<string[]>([])
@@ -227,7 +244,8 @@ export function useIntakeChat({ proposalId, idea }: Props) {
   const lastPauseTurn = useRef(-999)  // turn index of the last checkpoint (-999 = never)
   const turnCount = useRef(0)         // increments each time a tool_result is processed
   const isPausedRef = useRef(false)
-  const currentPhaseRef = useRef<'discovery' | 'deep_dive' | 'wrap_up'>('discovery')
+  const journeyModeRef = useRef<'' | 'quick' | 'full' | 'upgraded'>('')
+  const currentPhaseRef = useRef<'triage' | 'quick_discovery' | 'discovery' | 'deep_dive' | 'wrap_up'>('triage')
   const currentScopeRef = useRef('')
   const scopeQueueRef = useRef<string[]>([])
   const completedScopeRef = useRef<string[]>([])
@@ -259,6 +277,7 @@ export function useIntakeChat({ proposalId, idea }: Props) {
   useEffect(() => { projectOverviewRef.current = projectOverview }, [projectOverview])
   useEffect(() => { scopeSummariesRef.current = scopeSummaries }, [scopeSummaries])
   useEffect(() => { isPausedRef.current = isPaused }, [isPaused])
+  useEffect(() => { journeyModeRef.current = journeyMode }, [journeyMode])
   useEffect(() => { currentPhaseRef.current = currentPhase }, [currentPhase])
   useEffect(() => { currentScopeRef.current = currentScope }, [currentScope])
   useEffect(() => { scopeQueueRef.current = scopeQueue }, [scopeQueue])
@@ -466,6 +485,14 @@ export function useIntakeChat({ proposalId, idea }: Props) {
             }
           }
 
+          // Restore journey mode from localStorage
+          const storedJourneyMode = localStorage.getItem(JOURNEY_MODE_KEY(proposalId))
+          if (storedJourneyMode) {
+            const jm = storedJourneyMode as '' | 'quick' | 'full' | 'upgraded'
+            setJourneyMode(jm)
+            journeyModeRef.current = jm
+          }
+
           // Restore phase state from localStorage
           const storedPhase = localStorage.getItem(PHASE_KEY(proposalId))
           if (storedPhase) {
@@ -613,6 +640,7 @@ export function useIntakeChat({ proposalId, idea }: Props) {
           currentScope: detectedScopeRef.current,
           confidenceScore: confidenceRef.current,
           paused: isPausedRef.current,
+          journeyMode: journeyModeRef.current,
           currentPhase: currentPhaseRef.current,
           currentScopeItem: currentScopeRef.current,
           scopeQueue: scopeQueueRef.current,
@@ -1055,7 +1083,15 @@ export function useIntakeChat({ proposalId, idea }: Props) {
               effectiveScope = sorted[0] || ''
             }
 
-            if (effectivePhase) setCurrentPhase(effectivePhase as 'discovery' | 'deep_dive' | 'wrap_up')
+            // Handle journey_mode from AI output
+            if (input?.journey_mode && input.journey_mode !== journeyModeRef.current) {
+              const jm = (input.journey_mode || '') as '' | 'quick' | 'full'
+              setJourneyMode(jm)
+              journeyModeRef.current = jm
+              if (proposalId) localStorage.setItem(JOURNEY_MODE_KEY(proposalId), jm)
+            }
+
+            if (effectivePhase) setCurrentPhase(effectivePhase as typeof currentPhase)
             if (effectiveScope) setCurrentScope(effectiveScope)
             if (effectiveQueue.length > 0) setScopeQueue(effectiveQueue)
 
@@ -1208,6 +1244,32 @@ export function useIntakeChat({ proposalId, idea }: Props) {
                   }).catch(() => { /* best-effort, ignore errors */ })
                 }
               } catch { /* Ignore QuotaExceededError */ }
+            }
+
+            // Ballpark card: when quick_discovery phase completes (AI sends empty question),
+            // insert a BallparkResultCard with the computed price range.
+            if (effectivePhase === 'quick_discovery' && !stageQuestionText && journeyModeRef.current === 'quick' && turnCount.current >= 2) {
+              const qf = qualifyingFieldsRef.current
+              const ballpark = computeQuickBallpark({
+                scopeIds: detectedScopeRef.current,
+                sizeSqft: qf.size_sqft || 0,
+                condition: qf.condition || 'needs_refresh',
+                location: qf.location || '',
+              })
+              const ballparkMsg: ChatMessage = {
+                id: crypto.randomUUID(),
+                role: 'assistant',
+                content: '',
+                isBallpark: true,
+                ballparkRange: ballpark,
+                ballparkScopeIds: [...detectedScopeRef.current],
+                ballparkPropertyType: qf.property_type || '',
+                ballparkLocation: qf.location || '',
+                ballparkSizeSqft: qf.size_sqft || 0,
+                ballparkCondition: qf.condition || '',
+                createdAt: Date.now(),
+              }
+              setMessages(prev => [...prev, ballparkMsg])
             }
 
             // Stage-setting auto-continue: if AI transitioned to deep_dive with
@@ -1575,6 +1637,7 @@ export function useIntakeChat({ proposalId, idea }: Props) {
       localStorage.removeItem(PAUSED_KEY(proposalId))
       localStorage.removeItem(PAUSED_QR_KEY(proposalId))
       localStorage.removeItem(PHASE_KEY(proposalId))
+      localStorage.removeItem(JOURNEY_MODE_KEY(proposalId))
     }
     // Reset refs synchronously
     messagesRef.current = []
@@ -1583,7 +1646,7 @@ export function useIntakeChat({ proposalId, idea }: Props) {
     complexityRef.current = 1.0
     lastPauseTurn.current = -999
     turnCount.current = 0
-    currentPhaseRef.current = 'discovery'
+    currentPhaseRef.current = 'triage'
     currentScopeRef.current = ''
     scopeQueueRef.current = []
     completedScopeRef.current = []
@@ -1604,11 +1667,24 @@ export function useIntakeChat({ proposalId, idea }: Props) {
     isPausedRef.current = false
     setPausedQuestion(null)
     pausedQRRef.current = null
-    setCurrentPhase('discovery')
+    setJourneyMode('')
+    journeyModeRef.current = ''
+    setCurrentPhase('triage')
     setCurrentScope('')
     setScopeQueue([])
     setCompletedScope([])
   }, [proposalId]) // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Upgrade from quick estimate to full consultation.
+  // Carries over all Core Four + detected scope, sends a synthetic message
+  // so the AI picks up with the remaining discovery questions.
+  const upgradeToFull = useCallback(() => {
+    setJourneyMode('upgraded')
+    journeyModeRef.current = 'upgraded'
+    if (proposalId) localStorage.setItem(JOURNEY_MODE_KEY(proposalId), 'upgraded')
+    // Send synthetic user message to trigger the upgrade flow
+    sendMessage("I'd like to refine this estimate with more details", 'Dig deeper')
+  }, [proposalId, sendMessage])
 
   return {
     messages,
@@ -1635,6 +1711,8 @@ export function useIntakeChat({ proposalId, idea }: Props) {
     currentScope,
     scopeQueue,
     completedScope,
+    journeyMode,
+    upgradeToFull,
     isAdminActive,
     handleFileUploaded,
     handleFileUploadDone,

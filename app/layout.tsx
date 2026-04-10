@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from 'next'
 import { DM_Sans, Syne } from 'next/font/google'
+import Script from 'next/script'
 import './globals.css'
 
 const dmSans = DM_Sans({ subsets: ['latin'], variable: '--font-dm-sans' })
@@ -48,7 +49,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en" suppressHydrationWarning className={`dark ${dmSans.variable} ${syne.variable}`}>
       <head>
-        <script dangerouslySetInnerHTML={{ __html: ANTI_FLASH_SCRIPT }} />
+        <Script id="anti-flash" strategy="beforeInteractive">{ANTI_FLASH_SCRIPT}</Script>
       </head>
       <body className="bg-brand-dark text-foreground antialiased">
         {children}

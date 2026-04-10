@@ -33,13 +33,11 @@ export default function IntakeOverlay({ initialMessage, onClose }: Props) {
   const retryCountRef = useRef(0)
   const retryTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   const maxAutoRetries = 6 // auto-retry up to 6 times (~30s total)
-  // Start mounted=true for returning users so the overlay is opaque on the
-  // very first frame (no flash of the homepage behind the transparent overlay).
-  // New users (no stored session) get the fade-in animation.
-  const [mounted, setMounted] = useState(() => {
-    if (typeof window === 'undefined') return false
-    try { return !!getStoredSession() } catch { return false }
-  })
+  // Start mounted=false on both server and client to avoid hydration mismatch.
+  // For returning users, the useEffect below sets mounted=true on the first
+  // frame, and the `has-session` class on <html> (set by the anti-flash script)
+  // keeps the page visually dark so there's no flash.
+  const [mounted, setMounted] = useState(false)
   const [minimized, setMinimized] = useState(false)
   const [proposalOpen, setProposalOpen] = useState(false)
   const [saveModalOpen, setSaveModalOpen] = useState(false)

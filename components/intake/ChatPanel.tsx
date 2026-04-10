@@ -5,11 +5,13 @@ import { ArrowRight, ArrowDown, Pause, Play } from 'lucide-react'
 import MessageBubble from './MessageBubble'
 import ScopeProgressCard from './ScopeProgressCard'
 import PauseCheckpoint from './PauseCheckpoint'
+import BallparkResultCard from './BallparkResultCard'
 import QuickReplies from './QuickReplies'
 import CardChoiceCarousel from './CardChoiceCarousel'
 import SqftPicker from './SqftPicker'
 import BudgetPicker from './BudgetPicker'
 import FileUploadWidget from './FileUploadWidget'
+import ScopeMultiSelectGrid from './ScopeMultiSelectGrid'
 import type { ChatMessage } from '@/hooks/useIntakeChat'
 import type { QuickReplies as QuickRepliesType, UploadedFile } from '@/lib/intake-types'
 
@@ -37,9 +39,10 @@ type Props = {
   onFileUploaded?: (messageId: string, file: UploadedFile) => void
   onFileUploadDone?: (messageId: string) => void
   onFileUploadSkipped?: (messageId: string) => void
+  onUpgradeToFull?: () => void
 }
 
-export default function ChatPanel({ messages, isStreaming, onSend, onEdit, onRequestViewProposal, onSaveLater, constrained = false, theme, isPaused, pausedQuestion, questionRevealed, onPauseQuestions, onResumeQuestions, onRevealPausedQuestion, onSkipQuestion, confidenceScore = 0, emailVerified, leadId, sessionId, onFileUploaded, onFileUploadDone, onFileUploadSkipped }: Props) {
+export default function ChatPanel({ messages, isStreaming, onSend, onEdit, onRequestViewProposal, onSaveLater, constrained = false, theme, isPaused, pausedQuestion, questionRevealed, onPauseQuestions, onResumeQuestions, onRevealPausedQuestion, onSkipQuestion, confidenceScore = 0, emailVerified, leadId, sessionId, onFileUploaded, onFileUploadDone, onFileUploadSkipped, onUpgradeToFull }: Props) {
   const [input, setInput] = useState('')
   const [reEditingMessageId, setReEditingMessageId] = useState<string | null>(null)
   const [showScrollBtn, setShowScrollBtn] = useState(false)
@@ -122,7 +125,8 @@ export default function ChatPanel({ messages, isStreaming, onSend, onEdit, onReq
   const isCardsQR = lastQR?.style === 'cards'
   const isSqftQR = lastQR?.style === 'sqft'
   const isBudgetQR = lastQR?.style === 'budget'
-  const isCustomPicker = isCardsQR || isSqftQR || isBudgetQR
+  const isScopeGridQR = lastQR?.style === 'scope_grid'
+  const isCustomPicker = isCardsQR || isSqftQR || isBudgetQR || isScopeGridQR
   const shouldBeList = lastQR && !isCustomPicker && (lastQR.style === 'list' || (Array.isArray(lastQR.options) && lastQR.options.length >= 3))
   const listQR = shouldBeList
     ? { ...lastQR!, style: 'list' as const }
@@ -189,6 +193,20 @@ export default function ChatPanel({ messages, isStreaming, onSend, onEdit, onReq
                   onSkip={() => onFileUploadSkipped?.(msg.id)}
                 />
               ) : null
+            ) : msg.isBallpark && msg.ballparkRange ? (
+              <BallparkResultCard
+                key={msg.id}
+                range={msg.ballparkRange}
+                scopeIds={msg.ballparkScopeIds ?? []}
+                propertyType={msg.ballparkPropertyType ?? ''}
+                location={msg.ballparkLocation ?? ''}
+                sizeSqft={msg.ballparkSizeSqft ?? 0}
+                condition={msg.ballparkCondition ?? ''}
+                onDigDeeper={() => onUpgradeToFull?.()}
+                onSaveLater={() => onSaveLater?.()}
+                isLast={isLastVisible}
+                isStreaming={isStreaming && isLastVisible}
+              />
             ) : msg.isPause ? (
               // Hide breather checkpoint while a paused question is temporarily revealed
               questionRevealed ? null : <PauseCheckpoint
@@ -330,6 +348,20 @@ export default function ChatPanel({ messages, isStreaming, onSend, onEdit, onReq
                 onPauseQuestions={!reEditingQR ? onPauseQuestions : undefined}
                 onResumeQuestions={!reEditingQR ? onResumeQuestions : undefined}
                 isPaused={isPaused}
+              />
+            ) : activeQR.style === 'scope_grid' ? (
+              <ScopeMultiSelectGrid
+                onSubmit={(ids, displayText) => {
+                  const value = ids.join(', ')
+                  if (reEditingQR && reEditingMessageId) {
+                    onEdit?.(reEditingMessageId, value, displayText)
+                    setReEditingMessageId(null)
+                  } else {
+                    onSend(value, displayText, activeQR, activeQuestion || undefined)
+                  }
+                }}
+                isLast={true}
+                isStreaming={isStreaming}
               />
             ) : (
               <QuickReplies

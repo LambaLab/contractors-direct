@@ -77,41 +77,47 @@ export default function CardChoiceCarousel({
   const [showCustomInput, setShowCustomInput] = useState(false)
   const [customValue, setCustomValue] = useState('')
 
-  // Click-and-drag horizontal scrolling
+  // Click-and-drag horizontal scrolling using mouse events on the container.
+  // Pointer capture is NOT used because it eats click events on child buttons.
   const scrollRef = useRef<HTMLDivElement>(null)
   const dragState = useRef({ isDown: false, startX: 0, scrollLeft: 0, moved: false })
 
   const onMouseDown = useCallback((e: React.MouseEvent) => {
     const el = scrollRef.current
     if (!el) return
+    if (e.button !== 0) return
     dragState.current = {
       isDown: true,
-      startX: e.pageX - el.offsetLeft,
+      startX: e.clientX,
       scrollLeft: el.scrollLeft,
       moved: false,
     }
-    el.style.cursor = 'grabbing'
   }, [])
 
   const onMouseMove = useCallback((e: React.MouseEvent) => {
     if (!dragState.current.isDown) return
     const el = scrollRef.current
     if (!el) return
-    e.preventDefault()
-    const x = e.pageX - el.offsetLeft
-    const walk = x - dragState.current.startX
-    if (Math.abs(walk) > 5) dragState.current.moved = true
-    el.scrollLeft = dragState.current.scrollLeft - walk
+    const dx = e.clientX - dragState.current.startX
+    // Only start dragging after 8px of movement to avoid suppressing clicks
+    if (Math.abs(dx) > 8) {
+      dragState.current.moved = true
+      el.style.cursor = 'grabbing'
+    }
+    if (dragState.current.moved) {
+      e.preventDefault()
+      el.scrollLeft = dragState.current.scrollLeft - dx
+    }
   }, [])
 
-  const onMouseUp = useCallback(() => {
+  const endDrag = useCallback(() => {
     dragState.current.isDown = false
     const el = scrollRef.current
     if (el) el.style.cursor = ''
   }, [])
 
   function handleSelect(opt: QuickReplyOption) {
-    // Suppress click if the user was dragging (moved > 5px)
+    // Suppress click if the user was dragging
     if (dragState.current.moved) {
       dragState.current.moved = false
       return
@@ -149,14 +155,14 @@ export default function CardChoiceCarousel({
           ref={scrollRef}
           onMouseDown={onMouseDown}
           onMouseMove={onMouseMove}
-          onMouseUp={onMouseUp}
-          onMouseLeave={onMouseUp}
+          onMouseUp={endDrag}
+          onMouseLeave={endDrag}
           className="
-            flex gap-3 overflow-x-auto
-            snap-x snap-mandatory scrollbar-hide
+            flex gap-3 overflow-x-auto scrollbar-hide
             -mx-3 px-3
             pb-1 cursor-grab select-none
           "
+          style={{ WebkitOverflowScrolling: 'touch' }}
         >
           {options.map((opt) => (
             <button
@@ -165,7 +171,7 @@ export default function CardChoiceCarousel({
               onClick={() => handleSelect(opt)}
               disabled={disabled}
               className="
-                flex-shrink-0 w-[200px] sm:w-[220px] snap-start
+                flex-shrink-0 w-[200px] sm:w-[220px]
                 rounded-xl overflow-hidden border border-[var(--ov-border,rgba(255,255,255,0.10))]
                 bg-[var(--ov-surface-subtle,rgba(255,255,255,0.03))]
                 hover:border-[var(--ov-accent-border,rgba(115,103,255,0.40))]

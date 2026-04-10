@@ -45,6 +45,8 @@ export default function IntakeLayout({ proposalId, initialMessage, onStateChange
     skipQuestion,
     lastSyncedAt,
     currentScope,
+    journeyMode,
+    upgradeToFull,
     handleFileUploaded,
     handleFileUploadDone,
     handleFileUploadSkipped,
@@ -172,6 +174,7 @@ export default function IntakeLayout({ proposalId, initialMessage, onStateChange
             onFileUploaded={handleFileUploaded}
             onFileUploadDone={handleFileUploadDone}
             onFileUploadSkipped={handleFileUploadSkipped}
+            onUpgradeToFull={upgradeToFull}
           />
         </div>
 
@@ -237,6 +240,7 @@ export default function IntakeLayout({ proposalId, initialMessage, onStateChange
             onFileUploaded={handleFileUploaded}
             onFileUploadDone={handleFileUploadDone}
             onFileUploadSkipped={handleFileUploadSkipped}
+            onUpgradeToFull={upgradeToFull}
           />
         </div>
         <MobileBottomDrawer

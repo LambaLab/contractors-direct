@@ -42,7 +42,7 @@ export const UPDATE_PROPOSAL_TOOL: Anthropic.Tool = {
       // the user would otherwise see nothing after the text stops streaming.
       question: {
         type: 'string',
-        description: 'REQUIRED every turn. Never empty. Ends with ?. On normal turns: one crisp question sentence, the user\'s call to action. On suggest_pause turns: 2-4 sentences covering what\'s been established (use the user\'s exact words/numbers), note that progress is saved, then close with a warm invitation to review, continue, or save.',
+        description: 'REQUIRED every turn. Ends with ?. On normal turns: one crisp question sentence, the user\'s call to action. On suggest_pause turns: 2-4 sentences covering what\'s been established (use the user\'s exact words/numbers), note that progress is saved, then close with a warm invitation to review, continue, or save. EXCEPTION: Set to empty string ("") on exactly three handoff turns: (1) stage-setting into deep_dive, (2) floor plans upload handoff, (3) quick discovery completion.',
       },
       quick_replies: {
         type: 'object' as const,
@@ -50,8 +50,8 @@ export const UPDATE_PROPOSAL_TOOL: Anthropic.Tool = {
         properties: {
           style: {
             type: 'string' as const,
-            enum: ['list', 'pills', 'cards', 'sqft', 'budget'],
-            description: 'list = numbered items with descriptions (default for most decisions). pills = compact chips (simple/short answers like yes/no or platform choice). cards = swipeable image cards, ONLY for the 5 card-eligible questions listed in the system prompt (project type, current condition, style preference, flooring material, countertop material). sqft = a drag-scrub numeric picker, ONLY for Phase 1 Question 6 (property size in square feet). budget = a drag-scrub AED currency picker with preset tiers, ONLY for Phase 1 Question 7 (budget). Never invent new card, sqft, or budget questions.',
+            enum: ['list', 'pills', 'cards', 'sqft', 'budget', 'scope_grid'],
+            description: 'list = numbered items with descriptions (default for most decisions). pills = compact chips (simple/short answers like yes/no or platform choice). cards = swipeable image cards, ONLY for the 5 card-eligible questions listed in the system prompt (project type, current condition, style preference, flooring material, countertop material). sqft = a drag-scrub numeric picker, ONLY for Phase 1 Question 6 (property size in square feet). budget = a drag-scrub AED currency picker with preset tiers, ONLY for Phase 1 Question 7 (budget). scope_grid = 3-column checkbox grid of ALL scope catalog items, ONLY for scope selection questions (Phase 1 item 8, Phase 1A item 5). Never invent new card, sqft, budget, or scope_grid questions.',
           },
           multiSelect: {
             type: 'boolean' as const,
@@ -163,11 +163,16 @@ export const UPDATE_PROPOSAL_TOOL: Anthropic.Tool = {
           'Optional. Only include entries for scope items that were newly detected or had their details meaningfully clarified this turn. Previously established summaries are preserved automatically, omit unchanged scope items. Keys are scope item IDs (e.g. "kitchen", "bathrooms"). Values are 1-2 plain sentences specific to this project, no markdown.',
         additionalProperties: { type: 'string' as const },
       },
-      // Phase tracking fields — drive the 3-phase conversation structure
+      // Phase tracking fields — drive the conversation structure
+      journey_mode: {
+        type: 'string' as const,
+        enum: ['quick', 'full', ''],
+        description: 'Set on the turn after the user selects Quick Estimate or Full Consultation from the triage cards. "quick" = abbreviated 5-question flow ending in a ballpark. "full" = existing detailed consultation. Empty string until selected.',
+      },
       current_phase: {
         type: 'string' as const,
-        enum: ['discovery', 'deep_dive', 'wrap_up'],
-        description: 'Current conversation phase. discovery = broad questions (turns 1-5). deep_dive = focused per-scope-item questions. wrap_up = final recap.',
+        enum: ['triage', 'quick_discovery', 'discovery', 'deep_dive', 'wrap_up'],
+        description: 'Current conversation phase. triage = turn 0, present journey divider. quick_discovery = abbreviated 5-question flow (quick mode). discovery = full 8-item checklist (full mode or post-upgrade). deep_dive = focused per-scope-item questions. wrap_up = final recap.',
       },
       current_scope: {
         type: 'string',

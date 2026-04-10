@@ -10,7 +10,7 @@ export type QuickReplyOption = {
 }
 
 export type QuickReplies = {
-  style: 'list' | 'pills' | 'cards' | 'sqft' | 'budget'
+  style: 'list' | 'pills' | 'cards' | 'sqft' | 'budget' | 'scope_grid'
   multiSelect?: boolean
   allowCustom?: boolean
   options: QuickReplyOption[]

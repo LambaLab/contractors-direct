@@ -116,6 +116,26 @@ export function tightenPriceRange(base: PriceRange, confidenceScore: number): Pr
   }
 }
 
+/**
+ * Quick ballpark for the journey divider's "Quick Estimate" mode.
+ * Uses Core Four + scope selection (no style, no complexity, no tightening).
+ * Widens the range by 15% each direction to account for missing detail.
+ */
+export function computeQuickBallpark(params: {
+  scopeIds: string[]
+  sizeSqft: number
+  condition: string
+  location: string
+}): PriceRange {
+  const base = calculatePriceRange(params.scopeIds, params.sizeSqft)
+  const withCondition = applyConditionMultiplier(base, params.condition)
+  const withLocation = applyLocationFactor(withCondition, params.location)
+  return {
+    min: Math.round(withLocation.min * 0.85),
+    max: Math.round(withLocation.max * 1.15),
+  }
+}
+
 export function getConfidenceLabel(score: number): string {
   if (score < 30) return 'Low'
   if (score < 55) return 'Fair'

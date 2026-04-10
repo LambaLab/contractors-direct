@@ -16,16 +16,18 @@ export async function POST(req: NextRequest) {
   const {
     messages,
     paused,
+    journeyMode: clientJourneyMode,
     confidenceScore: clientConfidence,
     currentPhase: clientPhase,
     currentScope: clientScope,
     scopeQueue: clientQueue,
-    completedScopes: clientCompleted,
+    completedScope: clientCompleted,
     turnCount: clientTurnCount,
   } = await req.json()
   const isPaused = paused === true
+  const journeyMode = typeof clientJourneyMode === 'string' ? clientJourneyMode : ''
   const currentConfidence = typeof clientConfidence === 'number' ? clientConfidence : 0
-  const phase = typeof clientPhase === 'string' ? clientPhase : 'discovery'
+  const phase = typeof clientPhase === 'string' ? clientPhase : 'triage'
   const currentScope = typeof clientScope === 'string' ? clientScope : ''
   const queue = Array.isArray(clientQueue) ? clientQueue : []
   const completed = Array.isArray(clientCompleted) ? clientCompleted : []
@@ -50,21 +52,32 @@ export async function POST(req: NextRequest) {
         type: 'text' as const,
         text: [
           `\n## Current Conversation State`,
+          `Journey mode: ${journeyMode || 'not selected'}`,
           `Phase: ${phase}`,
-          `Discovery turn: ${phase === 'discovery' ? turns + 1 : 'N/A (already in ' + phase + ')'}`,
+          `Discovery turn: ${phase === 'discovery' || phase === 'quick_discovery' ? turns + 1 : 'N/A (already in ' + phase + ')'}`,
           `Current scope: ${currentScope || 'none'}`,
           `Scope queue: ${queue.length > 0 ? queue.join(', ') : 'empty'}`,
           `Completed scopes: ${completed.length > 0 ? completed.join(', ') : 'none'}`,
           `Confidence: ${currentConfidence}%`,
+          // Triage: first message, present the journey divider
+          ...(phase === 'triage' && turns === 0 ? [
+            `\n-- TURN 0 INSTRUCTION: This is the user's first message. You are in Phase 0 Triage. Present the journey divider. Set current_phase: "triage". Acknowledge their project idea in 1 sentence, then ask "How detailed would you like to go?" with cards-style quick_replies: Quick Estimate and Full Consultation. Do NOT ask any qualifying questions yet.`,
+          ] : []),
+          // Quick discovery mode
+          ...(phase === 'quick_discovery' ? [
+            `\n-- QUICK DISCOVERY MODE: You are in the abbreviated 5-question flow. Ask ONLY: property type, location, size, condition, scope selection. One per turn. After all 5, set question to "" (empty string) so the client can show the ballpark card.`,
+          ] : []),
+          // Upgrade from quick to full
+          ...(journeyMode === 'upgraded' ? [
+            `\n-- UPGRADE INSTRUCTION: The user has upgraded from Quick Estimate. Core Four fields are already populated (property_type, location, size_sqft, condition) and detected_scope is set. Set journey_mode: "full". Skip items 1, 2, 4, 6 of the Priority Checklist. Ask items 3 (ownership), 5 (floor plans), 7 (budget), 8 (full scope probing), then transition to deep_dive.`,
+          ] : []),
           // Guard: if there are remaining scopes in queue, strongly prevent wrap_up
           ...(queue.filter(m => !completed.includes(m)).length > 0 && phase === 'deep_dive' ? [
             `\n-- There are ${queue.filter(m => !completed.includes(m)).length} scopes still in the queue that have NOT been discussed: ${queue.filter(m => !completed.includes(m)).join(', ')}. You MUST continue deep_dive with the next scope. Do NOT set current_phase to "wrap_up".`,
           ] : []),
-          // Turn 1: stay in discovery and walk the Priority Question Checklist.
-          // The AI should start at item 1 (project type) unless the user's opening
-          // message already answers earlier items, in which case it jumps ahead.
-          ...(phase === 'discovery' && turns === 0 ? [
-            `\n-- TURN 1 INSTRUCTION: This is the user's first message. You are in Phase 1 Discovery. Walk the Priority Question Checklist in order (project type, location, ownership, condition, floor plans, size, budget, full scope). SKIP any items the user already answered in their opening message. Set current_phase: "discovery" and ask the FIRST unanswered checklist item. Do NOT jump to deep_dive yet, deep_dive only happens after item 8 (full scope probing).`,
+          // Turn 1 in full discovery: stay in discovery and walk the Priority Question Checklist.
+          ...(phase === 'discovery' && turns === 0 && journeyMode !== 'upgraded' ? [
+            `\n-- TURN 1 INSTRUCTION: This is the user's first discovery turn. You are in Phase 1 Discovery. Walk the Priority Question Checklist in order (project type, location, ownership, condition, floor plans, size, budget, full scope). SKIP any items the user already answered in their opening message. Set current_phase: "discovery" and ask the FIRST unanswered checklist item. Do NOT jump to deep_dive yet, deep_dive only happens after item 8 (full scope probing).`,
           ] : []),
           // Force transition when discovery has gone too long
           ...(phase === 'discovery' && turns >= 8 ? [
