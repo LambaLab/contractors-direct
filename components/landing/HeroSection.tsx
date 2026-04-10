@@ -15,25 +15,10 @@ type RestoreData = {
   [key: string]: unknown
 }
 
-// Check localStorage synchronously during initial render so returning users
-// never see a flash of the homepage before the chat overlay appears.
+// Resolve initial state client-side only (after mount) to avoid hydration mismatch.
+// Server always renders open=false (hero page). The useEffect below opens the
+// overlay immediately on the first frame if a ?c= session is present.
 function getInitialState(): { open: boolean; message: string } {
-  if (typeof window === 'undefined') return { open: false, message: '' }
-  try {
-    const params = new URLSearchParams(window.location.search)
-    const c = params.get('c')
-    if (c) {
-      const storedSession = getStoredSession()
-      const idea = storedSession?.proposalId === c ? getIdeaForSession(c) : null
-      if (idea) return { open: true, message: idea }
-      // Cross-device restore handled in useEffect (needs async fetch)
-      return { open: false, message: '' }
-    }
-    // Only auto-restore if the user isn't landing on the bare root URL.
-    // If someone pastes "/" in a new tab, they expect the landing page —
-    // not an automatic jump back into a previous conversation.
-    // Auto-restore is still triggered via ?c= links (handled above).
-  } catch { /* SSR or localStorage error — fall through */ }
   return { open: false, message: '' }
 }
 
@@ -52,20 +37,23 @@ export default function HeroSection({ onIntakeChange, onIntakeClose }: HeroProps
 
   // Remove the anti-flash class once React has hydrated — the overlay (if open)
   // covers everything via its own fixed positioning, so the CSS hack is no longer needed.
+  // On mount: check for ?c= param and restore session (same-device or cross-device)
   useEffect(() => {
     document.documentElement.classList.remove('has-session')
-  }, [])
 
-  // Handle cross-device restore (async fetch) — same-device restore is handled
-  // synchronously above in getInitialState so there's no flash.
-  useEffect(() => {
     const params = new URLSearchParams(window.location.search)
     const c = params.get('c')
     const token = params.get('t')
-    if (!c) return // Same-device already handled in getInitialState
+    if (!c) return
 
-    // If already open (same-device match found synchronously), skip fetch
-    if (intakeOpen) return
+    // Same-device restore: session already in localStorage
+    const storedSession = getStoredSession()
+    const idea = storedSession?.proposalId === c ? getIdeaForSession(c) : null
+    if (idea) {
+      setInitialMessage(idea)
+      setIntakeOpen(true)
+      return
+    }
 
     // If there's an auth token (user clicked link from email), try auto-auth
     if (token) {

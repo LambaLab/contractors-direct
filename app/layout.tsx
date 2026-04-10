@@ -33,23 +33,11 @@ export const metadata: Metadata = {
   },
 }
 
-const ANTI_FLASH_SCRIPT = `
-(function(){
-  try {
-    var c = new URLSearchParams(window.location.search).get('c');
-    if (c && localStorage.getItem('cd_session')) {
-      document.documentElement.classList.add('has-session');
-    }
-  } catch(e) {}
-})();
-`
-
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" suppressHydrationWarning className={`dark ${dmSans.variable} ${syne.variable}`}>
       <head />
-      <body className="bg-brand-dark text-foreground antialiased" suppressHydrationWarning>
-        <script dangerouslySetInnerHTML={{ __html: ANTI_FLASH_SCRIPT }} suppressHydrationWarning />
+      <body className="bg-brand-dark text-foreground antialiased">
         {children}
       </body>
     </html>
