@@ -1,11 +1,12 @@
 'use client'
 
 import { useState, useRef, useEffect } from 'react'
-import { ChevronDown } from 'lucide-react'
+import { ChevronDown, ChevronUp, Mail, Plus, Star, Trash2, Send } from 'lucide-react'
 import ScopeCard from './ScopeCard'
 import ConfidenceBar from './ConfidenceBar'
 import AuthGateModal from './AuthGateModal'
 import { SCOPE_CATALOG } from '@/lib/scope/catalog'
+import type { LeadEmail } from './ProposalDrawer'
 
 type Props = {
   detectedScope: string[]
@@ -20,6 +21,13 @@ type Props = {
   onReset?: () => void
   onSaveLater?: () => void
   currentScope?: string
+  emailVerified?: boolean
+  leadEmails?: LeadEmail[]
+  onAddEmail?: () => void
+  onRemoveEmail?: (emailId: string) => void
+  onSetPrimary?: (emailId: string) => void
+  onSendLink?: (emails: string[]) => void
+  sendingLink?: boolean
 }
 
 // Renders project overview text — supports labeled sections and plain paragraphs.
@@ -84,6 +92,13 @@ export default function ScopePanel({
   onReset,
   onSaveLater,
   currentScope,
+  emailVerified,
+  leadEmails = [],
+  onAddEmail,
+  onRemoveEmail,
+  onSetPrimary,
+  onSendLink,
+  sendingLink,
 }: Props) {
   const [showAuthGate, setShowAuthGate] = useState(false)
   const [projectOpen, setProjectOpen] = useState(true)
@@ -256,7 +271,68 @@ export default function ScopePanel({
 
       </div>
 
-      {/* 4. Bottom action bar */}
+      {/* 4. Email management — visible after OTP verification */}
+      {emailVerified && leadEmails.length > 0 && (
+        <div className="flex-shrink-0 border-t border-[var(--ov-border,rgba(255,255,255,0.05))] px-4 py-3">
+          <p className="text-[10px] font-semibold uppercase tracking-widest text-[var(--ov-text-muted,#727272)]/50 mb-2">
+            Saved Emails
+          </p>
+          <div className="space-y-1.5">
+            {leadEmails.map((le) => (
+              <div key={le.id} className="flex items-center gap-2 group">
+                <Mail className="w-3.5 h-3.5 text-[var(--ov-text-muted,#727272)] flex-shrink-0" />
+                <span className="text-sm text-[var(--ov-text,#ffffff)] truncate flex-1">{le.email}</span>
+                {le.is_primary && (
+                  <span className="text-[10px] text-brand-purple font-medium flex-shrink-0">Primary</span>
+                )}
+                {!le.is_primary && onSetPrimary && (
+                  <button
+                    type="button"
+                    onClick={() => onSetPrimary(le.id)}
+                    title="Set as primary"
+                    className="opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer p-0.5"
+                  >
+                    <Star className="w-3 h-3 text-[var(--ov-text-muted,#727272)] hover:text-brand-purple" />
+                  </button>
+                )}
+                {onRemoveEmail && (
+                  <button
+                    type="button"
+                    onClick={() => onRemoveEmail(le.id)}
+                    title="Remove email"
+                    className="opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer p-0.5"
+                  >
+                    <Trash2 className="w-3 h-3 text-[var(--ov-text-muted,#727272)] hover:text-red-400" />
+                  </button>
+                )}
+              </div>
+            ))}
+          </div>
+          {onAddEmail && (
+            <button
+              type="button"
+              onClick={onAddEmail}
+              className="mt-2 flex items-center gap-1.5 text-xs text-brand-purple hover:text-brand-purple/80 transition-colors cursor-pointer"
+            >
+              <Plus className="w-3 h-3" />
+              Add email
+            </button>
+          )}
+          {onSendLink && leadEmails.length > 0 && (
+            <button
+              type="button"
+              onClick={() => onSendLink(leadEmails.map(e => e.email))}
+              disabled={sendingLink}
+              className="mt-2 flex items-center gap-1.5 text-xs text-[var(--ov-text-muted,#727272)] hover:text-[var(--ov-text,#ffffff)] transition-colors cursor-pointer disabled:opacity-50"
+            >
+              <Send className="w-3 h-3" />
+              {sendingLink ? 'Sending...' : 'Send project link to all'}
+            </button>
+          )}
+        </div>
+      )}
+
+      {/* 5. Bottom action bar */}
       <div className="flex-shrink-0 border-t border-[var(--ov-border,rgba(255,255,255,0.05))] px-4 py-4 space-y-2">
 
         {/* Save Proposal — hidden when email is already verified */}

@@ -7,6 +7,7 @@ import MobileBottomDrawer from './MobileBottomDrawer'
 import { useIntakeChat } from '@/hooks/useIntakeChat'
 import { formatPriceRange, isPricingVisible } from '@/lib/pricing/engine'
 import { getStoredSession } from '@/lib/session'
+import type { LeadEmail } from './ProposalDrawer'
 
 type Props = {
   proposalId: string
@@ -19,9 +20,15 @@ type Props = {
   onReset?: () => void
   onSaveLater?: () => void
   emailVerified?: boolean
+  leadEmails?: LeadEmail[]
+  onAddEmail?: () => void
+  onRemoveEmail?: (emailId: string) => void
+  onSetPrimary?: (emailId: string) => void
+  onSendLink?: (emails: string[]) => void
+  sendingLink?: boolean
 }
 
-export default function IntakeLayout({ proposalId, initialMessage, onStateChange, onResetRef, theme, proposalOpen, onProposalToggle, onReset, onSaveLater, emailVerified }: Props) {
+export default function IntakeLayout({ proposalId, initialMessage, onStateChange, onResetRef, theme, proposalOpen, onProposalToggle, onReset, onSaveLater, emailVerified, leadEmails, onAddEmail, onRemoveEmail, onSetPrimary, onSendLink, sendingLink }: Props) {
   const {
     messages,
     detectedScope,
@@ -210,6 +217,13 @@ export default function IntakeLayout({ proposalId, initialMessage, onStateChange
             onReset={onReset}
             onSaveLater={onSaveLater}
             currentScope={currentScope}
+            emailVerified={emailVerified}
+            leadEmails={leadEmails}
+            onAddEmail={onAddEmail}
+            onRemoveEmail={onRemoveEmail}
+            onSetPrimary={onSetPrimary}
+            onSendLink={onSendLink}
+            sendingLink={sendingLink}
           />
         </div>
       </div>

@@ -728,6 +728,12 @@ export default function IntakeOverlay({ initialMessage, onClose }: Props) {
             onProposalToggle={() => setProposalOpen(p => !p)}
             onSaveLater={() => setSaveModalOpen(true)}
             emailVerified={emailVerified}
+            leadEmails={leadEmails}
+            onAddEmail={() => setAddEmailModalOpen(true)}
+            onRemoveEmail={handleRemoveEmail}
+            onSetPrimary={handleSetPrimary}
+            onSendLink={handleSendLink}
+            sendingLink={sendingLink}
           />
 
           {/* Proposal Drawer */}
