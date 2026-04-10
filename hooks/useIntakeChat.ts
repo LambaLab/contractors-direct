@@ -140,11 +140,20 @@ function autoDetectQRStyle(qr: QuickReplies | undefined, question: string): Quic
     if (qr.style !== 'budget') return { ...qr, style: 'budget' as const, options: [] }
   }
 
-  // Cards: question about project type (Q1) or condition (Q4)
-  if (q.includes('type of project') || q.includes('type of property') || q.includes('what kind of property')) {
+  // Cards: detect by question text OR by option values matching known card sets.
+  // This catches cases where Haiku rephrases the question ("residential or commercial?"
+  // instead of "what type of project?").
+  const PROPERTY_TYPE_VALUES = new Set(['villa', 'apartment', 'townhouse', 'penthouse', 'office', 'retail', 'warehouse'])
+  const CONDITION_VALUES = new Set(['new', 'needs_refresh', 'major_renovation', 'shell', 'fitted', 'semi_fitted', 'shell_and_core'])
+  const optionValues = new Set(Array.isArray(qr.options) ? qr.options.map(o => o.value) : [])
+
+  const hasPropertyTypeOptions = [...optionValues].some(v => PROPERTY_TYPE_VALUES.has(v))
+  const hasConditionOptions = [...optionValues].some(v => CONDITION_VALUES.has(v))
+
+  if (q.includes('type of project') || q.includes('type of property') || q.includes('what kind of property') || q.includes('residential') || q.includes('commercial') || hasPropertyTypeOptions) {
     if (qr.style !== 'cards') return { ...qr, style: 'cards' as const }
   }
-  if (q.includes('current condition') || q.includes('condition of the space') || q.includes('state of the space')) {
+  if (q.includes('current condition') || q.includes('condition of the space') || q.includes('state of the space') || hasConditionOptions) {
     if (qr.style !== 'cards') return { ...qr, style: 'cards' as const }
   }
 
