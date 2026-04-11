@@ -80,8 +80,11 @@ const COL = 'grid-cols-[1fr_55px_45px_90px_105px_70px]'
 export default function BoqTab({ leadId }: Props) {
   const [loading, setLoading] = useState(true)
   const [generating, setGenerating] = useState(false)
+  const [genMode, setGenMode] = useState<'full' | 'merge'>('full')
   const [locking, setLocking] = useState(false)
   const [saving, setSaving] = useState(false)
+  const [leadScope, setLeadScope] = useState<string[]>([])
+  const [leadUpdatedAt, setLeadUpdatedAt] = useState<string | null>(null)
   const [boq, setBoq] = useState<BoqDraft | null>(null)
   const [categories, setCategories] = useState<BoqCategory[]>([])
   const [expandedCategories, setExpandedCategories] = useState<Set<number>>(new Set())
@@ -127,10 +130,15 @@ export default function BoqTab({ leadId }: Props) {
       const res = await fetch(`/api/admin/leads/${leadId}/boq`)
       if (res.ok) {
         const data = await res.json()
-        setBoq(data)
-        if (data) {
-          setCategories(data.categories as BoqCategory[])
-          setExpandedCategories(new Set((data.categories as BoqCategory[]).map((_: BoqCategory, i: number) => i)))
+        const boqData = data.boq ?? data // handle both old and new format
+        setBoq(boqData)
+        if (boqData) {
+          setCategories(boqData.categories as BoqCategory[])
+          setExpandedCategories(new Set((boqData.categories as BoqCategory[]).map((_: BoqCategory, i: number) => i)))
+        }
+        if (data.lead) {
+          setLeadScope((data.lead.scope ?? []) as string[])
+          setLeadUpdatedAt(data.lead.updated_at)
         }
         setDirty(false)
       }
@@ -168,10 +176,17 @@ export default function BoqTab({ leadId }: Props) {
 
   // ── Handlers ──
 
-  const handleGenerate = async () => {
+  const handleGenerate = async (mode: 'full' | 'merge' = 'full', scopeToAdd?: string[]) => {
     setGenerating(true)
+    setGenMode(mode)
     try {
-      const res = await fetch(`/api/admin/leads/${leadId}/boq/generate`, { method: 'POST' })
+      const body: { mode: string; newScopeIds?: string[] } = { mode }
+      if (mode === 'merge' && scopeToAdd) body.newScopeIds = scopeToAdd
+      const res = await fetch(`/api/admin/leads/${leadId}/boq/generate`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body),
+      })
       if (res.ok) await fetchBoq()
     } catch { /* ignore */ }
     setGenerating(false)
@@ -381,12 +396,61 @@ export default function BoqTab({ leadId }: Props) {
 
   if (loading) return <div className="flex items-center justify-center py-16"><Loader2 className="w-5 h-5 animate-spin text-muted-foreground" /></div>
   if (generating) return <div className="flex flex-col items-center justify-center py-16 gap-3"><Loader2 className="w-6 h-6 animate-spin text-purple-500" /><p className="text-sm text-muted-foreground">Generating BOQ with historical pricing...</p><p className="text-xs text-muted-foreground">This may take up to a minute.</p></div>
-  if (!boq) return <div className="flex flex-col items-center justify-center py-16 gap-3"><p className="text-sm text-muted-foreground">No BOQ generated yet.</p><Button onClick={handleGenerate} className="gap-2 cursor-pointer"><Sparkles className="w-4 h-4" />Generate BOQ</Button></div>
+  if (!boq) return <div className="flex flex-col items-center justify-center py-16 gap-3"><p className="text-sm text-muted-foreground">No BOQ generated yet.</p><Button onClick={() => handleGenerate('full')} className="gap-2 cursor-pointer"><Sparkles className="w-4 h-4" />Generate BOQ</Button></div>
 
   const isLocked = boq.locked
 
+  // ── Change detection ──
+  // Compare lead scope vs what's in the BOQ categories, and timestamps
+  const boqScopeNames = categories.map(c => c.name.toLowerCase())
+  const SCOPE_CATALOG_MAP: Record<string, string> = {}
+  try {
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
+    const { SCOPE_CATALOG } = require('@/lib/scope/catalog')
+    for (const s of SCOPE_CATALOG) SCOPE_CATALOG_MAP[s.id] = s.name.toLowerCase()
+  } catch { /* ignore */ }
+
+  const newScopeItems = leadScope.filter(scopeId => {
+    const name = SCOPE_CATALOG_MAP[scopeId] ?? scopeId.replace(/_/g, ' ')
+    return !boqScopeNames.some(bn => bn.includes(name) || name.includes(bn))
+  })
+
+  const proposalUpdatedAfterBoq = leadUpdatedAt && boq.created_at && new Date(leadUpdatedAt) > new Date(boq.created_at)
+  const hasChanges = (newScopeItems.length > 0 || proposalUpdatedAfterBoq) && !isLocked
+
   return (
     <div className="flex flex-col h-full">
+      {/* Changes detected banner */}
+      {hasChanges && (
+        <div className="px-6 md:px-8 py-3 border-b bg-purple-500/5 flex items-start gap-3">
+          <Sparkles className="w-4 h-4 text-purple-400 shrink-0 mt-0.5" />
+          <div className="flex-1">
+            <p className="text-sm font-medium">Proposal has been updated</p>
+            {newScopeItems.length > 0 && (
+              <p className="text-xs text-muted-foreground mt-0.5">
+                New scope added: {newScopeItems.map(id => {
+                  const name = SCOPE_CATALOG_MAP[id] ?? id.replace(/_/g, ' ')
+                  return name.charAt(0).toUpperCase() + name.slice(1)
+                }).join(', ')}
+              </p>
+            )}
+            {proposalUpdatedAfterBoq && newScopeItems.length === 0 && (
+              <p className="text-xs text-muted-foreground mt-0.5">Brief or details were updated since this BOQ was generated.</p>
+            )}
+            <div className="flex items-center gap-2 mt-2">
+              {newScopeItems.length > 0 && (
+                <Button size="sm" variant="outline" onClick={() => handleGenerate('merge', newScopeItems)} className="text-xs cursor-pointer gap-1.5 h-7">
+                  <Plus className="w-3 h-3" />Add new scope only
+                </Button>
+              )}
+              <Button size="sm" onClick={() => handleGenerate('full')} className="text-xs cursor-pointer gap-1.5 h-7">
+                <Sparkles className="w-3 h-3" />Regenerate all
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Header */}
       <div className="flex items-center justify-between px-6 md:px-8 py-3 border-b bg-background">
         <div className="flex items-center gap-3">
@@ -398,7 +462,7 @@ export default function BoqTab({ leadId }: Props) {
           {!isLocked && <>
             {dirty && <Button size="sm" onClick={handleSave} disabled={saving} className="text-xs cursor-pointer">{saving ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : 'Save'}</Button>}
             <Button variant="ghost" size="sm" onClick={openAddCategory} className="text-xs cursor-pointer gap-1.5"><Plus className="w-3.5 h-3.5" />Category</Button>
-            <Button variant="ghost" size="sm" onClick={handleGenerate} disabled={generating} className="text-xs cursor-pointer gap-1.5"><Sparkles className="w-3.5 h-3.5" />Regenerate</Button>
+            <Button variant="ghost" size="sm" onClick={() => handleGenerate('full')} disabled={generating} className="text-xs cursor-pointer gap-1.5"><Sparkles className="w-3.5 h-3.5" />Regenerate</Button>
             <Button variant="outline" size="sm" onClick={() => setLockConfirmOpen(true)} className="text-xs cursor-pointer gap-1.5"><Lock className="w-3.5 h-3.5" />Lock</Button>
           </>}
         </div>

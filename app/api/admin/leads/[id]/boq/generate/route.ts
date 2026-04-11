@@ -21,6 +21,15 @@ export async function POST(_req: NextRequest, { params }: { params: Promise<{ id
   const supabase = createServiceClient() as any
   const { id: leadId } = await params
 
+  // Check for merge mode (add new scope only)
+  let mode = 'full'
+  let newScopeIds: string[] = []
+  try {
+    const body = await _req.json()
+    mode = body.mode ?? 'full'
+    newScopeIds = body.newScopeIds ?? []
+  } catch { /* empty body is fine */ }
+
   const { data: lead, error: leadError } = await supabase
     .from('leads')
     .select('*')
@@ -40,13 +49,17 @@ export async function POST(_req: NextRequest, { params }: { params: Promise<{ id
   const chatHistory = rows.map((m) => `${m.role}: ${m.content}`).join('\n\n')
 
   // Fetch historical pricing context
-  const scopeIds = (lead.scope as string[]) ?? []
+  const allScopeIds = (lead.scope as string[]) ?? []
+  const scopeIds = mode === 'merge' && newScopeIds.length > 0 ? newScopeIds : allScopeIds
   const [historicalContext, pricingSummary] = await Promise.all([
     getHistoricalContext(scopeIds),
     getPricingSummary(),
   ])
 
   const historicalBlock = historicalContext ? `\n\n${historicalContext}` : ''
+  const scopeInstruction = mode === 'merge'
+    ? `\nIMPORTANT: Only generate categories and line items for these NEW scope items: ${newScopeIds.join(', ')}. Do NOT include items that already exist in the current BOQ.`
+    : ''
 
   const stream = anthropic.messages.stream({
     model: 'claude-sonnet-4-6',
@@ -64,7 +77,7 @@ PROJECT BRIEF: ${lead.brief}
 PROPERTY TYPE: ${lead.property_type ?? 'not specified'}
 LOCATION: ${lead.location ?? 'not specified'}
 SIZE: ${lead.size_sqft ? `${lead.size_sqft} sqft` : 'not specified'}
-CONDITION: ${lead.condition ?? 'not specified'}${historicalBlock}
+CONDITION: ${lead.condition ?? 'not specified'}${historicalBlock}${scopeInstruction}
 
 Generate a structured BOQ with the following:
 1. Categories: Group line items into standard construction categories relevant to this project (e.g., Demolition, Flooring, Electrical, Joinery, Painting, HVAC, Plumbing). Use specific category names, not generic ones like "Structural" or "Finishes".
@@ -151,7 +164,40 @@ Format as structured JSON using the submit_boq_draft tool.`,
     pricingSummary,
   )
 
-  // Delete any existing BOQ drafts for this lead (regeneration)
+  if (mode === 'merge') {
+    // Merge: append new categories to existing BOQ
+    const { data: existingBoq } = await supabase
+      .from('boq_drafts')
+      .select('*')
+      .eq('lead_id', leadId)
+      .order('created_at', { ascending: false })
+      .limit(1)
+      .maybeSingle()
+
+    if (existingBoq) {
+      const existingCats = (existingBoq.categories ?? []) as unknown[]
+      const newCats = boqData.categories as unknown[]
+      const mergedCats = [...existingCats, ...newCats]
+      const mergedTotal = (existingBoq.grand_total_aed ?? 0) + boqData.grand_total_aed
+
+      const { data: updated, error: updateError } = await supabase
+        .from('boq_drafts')
+        .update({
+          categories: mergedCats,
+          grand_total_aed: mergedTotal,
+          deviation_flags: deviationFlags.length > 0 ? deviationFlags : existingBoq.deviation_flags,
+          updated_at: new Date().toISOString(),
+        })
+        .eq('id', existingBoq.id)
+        .select()
+        .single()
+
+      if (updateError) return NextResponse.json({ error: updateError.message }, { status: 500 })
+      return NextResponse.json(updated)
+    }
+  }
+
+  // Full mode: delete existing and create new
   await supabase.from('boq_drafts').delete().eq('lead_id', leadId)
 
   // Insert new BOQ

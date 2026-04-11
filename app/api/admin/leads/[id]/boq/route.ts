@@ -13,16 +13,33 @@ export async function GET(_req: NextRequest, { params }: { params: Promise<{ id:
   const supabase = createServiceClient()
   const { id } = await params
 
-  const { data, error } = await supabase
-    .from('boq_drafts')
-    .select('*')
-    .eq('lead_id', id)
-    .order('created_at', { ascending: false })
-    .limit(1)
-    .maybeSingle()
+  // Fetch BOQ + lead scope/timestamps in parallel
+  const [boqResult, leadResult] = await Promise.all([
+    supabase
+      .from('boq_drafts')
+      .select('*')
+      .eq('lead_id', id)
+      .order('created_at', { ascending: false })
+      .limit(1)
+      .maybeSingle(),
+    supabase
+      .from('leads')
+      .select('scope, brief, updated_at')
+      .eq('id', id)
+      .single(),
+  ])
 
-  if (error) return NextResponse.json({ error: error.message }, { status: 500 })
-  return NextResponse.json(data)
+  if (boqResult.error) return NextResponse.json({ error: boqResult.error.message }, { status: 500 })
+
+  // Include lead context so client can detect changes
+  return NextResponse.json({
+    boq: boqResult.data,
+    lead: leadResult.data ? {
+      scope: leadResult.data.scope,
+      brief: leadResult.data.brief,
+      updated_at: leadResult.data.updated_at,
+    } : null,
+  })
 }
 
 /**
