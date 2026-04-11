@@ -130,9 +130,9 @@ export default function BoqTab({ leadId }: Props) {
       const res = await fetch(`/api/admin/leads/${leadId}/boq`)
       if (res.ok) {
         const data = await res.json()
-        const boqData = data.boq ?? data // handle both old and new format
+        const boqData = data.boq !== undefined ? data.boq : data // handle both formats
         setBoq(boqData)
-        if (boqData) {
+        if (boqData && boqData.categories) {
           setCategories(boqData.categories as BoqCategory[])
           setExpandedCategories(new Set((boqData.categories as BoqCategory[]).map((_: BoqCategory, i: number) => i)))
         }
