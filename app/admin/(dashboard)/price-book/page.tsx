@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect, useCallback } from 'react'
-import { ChevronRight, ChevronDown, Pencil, X, Search, LayoutGrid, List, Loader2 } from 'lucide-react'
+import { ChevronRight, ChevronDown, Pencil, Check, X, Plus, Search, LayoutGrid, List, Loader2 } from 'lucide-react'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { SCOPE_CATALOG } from '@/lib/scope/catalog'
@@ -39,23 +39,15 @@ type SampleItem = {
 
 type ViewMode = 'category' | 'flat'
 
-/** Format number with commas: 15480 -> "15,480" */
 function fmt(n: number | null | undefined): string {
   if (n == null || n === 0) return '-'
   return n.toLocaleString('en-US', { maximumFractionDigits: 0 })
 }
 
-/** Format range: "1,466 - 3,292" */
-function fmtRange(min: number, max: number): string {
-  return `${fmt(min)} - ${fmt(max)}`
-}
-
-/** Total sample count across all stats in a group */
 function totalSamples(stats: PricingStat[]): number {
   return stats.reduce((sum, s) => sum + s.sample_count, 0)
 }
 
-// Group items by scope category for category view
 function groupByCategory(stats: PricingStat[], sampleItems: SampleItem[]) {
   const groups = new Map<string, {
     scopeId: string
@@ -83,6 +75,9 @@ function groupByCategory(stats: PricingStat[], sampleItems: SampleItem[]) {
   return Array.from(groups.values()).sort((a, b) => a.categoryName.localeCompare(b.categoryName))
 }
 
+// Column layout used everywhere (collapsed + expanded)
+const COL_GRID = 'grid-cols-[1fr_100px_140px_50px_36px]'
+
 export default function PriceBookPage() {
   const [loading, setLoading] = useState(true)
   const [stats, setStats] = useState<PricingStat[]>([])
@@ -92,10 +87,12 @@ export default function PriceBookPage() {
   const [viewMode, setViewMode] = useState<ViewMode>('category')
   const [searchQuery, setSearchQuery] = useState('')
   const [expandedCategories, setExpandedCategories] = useState<Set<string>>(new Set())
-  const [editingItem, setEditingItem] = useState<string | null>(null)
-  const [editMin, setEditMin] = useState('')
-  const [editMax, setEditMax] = useState('')
-  const [editNotes, setEditNotes] = useState('')
+
+  // Per-item editing state
+  const [editingKey, setEditingKey] = useState<string | null>(null) // "scopeId:idx" or "new:scopeId"
+  const [editRate, setEditRate] = useState('')
+  const [editDesc, setEditDesc] = useState('')
+  const [editUnit, setEditUnit] = useState('')
   const [saving, setSaving] = useState(false)
 
   const fetchData = useCallback(async () => {
@@ -115,11 +112,7 @@ export default function PriceBookPage() {
 
   useEffect(() => { fetchData() }, [fetchData])
 
-  const handleSaveOverride = async (scopeItemId: string, description: string, unit: string) => {
-    const min = parseFloat(editMin)
-    const max = parseFloat(editMax)
-    if (isNaN(min) || isNaN(max) || min < 0 || max < 0 || min > max) return
-
+  const handleSaveItemOverride = async (scopeItemId: string, description: string, unit: string, rate: number) => {
     setSaving(true)
     try {
       const res = await fetch('/api/admin/price-book', {
@@ -129,40 +122,44 @@ export default function PriceBookPage() {
           item_description: description,
           unit,
           scope_item_id: scopeItemId,
-          override_min_aed: min,
-          override_max_aed: max,
-          notes: editNotes || null,
+          override_min_aed: rate,
+          override_max_aed: rate,
+          notes: null,
         }),
       })
       if (res.ok) {
         await fetchData()
-        setEditingItem(null)
+        setEditingKey(null)
       }
     } catch { /* ignore */ }
     setSaving(false)
   }
 
-  const handleClearOverride = async (overrideId: string) => {
-    setSaving(true)
-    try {
-      const res = await fetch('/api/admin/price-book', {
-        method: 'DELETE',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ id: overrideId }),
-      })
-      if (res.ok) {
-        await fetchData()
-        setEditingItem(null)
-      }
-    } catch { /* ignore */ }
-    setSaving(false)
+  const startEditItem = (key: string, description: string, unit: string, rate: number | null) => {
+    setEditingKey(key)
+    setEditRate(rate?.toString() ?? '')
+    setEditDesc(description)
+    setEditUnit(unit)
   }
 
-  const startEdit = (key: string, existingOverride?: PricingOverride) => {
-    setEditingItem(key)
-    setEditMin(existingOverride?.override_min_aed?.toString() ?? '')
-    setEditMax(existingOverride?.override_max_aed?.toString() ?? '')
-    setEditNotes(existingOverride?.notes ?? '')
+  const startAddItem = (scopeId: string) => {
+    setEditingKey(`new:${scopeId}`)
+    setEditDesc('')
+    setEditRate('')
+    setEditUnit('')
+  }
+
+  const cancelEdit = () => {
+    setEditingKey(null)
+    setEditRate('')
+    setEditDesc('')
+    setEditUnit('')
+  }
+
+  const submitEdit = (scopeId: string) => {
+    const rate = parseFloat(editRate)
+    if (isNaN(rate) || rate < 0 || !editDesc.trim()) return
+    handleSaveItemOverride(scopeId, editDesc.trim(), editUnit || 'unit', rate)
   }
 
   const toggleCategory = (scopeId: string) => {
@@ -174,8 +171,8 @@ export default function PriceBookPage() {
     })
   }
 
-  const getOverrideForScope = (scopeId: string): PricingOverride | undefined => {
-    return overrides.find(o => o.scope_item_id === scopeId)
+  const getOverrideForItem = (desc: string, unit: string): PricingOverride | undefined => {
+    return overrides.find(o => o.item_description === desc && o.unit === unit)
   }
 
   const categories = groupByCategory(stats, sampleItems)
@@ -185,18 +182,6 @@ export default function PriceBookPage() {
         c.samples.some(s => s.description.toLowerCase().includes(searchQuery.toLowerCase()))
       )
     : categories
-
-  // Flat view: all stats as rows
-  const flatRows = stats
-    .filter(s => {
-      if (!searchQuery) return true
-      const scopeItem = SCOPE_CATALOG.find(sc => sc.id === s.scope_item_id)
-      return (
-        (scopeItem?.name ?? s.scope_item_id).toLowerCase().includes(searchQuery.toLowerCase()) ||
-        s.scope_item_id.toLowerCase().includes(searchQuery.toLowerCase())
-      )
-    })
-    .sort((a, b) => a.scope_item_id.localeCompare(b.scope_item_id))
 
   if (loading) {
     return (
@@ -238,7 +223,7 @@ export default function PriceBookPage() {
         </div>
 
         <span className="text-xs text-muted-foreground">
-          {projectCount} projects &middot; {stats.length} items &middot; {overrides.length} overrides
+          {projectCount} projects &middot; {overrides.length} overrides
         </span>
       </div>
 
@@ -253,104 +238,147 @@ export default function PriceBookPage() {
           /* ── Category View ── */
           <div>
             {/* Column headers */}
-            <div className="grid grid-cols-[1fr_100px_80px_40px] gap-3 px-6 py-2 text-[10px] uppercase tracking-widest font-medium text-muted-foreground/70 border-b bg-zinc-50/50 dark:bg-zinc-900/30 sticky top-0 z-10">
-              <span>Category</span>
-              <span className="text-right">Avg Rate (AED)</span>
-              <span className="text-right">Data Points</span>
+            <div className={`grid ${COL_GRID} gap-3 px-6 py-2 text-[10px] uppercase tracking-widest font-medium text-muted-foreground/70 border-b bg-zinc-50/50 dark:bg-zinc-900/30 sticky top-0 z-10`}>
+              <span>Item</span>
+              <span className="text-right">Rate (AED)</span>
+              <span className="text-right">Source</span>
+              <span className="text-right">Unit</span>
               <span></span>
             </div>
 
             {filteredCategories.map(group => {
               const isOpen = expandedCategories.has(group.scopeId)
-              const override = getOverrideForScope(group.scopeId)
               const total = totalSamples(group.stats)
-              // Compute weighted average across all unit types
-              const weightedAvg = group.stats.reduce((sum, s) => sum + s.rate_avg * s.sample_count, 0) / (total || 1)
 
               return (
                 <div key={group.scopeId}>
                   {/* Category header row */}
                   <div
-                    className="grid grid-cols-[1fr_100px_80px_40px] gap-3 items-center px-6 py-3 hover:bg-muted/30 cursor-pointer border-b transition-colors"
+                    className="flex items-center gap-2 px-6 py-3 hover:bg-muted/30 cursor-pointer border-b transition-colors"
                     onClick={() => toggleCategory(group.scopeId)}
                   >
-                    <div className="flex items-center gap-2 min-w-0">
-                      {isOpen
-                        ? <ChevronDown className="w-4 h-4 shrink-0 text-muted-foreground" />
-                        : <ChevronRight className="w-4 h-4 shrink-0 text-muted-foreground" />
-                      }
-                      <span className="font-semibold text-sm">{group.categoryName}</span>
-                      {override && (
-                        <span className="text-[10px] px-1.5 py-0.5 rounded bg-purple-500/10 text-purple-400 font-medium">Override</span>
-                      )}
-                    </div>
-                    <span className="text-xs text-right font-mono">
-                      {fmt(weightedAvg)}
-                    </span>
-                    <span className="text-xs text-right text-muted-foreground">
-                      {total} from {group.stats.length} units
-                    </span>
-                    <div className="flex justify-end">
-                      <button
-                        onClick={(e) => { e.stopPropagation(); startEdit(group.scopeId, override) }}
-                        className="p-1 text-muted-foreground hover:text-foreground cursor-pointer transition-colors"
-                        title="Set price override"
-                      >
-                        <Pencil className="w-3.5 h-3.5" />
-                      </button>
-                    </div>
+                    {isOpen
+                      ? <ChevronDown className="w-4 h-4 shrink-0 text-muted-foreground" />
+                      : <ChevronRight className="w-4 h-4 shrink-0 text-muted-foreground" />
+                    }
+                    <span className="font-semibold text-sm">{group.categoryName}</span>
+                    <span className="text-xs text-muted-foreground ml-1">{total} items</span>
                   </div>
 
-                  {/* Expanded: show sample items and edit form */}
+                  {/* Expanded: line items */}
                   {isOpen && (
-                    <div className="border-b bg-zinc-50/30 dark:bg-zinc-900/20">
-                      {/* Column headers for expanded section */}
-                      <div className="grid grid-cols-[1fr_120px_160px_60px] gap-3 pl-12 pr-6 py-1.5 text-[10px] uppercase tracking-widest text-muted-foreground/70 border-b border-dashed">
-                        <span>Description</span>
-                        <span className="text-right">Rate (AED)</span>
-                        <span className="text-right">Project</span>
-                        <span className="text-right">Unit</span>
-                      </div>
+                    <div className="border-b">
+                      {group.samples.map((sample, idx) => {
+                        const itemKey = `${group.scopeId}:${idx}`
+                        const isEditing = editingKey === itemKey
+                        const override = getOverrideForItem(sample.description, sample.unit ?? '')
+                        const displayRate = override ? override.override_min_aed : sample.unit_rate_aed
 
-                      {/* Sample line items from historical data */}
-                      {group.samples.slice(0, 12).map((sample, idx) => (
-                        <div
-                          key={idx}
-                          className="grid grid-cols-[1fr_120px_160px_60px] gap-3 items-center pl-12 pr-6 py-2 border-b border-dashed border-muted/30 text-sm"
+                        if (isEditing) {
+                          return (
+                            <div key={idx} className={`grid ${COL_GRID} gap-3 items-center pl-12 pr-6 py-1.5 bg-purple-500/5 border-b border-dashed border-muted/30`}>
+                              <span className="text-sm truncate text-muted-foreground">{sample.description}</span>
+                              <Input
+                                type="number"
+                                value={editRate}
+                                onChange={(e) => setEditRate(e.target.value)}
+                                className="h-7 text-xs font-mono text-right"
+                                autoFocus
+                                onKeyDown={(e) => {
+                                  if (e.key === 'Enter') submitEdit(group.scopeId)
+                                  if (e.key === 'Escape') cancelEdit()
+                                }}
+                              />
+                              <span className="text-right text-xs text-muted-foreground truncate">
+                                {sample.historical_projects?.project_name ?? '-'}
+                              </span>
+                              <span className="text-right text-xs text-muted-foreground">{sample.unit ?? '-'}</span>
+                              <div className="flex items-center gap-0.5 justify-end">
+                                <button onClick={() => submitEdit(group.scopeId)} className="p-1 text-emerald-500 hover:text-emerald-400 cursor-pointer" disabled={saving}>
+                                  {saving ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Check className="w-3.5 h-3.5" />}
+                                </button>
+                                <button onClick={cancelEdit} className="p-1 text-muted-foreground hover:text-foreground cursor-pointer">
+                                  <X className="w-3.5 h-3.5" />
+                                </button>
+                              </div>
+                            </div>
+                          )
+                        }
+
+                        return (
+                          <div
+                            key={idx}
+                            className={`grid ${COL_GRID} gap-3 items-center pl-12 pr-6 py-2 border-b border-dashed border-muted/30 hover:bg-muted/10 transition-colors group`}
+                          >
+                            <span className="text-sm truncate text-muted-foreground" title={sample.description}>{sample.description}</span>
+                            <span className={`text-right font-mono text-xs ${override ? 'text-purple-400 font-medium' : ''}`}>
+                              {fmt(displayRate)}
+                            </span>
+                            <span className="text-right text-xs text-muted-foreground truncate" title={sample.historical_projects?.project_name ?? ''}>
+                              {sample.historical_projects?.project_name ?? '-'}
+                            </span>
+                            <span className="text-right text-xs text-muted-foreground">{sample.unit ?? '-'}</span>
+                            <div className="flex justify-end">
+                              <button
+                                onClick={(e) => {
+                                  e.stopPropagation()
+                                  startEditItem(itemKey, sample.description, sample.unit ?? '', displayRate)
+                                }}
+                                className="p-1 opacity-0 group-hover:opacity-100 text-muted-foreground hover:text-foreground cursor-pointer transition-opacity"
+                                title="Edit rate"
+                              >
+                                <Pencil className="w-3 h-3" />
+                              </button>
+                            </div>
+                          </div>
+                        )
+                      })}
+
+                      {/* Add new item row */}
+                      {editingKey === `new:${group.scopeId}` ? (
+                        <div className={`grid ${COL_GRID} gap-3 items-center pl-12 pr-6 py-1.5 bg-purple-500/5 border-b border-dashed border-muted/30`}>
+                          <Input
+                            value={editDesc}
+                            onChange={(e) => setEditDesc(e.target.value)}
+                            placeholder="Item description..."
+                            className="h-7 text-xs"
+                            autoFocus
+                          />
+                          <Input
+                            type="number"
+                            value={editRate}
+                            onChange={(e) => setEditRate(e.target.value)}
+                            placeholder="Rate"
+                            className="h-7 text-xs font-mono text-right"
+                            onKeyDown={(e) => {
+                              if (e.key === 'Enter') submitEdit(group.scopeId)
+                              if (e.key === 'Escape') cancelEdit()
+                            }}
+                          />
+                          <div />
+                          <Input
+                            value={editUnit}
+                            onChange={(e) => setEditUnit(e.target.value)}
+                            placeholder="sqm"
+                            className="h-7 text-xs text-right"
+                          />
+                          <div className="flex items-center gap-0.5 justify-end">
+                            <button onClick={() => submitEdit(group.scopeId)} className="p-1 text-emerald-500 hover:text-emerald-400 cursor-pointer" disabled={saving}>
+                              {saving ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Check className="w-3.5 h-3.5" />}
+                            </button>
+                            <button onClick={cancelEdit} className="p-1 text-muted-foreground hover:text-foreground cursor-pointer">
+                              <X className="w-3.5 h-3.5" />
+                            </button>
+                          </div>
+                        </div>
+                      ) : (
+                        <button
+                          onClick={() => startAddItem(group.scopeId)}
+                          className="flex items-center gap-1.5 pl-12 py-2 text-xs text-muted-foreground hover:text-foreground transition-colors cursor-pointer border-b border-dashed border-muted/30 w-full"
                         >
-                          <span className="truncate text-muted-foreground">{sample.description}</span>
-                          <span className="text-right font-mono text-xs">
-                            {fmt(sample.unit_rate_aed)}
-                          </span>
-                          <span className="text-right text-xs text-muted-foreground truncate">
-                            {sample.historical_projects?.project_name ?? '-'}
-                          </span>
-                          <span className="text-right text-xs text-muted-foreground">{sample.unit ?? '-'}</span>
-                        </div>
-                      ))}
-
-                      {group.samples.length > 12 && (
-                        <div className="pl-12 pr-6 py-1.5 text-xs text-muted-foreground">
-                          +{group.samples.length - 12} more items
-                        </div>
-                      )}
-
-                      {/* Edit override form */}
-                      {editingItem === group.scopeId && (
-                        <EditOverrideForm
-                          stats={group.stats}
-                          override={override}
-                          editMin={editMin}
-                          editMax={editMax}
-                          editNotes={editNotes}
-                          saving={saving}
-                          onMinChange={setEditMin}
-                          onMaxChange={setEditMax}
-                          onNotesChange={setEditNotes}
-                          onSave={() => handleSaveOverride(group.scopeId, group.categoryName, group.stats[0]?.unit ?? 'unit')}
-                          onClear={override ? () => handleClearOverride(override.id) : undefined}
-                          onCancel={() => setEditingItem(null)}
-                        />
+                          <Plus className="w-3.5 h-3.5" />
+                          Add item
+                        </button>
                       )}
                     </div>
                   )}
@@ -362,140 +390,47 @@ export default function PriceBookPage() {
           /* ── Flat View ── */
           <div>
             {/* Column headers */}
-            <div className="grid grid-cols-[1fr_60px_120px_120px_80px_40px] gap-3 px-6 py-2 text-[10px] uppercase tracking-widest font-medium text-muted-foreground/70 border-b bg-zinc-50/50 dark:bg-zinc-900/30 sticky top-0 z-10">
+            <div className={`grid ${COL_GRID} gap-3 px-6 py-2 text-[10px] uppercase tracking-widest font-medium text-muted-foreground/70 border-b bg-zinc-50/50 dark:bg-zinc-900/30 sticky top-0 z-10`}>
               <span>Item</span>
+              <span className="text-right">Avg Rate (AED)</span>
+              <span className="text-right">Range (P25-P75)</span>
               <span className="text-right">Unit</span>
-              <span className="text-right">Historical Range</span>
-              <span className="text-right">CD Rate</span>
-              <span className="text-right">Sources</span>
               <span></span>
             </div>
 
-            {flatRows.map(stat => {
-              const scopeItem = SCOPE_CATALOG.find(s => s.id === stat.scope_item_id)
-              const override = getOverrideForScope(stat.scope_item_id)
-              const key = `${stat.scope_item_id}:${stat.unit}`
+            {stats
+              .filter(s => {
+                if (!searchQuery) return true
+                const scopeItem = SCOPE_CATALOG.find(sc => sc.id === s.scope_item_id)
+                return (
+                  (scopeItem?.name ?? s.scope_item_id).toLowerCase().includes(searchQuery.toLowerCase()) ||
+                  s.scope_item_id.toLowerCase().includes(searchQuery.toLowerCase())
+                )
+              })
+              .sort((a, b) => a.scope_item_id.localeCompare(b.scope_item_id))
+              .map(stat => {
+                const scopeItem = SCOPE_CATALOG.find(s => s.id === stat.scope_item_id)
 
-              return (
-                <div key={key}>
-                  <div className="grid grid-cols-[1fr_60px_120px_120px_80px_40px] gap-3 items-center px-6 py-2.5 hover:bg-muted/20 border-b transition-colors">
-                    <span className="text-sm truncate">{scopeItem?.name ?? stat.scope_item_id}</span>
-                    <span className="text-xs text-right text-muted-foreground">{stat.unit ?? '-'}</span>
-                    <span className="text-xs text-right font-mono">
-                      {fmtRange(stat.rate_p25, stat.rate_p75)}
-                    </span>
-                    <span className={`text-xs text-right font-mono ${override ? 'text-purple-400 font-medium' : 'text-muted-foreground'}`}>
-                      {override ? fmtRange(override.override_min_aed, override.override_max_aed) : '-'}
-                    </span>
-                    <span className="text-xs text-right text-muted-foreground">{stat.sample_count} proj</span>
-                    <div className="flex justify-end">
-                      <button
-                        onClick={() => startEdit(key, override)}
-                        className="p-1 text-muted-foreground hover:text-foreground cursor-pointer transition-colors"
-                        title="Set price override"
-                      >
-                        <Pencil className="w-3.5 h-3.5" />
-                      </button>
+                return (
+                  <div
+                    key={`${stat.scope_item_id}:${stat.unit}`}
+                    className={`grid ${COL_GRID} gap-3 items-center px-6 py-2.5 hover:bg-muted/20 border-b transition-colors`}
+                  >
+                    <div className="min-w-0">
+                      <span className="text-sm truncate block">{scopeItem?.name ?? stat.scope_item_id}</span>
+                      <span className="text-[11px] text-muted-foreground">{stat.sample_count} data points</span>
                     </div>
+                    <span className="text-xs text-right font-mono">{fmt(stat.rate_avg)}</span>
+                    <span className="text-xs text-right font-mono text-muted-foreground">
+                      {fmt(stat.rate_p25)} - {fmt(stat.rate_p75)}
+                    </span>
+                    <span className="text-xs text-right text-muted-foreground">{stat.unit ?? '-'}</span>
+                    <div />
                   </div>
-
-                  {/* Inline edit form */}
-                  {editingItem === key && (
-                    <EditOverrideForm
-                      stats={[stat]}
-                      override={override}
-                      editMin={editMin}
-                      editMax={editMax}
-                      editNotes={editNotes}
-                      saving={saving}
-                      onMinChange={setEditMin}
-                      onMaxChange={setEditMax}
-                      onNotesChange={setEditNotes}
-                      onSave={() => handleSaveOverride(stat.scope_item_id, scopeItem?.name ?? stat.scope_item_id, stat.unit ?? 'unit')}
-                      onClear={override ? () => handleClearOverride(override.id) : undefined}
-                      onCancel={() => setEditingItem(null)}
-                    />
-                  )}
-                </div>
-              )
-            })}
+                )
+              })}
           </div>
         )}
-      </div>
-    </div>
-  )
-}
-
-/** Reusable override editor form */
-function EditOverrideForm({ stats, override, editMin, editMax, editNotes, saving, onMinChange, onMaxChange, onNotesChange, onSave, onClear, onCancel }: {
-  stats: PricingStat[]
-  override?: PricingOverride
-  editMin: string
-  editMax: string
-  editNotes: string
-  saving: boolean
-  onMinChange: (v: string) => void
-  onMaxChange: (v: string) => void
-  onNotesChange: (v: string) => void
-  onSave: () => void
-  onClear?: () => void
-  onCancel: () => void
-}) {
-  const primaryStat = stats[0]
-  const unit = primaryStat?.unit ?? 'unit'
-
-  return (
-    <div className="px-6 pl-12 py-4 bg-purple-500/5 border-t border-purple-500/10">
-      <div className="flex items-start gap-6 max-w-lg">
-        <div className="flex-1 space-y-3">
-          <div className="text-xs text-muted-foreground">
-            Historical: {primaryStat ? `${fmt(primaryStat.rate_p25)} - ${fmt(primaryStat.rate_p75)} AED/${unit}` : 'No data'} ({primaryStat?.sample_count ?? 0} data points)
-          </div>
-          <div className="flex items-center gap-2">
-            <label className="text-xs text-muted-foreground w-16 shrink-0">Min Rate</label>
-            <Input
-              type="number"
-              value={editMin}
-              onChange={(e) => onMinChange(e.target.value)}
-              placeholder="0"
-              className="h-8 w-28 text-sm font-mono"
-            />
-            <span className="text-xs text-muted-foreground shrink-0">AED/{unit}</span>
-          </div>
-          <div className="flex items-center gap-2">
-            <label className="text-xs text-muted-foreground w-16 shrink-0">Max Rate</label>
-            <Input
-              type="number"
-              value={editMax}
-              onChange={(e) => onMaxChange(e.target.value)}
-              placeholder="0"
-              className="h-8 w-28 text-sm font-mono"
-            />
-            <span className="text-xs text-muted-foreground shrink-0">AED/{unit}</span>
-          </div>
-          <div className="flex items-center gap-2">
-            <label className="text-xs text-muted-foreground w-16 shrink-0">Notes</label>
-            <Input
-              value={editNotes}
-              onChange={(e) => onNotesChange(e.target.value)}
-              placeholder="e.g., Prices increased Q1 2026"
-              className="h-8 text-sm flex-1"
-            />
-          </div>
-        </div>
-        <div className="flex flex-col gap-2 pt-5">
-          <Button size="sm" onClick={onSave} disabled={saving} className="text-xs cursor-pointer">
-            {saving ? <Loader2 className="w-3 h-3 animate-spin" /> : 'Save'}
-          </Button>
-          {onClear && (
-            <Button size="sm" variant="ghost" onClick={onClear} disabled={saving} className="text-xs cursor-pointer text-destructive">
-              Clear
-            </Button>
-          )}
-          <Button size="sm" variant="ghost" onClick={onCancel} className="text-xs cursor-pointer">
-            <X className="w-3 h-3" />
-          </Button>
-        </div>
       </div>
     </div>
   )
