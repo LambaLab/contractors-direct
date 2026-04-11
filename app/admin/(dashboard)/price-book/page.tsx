@@ -1,21 +1,20 @@
 'use client'
 
-import { useState, useEffect, useCallback } from 'react'
-import { ChevronRight, ChevronDown, Pencil, Check, X, Plus, Search, LayoutGrid, List, Loader2 } from 'lucide-react'
+import { useState, useEffect, useCallback, useRef } from 'react'
+import { ChevronRight, ChevronDown, Pencil, Plus, Search, LayoutGrid, List, Loader2, Upload, FileText } from 'lucide-react'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog'
 import { SCOPE_CATALOG } from '@/lib/scope/catalog'
 
-type PricingStat = {
-  scope_item_id: string
+// ── Types ──
+
+type SampleItem = {
+  scope_item_id: string | null
+  description: string
   unit: string | null
-  sample_count: number
-  rate_min: number
-  rate_max: number
-  rate_avg: number
-  rate_p25: number
-  rate_median: number
-  rate_p75: number
+  unit_rate_aed: number | null
+  historical_projects: { project_name: string } | null
 }
 
 type PricingOverride = {
@@ -26,18 +25,25 @@ type PricingOverride = {
   override_min_aed: number
   override_max_aed: number
   notes: string | null
-  updated_at: string
 }
 
-type SampleItem = {
-  scope_item_id: string | null
-  description: string
+type PricingStat = {
+  scope_item_id: string
   unit: string | null
-  unit_rate_aed: number | null
-  historical_projects: { project_name: string } | null
+  sample_count: number
+  rate_avg: number
+  rate_p25: number
+  rate_p75: number
 }
 
-type ViewMode = 'category' | 'flat'
+type CategoryGroup = {
+  scopeId: string
+  categoryName: string
+  stats: PricingStat[]
+  samples: SampleItem[]
+}
+
+// ── Helpers ──
 
 function fmt(n: number | null | undefined): string {
   if (n == null || n === 0) return '-'
@@ -48,14 +54,8 @@ function totalSamples(stats: PricingStat[]): number {
   return stats.reduce((sum, s) => sum + s.sample_count, 0)
 }
 
-function groupByCategory(stats: PricingStat[], sampleItems: SampleItem[]) {
-  const groups = new Map<string, {
-    scopeId: string
-    categoryName: string
-    stats: PricingStat[]
-    samples: SampleItem[]
-  }>()
-
+function groupByCategory(stats: PricingStat[], sampleItems: SampleItem[]): CategoryGroup[] {
+  const groups = new Map<string, CategoryGroup>()
   for (const stat of stats) {
     const scopeItem = SCOPE_CATALOG.find(s => s.id === stat.scope_item_id)
     const key = stat.scope_item_id
@@ -71,12 +71,13 @@ function groupByCategory(stats: PricingStat[], sampleItems: SampleItem[]) {
       })
     }
   }
-
   return Array.from(groups.values()).sort((a, b) => a.categoryName.localeCompare(b.categoryName))
 }
 
-// Column layout used everywhere (collapsed + expanded)
-const COL_GRID = 'grid-cols-[1fr_100px_140px_50px_36px]'
+// Consistent column grid
+const COL = 'grid-cols-[1fr_100px_140px_50px_36px]'
+
+// ── Main Component ──
 
 export default function PriceBookPage() {
   const [loading, setLoading] = useState(true)
@@ -84,16 +85,34 @@ export default function PriceBookPage() {
   const [overrides, setOverrides] = useState<PricingOverride[]>([])
   const [sampleItems, setSampleItems] = useState<SampleItem[]>([])
   const [projectCount, setProjectCount] = useState(0)
-  const [viewMode, setViewMode] = useState<ViewMode>('category')
+  const [viewMode, setViewMode] = useState<'category' | 'flat'>('category')
   const [searchQuery, setSearchQuery] = useState('')
   const [expandedCategories, setExpandedCategories] = useState<Set<string>>(new Set())
 
-  // Per-item editing state
-  const [editingKey, setEditingKey] = useState<string | null>(null) // "scopeId:idx" or "new:scopeId"
-  const [editRate, setEditRate] = useState('')
+  // Edit dialog state
+  const [editOpen, setEditOpen] = useState(false)
+  const [editItem, setEditItem] = useState<SampleItem | null>(null)
+  const [editScopeId, setEditScopeId] = useState('')
   const [editDesc, setEditDesc] = useState('')
+  const [editRate, setEditRate] = useState('')
   const [editUnit, setEditUnit] = useState('')
+  const [editNotes, setEditNotes] = useState('')
   const [saving, setSaving] = useState(false)
+
+  // Add item state
+  const [addingTo, setAddingTo] = useState<string | null>(null)
+  const [addDesc, setAddDesc] = useState('')
+  const [addRate, setAddRate] = useState('')
+  const [addUnit, setAddUnit] = useState('')
+
+  // Upload state
+  const [uploadOpen, setUploadOpen] = useState(false)
+  const [uploading, setUploading] = useState(false)
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const [uploadResult, setUploadResult] = useState<{ extracted: any; summary: any } | null>(null)
+  const [uploadFilename, setUploadFilename] = useState('')
+  const [importing, setImporting] = useState(false)
+  const fileInputRef = useRef<HTMLInputElement>(null)
 
   const fetchData = useCallback(async () => {
     setLoading(true)
@@ -112,55 +131,121 @@ export default function PriceBookPage() {
 
   useEffect(() => { fetchData() }, [fetchData])
 
-  const handleSaveItemOverride = async (scopeItemId: string, description: string, unit: string, rate: number) => {
+  // ── Edit handlers ──
+
+  const openEditDialog = (item: SampleItem, scopeId: string) => {
+    const override = overrides.find(o => o.item_description === item.description && o.unit === (item.unit ?? ''))
+    setEditItem(item)
+    setEditScopeId(scopeId)
+    setEditDesc(item.description)
+    setEditRate(override ? override.override_min_aed.toString() : (item.unit_rate_aed?.toString() ?? ''))
+    setEditUnit(item.unit ?? '')
+    setEditNotes(override?.notes ?? '')
+    setEditOpen(true)
+  }
+
+  const handleSaveEdit = async () => {
+    const rate = parseFloat(editRate)
+    if (isNaN(rate) || rate < 0 || !editDesc.trim()) return
     setSaving(true)
     try {
       const res = await fetch('/api/admin/price-book', {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          item_description: description,
-          unit,
-          scope_item_id: scopeItemId,
+          item_description: editDesc.trim(),
+          unit: editUnit || 'unit',
+          scope_item_id: editScopeId,
           override_min_aed: rate,
           override_max_aed: rate,
-          notes: null,
+          notes: editNotes || null,
         }),
       })
       if (res.ok) {
         await fetchData()
-        setEditingKey(null)
+        setEditOpen(false)
       }
     } catch { /* ignore */ }
     setSaving(false)
   }
 
-  const startEditItem = (key: string, description: string, unit: string, rate: number | null) => {
-    setEditingKey(key)
-    setEditRate(rate?.toString() ?? '')
-    setEditDesc(description)
-    setEditUnit(unit)
+  // ── Add item handlers ──
+
+  const handleAddItem = async (scopeId: string) => {
+    const rate = parseFloat(addRate)
+    if (isNaN(rate) || rate < 0 || !addDesc.trim()) return
+    setSaving(true)
+    try {
+      const res = await fetch('/api/admin/price-book', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          item_description: addDesc.trim(),
+          unit: addUnit || 'unit',
+          scope_item_id: scopeId,
+          override_min_aed: rate,
+          override_max_aed: rate,
+          notes: 'Manually added',
+        }),
+      })
+      if (res.ok) {
+        await fetchData()
+        setAddingTo(null)
+        setAddDesc('')
+        setAddRate('')
+        setAddUnit('')
+      }
+    } catch { /* ignore */ }
+    setSaving(false)
   }
 
-  const startAddItem = (scopeId: string) => {
-    setEditingKey(`new:${scopeId}`)
-    setEditDesc('')
-    setEditRate('')
-    setEditUnit('')
+  // ── Upload handlers ──
+
+  const handleFileSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+    setUploadFilename(file.name)
+    setUploading(true)
+    setUploadResult(null)
+    setUploadOpen(true)
+
+    try {
+      const formData = new FormData()
+      formData.append('file', file)
+      const res = await fetch('/api/admin/price-book/upload', { method: 'POST', body: formData })
+      if (res.ok) {
+        const data = await res.json()
+        setUploadResult(data)
+      } else {
+        const err = await res.json()
+        setUploadResult({ extracted: null, summary: { error: err.error ?? 'Failed to process PDF' } })
+      }
+    } catch {
+      setUploadResult({ extracted: null, summary: { error: 'Upload failed' } })
+    }
+    setUploading(false)
+    if (fileInputRef.current) fileInputRef.current.value = ''
   }
 
-  const cancelEdit = () => {
-    setEditingKey(null)
-    setEditRate('')
-    setEditDesc('')
-    setEditUnit('')
+  const handleImport = async () => {
+    if (!uploadResult?.extracted) return
+    setImporting(true)
+    try {
+      const res = await fetch('/api/admin/price-book/upload', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ extracted: uploadResult.extracted, filename: uploadFilename }),
+      })
+      if (res.ok) {
+        await fetchData()
+        setUploadOpen(false)
+        setUploadResult(null)
+      }
+    } catch { /* ignore */ }
+    setImporting(false)
   }
 
-  const submitEdit = (scopeId: string) => {
-    const rate = parseFloat(editRate)
-    if (isNaN(rate) || rate < 0 || !editDesc.trim()) return
-    handleSaveItemOverride(scopeId, editDesc.trim(), editUnit || 'unit', rate)
-  }
+  // ── Helpers ──
 
   const toggleCategory = (scopeId: string) => {
     setExpandedCategories(prev => {
@@ -173,6 +258,19 @@ export default function PriceBookPage() {
 
   const getOverrideForItem = (desc: string, unit: string): PricingOverride | undefined => {
     return overrides.find(o => o.item_description === desc && o.unit === unit)
+  }
+
+  // Find similar items for history in the edit dialog
+  const getHistoryForItem = (desc: string, unit: string): SampleItem[] => {
+    const words = desc.toLowerCase().split(/\s+/).filter(w => w.length > 3).slice(0, 3)
+    if (words.length === 0) return []
+    return sampleItems
+      .filter(s =>
+        s.description !== desc &&
+        s.unit === unit &&
+        words.some(w => s.description.toLowerCase().includes(w))
+      )
+      .slice(0, 6)
   }
 
   const categories = groupByCategory(stats, sampleItems)
@@ -194,7 +292,7 @@ export default function PriceBookPage() {
   return (
     <div className="flex flex-col h-full">
       {/* Toolbar */}
-      <div className="flex items-center gap-3 px-6 py-3 border-b bg-white dark:bg-background">
+      <div className="flex items-center gap-3 px-6 py-3 border-b bg-background">
         <div className="relative flex-1 max-w-sm">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
           <Input
@@ -209,14 +307,12 @@ export default function PriceBookPage() {
           <button
             onClick={() => setViewMode('category')}
             className={`p-1.5 rounded cursor-pointer transition-colors ${viewMode === 'category' ? 'bg-muted text-foreground' : 'text-muted-foreground hover:text-foreground'}`}
-            title="Category view"
           >
             <LayoutGrid className="w-4 h-4" />
           </button>
           <button
             onClick={() => setViewMode('flat')}
             className={`p-1.5 rounded cursor-pointer transition-colors ${viewMode === 'flat' ? 'bg-muted text-foreground' : 'text-muted-foreground hover:text-foreground'}`}
-            title="Flat list"
           >
             <List className="w-4 h-4" />
           </button>
@@ -225,20 +321,32 @@ export default function PriceBookPage() {
         <span className="text-xs text-muted-foreground">
           {projectCount} projects &middot; {overrides.length} overrides
         </span>
+
+        <div className="ml-auto">
+          <input ref={fileInputRef} type="file" accept=".pdf" className="hidden" onChange={handleFileSelect} />
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => fileInputRef.current?.click()}
+            className="text-xs cursor-pointer gap-1.5"
+          >
+            <Upload className="w-3.5 h-3.5" />
+            Upload BOQ
+          </Button>
+        </div>
       </div>
 
       {/* Content */}
-      <div className="flex-1 min-h-0 overflow-auto bg-white dark:bg-background">
+      <div className="flex-1 min-h-0 overflow-auto">
         {stats.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-16 gap-2">
             <p className="text-sm text-muted-foreground">No historical pricing data yet.</p>
-            <p className="text-xs text-muted-foreground">Import historical BOQs to populate the Price Book.</p>
+            <p className="text-xs text-muted-foreground">Upload BOQ files to populate the Price Book.</p>
           </div>
         ) : viewMode === 'category' ? (
-          /* ── Category View ── */
           <div>
-            {/* Column headers */}
-            <div className={`grid ${COL_GRID} gap-3 px-6 py-2 text-[10px] uppercase tracking-widest font-medium text-muted-foreground/70 border-b bg-zinc-50/50 dark:bg-zinc-900/30 sticky top-0 z-10`}>
+            {/* Column headers - solid background */}
+            <div className={`grid ${COL} gap-3 px-6 py-2 text-[10px] uppercase tracking-widest font-medium text-muted-foreground/70 border-b bg-background sticky top-0 z-10`}>
               <span>Item</span>
               <span className="text-right">Rate (AED)</span>
               <span className="text-right">Source</span>
@@ -252,7 +360,7 @@ export default function PriceBookPage() {
 
               return (
                 <div key={group.scopeId}>
-                  {/* Category header row */}
+                  {/* Category header */}
                   <div
                     className="flex items-center gap-2 px-6 py-3 hover:bg-muted/30 cursor-pointer border-b transition-colors"
                     onClick={() => toggleCategory(group.scopeId)}
@@ -265,52 +373,22 @@ export default function PriceBookPage() {
                     <span className="text-xs text-muted-foreground ml-1">{total} items</span>
                   </div>
 
-                  {/* Expanded: line items */}
+                  {/* Expanded items */}
                   {isOpen && (
                     <div className="border-b">
                       {group.samples.map((sample, idx) => {
-                        const itemKey = `${group.scopeId}:${idx}`
-                        const isEditing = editingKey === itemKey
                         const override = getOverrideForItem(sample.description, sample.unit ?? '')
                         const displayRate = override ? override.override_min_aed : sample.unit_rate_aed
-
-                        if (isEditing) {
-                          return (
-                            <div key={idx} className={`grid ${COL_GRID} gap-3 items-center pl-12 pr-6 py-1.5 bg-purple-500/5 border-b border-dashed border-muted/30`}>
-                              <span className="text-sm truncate text-muted-foreground">{sample.description}</span>
-                              <Input
-                                type="number"
-                                value={editRate}
-                                onChange={(e) => setEditRate(e.target.value)}
-                                className="h-7 text-xs font-mono text-right"
-                                autoFocus
-                                onKeyDown={(e) => {
-                                  if (e.key === 'Enter') submitEdit(group.scopeId)
-                                  if (e.key === 'Escape') cancelEdit()
-                                }}
-                              />
-                              <span className="text-right text-xs text-muted-foreground truncate">
-                                {sample.historical_projects?.project_name ?? '-'}
-                              </span>
-                              <span className="text-right text-xs text-muted-foreground">{sample.unit ?? '-'}</span>
-                              <div className="flex items-center gap-0.5 justify-end">
-                                <button onClick={() => submitEdit(group.scopeId)} className="p-1 text-emerald-500 hover:text-emerald-400 cursor-pointer" disabled={saving}>
-                                  {saving ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Check className="w-3.5 h-3.5" />}
-                                </button>
-                                <button onClick={cancelEdit} className="p-1 text-muted-foreground hover:text-foreground cursor-pointer">
-                                  <X className="w-3.5 h-3.5" />
-                                </button>
-                              </div>
-                            </div>
-                          )
-                        }
 
                         return (
                           <div
                             key={idx}
-                            className={`grid ${COL_GRID} gap-3 items-center pl-12 pr-6 py-2 border-b border-dashed border-muted/30 hover:bg-muted/10 transition-colors group`}
+                            className={`grid ${COL} gap-3 items-center pl-12 pr-6 py-2 border-b border-dashed border-muted/30 hover:bg-muted/10 transition-colors group cursor-pointer`}
+                            onClick={() => openEditDialog(sample, group.scopeId)}
                           >
-                            <span className="text-sm truncate text-muted-foreground" title={sample.description}>{sample.description}</span>
+                            <span className="text-sm truncate text-muted-foreground" title={sample.description}>
+                              {sample.description}
+                            </span>
                             <span className={`text-right font-mono text-xs ${override ? 'text-purple-400 font-medium' : ''}`}>
                               {fmt(displayRate)}
                             </span>
@@ -319,62 +397,50 @@ export default function PriceBookPage() {
                             </span>
                             <span className="text-right text-xs text-muted-foreground">{sample.unit ?? '-'}</span>
                             <div className="flex justify-end">
-                              <button
-                                onClick={(e) => {
-                                  e.stopPropagation()
-                                  startEditItem(itemKey, sample.description, sample.unit ?? '', displayRate)
-                                }}
-                                className="p-1 opacity-0 group-hover:opacity-100 text-muted-foreground hover:text-foreground cursor-pointer transition-opacity"
-                                title="Edit rate"
-                              >
-                                <Pencil className="w-3 h-3" />
-                              </button>
+                              <Pencil className="w-3 h-3 opacity-0 group-hover:opacity-100 text-muted-foreground transition-opacity" />
                             </div>
                           </div>
                         )
                       })}
 
-                      {/* Add new item row */}
-                      {editingKey === `new:${group.scopeId}` ? (
-                        <div className={`grid ${COL_GRID} gap-3 items-center pl-12 pr-6 py-1.5 bg-purple-500/5 border-b border-dashed border-muted/30`}>
+                      {/* Add item */}
+                      {addingTo === group.scopeId ? (
+                        <div className={`grid ${COL} gap-3 items-center pl-12 pr-6 py-1.5 bg-purple-500/5 border-b border-dashed border-muted/30`}>
                           <Input
-                            value={editDesc}
-                            onChange={(e) => setEditDesc(e.target.value)}
+                            value={addDesc}
+                            onChange={(e) => setAddDesc(e.target.value)}
                             placeholder="Item description..."
                             className="h-7 text-xs"
                             autoFocus
                           />
                           <Input
                             type="number"
-                            value={editRate}
-                            onChange={(e) => setEditRate(e.target.value)}
+                            value={addRate}
+                            onChange={(e) => setAddRate(e.target.value)}
                             placeholder="Rate"
                             className="h-7 text-xs font-mono text-right"
-                            onKeyDown={(e) => {
-                              if (e.key === 'Enter') submitEdit(group.scopeId)
-                              if (e.key === 'Escape') cancelEdit()
-                            }}
                           />
                           <div />
                           <Input
-                            value={editUnit}
-                            onChange={(e) => setEditUnit(e.target.value)}
+                            value={addUnit}
+                            onChange={(e) => setAddUnit(e.target.value)}
                             placeholder="sqm"
                             className="h-7 text-xs text-right"
+                            onKeyDown={(e) => {
+                              if (e.key === 'Enter') handleAddItem(group.scopeId)
+                              if (e.key === 'Escape') setAddingTo(null)
+                            }}
                           />
-                          <div className="flex items-center gap-0.5 justify-end">
-                            <button onClick={() => submitEdit(group.scopeId)} className="p-1 text-emerald-500 hover:text-emerald-400 cursor-pointer" disabled={saving}>
-                              {saving ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Check className="w-3.5 h-3.5" />}
-                            </button>
-                            <button onClick={cancelEdit} className="p-1 text-muted-foreground hover:text-foreground cursor-pointer">
-                              <X className="w-3.5 h-3.5" />
-                            </button>
+                          <div className="flex gap-0.5 justify-end">
+                            <Button size="sm" onClick={() => handleAddItem(group.scopeId)} disabled={saving} className="h-7 text-[10px] px-2 cursor-pointer">
+                              {saving ? <Loader2 className="w-3 h-3 animate-spin" /> : 'Add'}
+                            </Button>
                           </div>
                         </div>
                       ) : (
                         <button
-                          onClick={() => startAddItem(group.scopeId)}
-                          className="flex items-center gap-1.5 pl-12 py-2 text-xs text-muted-foreground hover:text-foreground transition-colors cursor-pointer border-b border-dashed border-muted/30 w-full"
+                          onClick={() => setAddingTo(group.scopeId)}
+                          className="flex items-center gap-1.5 pl-12 py-2 text-xs text-muted-foreground hover:text-foreground transition-colors cursor-pointer w-full"
                         >
                           <Plus className="w-3.5 h-3.5" />
                           Add item
@@ -387,51 +453,183 @@ export default function PriceBookPage() {
             })}
           </div>
         ) : (
-          /* ── Flat View ── */
+          /* Flat view */
           <div>
-            {/* Column headers */}
-            <div className={`grid ${COL_GRID} gap-3 px-6 py-2 text-[10px] uppercase tracking-widest font-medium text-muted-foreground/70 border-b bg-zinc-50/50 dark:bg-zinc-900/30 sticky top-0 z-10`}>
-              <span>Item</span>
-              <span className="text-right">Avg Rate (AED)</span>
-              <span className="text-right">Range (P25-P75)</span>
+            <div className={`grid grid-cols-[1fr_80px_100px_100px_50px] gap-3 px-6 py-2 text-[10px] uppercase tracking-widest font-medium text-muted-foreground/70 border-b bg-background sticky top-0 z-10`}>
+              <span>Category</span>
+              <span className="text-right">Avg Rate</span>
+              <span className="text-right">Range</span>
+              <span className="text-right">Data Points</span>
               <span className="text-right">Unit</span>
-              <span></span>
             </div>
-
             {stats
+              .sort((a, b) => a.scope_item_id.localeCompare(b.scope_item_id))
               .filter(s => {
                 if (!searchQuery) return true
-                const scopeItem = SCOPE_CATALOG.find(sc => sc.id === s.scope_item_id)
-                return (
-                  (scopeItem?.name ?? s.scope_item_id).toLowerCase().includes(searchQuery.toLowerCase()) ||
-                  s.scope_item_id.toLowerCase().includes(searchQuery.toLowerCase())
-                )
+                const name = SCOPE_CATALOG.find(sc => sc.id === s.scope_item_id)?.name ?? s.scope_item_id
+                return name.toLowerCase().includes(searchQuery.toLowerCase())
               })
-              .sort((a, b) => a.scope_item_id.localeCompare(b.scope_item_id))
-              .map(stat => {
-                const scopeItem = SCOPE_CATALOG.find(s => s.id === stat.scope_item_id)
-
-                return (
-                  <div
-                    key={`${stat.scope_item_id}:${stat.unit}`}
-                    className={`grid ${COL_GRID} gap-3 items-center px-6 py-2.5 hover:bg-muted/20 border-b transition-colors`}
-                  >
-                    <div className="min-w-0">
-                      <span className="text-sm truncate block">{scopeItem?.name ?? stat.scope_item_id}</span>
-                      <span className="text-[11px] text-muted-foreground">{stat.sample_count} data points</span>
-                    </div>
-                    <span className="text-xs text-right font-mono">{fmt(stat.rate_avg)}</span>
-                    <span className="text-xs text-right font-mono text-muted-foreground">
-                      {fmt(stat.rate_p25)} - {fmt(stat.rate_p75)}
-                    </span>
-                    <span className="text-xs text-right text-muted-foreground">{stat.unit ?? '-'}</span>
-                    <div />
-                  </div>
-                )
-              })}
+              .map(stat => (
+                <div
+                  key={`${stat.scope_item_id}:${stat.unit}`}
+                  className="grid grid-cols-[1fr_80px_100px_100px_50px] gap-3 items-center px-6 py-2.5 hover:bg-muted/20 border-b transition-colors"
+                >
+                  <span className="text-sm truncate">{SCOPE_CATALOG.find(s => s.id === stat.scope_item_id)?.name ?? stat.scope_item_id}</span>
+                  <span className="text-xs text-right font-mono">{fmt(stat.rate_avg)}</span>
+                  <span className="text-xs text-right font-mono text-muted-foreground">{fmt(stat.rate_p25)} - {fmt(stat.rate_p75)}</span>
+                  <span className="text-xs text-right text-muted-foreground">{stat.sample_count}</span>
+                  <span className="text-xs text-right text-muted-foreground">{stat.unit ?? '-'}</span>
+                </div>
+              ))
+            }
           </div>
         )}
       </div>
+
+      {/* ── Edit Item Dialog ── */}
+      <Dialog open={editOpen} onOpenChange={setEditOpen}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle>Edit Item</DialogTitle>
+          </DialogHeader>
+
+          <div className="space-y-4">
+            <div>
+              <label className="text-xs text-muted-foreground mb-1 block">Description</label>
+              <Input value={editDesc} onChange={(e) => setEditDesc(e.target.value)} className="text-sm" />
+            </div>
+
+            <div className="grid grid-cols-2 gap-3">
+              <div>
+                <label className="text-xs text-muted-foreground mb-1 block">Rate (AED)</label>
+                <Input type="number" value={editRate} onChange={(e) => setEditRate(e.target.value)} className="text-sm font-mono" />
+              </div>
+              <div>
+                <label className="text-xs text-muted-foreground mb-1 block">Unit</label>
+                <Input value={editUnit} onChange={(e) => setEditUnit(e.target.value)} className="text-sm" />
+              </div>
+            </div>
+
+            <div>
+              <label className="text-xs text-muted-foreground mb-1 block">Source</label>
+              <div className="text-sm text-muted-foreground px-3 py-2 bg-muted/30 rounded-md">
+                {editItem?.historical_projects?.project_name ?? 'Unknown'}
+              </div>
+            </div>
+
+            <div>
+              <label className="text-xs text-muted-foreground mb-1 block">Notes</label>
+              <Input value={editNotes} onChange={(e) => setEditNotes(e.target.value)} placeholder="Optional notes about this price" className="text-sm" />
+            </div>
+
+            {/* Price history */}
+            {editItem && (() => {
+              const history = getHistoryForItem(editItem.description, editItem.unit ?? '')
+              if (history.length === 0) return null
+              return (
+                <div>
+                  <label className="text-xs text-muted-foreground mb-2 block">Similar items from other projects</label>
+                  <div className="border rounded-md divide-y max-h-36 overflow-auto">
+                    {history.map((h, i) => (
+                      <div key={i} className="flex items-center justify-between px-3 py-1.5 text-xs">
+                        <span className="truncate text-muted-foreground flex-1 mr-2">{h.historical_projects?.project_name ?? '-'}</span>
+                        <span className="font-mono shrink-0">{fmt(h.unit_rate_aed)} AED</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )
+            })()}
+          </div>
+
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setEditOpen(false)} className="cursor-pointer">Cancel</Button>
+            <Button onClick={handleSaveEdit} disabled={saving} className="cursor-pointer">
+              {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : 'Save'}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* ── Upload BOQ Dialog ── */}
+      <Dialog open={uploadOpen} onOpenChange={setUploadOpen}>
+        <DialogContent className="sm:max-w-lg">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <FileText className="w-4 h-4" />
+              {uploading ? 'Processing BOQ...' : uploadResult ? 'BOQ Extracted' : 'Upload BOQ'}
+            </DialogTitle>
+          </DialogHeader>
+
+          {uploading && (
+            <div className="flex flex-col items-center justify-center py-8 gap-3">
+              <Loader2 className="w-8 h-8 animate-spin text-purple-500" />
+              <p className="text-sm text-muted-foreground">Extracting pricing data from {uploadFilename}...</p>
+              <p className="text-xs text-muted-foreground">This may take 1-2 minutes for large documents.</p>
+            </div>
+          )}
+
+          {!uploading && uploadResult && (
+            <>
+              {uploadResult.summary.error ? (
+                <div className="py-4 text-center">
+                  <p className="text-sm text-destructive">{uploadResult.summary.error}</p>
+                </div>
+              ) : (
+                <div className="space-y-4">
+                  {/* Summary stats */}
+                  <div className="grid grid-cols-2 gap-3">
+                    <div className="p-3 bg-muted/30 rounded-md">
+                      <p className="text-[10px] uppercase tracking-widest text-muted-foreground mb-0.5">Project</p>
+                      <p className="text-sm font-medium truncate">{uploadResult.summary.project_name}</p>
+                    </div>
+                    <div className="p-3 bg-muted/30 rounded-md">
+                      <p className="text-[10px] uppercase tracking-widest text-muted-foreground mb-0.5">Total</p>
+                      <p className="text-sm font-medium font-mono">AED {fmt(uploadResult.summary.grand_total_aed)}</p>
+                    </div>
+                    <div className="p-3 bg-muted/30 rounded-md">
+                      <p className="text-[10px] uppercase tracking-widest text-muted-foreground mb-0.5">Categories</p>
+                      <p className="text-sm font-medium">{uploadResult.summary.category_count}</p>
+                    </div>
+                    <div className="p-3 bg-muted/30 rounded-md">
+                      <p className="text-[10px] uppercase tracking-widest text-muted-foreground mb-0.5">Line Items</p>
+                      <p className="text-sm font-medium">{uploadResult.summary.item_count}</p>
+                    </div>
+                  </div>
+
+                  {/* Preview of categories */}
+                  <div>
+                    <p className="text-xs text-muted-foreground mb-2">Categories extracted:</p>
+                    <div className="border rounded-md divide-y max-h-48 overflow-auto">
+                      {(uploadResult.extracted.categories ?? []).map((cat: { name: string; line_items?: { is_subtotal?: boolean }[]; category_total_aed?: number }, i: number) => (
+                        <div key={i} className="flex items-center justify-between px-3 py-2 text-xs">
+                          <span className="truncate flex-1 mr-2">{cat.name}</span>
+                          <span className="text-muted-foreground shrink-0">
+                            {(cat.line_items ?? []).filter(li => !li.is_subtotal).length} items
+                          </span>
+                          <span className="font-mono ml-3 shrink-0">{fmt(cat.category_total_aed)}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              )}
+            </>
+          )}
+
+          {!uploading && uploadResult && !uploadResult.summary.error && (
+            <DialogFooter>
+              <Button variant="outline" onClick={() => { setUploadOpen(false); setUploadResult(null) }} className="cursor-pointer">
+                Discard
+              </Button>
+              <Button onClick={handleImport} disabled={importing} className="cursor-pointer">
+                {importing ? <Loader2 className="w-4 h-4 animate-spin mr-1" /> : null}
+                Import {uploadResult.summary.item_count} items
+              </Button>
+            </DialogFooter>
+          )}
+        </DialogContent>
+      </Dialog>
     </div>
   )
 }
