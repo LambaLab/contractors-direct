@@ -156,7 +156,7 @@ export function hydrateProposalFromRestore(data: {
   const meta = data.metadata && typeof data.metadata === 'object' ? data.metadata : {} as Record<string, unknown>
 
   localStorage.setItem(
-    `cd_lead_${data.proposalId}`,
+    `cd_proposal_${data.proposalId}`,
     JSON.stringify({
       detectedScope: Array.isArray(data.scope) ? data.scope : [],
       confidenceScore: typeof data.confidenceScore === 'number' ? data.confidenceScore : 0,
@@ -192,7 +192,7 @@ export function hydrateProposalFromRestore(data: {
   }
 
   if (data.email) {
-    localStorage.setItem(`cd_phone_verified_${data.proposalId}`, '1')
+    localStorage.setItem(`cd_email_verified_${data.proposalId}`, '1')
   }
   localStorage.setItem(
     `cd_synced_count_${data.proposalId}`,
@@ -206,11 +206,14 @@ export function clearProposalData(proposalId: string): void {
   const keys = [
     `cd_idea_${proposalId}`,
     `cd_msgs_${proposalId}`,
-    `cd_lead_${proposalId}`,
-    `cd_phone_verified_${proposalId}`,
+    `cd_proposal_${proposalId}`,
+    `cd_email_verified_${proposalId}`,
     `cd_synced_count_${proposalId}`,
     `cd_paused_${proposalId}`,
     `cd_paused_qr_${proposalId}`,
+    // Legacy keys (pre-rename)
+    `cd_lead_${proposalId}`,
+    `cd_phone_verified_${proposalId}`,
   ]
   keys.forEach((k) => localStorage.removeItem(k))
 }

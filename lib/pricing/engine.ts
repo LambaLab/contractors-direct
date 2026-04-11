@@ -119,7 +119,7 @@ export function tightenPriceRange(base: PriceRange, confidenceScore: number): Pr
 /**
  * Quick ballpark for the journey divider's "Quick Estimate" mode.
  * Uses Core Four + scope selection (no style, no complexity, no tightening).
- * Widens the range by 15% each direction to account for missing detail.
+ * Widens the range by 10% each direction to account for missing detail.
  */
 export function computeQuickBallpark(params: {
   scopeIds: string[]
@@ -131,8 +131,8 @@ export function computeQuickBallpark(params: {
   const withCondition = applyConditionMultiplier(base, params.condition)
   const withLocation = applyLocationFactor(withCondition, params.location)
   return {
-    min: Math.round(withLocation.min * 0.85),
-    max: Math.round(withLocation.max * 1.15),
+    min: Math.round(withLocation.min * 0.90),
+    max: Math.round(withLocation.max * 1.10),
   }
 }
 

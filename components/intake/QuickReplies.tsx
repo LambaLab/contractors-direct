@@ -34,8 +34,15 @@ export default function QuickReplies({ quickReplies, onSelect, disabled, questio
   // Always show "Type something else..." for list style
   const effectiveAllowCustom = style === 'list' ? true : (allowCustom ?? false)
   const [selected, setSelected] = useState<string[]>([])
-  const [showCustomInput, setShowCustomInput] = useState(false)
+  // Auto-expand text input when there are no predefined options (e.g. location question)
+  const noOptions = options.length === 0 && effectiveAllowCustom
+  const [showCustomInput, setShowCustomInput] = useState(noOptions)
   const [customValue, setCustomValue] = useState('')
+
+  // Sync auto-expand when options change (e.g. new question replaces the previous one)
+  useEffect(() => {
+    setShowCustomInput(options.length === 0 && effectiveAllowCustom)
+  }, [options.length, effectiveAllowCustom])
 
   function toggleSelected(value: string) {
     setSelected((prev) =>

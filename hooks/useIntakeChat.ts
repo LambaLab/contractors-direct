@@ -984,7 +984,21 @@ export function useIntakeChat({ proposalId, idea }: Props) {
                 : base
               // Ensure bubble always has content — empty bubbles get filtered from API
               // messages which can create invalid consecutive same-role messages (400 error).
-              const safeContent = bubbleContent || finalQuestion || followUp || '...'
+              // For quick_discovery ballpark turns, generate a summary from qualifying fields
+              // instead of showing '...' when the AI omits follow_up_question.
+              let fallbackText = '...'
+              if (!bubbleContent && !finalQuestion && !followUp && effectivePhase === 'quick_discovery') {
+                const qf = qualifyingFieldsRef.current
+                const parts = [
+                  qf.size_sqft ? `${qf.size_sqft.toLocaleString()} sqft` : '',
+                  qf.property_type || '',
+                  qf.location ? `in ${qf.location}` : '',
+                ].filter(Boolean)
+                fallbackText = parts.length > 0
+                  ? `Here's what we have so far: ${parts.join(' ')}.`
+                  : 'Here is your quick estimate based on what you shared.'
+              }
+              const safeContent = bubbleContent || finalQuestion || followUp || fallbackText
 
               return [...prev.slice(0, -1), {
                 ...last,
