@@ -191,6 +191,7 @@ export default function BoqTab({ leadId }: Props) {
       })
 
       if (!res.ok || !res.body) {
+        console.error('[BOQ Generate] Response not ok:', res.status, await res.text().catch(() => ''))
         await fetchBoq()
         setGenerating(false)
         return
@@ -228,7 +229,7 @@ export default function BoqTab({ leadId }: Props) {
           } catch { /* skip malformed */ }
         }
       }
-    } catch { /* ignore */ }
+    } catch (err) { console.error('[BOQ Generate] Error:', err) }
     setGenerating(false)
   }
 
