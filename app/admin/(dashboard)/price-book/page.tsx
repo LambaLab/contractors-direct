@@ -200,6 +200,8 @@ export default function PriceBookPage() {
   }
 
   // ── Upload handlers ──
+  // Upload runs in the background. Closing the modal does NOT cancel it.
+  // A toast-style banner shows progress and re-opens the review dialog when ready.
 
   const handleFileSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
@@ -209,22 +211,29 @@ export default function PriceBookPage() {
     setUploadResult(null)
     setUploadOpen(true)
 
-    try {
-      const formData = new FormData()
-      formData.append('file', file)
-      const res = await fetch('/api/admin/price-book/upload', { method: 'POST', body: formData })
-      if (res.ok) {
-        const data = await res.json()
-        setUploadResult(data)
-      } else {
-        const err = await res.json()
-        setUploadResult({ extracted: null, summary: { error: err.error ?? 'Failed to process PDF' } })
-      }
-    } catch {
-      setUploadResult({ extracted: null, summary: { error: 'Upload failed' } })
-    }
-    setUploading(false)
+    const formData = new FormData()
+    formData.append('file', file)
     if (fileInputRef.current) fileInputRef.current.value = ''
+
+    // Fire and forget - runs even if modal is closed
+    fetch('/api/admin/price-book/upload', { method: 'POST', body: formData })
+      .then(async (res) => {
+        if (res.ok) {
+          const data = await res.json()
+          setUploadResult(data)
+        } else {
+          const err = await res.json().catch(() => ({ error: 'Failed to process PDF' }))
+          setUploadResult({ extracted: null, summary: { error: err.error ?? 'Failed to process PDF' } })
+        }
+      })
+      .catch(() => {
+        setUploadResult({ extracted: null, summary: { error: 'Upload failed' } })
+      })
+      .finally(() => {
+        setUploading(false)
+        // Re-open the dialog to show results if user closed it
+        setUploadOpen(true)
+      })
   }
 
   const handleImport = async () => {
@@ -486,6 +495,20 @@ export default function PriceBookPage() {
         )}
       </div>
 
+      {/* ── Background processing banner ── */}
+      {uploading && !uploadOpen && (
+        <div
+          className="fixed bottom-4 right-4 z-50 flex items-center gap-3 bg-background border border-purple-500/30 rounded-lg px-4 py-3 shadow-lg cursor-pointer hover:border-purple-500/50 transition-colors"
+          onClick={() => setUploadOpen(true)}
+        >
+          <Loader2 className="w-4 h-4 animate-spin text-purple-500 shrink-0" />
+          <div>
+            <p className="text-sm font-medium">Processing {uploadFilename}</p>
+            <p className="text-xs text-muted-foreground">Click to view progress</p>
+          </div>
+        </div>
+      )}
+
       {/* ── Edit Item Dialog ── */}
       <Dialog open={editOpen} onOpenChange={setEditOpen}>
         <DialogContent className="sm:max-w-md">
@@ -566,6 +589,12 @@ export default function PriceBookPage() {
               <Loader2 className="w-8 h-8 animate-spin text-purple-500" />
               <p className="text-sm text-muted-foreground">Extracting pricing data from {uploadFilename}...</p>
               <p className="text-xs text-muted-foreground">This may take 1-2 minutes for large documents.</p>
+              <button
+                onClick={() => setUploadOpen(false)}
+                className="mt-2 text-xs text-purple-400 hover:text-purple-300 cursor-pointer underline underline-offset-2"
+              >
+                Close and continue in background. We will notify you when it is ready.
+              </button>
             </div>
           )}
 
