@@ -77,9 +77,6 @@ export function AppSidebar({ adminRole, onTeamOpen }: Props) {
                   <BarChart3 />
                   <span>Analytics</span>
                 </SidebarMenuButton>
-                <SidebarMenuBadge className="text-[10px] text-muted-foreground">
-                  Soon
-                </SidebarMenuBadge>
               </SidebarMenuItem>
             </SidebarMenu>
           </SidebarGroupContent>
@@ -101,9 +98,6 @@ export function AppSidebar({ adminRole, onTeamOpen }: Props) {
                     <Settings />
                     <span>Settings</span>
                   </SidebarMenuButton>
-                  <SidebarMenuBadge className="text-[10px] text-muted-foreground">
-                    Soon
-                  </SidebarMenuBadge>
                 </SidebarMenuItem>
               </SidebarMenu>
             </SidebarGroupContent>
