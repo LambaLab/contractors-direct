@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from 'next/server'
+import { NextRequest } from 'next/server'
 import Anthropic from '@anthropic-ai/sdk'
 import { verifyAdmin } from '@/lib/admin/auth'
 import { createServiceClient } from '@/lib/supabase/server'
@@ -10,25 +10,23 @@ const anthropic = new Anthropic()
 
 /**
  * POST /api/admin/leads/[id]/boq/generate
- * Generate a BOQ draft for a lead using AI + historical pricing data.
- * Admin-authenticated (no user_id check, no status restriction).
+ * Generate a BOQ draft with streaming - sends categories progressively via SSE.
  */
 export async function POST(_req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   const auth = await verifyAdmin()
-  if (!auth.admin) return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
+  if (!auth.admin) return new Response(JSON.stringify({ error: 'Forbidden' }), { status: 403 })
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const supabase = createServiceClient() as any
   const { id: leadId } = await params
 
-  // Check for merge mode (add new scope only)
   let mode = 'full'
   let newScopeIds: string[] = []
   try {
     const body = await _req.json()
     mode = body.mode ?? 'full'
     newScopeIds = body.newScopeIds ?? []
-  } catch { /* empty body is fine */ }
+  } catch { /* empty body */ }
 
   const { data: lead, error: leadError } = await supabase
     .from('leads')
@@ -36,9 +34,8 @@ export async function POST(_req: NextRequest, { params }: { params: Promise<{ id
     .eq('id', leadId)
     .single()
 
-  if (leadError || !lead) return NextResponse.json({ error: 'Lead not found' }, { status: 404 })
+  if (leadError || !lead) return new Response(JSON.stringify({ error: 'Lead not found' }), { status: 404 })
 
-  // Fetch chat history
   const { data: messages } = await supabase
     .from('chat_messages')
     .select('role, content')
@@ -48,7 +45,6 @@ export async function POST(_req: NextRequest, { params }: { params: Promise<{ id
   const rows = (messages ?? []) as { role: string; content: string }[]
   const chatHistory = rows.map((m) => `${m.role}: ${m.content}`).join('\n\n')
 
-  // Fetch historical pricing context
   const allScopeIds = (lead.scope as string[]) ?? []
   const scopeIds = mode === 'merge' && newScopeIds.length > 0 ? newScopeIds : allScopeIds
   const [historicalContext, pricingSummary] = await Promise.all([
@@ -143,80 +139,167 @@ Format as structured JSON using the submit_boq_draft tool.`,
     tool_choice: { type: 'tool', name: 'submit_boq_draft' },
   })
 
-  const response = await stream.finalMessage()
+  // Stream response as SSE - parse categories progressively from tool JSON
+  const readable = new ReadableStream({
+    async start(controller) {
+      const encoder = new TextEncoder()
+      function send(event: string, data: unknown) {
+        controller.enqueue(encoder.encode(`data: ${JSON.stringify({ event, data })}\n\n`))
+      }
 
-  const toolUse = response.content.find((b) => b.type === 'tool_use')
-  if (!toolUse || toolUse.type !== 'tool_use') {
-    return NextResponse.json({ error: 'Failed to generate BOQ draft' }, { status: 500 })
-  }
+      let toolBuffer = ''
+      let lastCategoryCount = 0
 
-  const boqData = toolUse.input as {
-    summary: string
-    categories: Json
-    grand_total_aed: number
-    assumptions: Json
-    exclusions: Json
-  }
+      // Try to extract complete categories from the buffer
+      function tryExtractCategories() {
+        // Find the categories array in the JSON
+        const catStart = toolBuffer.indexOf('"categories"')
+        if (catStart === -1) return
 
-  // Run deviation flagging
-  const deviationFlags = flagDeviations(
-    boqData.categories as unknown as Parameters<typeof flagDeviations>[0],
-    pricingSummary,
-  )
+        // Find the opening bracket
+        let bracketStart = toolBuffer.indexOf('[', catStart)
+        if (bracketStart === -1) return
 
-  if (mode === 'merge') {
-    // Merge: append new categories to existing BOQ
-    const { data: existingBoq } = await supabase
-      .from('boq_drafts')
-      .select('*')
-      .eq('lead_id', leadId)
-      .order('created_at', { ascending: false })
-      .limit(1)
-      .maybeSingle()
+        // Try to parse individual category objects
+        let depth = 0
+        let inStr = false
+        let strEsc = false
+        let objStart = -1
+        const extractedCategories: unknown[] = []
 
-    if (existingBoq) {
-      const existingCats = (existingBoq.categories ?? []) as unknown[]
-      const newCats = boqData.categories as unknown[]
-      const mergedCats = [...existingCats, ...newCats]
-      const mergedTotal = (existingBoq.grand_total_aed ?? 0) + boqData.grand_total_aed
+        for (let i = bracketStart; i < toolBuffer.length; i++) {
+          const ch = toolBuffer[i]
+          if (inStr) {
+            if (strEsc) { strEsc = false }
+            else if (ch === '\\') { strEsc = true }
+            else if (ch === '"') { inStr = false }
+          } else {
+            if (ch === '"') { inStr = true }
+            else if (ch === '{') {
+              if (depth === 1 && objStart === -1) objStart = i
+              depth++
+            }
+            else if (ch === '[') { depth++ }
+            else if (ch === '}' || ch === ']') {
+              depth--
+              if (depth === 1 && ch === '}' && objStart !== -1) {
+                // Complete category object
+                const objStr = toolBuffer.slice(objStart, i + 1)
+                try {
+                  const cat = JSON.parse(objStr)
+                  if (cat.name && cat.line_items) {
+                    extractedCategories.push(cat)
+                  }
+                } catch { /* incomplete */ }
+                objStart = -1
+              }
+            }
+          }
+        }
 
-      const { data: updated, error: updateError } = await supabase
-        .from('boq_drafts')
-        .update({
-          categories: mergedCats,
-          grand_total_aed: mergedTotal,
-          deviation_flags: deviationFlags.length > 0 ? deviationFlags : existingBoq.deviation_flags,
-          updated_at: new Date().toISOString(),
+        // Send any new categories
+        if (extractedCategories.length > lastCategoryCount) {
+          for (let i = lastCategoryCount; i < extractedCategories.length; i++) {
+            send('category', extractedCategories[i])
+          }
+          lastCategoryCount = extractedCategories.length
+        }
+      }
+
+      try {
+        send('start', { mode })
+
+        for await (const chunk of stream) {
+          if (chunk.type === 'content_block_delta' && chunk.delta.type === 'input_json_delta') {
+            toolBuffer += chunk.delta.partial_json
+            tryExtractCategories()
+          }
+        }
+
+        // Parse complete result
+        const response = await stream.finalMessage()
+        const toolUse = response.content.find(b => b.type === 'tool_use')
+
+        if (!toolUse || toolUse.type !== 'tool_use') {
+          send('error', { message: 'Failed to generate BOQ' })
+          controller.close()
+          return
+        }
+
+        const boqData = toolUse.input as {
+          summary: string
+          categories: Json
+          grand_total_aed: number
+          assumptions: Json
+          exclusions: Json
+        }
+
+        // Run deviation flagging
+        const deviationFlags = flagDeviations(
+          boqData.categories as unknown as Parameters<typeof flagDeviations>[0],
+          pricingSummary,
+        )
+
+        // Save to DB
+        if (mode === 'merge') {
+          const { data: existingBoq } = await supabase
+            .from('boq_drafts')
+            .select('*')
+            .eq('lead_id', leadId)
+            .order('created_at', { ascending: false })
+            .limit(1)
+            .maybeSingle()
+
+          if (existingBoq) {
+            const existingCats = (existingBoq.categories ?? []) as unknown[]
+            const newCats = boqData.categories as unknown[]
+            const mergedCats = [...existingCats, ...newCats]
+            const mergedTotal = (existingBoq.grand_total_aed ?? 0) + boqData.grand_total_aed
+
+            await supabase
+              .from('boq_drafts')
+              .update({
+                categories: mergedCats,
+                grand_total_aed: mergedTotal,
+                deviation_flags: deviationFlags.length > 0 ? deviationFlags : existingBoq.deviation_flags,
+                updated_at: new Date().toISOString(),
+              })
+              .eq('id', existingBoq.id)
+          }
+        } else {
+          await supabase.from('boq_drafts').delete().eq('lead_id', leadId)
+          await supabase
+            .from('boq_drafts')
+            .insert({
+              lead_id: leadId,
+              categories: boqData.categories,
+              grand_total_aed: boqData.grand_total_aed,
+              assumptions: boqData.assumptions,
+              exclusions: boqData.exclusions,
+              deviation_flags: deviationFlags.length > 0 ? deviationFlags : null,
+            })
+        }
+
+        send('complete', {
+          categories: boqData.categories,
+          grand_total_aed: boqData.grand_total_aed,
+          assumptions: boqData.assumptions,
+          exclusions: boqData.exclusions,
         })
-        .eq('id', existingBoq.id)
-        .select()
-        .single()
+      } catch (err) {
+        send('error', { message: err instanceof Error ? err.message : 'Unknown error' })
+      } finally {
+        controller.close()
+      }
+    },
+  })
 
-      if (updateError) return NextResponse.json({ error: updateError.message }, { status: 500 })
-      return NextResponse.json(updated)
-    }
-  }
-
-  // Full mode: delete existing and create new
-  await supabase.from('boq_drafts').delete().eq('lead_id', leadId)
-
-  // Insert new BOQ
-  const { data: boq, error: insertError } = await supabase
-    .from('boq_drafts')
-    .insert({
-      lead_id: leadId,
-      categories: boqData.categories,
-      grand_total_aed: boqData.grand_total_aed,
-      assumptions: boqData.assumptions,
-      exclusions: boqData.exclusions,
-      deviation_flags: deviationFlags.length > 0 ? deviationFlags : null,
-    })
-    .select()
-    .single()
-
-  if (insertError) {
-    return NextResponse.json({ error: insertError.message }, { status: 500 })
-  }
-
-  return NextResponse.json(boq)
+  return new Response(readable, {
+    headers: {
+      'Content-Type': 'text/event-stream',
+      'Cache-Control': 'no-cache',
+      'Connection': 'keep-alive',
+      'X-Accel-Buffering': 'no',
+    },
+  })
 }

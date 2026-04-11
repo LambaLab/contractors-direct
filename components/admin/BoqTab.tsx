@@ -179,6 +179,8 @@ export default function BoqTab({ leadId }: Props) {
   const handleGenerate = async (mode: 'full' | 'merge' = 'full', scopeToAdd?: string[]) => {
     setGenerating(true)
     setGenMode(mode)
+    if (mode === 'full') setCategories([])
+
     try {
       const body: { mode: string; newScopeIds?: string[] } = { mode }
       if (mode === 'merge' && scopeToAdd) body.newScopeIds = scopeToAdd
@@ -187,7 +189,45 @@ export default function BoqTab({ leadId }: Props) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(body),
       })
-      if (res.ok) await fetchBoq()
+
+      if (!res.ok || !res.body) {
+        await fetchBoq()
+        setGenerating(false)
+        return
+      }
+
+      // Read SSE stream
+      const reader = res.body.getReader()
+      const decoder = new TextDecoder()
+      let buffer = ''
+
+      while (true) {
+        const { done, value } = await reader.read()
+        if (done) break
+        buffer += decoder.decode(value, { stream: true })
+
+        // Parse SSE events
+        const lines = buffer.split('\n')
+        buffer = lines.pop() ?? ''
+
+        for (const line of lines) {
+          if (!line.startsWith('data: ')) continue
+          try {
+            const { event, data } = JSON.parse(line.slice(6))
+            if (event === 'category') {
+              // Progressively add category
+              setCategories(prev => {
+                const next = [...prev, data as BoqCategory]
+                setExpandedCategories(new Set(next.map((_, i) => i)))
+                return next
+              })
+            } else if (event === 'complete') {
+              // Final state from DB
+              await fetchBoq()
+            }
+          } catch { /* skip malformed */ }
+        }
+      }
     } catch { /* ignore */ }
     setGenerating(false)
   }
@@ -195,7 +235,7 @@ export default function BoqTab({ leadId }: Props) {
   const handleSave = async () => {
     if (!boq || !dirty) return
     setSaving(true)
-    const updated = categories.map(cat => ({ ...cat, category_subtotal_aed: cat.line_items.reduce((s, li) => s + li.subtotal_aed, 0) }))
+    const updated = categories.map(cat => ({ ...cat, category_subtotal_aed: (cat.line_items ?? []).reduce((s, li) => s + li.subtotal_aed, 0) }))
     const grandTotal = updated.reduce((s, cat) => s + cat.category_subtotal_aed, 0)
     try {
       const res = await fetch(`/api/admin/leads/${leadId}/boq`, {
@@ -383,7 +423,7 @@ export default function BoqTab({ leadId }: Props) {
   const flagMap = new Map<string, DeviationFlag>()
   if (boq?.deviation_flags) for (const f of boq.deviation_flags) flagMap.set(`${f.categoryName}:${f.lineItemIndex}`, f)
 
-  const grandTotal = categories.reduce((s, c) => s + c.line_items.reduce((ls, li) => ls + li.subtotal_aed, 0), 0)
+  const grandTotal = categories.reduce((s, c) => s + (c.line_items ?? []).reduce((ls, li) => ls + li.subtotal_aed, 0), 0)
 
   // Filtered PB items for add dialog
   const filteredPB = priceBookItems.filter(p => {
@@ -395,10 +435,11 @@ export default function BoqTab({ leadId }: Props) {
   // ── Render ──
 
   if (loading) return <div className="flex items-center justify-center py-16"><Loader2 className="w-5 h-5 animate-spin text-muted-foreground" /></div>
-  if (generating) return <div className="flex flex-col items-center justify-center py-16 gap-3"><Loader2 className="w-6 h-6 animate-spin text-purple-500" /><p className="text-sm text-muted-foreground">Generating BOQ with historical pricing...</p><p className="text-xs text-muted-foreground">This may take up to a minute.</p></div>
-  if (!boq) return <div className="flex flex-col items-center justify-center py-16 gap-3"><p className="text-sm text-muted-foreground">No BOQ generated yet.</p><Button onClick={() => handleGenerate('full')} className="gap-2 cursor-pointer"><Sparkles className="w-4 h-4" />Generate BOQ</Button></div>
+  // While generating, show progressive content (categories stream in) + skeleton for pending
+  // Don't return early - let the main render handle it with the `generating` flag
+  if (!boq && !generating) return <div className="flex flex-col items-center justify-center py-16 gap-3"><p className="text-sm text-muted-foreground">No BOQ generated yet.</p><Button onClick={() => handleGenerate('full')} className="gap-2 cursor-pointer"><Sparkles className="w-4 h-4" />Generate BOQ</Button></div>
 
-  const isLocked = boq.locked
+  const isLocked = boq?.locked ?? false
 
   // ── Change detection ──
   // Compare lead scope vs what's in the BOQ categories, and timestamps
@@ -415,7 +456,7 @@ export default function BoqTab({ leadId }: Props) {
     return !boqScopeNames.some(bn => bn.includes(name) || name.includes(bn))
   })
 
-  const proposalUpdatedAfterBoq = leadUpdatedAt && boq.created_at && new Date(leadUpdatedAt) > new Date(boq.created_at)
+  const proposalUpdatedAfterBoq = leadUpdatedAt && boq?.created_at && new Date(leadUpdatedAt) > new Date(boq.created_at)
   const hasChanges = (newScopeItems.length > 0 || proposalUpdatedAfterBoq) && !isLocked
 
   return (
@@ -481,7 +522,7 @@ export default function BoqTab({ leadId }: Props) {
 
         {categories.map((category, catIdx) => {
           const isOpen = expandedCategories.has(catIdx)
-          const catSubtotal = category.line_items.reduce((s, li) => s + li.subtotal_aed, 0)
+          const catSubtotal = (category.line_items ?? []).reduce((s, li) => s + li.subtotal_aed, 0)
           return (
             <div key={catIdx}>
               <div className="flex items-center gap-1 px-6 md:px-8 py-2.5 hover:bg-muted/30 border-b transition-colors group cursor-pointer" onClick={() => toggleCategory(catIdx)}>
@@ -492,7 +533,7 @@ export default function BoqTab({ leadId }: Props) {
                   className={`font-semibold text-sm shrink-0 ${!isLocked ? 'hover:text-purple-400 hover:underline transition-colors cursor-text' : ''}`}
                   onClick={(e) => { if (!isLocked) { e.stopPropagation(); openRenameCat(catIdx) } }}
                 >{category.name}</span>
-                <span className="text-xs text-muted-foreground ml-1 shrink-0">({category.line_items.length})</span>
+                <span className="text-xs text-muted-foreground ml-1 shrink-0">({(category.line_items ?? []).length})</span>
                 <div className="flex-1" />{/* spacer - clicks here toggle expand */}
                 <span className="text-right font-mono text-xs font-medium w-[110px]">{aed(catSubtotal)}</span>
                 {!isLocked && <div className="flex items-center gap-0.5 opacity-0 group-hover:opacity-100 transition-opacity ml-1">
@@ -503,7 +544,7 @@ export default function BoqTab({ leadId }: Props) {
               </div>
 
               {isOpen && <>
-                {category.line_items.map((item, itemIdx) => {
+                {(category.line_items ?? []).map((item, itemIdx) => {
                   const flag = flagMap.get(`${category.name}:${itemIdx}`)
                   const FlagIcon = flag ? FLAG_STYLES[flag.severity].icon : null
                   return (
@@ -530,15 +571,45 @@ export default function BoqTab({ leadId }: Props) {
           )
         })}
 
-        <div className={`grid ${COL} gap-2 items-center px-6 md:px-8 py-3 border-t-2 bg-muted/20`}>
-          <span className="font-semibold text-sm">Grand Total</span><span /><span /><span />
-          <span className="text-right font-mono text-sm font-bold">{aed(grandTotal)}</span><span />
-        </div>
+        {/* Skeleton rows while generating */}
+        {generating && (
+          <div className="animate-pulse">
+            {[1, 2, 3].map(i => (
+              <div key={i}>
+                <div className="flex items-center gap-2 px-6 md:px-8 py-3 border-b">
+                  <div className="h-4 w-4 rounded bg-muted" />
+                  <div className="h-4 rounded bg-muted" style={{ width: `${120 + i * 30}px` }} />
+                </div>
+                {[1, 2, 3, 4].map(j => (
+                  <div key={j} className={`grid ${COL} gap-2 items-center pl-10 pr-6 md:pl-12 md:pr-8 py-2.5 border-b border-dashed border-muted/30`}>
+                    <div className="h-3 rounded bg-muted" style={{ width: `${60 + j * 20}%` }} />
+                    <div className="h-3 w-8 rounded bg-muted ml-auto" />
+                    <div className="h-3 w-6 rounded bg-muted ml-auto" />
+                    <div className="h-3 w-12 rounded bg-muted ml-auto" />
+                    <div className="h-3 w-14 rounded bg-muted ml-auto" />
+                    <div />
+                  </div>
+                ))}
+              </div>
+            ))}
+            <div className="flex items-center justify-center py-3 text-xs text-muted-foreground gap-2">
+              <Loader2 className="w-3.5 h-3.5 animate-spin" />
+              Generating more categories...
+            </div>
+          </div>
+        )}
 
-        {((boq.assumptions?.length ?? 0) > 0 || (boq.exclusions?.length ?? 0) > 0) && (
+        {!generating && (
+          <div className={`grid ${COL} gap-2 items-center px-6 md:px-8 py-3 border-t-2 bg-muted/20`}>
+            <span className="font-semibold text-sm">Grand Total</span><span /><span /><span />
+            <span className="text-right font-mono text-sm font-bold">{aed(grandTotal)}</span><span />
+          </div>
+        )}
+
+        {!generating && ((boq?.assumptions?.length ?? 0) > 0 || (boq?.exclusions?.length ?? 0) > 0) && (
           <div className="px-6 md:px-8 py-4 space-y-3 border-t">
-            {boq.assumptions?.length > 0 && <div><p className="text-[10px] uppercase tracking-widest text-muted-foreground mb-1">Assumptions</p><ul className="text-xs text-muted-foreground space-y-0.5">{boq.assumptions.map((a, i) => <li key={i}>&bull; {a}</li>)}</ul></div>}
-            {boq.exclusions?.length > 0 && <div><p className="text-[10px] uppercase tracking-widest text-muted-foreground mb-1">Exclusions</p><ul className="text-xs text-muted-foreground space-y-0.5">{boq.exclusions.map((e, i) => <li key={i}>&bull; {e}</li>)}</ul></div>}
+            {(boq?.assumptions?.length ?? 0) > 0 && <div><p className="text-[10px] uppercase tracking-widest text-muted-foreground mb-1">Assumptions</p><ul className="text-xs text-muted-foreground space-y-0.5">{boq!.assumptions.map((a, i) => <li key={i}>&bull; {a}</li>)}</ul></div>}
+            {(boq?.exclusions?.length ?? 0) > 0 && <div><p className="text-[10px] uppercase tracking-widest text-muted-foreground mb-1">Exclusions</p><ul className="text-xs text-muted-foreground space-y-0.5">{boq!.exclusions.map((e, i) => <li key={i}>&bull; {e}</li>)}</ul></div>}
           </div>
         )}
       </div>
