@@ -680,21 +680,7 @@ export interface Database {
         ]
       }
     }
-    Views: {
-      pricing_summary: {
-        Row: {
-          scope_item_id: string | null
-          unit: string | null
-          sample_count: number
-          rate_min: number
-          rate_max: number
-          rate_avg: number
-          rate_p25: number
-          rate_median: number
-          rate_p75: number
-        }
-      }
-    }
+    Views: Record<string, never>
     Functions: Record<string, never>
     Enums: Record<string, never>
   }

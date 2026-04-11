@@ -168,7 +168,7 @@ Format as structured JSON using the submit_boq_draft tool.`,
 
   // Run deviation flagging against historical data
   const deviationFlags = flagDeviations(
-    boqData.categories as Parameters<typeof flagDeviations>[0],
+    boqData.categories as unknown as Parameters<typeof flagDeviations>[0],
     pricingSummary,
   )
 

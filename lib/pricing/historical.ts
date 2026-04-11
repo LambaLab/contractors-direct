@@ -32,13 +32,14 @@ export interface PricingOverride {
  * Returns aggregated historical pricing per scope_item_id + unit.
  */
 export async function getPricingSummary(): Promise<HistoricalPricingStat[]> {
-  const supabase = createServiceClient()
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const supabase = createServiceClient() as any
   const { data, error } = await supabase
-    .from('pricing_summary' as 'historical_projects')
+    .from('pricing_summary')
     .select('*')
 
   if (error || !data) return []
-  return data as unknown as HistoricalPricingStat[]
+  return data as HistoricalPricingStat[]
 }
 
 /**
@@ -48,10 +49,11 @@ export async function getHistoricalPricing(params: {
   scopeItemId: string
   unit?: string
 }): Promise<HistoricalPricingStat | null> {
-  const supabase = createServiceClient()
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const supabase = createServiceClient() as any
 
   let query = supabase
-    .from('pricing_summary' as 'historical_projects')
+    .from('pricing_summary')
     .select('*')
     .eq('scope_item_id', params.scopeItemId)
 
@@ -61,7 +63,7 @@ export async function getHistoricalPricing(params: {
 
   const { data, error } = await query.limit(1).maybeSingle()
   if (error || !data) return null
-  return data as unknown as HistoricalPricingStat
+  return data as HistoricalPricingStat
 }
 
 /**

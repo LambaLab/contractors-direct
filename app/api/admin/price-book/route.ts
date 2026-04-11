@@ -67,6 +67,7 @@ export async function PATCH(req: NextRequest) {
   const supabase = createServiceClient()
 
   // Upsert by (item_description, unit) unique constraint
+  const adminId = (auth.admin as unknown as { id: string }).id
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { data, error } = await (supabase as any)
     .from('pricing_overrides')
@@ -78,7 +79,7 @@ export async function PATCH(req: NextRequest) {
         override_min_aed,
         override_max_aed,
         notes: notes ?? null,
-        updated_by: auth.admin.id,
+        updated_by: adminId,
         updated_at: new Date().toISOString(),
       },
       { onConflict: 'item_description,unit' }

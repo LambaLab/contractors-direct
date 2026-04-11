@@ -264,7 +264,7 @@ async function extractFromExcel(filePath: string, filename: string): Promise<Ext
   // Process each sheet (skip cover sheet)
   for (const sheetName of workbook.SheetNames) {
     const sheet = workbook.Sheets[sheetName]
-    const rows = XLSX.utils.sheet_to_json<Record<string, unknown>>(sheet, { header: 1 }) as unknown[][]
+    const rows = XLSX.utils.sheet_to_json(sheet, { header: 1 }) as unknown[][]
 
     if (!rows || rows.length < 3) continue
 
@@ -358,11 +358,11 @@ async function extractFromExcel(filePath: string, filename: string): Promise<Ext
   let csvText = ''
   for (const sheetName of workbook.SheetNames) {
     const sheet = workbook.Sheets[sheetName]
-    const csv = XLSX.utils.sheet_to_json(sheet, { header: 1 }) as unknown[][]
+    const csv = XLSX.utils.sheet_to_json(sheet, { header: 1 }) as unknown[]
     if (!csv || csv.length === 0) continue
     csvText += `\n=== Sheet: ${sheetName} ===\n`
     for (const row of csv) {
-      if (!row || row.length === 0) continue
+      if (!row || !Array.isArray(row) || row.length === 0) continue
       csvText += (row as unknown[]).map(c => c ?? '').join('\t') + '\n'
     }
   }
