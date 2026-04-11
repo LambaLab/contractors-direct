@@ -297,7 +297,16 @@ export default function BoqTab({ leadId }: Props) {
     setDirty(true)
   }
   const deleteCategory = (catIdx: number) => { setCategories(prev => prev.filter((_, i) => i !== catIdx)); setDirty(true) }
-  const addCategory = () => { setCategories(prev => [...prev, { name: 'New Category', line_items: [], category_subtotal_aed: 0 }]); setExpandedCategories(prev => new Set([...prev, categories.length])); setDirty(true) }
+  const addCategory = () => {
+    setCategories(prev => [{ name: 'New Category', line_items: [], category_subtotal_aed: 0 }, ...prev])
+    // Shift all expanded indices up by 1 and expand the new one at index 0
+    setExpandedCategories(prev => {
+      const next = new Set<number>([0])
+      for (const idx of prev) next.add(idx + 1)
+      return next
+    })
+    setDirty(true)
+  }
 
   // Rename category
   const openRenameCat = (catIdx: number) => { setRenameCatIdx(catIdx); setRenameCatValue(categories[catIdx].name); setRenameCatOpen(true) }
@@ -351,8 +360,8 @@ export default function BoqTab({ leadId }: Props) {
           <span>Description</span>
           <span className="text-right">Qty</span>
           <span className="text-right">Unit</span>
-          <span className="text-right">Rate</span>
-          <span className="text-right">Total</span>
+          <span className="text-right">Unit Price</span>
+          <span className="text-right">Amount</span>
           <span></span>
         </div>
 
@@ -361,11 +370,14 @@ export default function BoqTab({ leadId }: Props) {
           const catSubtotal = category.line_items.reduce((s, li) => s + li.subtotal_aed, 0)
           return (
             <div key={catIdx}>
-              <div className="flex items-center gap-1 px-6 md:px-8 py-2.5 hover:bg-muted/30 border-b transition-colors group">
-                <button onClick={() => toggleCategory(catIdx)} className="cursor-pointer shrink-0">
+              <div className="flex items-center gap-1 px-6 md:px-8 py-2.5 hover:bg-muted/30 border-b transition-colors group cursor-pointer" onClick={() => toggleCategory(catIdx)}>
+                <div className="shrink-0">
                   {isOpen ? <ChevronDown className="w-4 h-4 text-muted-foreground" /> : <ChevronRight className="w-4 h-4 text-muted-foreground" />}
-                </button>
-                <span className={`font-semibold text-sm flex-1 ${!isLocked ? 'cursor-pointer hover:text-purple-400 transition-colors' : ''}`} onClick={() => !isLocked && openRenameCat(catIdx)}>{category.name}</span>
+                </div>
+                <span
+                  className={`font-semibold text-sm flex-1 ${!isLocked ? 'hover:text-purple-400 hover:underline transition-colors' : ''}`}
+                  onClick={(e) => { if (!isLocked) { e.stopPropagation(); openRenameCat(catIdx) } }}
+                >{category.name}</span>
                 <span className="text-xs text-muted-foreground mr-2">({category.line_items.length})</span>
                 <span className="text-right font-mono text-xs font-medium w-[110px]">{aed(catSubtotal)}</span>
                 {!isLocked && <div className="flex items-center gap-0.5 opacity-0 group-hover:opacity-100 transition-opacity ml-1">
