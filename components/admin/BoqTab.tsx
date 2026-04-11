@@ -116,6 +116,12 @@ export default function BoqTab({ leadId }: Props) {
   const [renameCatIdx, setRenameCatIdx] = useState(0)
   const [renameCatValue, setRenameCatValue] = useState('')
 
+  // Add category dialog
+  const [addCatOpen, setAddCatOpen] = useState(false)
+  const [addCatSelected, setAddCatSelected] = useState<string | null>(null) // scope_item_id or 'custom'
+  const [addCatCustomName, setAddCatCustomName] = useState('')
+  const [addCatCheckedItems, setAddCatCheckedItems] = useState<Set<number>>(new Set())
+
   const fetchBoq = useCallback(async () => {
     try {
       const res = await fetch(`/api/admin/leads/${leadId}/boq`)
@@ -302,15 +308,54 @@ export default function BoqTab({ leadId }: Props) {
     setDirty(true)
   }
   const deleteCategory = (catIdx: number) => { setCategories(prev => prev.filter((_, i) => i !== catIdx)); setDirty(true) }
-  const addCategory = () => {
-    setCategories(prev => [{ name: 'New Category', line_items: [], category_subtotal_aed: 0 }, ...prev])
-    // Shift all expanded indices up by 1 and expand the new one at index 0
+  const openAddCategory = async () => {
+    setAddCatSelected(null)
+    setAddCatCustomName('')
+    setAddCatCheckedItems(new Set())
+    setAddCatOpen(true)
+    await fetchPriceBook()
+  }
+
+  const getItemsForScope = (scopeId: string): PriceBookItem[] => {
+    return priceBookItems.filter(p => p.scope_item_id === scopeId)
+  }
+
+  const toggleAddCatItem = (idx: number) => {
+    setAddCatCheckedItems(prev => {
+      const next = new Set(prev)
+      if (next.has(idx)) next.delete(idx); else next.add(idx)
+      return next
+    })
+  }
+
+  const selectAllCatItems = (items: PriceBookItem[]) => {
+    setAddCatCheckedItems(new Set(items.map((_, i) => i)))
+  }
+
+  const confirmAddCategory = () => {
+    const name = addCatSelected === 'custom'
+      ? addCatCustomName.trim() || 'New Category'
+      : addCatSelected?.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase()) ?? 'New Category'
+
+    const scopeItems = addCatSelected && addCatSelected !== 'custom' ? getItemsForScope(addCatSelected) : []
+    const selectedItems = [...addCatCheckedItems].map(i => scopeItems[i]).filter(Boolean)
+
+    const lineItems: BoqLineItem[] = selectedItems.map(item => ({
+      description: item.description,
+      unit: item.unit ?? 'nos',
+      quantity: 1,
+      unit_price_aed: item.unit_rate_aed ?? 0,
+      subtotal_aed: item.unit_rate_aed ?? 0,
+    }))
+
+    setCategories(prev => [{ name, line_items: lineItems, category_subtotal_aed: lineItems.reduce((s, li) => s + li.subtotal_aed, 0) }, ...prev])
     setExpandedCategories(prev => {
       const next = new Set<number>([0])
       for (const idx of prev) next.add(idx + 1)
       return next
     })
     setDirty(true)
+    setAddCatOpen(false)
   }
 
   // Rename category
@@ -352,7 +397,7 @@ export default function BoqTab({ leadId }: Props) {
         <div className="flex items-center gap-1.5">
           {!isLocked && <>
             {dirty && <Button size="sm" onClick={handleSave} disabled={saving} className="text-xs cursor-pointer">{saving ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : 'Save'}</Button>}
-            <Button variant="ghost" size="sm" onClick={addCategory} className="text-xs cursor-pointer gap-1.5"><Plus className="w-3.5 h-3.5" />Category</Button>
+            <Button variant="ghost" size="sm" onClick={openAddCategory} className="text-xs cursor-pointer gap-1.5"><Plus className="w-3.5 h-3.5" />Category</Button>
             <Button variant="ghost" size="sm" onClick={handleGenerate} disabled={generating} className="text-xs cursor-pointer gap-1.5"><Sparkles className="w-3.5 h-3.5" />Regenerate</Button>
             <Button variant="outline" size="sm" onClick={() => setLockConfirmOpen(true)} className="text-xs cursor-pointer gap-1.5"><Lock className="w-3.5 h-3.5" />Lock</Button>
           </>}
@@ -568,6 +613,108 @@ export default function BoqTab({ leadId }: Props) {
           <DialogHeader><DialogTitle>Rename Category</DialogTitle></DialogHeader>
           <Input value={renameCatValue} onChange={(e) => setRenameCatValue(e.target.value)} className="text-sm" autoFocus onKeyDown={(e) => { if (e.key === 'Enter') saveRenameCat() }} />
           <DialogFooter><Button variant="outline" onClick={() => setRenameCatOpen(false)} className="cursor-pointer">Cancel</Button><Button onClick={saveRenameCat} className="cursor-pointer">Save</Button></DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* ── Add Category Dialog ── */}
+      <Dialog open={addCatOpen} onOpenChange={setAddCatOpen}>
+        <DialogContent className="sm:max-w-lg">
+          <DialogHeader>
+            {addCatSelected && addCatSelected !== 'custom' ? (
+              <div className="flex items-center gap-3">
+                <button onClick={() => { setAddCatSelected(null); setAddCatCheckedItems(new Set()) }} className="text-muted-foreground hover:text-foreground cursor-pointer transition-colors"><ArrowUp className="w-4 h-4 -rotate-90" /></button>
+                <DialogTitle className="flex-1">Select items for {addCatSelected.replace(/_/g, ' ')}</DialogTitle>
+              </div>
+            ) : (
+              <DialogTitle>Add Category</DialogTitle>
+            )}
+          </DialogHeader>
+
+          {!addCatSelected ? (
+            /* ── Category selection ── */
+            <div className="space-y-3">
+              <p className="text-xs text-muted-foreground">Choose a category from the Price Book or create a custom one.</p>
+              <div className="border rounded-md max-h-72 overflow-auto divide-y">
+                {pbLoading ? <div className="flex items-center justify-center py-8"><Loader2 className="w-5 h-5 animate-spin text-muted-foreground" /></div> : (
+                  <>
+                    {pbCategories.map(scopeId => {
+                      const items = getItemsForScope(scopeId)
+                      const alreadyExists = categories.some(c => c.name.toLowerCase().replace(/[^a-z]/g, '').includes(scopeId.replace(/_/g, '')))
+                      return (
+                        <div
+                          key={scopeId}
+                          className={`flex items-center justify-between px-4 py-3 cursor-pointer transition-colors ${alreadyExists ? 'opacity-50 hover:bg-muted/10' : 'hover:bg-muted/30'}`}
+                          onClick={() => { setAddCatSelected(scopeId); setAddCatCheckedItems(new Set()) }}
+                        >
+                          <div>
+                            <p className="text-sm font-medium">{scopeId.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase())}</p>
+                            <p className="text-[11px] text-muted-foreground">{items.length} items in Price Book{alreadyExists ? ' (already in BOQ)' : ''}</p>
+                          </div>
+                          <ChevronRight className="w-4 h-4 text-muted-foreground" />
+                        </div>
+                      )
+                    })}
+                  </>
+                )}
+              </div>
+              <DialogFooter>
+                <Button variant="outline" onClick={() => { setAddCatSelected('custom'); setAddCatCustomName('') }} className="cursor-pointer text-xs">Create custom category</Button>
+              </DialogFooter>
+            </div>
+          ) : addCatSelected === 'custom' ? (
+            /* ── Custom category name ── */
+            <div className="space-y-3">
+              <div><label className="text-xs text-muted-foreground mb-1 block">Category name</label>
+              <Input value={addCatCustomName} onChange={(e) => setAddCatCustomName(e.target.value)} placeholder="e.g., Landscaping" className="text-sm" autoFocus onKeyDown={(e) => { if (e.key === 'Enter') confirmAddCategory() }} /></div>
+              <DialogFooter>
+                <Button variant="outline" onClick={() => setAddCatSelected(null)} className="cursor-pointer">Back</Button>
+                <Button onClick={confirmAddCategory} className="cursor-pointer">Add Category</Button>
+              </DialogFooter>
+            </div>
+          ) : (
+            /* ── Item multi-select for chosen category ── */
+            (() => {
+              const scopeItems = getItemsForScope(addCatSelected)
+              return (
+                <div className="space-y-3">
+                  <div className="flex items-center justify-between">
+                    <p className="text-xs text-muted-foreground">{addCatCheckedItems.size} of {scopeItems.length} selected</p>
+                    <button
+                      onClick={() => addCatCheckedItems.size === scopeItems.length ? setAddCatCheckedItems(new Set()) : selectAllCatItems(scopeItems)}
+                      className="text-xs text-purple-400 hover:text-purple-300 cursor-pointer"
+                    >
+                      {addCatCheckedItems.size === scopeItems.length ? 'Deselect all' : 'Select all'}
+                    </button>
+                  </div>
+                  <div className="border rounded-md max-h-64 overflow-auto divide-y">
+                    {scopeItems.map((item, i) => (
+                      <label key={i} className="flex items-center gap-3 px-3 py-2 hover:bg-muted/30 cursor-pointer transition-colors">
+                        <input
+                          type="checkbox"
+                          checked={addCatCheckedItems.has(i)}
+                          onChange={() => toggleAddCatItem(i)}
+                          className="rounded border-muted-foreground cursor-pointer accent-purple-500"
+                        />
+                        <div className="flex-1 min-w-0">
+                          <p className="text-sm truncate">{item.description}</p>
+                          <p className="text-[11px] text-muted-foreground">{item.historical_projects?.project_name ?? '-'}</p>
+                        </div>
+                        <div className="text-right shrink-0">
+                          <p className="text-xs font-mono">{aed(item.unit_rate_aed)}</p>
+                          <p className="text-[11px] text-muted-foreground">{item.unit ?? '-'}</p>
+                        </div>
+                      </label>
+                    ))}
+                  </div>
+                  <DialogFooter>
+                    <Button onClick={confirmAddCategory} disabled={addCatCheckedItems.size === 0} className="cursor-pointer">
+                      Add {addCatCheckedItems.size} items
+                    </Button>
+                  </DialogFooter>
+                </div>
+              )
+            })()
+          )}
         </DialogContent>
       </Dialog>
 
