@@ -44,7 +44,7 @@ export function AdminLayoutShell({ children, adminEmail, adminRole }: Props) {
           <div className="flex w-full items-center gap-1 px-4 lg:gap-2">
             <SidebarTrigger />
             <Separator orientation="vertical" className="mx-1 data-[orientation=vertical]:h-4" />
-            <h1 className="text-sm font-medium">Leads</h1>
+            <div id="admin-header-portal"><h1 className="text-sm font-medium">Leads</h1></div>
             {/* Portal target for service dropdown rendered by page */}
             <div id="header-service-slot" className="flex items-center" />
 

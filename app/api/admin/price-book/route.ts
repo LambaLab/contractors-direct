@@ -11,12 +11,13 @@ export async function GET() {
   const auth = await verifyAdmin()
   if (!auth.admin) return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
 
-  const supabase = createServiceClient()
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const supabase = createServiceClient() as any
 
   // Fetch pricing summary (materialized view) and overrides in parallel
   const [summaryResult, overridesResult, projectCountResult] = await Promise.all([
     supabase
-      .from('pricing_summary' as 'historical_projects')
+      .from('pricing_summary')
       .select('*'),
     supabase
       .from('pricing_overrides')
