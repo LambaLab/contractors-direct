@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { usePathname } from 'next/navigation'
 import { LogOut } from 'lucide-react'
 import { createClient } from '@/lib/supabase/client'
 import { SidebarProvider, SidebarInset, SidebarTrigger } from '@/components/ui/sidebar'
@@ -23,8 +24,15 @@ type Props = {
   adminRole: 'super_admin' | 'admin'
 }
 
+const PAGE_TITLES: Record<string, string> = {
+  '/admin': 'Leads',
+  '/admin/price-book': 'Price Book',
+}
+
 export function AdminLayoutShell({ children, adminEmail, adminRole }: Props) {
   const [teamOpen, setTeamOpen] = useState(false)
+  const pathname = usePathname()
+  const pageTitle = PAGE_TITLES[pathname] ?? 'Leads'
 
   async function handleLogout() {
     const supabase = createClient()
@@ -44,7 +52,7 @@ export function AdminLayoutShell({ children, adminEmail, adminRole }: Props) {
           <div className="flex w-full items-center gap-1 px-4 lg:gap-2">
             <SidebarTrigger />
             <Separator orientation="vertical" className="mx-1 data-[orientation=vertical]:h-4" />
-            <div id="admin-header-portal"><h1 className="text-sm font-medium">Leads</h1></div>
+            <h1 className="text-sm font-medium">{pageTitle}</h1>
             {/* Portal target for service dropdown rendered by page */}
             <div id="header-service-slot" className="flex items-center" />
 

@@ -1,7 +1,6 @@
 'use client'
 
 import { useState, useEffect, useCallback } from 'react'
-import { createPortal } from 'react-dom'
 import { ChevronRight, ChevronDown, Pencil, X, Search, LayoutGrid, List, Loader2 } from 'lucide-react'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
@@ -82,11 +81,6 @@ export default function PriceBookPage() {
   const [editMax, setEditMax] = useState('')
   const [editNotes, setEditNotes] = useState('')
   const [saving, setSaving] = useState(false)
-  const [headerEl, setHeaderEl] = useState<HTMLElement | null>(null)
-
-  useEffect(() => {
-    setHeaderEl(document.getElementById('admin-header-portal'))
-  }, [])
 
   const fetchData = useCallback(async () => {
     setLoading(true)
@@ -197,19 +191,7 @@ export default function PriceBookPage() {
   }
 
   return (
-    <>
-      {/* Header portal */}
-      {headerEl && createPortal(
-        <div className="flex items-center gap-3">
-          <h1 className="text-base font-semibold">Price Book</h1>
-          <span className="text-xs text-muted-foreground bg-muted px-2 py-0.5 rounded-full">
-            {projectCount} projects
-          </span>
-        </div>,
-        headerEl
-      )}
-
-      <div className="flex flex-col h-full">
+    <div className="flex flex-col h-full">
         {/* Toolbar */}
         <div className="flex items-center gap-3 px-6 py-3 border-b bg-white dark:bg-background">
           <div className="relative flex-1 max-w-sm">
@@ -527,6 +509,5 @@ export default function PriceBookPage() {
           )}
         </div>
       </div>
-    </>
   )
 }
