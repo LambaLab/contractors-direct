@@ -74,8 +74,8 @@ const FLAG_STYLES = {
   alert: { icon: AlertCircle, color: 'text-red-400' },
 }
 
-// Wider total column to prevent icon overlap
-const COL = 'grid-cols-[1fr_55px_45px_95px_110px_32px]'
+// Wider amount + actions columns to prevent icon overlap
+const COL = 'grid-cols-[1fr_55px_45px_90px_105px_70px]'
 
 export default function BoqTab({ leadId }: Props) {
   const [loading, setLoading] = useState(true)
@@ -431,9 +431,9 @@ export default function BoqTab({ leadId }: Props) {
                 <span className="text-xs text-muted-foreground mr-2">({category.line_items.length})</span>
                 <span className="text-right font-mono text-xs font-medium w-[110px]">{aed(catSubtotal)}</span>
                 {!isLocked && <div className="flex items-center gap-0.5 opacity-0 group-hover:opacity-100 transition-opacity ml-1">
-                  <button onClick={() => moveCategory(catIdx, -1)} className="p-0.5 text-muted-foreground hover:text-foreground cursor-pointer"><ArrowUp className="w-3 h-3" /></button>
-                  <button onClick={() => moveCategory(catIdx, 1)} className="p-0.5 text-muted-foreground hover:text-foreground cursor-pointer"><ArrowDown className="w-3 h-3" /></button>
-                  <button onClick={() => deleteCategory(catIdx)} className="p-0.5 text-muted-foreground hover:text-destructive cursor-pointer"><Trash2 className="w-3 h-3" /></button>
+                  <button onClick={(e) => { e.stopPropagation(); moveCategory(catIdx, -1) }} className="p-0.5 text-muted-foreground hover:text-foreground cursor-pointer"><ArrowUp className="w-3 h-3" /></button>
+                  <button onClick={(e) => { e.stopPropagation(); moveCategory(catIdx, 1) }} className="p-0.5 text-muted-foreground hover:text-foreground cursor-pointer"><ArrowDown className="w-3 h-3" /></button>
+                  <button onClick={(e) => { e.stopPropagation(); deleteCategory(catIdx) }} className="p-0.5 text-muted-foreground hover:text-destructive cursor-pointer"><Trash2 className="w-3 h-3" /></button>
                 </div>}
               </div>
 
