@@ -253,10 +253,15 @@ export default function BoqTab({ leadId }: Props) {
   const openAddFromPB = async (catIdx: number) => {
     setAddCatIdx(catIdx)
     setAddSearch('')
-    setAddCategoryFilter('all')
     setAddDetailItem(null)
     setAddOpen(true)
     await fetchPriceBook()
+    // Default category filter to match current BOQ category name
+    const catName = categories[catIdx]?.name?.toLowerCase() ?? ''
+    const matchedScope = priceBookItems.find(p =>
+      p.scope_item_id && catName.includes(p.scope_item_id.replace(/_/g, ' '))
+    )?.scope_item_id
+    setAddCategoryFilter(matchedScope ?? 'all')
   }
 
   const showAddDetail = (item: PriceBookItem) => {
@@ -470,24 +475,33 @@ export default function BoqTab({ leadId }: Props) {
       {/* ── Add from Price Book Dialog ── */}
       <Dialog open={addOpen} onOpenChange={(open) => { setAddOpen(open); if (!open) setAddDetailItem(null) }}>
         <DialogContent className="sm:max-w-lg">
-          <DialogHeader><DialogTitle>{addDetailItem ? 'Item Details' : 'Add Item from Price Book'}</DialogTitle></DialogHeader>
+          <DialogHeader>
+            {addDetailItem ? (
+              <div className="flex items-center gap-3">
+                <button onClick={() => setAddDetailItem(null)} className="text-muted-foreground hover:text-foreground cursor-pointer transition-colors"><ArrowUp className="w-4 h-4 -rotate-90" /></button>
+                <DialogTitle className="flex-1">Item Details</DialogTitle>
+              </div>
+            ) : (
+              <DialogTitle>Add Item from Price Book</DialogTitle>
+            )}
+          </DialogHeader>
 
           {!addDetailItem ? (
             /* ── Browse / search view ── */
             <>
               <div className="flex gap-2">
+                <select
+                  value={addCategoryFilter}
+                  onChange={(e) => setAddCategoryFilter(e.target.value)}
+                  className="text-xs bg-background border rounded-md px-3 py-1.5 cursor-pointer min-w-[140px]"
+                >
+                  <option value="all">All categories</option>
+                  {pbCategories.map(c => <option key={c} value={c}>{c.replace(/_/g, ' ')}</option>)}
+                </select>
                 <div className="relative flex-1">
                   <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
                   <Input placeholder="Search items..." value={addSearch} onChange={(e) => setAddSearch(e.target.value)} className="pl-9 text-sm" autoFocus />
                 </div>
-                <select
-                  value={addCategoryFilter}
-                  onChange={(e) => setAddCategoryFilter(e.target.value)}
-                  className="text-xs bg-background border rounded-md px-2 cursor-pointer"
-                >
-                  <option value="all">All categories</option>
-                  {pbCategories.map(c => <option key={c} value={c}>{c}</option>)}
-                </select>
               </div>
               <div className="border rounded-md max-h-72 overflow-auto divide-y">
                 {pbLoading ? <div className="flex items-center justify-center py-8"><Loader2 className="w-5 h-5 animate-spin text-muted-foreground" /></div>
@@ -541,7 +555,6 @@ export default function BoqTab({ leadId }: Props) {
                 )}
               </div>
               <DialogFooter>
-                <Button variant="outline" onClick={() => setAddDetailItem(null)} className="cursor-pointer">Back</Button>
                 <Button onClick={confirmAddItem} className="cursor-pointer">Add to BOQ</Button>
               </DialogFooter>
             </>
