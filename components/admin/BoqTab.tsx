@@ -425,10 +425,11 @@ export default function BoqTab({ leadId }: Props) {
                   {isOpen ? <ChevronDown className="w-4 h-4 text-muted-foreground" /> : <ChevronRight className="w-4 h-4 text-muted-foreground" />}
                 </div>
                 <span
-                  className={`font-semibold text-sm flex-1 ${!isLocked ? 'hover:text-purple-400 hover:underline transition-colors' : ''}`}
+                  className={`font-semibold text-sm shrink-0 ${!isLocked ? 'hover:text-purple-400 hover:underline transition-colors cursor-text' : ''}`}
                   onClick={(e) => { if (!isLocked) { e.stopPropagation(); openRenameCat(catIdx) } }}
                 >{category.name}</span>
-                <span className="text-xs text-muted-foreground mr-2">({category.line_items.length})</span>
+                <span className="text-xs text-muted-foreground ml-1 shrink-0">({category.line_items.length})</span>
+                <div className="flex-1" />{/* spacer - clicks here toggle expand */}
                 <span className="text-right font-mono text-xs font-medium w-[110px]">{aed(catSubtotal)}</span>
                 {!isLocked && <div className="flex items-center gap-0.5 opacity-0 group-hover:opacity-100 transition-opacity ml-1">
                   <button onClick={(e) => { e.stopPropagation(); moveCategory(catIdx, -1) }} className="p-0.5 text-muted-foreground hover:text-foreground cursor-pointer"><ArrowUp className="w-3 h-3" /></button>
