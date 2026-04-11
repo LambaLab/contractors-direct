@@ -6,6 +6,7 @@ import type { Database } from '@/lib/supabase/types'
 import { SCOPE_CATALOG } from '@/lib/scope/catalog'
 import { Button } from '@/components/ui/button'
 import LeadEditor from './LeadEditor'
+import BoqTab from './BoqTab'
 import TrackerTab from './TrackerTab'
 import ChatTab from './ChatTab'
 import BudgetTab from './BudgetTab'
@@ -22,7 +23,7 @@ type Props = {
   onClose?: () => void
 }
 
-type DetailTab = 'lead' | 'tracker' | 'chat'
+type DetailTab = 'lead' | 'boq' | 'tracker' | 'chat'
 
 function getStatusStyle(status: string): { bg: string; text: string; dot: string; label: string } {
   const label = status.replace(/_/g, ' ')
@@ -61,6 +62,7 @@ export default function LeadDetail({ lead, onBack, onLeadUpdate, isMobileFullscr
 
   const tabs: { value: DetailTab; label: string }[] = [
     { value: 'lead', label: 'Proposal' },
+    { value: 'boq', label: 'BOQ' },
     { value: 'tracker', label: 'Tracker' },
     { value: 'chat', label: 'Chat' },
   ]
@@ -241,6 +243,9 @@ export default function LeadDetail({ lead, onBack, onLeadUpdate, isMobileFullscr
             <div className="border-t">
               <BudgetTab leadId={lead.id} leadEmail={lead.email} leadSlug={lead.slug} />
             </div>
+          </div>
+          <div className={activeTab === 'boq' ? 'flex-1 min-h-0 flex flex-col' : 'hidden'}>
+            <BoqTab leadId={lead.id} />
           </div>
           <div className={activeTab === 'tracker' ? '' : 'hidden'}>
             <TrackerTab leadId={lead.id} />
