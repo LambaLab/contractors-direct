@@ -1,0 +1,2222 @@
+{
+  "project_name": "Refurbishment Works at Rove Hotel, Dubai Health Care City - Public Area Fit Out & MEP Works",
+  "grand_total_aed": 3534120,
+  "contractor_name": "HTS Interior Design LLC",
+  "project_location": "Dubai Health Care City",
+  "project_type": "hotel_refurb",
+  "revision": "R0",
+  "categories": [
+    {
+      "name": "Bill 1 - Reception: Preliminaries",
+      "category_total_aed": 530550,
+      "line_items": [
+        {
+          "sr_no": "1.01",
+          "description": "Contractor preliminaries, mobilisation & barricades",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": 17000,
+          "total_aed": 17000,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "1.02",
+          "description": "Transport, deliveries, tools, protection, attendance",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": null,
+          "total_aed": 0,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "1.03",
+          "description": "Technical drawings prep & authority submission",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": 25500,
+          "total_aed": 25500,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "1.04",
+          "description": "As-built drawings preparation (Arch & MEP)",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": 25500,
+          "total_aed": 25500,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "1.05",
+          "description": "Project management, supervision & security",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": 170000,
+          "total_aed": 170000,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "1.06",
+          "description": "Health, safety and environmental procedures",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": null,
+          "total_aed": 0,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "1.07",
+          "description": "Govt/authority coordination & completion certificate",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": 34000,
+          "total_aed": 34000,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "1.08",
+          "description": "Insurance - all risk, third party (motor excluded)",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": null,
+          "total_aed": 0,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "1.09",
+          "description": "Scaffolding for builder's works",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": 110500,
+          "total_aed": 110500,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "1.10",
+          "description": "Hoarding up to 4m height (moveable temp)",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": 51000,
+          "total_aed": 51000,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "1.11",
+          "description": "Contractor facilities - offices, toilets, stores",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": null,
+          "total_aed": 0,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "1.12",
+          "description": "Employer facilities - offices, telephones, email",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": null,
+          "total_aed": 0,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "1.13",
+          "description": "Control of noise and pollution",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": null,
+          "total_aed": 0,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "1.14",
+          "description": "Coordination for works done by others",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": 17000,
+          "total_aed": 17000,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "1.15",
+          "description": "Water for the works",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": 2550,
+          "total_aed": 2550,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "1.16",
+          "description": "Electricity for the works",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": 3400,
+          "total_aed": 3400,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "1.17",
+          "description": "Temporary storage facilities",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": null,
+          "total_aed": 0,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "1.18",
+          "description": "Contractor facilities - offices, toilets, stores",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": null,
+          "total_aed": 0,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "1.19",
+          "description": "Employer facilities - offices, telephones, email",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": null,
+          "total_aed": 0,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "1.20",
+          "description": "Access for and possession of the site",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": null,
+          "total_aed": 0,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "1.21",
+          "description": "Maintenance of existing services (excluded)",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": null,
+          "total_aed": 0,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "1.22",
+          "description": "Protection of existing finishes at site",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": 34000,
+          "total_aed": 34000,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "1.23",
+          "description": "Execution in required order/sections/phases",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": null,
+          "total_aed": 0,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "1.24",
+          "description": "Site cleaning, deep clean & debris removal",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": 39100,
+          "total_aed": 39100,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "1.25",
+          "description": "Advance and performance bond charges (TBC)",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": null,
+          "total_aed": 0,
+          "is_subtotal": false
+        }
+      ]
+    },
+    {
+      "name": "Bill 1 - Reception: Demolition & Alteration Works",
+      "category_total_aed": 22100,
+      "line_items": [
+        {
+          "sr_no": "2.01",
+          "description": "Removal of existing table",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": null,
+          "total_aed": 0,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "2.02",
+          "description": "Removal of existing carpet",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": null,
+          "total_aed": 0,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "2.03",
+          "description": "Removal of existing light fixtures",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": null,
+          "total_aed": 0,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "2.04",
+          "description": "Removal of existing loose furniture",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": null,
+          "total_aed": 0,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "2.05",
+          "description": "Alteration to existing art works (by specialist)",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": null,
+          "total_aed": 0,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "2.00",
+          "description": "Demolition & Alteration Works subtotal",
+          "quantity": null,
+          "unit": null,
+          "unit_rate_aed": null,
+          "total_aed": 22100,
+          "is_subtotal": true
+        }
+      ]
+    },
+    {
+      "name": "Bill 1 - Reception: Wall Finish",
+      "category_total_aed": 67575,
+      "line_items": [
+        {
+          "sr_no": "3.01",
+          "description": "PNT-01 Fenomastic Satin RAL 9010 wall paint",
+          "quantity": 245,
+          "unit": "Sqm",
+          "unit_rate_aed": 85,
+          "total_aed": 20825,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "3.02",
+          "description": "PNT-02 Catalyzed paint MDF terracotta NCS S3560-Y70R",
+          "quantity": 30,
+          "unit": "Sqm",
+          "unit_rate_aed": 255,
+          "total_aed": 7650,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "3.03",
+          "description": "PNT-40 Special concrete effect matt NCS S1502-Y50R",
+          "quantity": 90,
+          "unit": "Sqm",
+          "unit_rate_aed": 340,
+          "total_aed": 30600,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "3.04",
+          "description": "PNT-41 Custom embossed plaster with matt paint",
+          "quantity": 10,
+          "unit": "Sqm",
+          "unit_rate_aed": 850,
+          "total_aed": 8500,
+          "is_subtotal": false
+        }
+      ]
+    },
+    {
+      "name": "Bill 1 - Reception: Ceiling Finish",
+      "category_total_aed": 2720,
+      "line_items": [
+        {
+          "sr_no": "4.01",
+          "description": "New MDF portal ceiling per drg ZBR-00-DRG-ID-01000-050",
+          "quantity": 16,
+          "unit": "Sqm",
+          "unit_rate_aed": 85,
+          "total_aed": 1360,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "4.02",
+          "description": "PNT-02 Catalyzed paint MDF terracotta ceiling",
+          "quantity": 16,
+          "unit": "Sqm",
+          "unit_rate_aed": 85,
+          "total_aed": 1360,
+          "is_subtotal": false
+        }
+      ]
+    },
+    {
+      "name": "Bill 1 - Reception: Doors",
+      "category_total_aed": 15980,
+      "line_items": [
+        {
+          "sr_no": "5.01",
+          "description": "D1 Repaint existing frameless door with PNT-01",
+          "quantity": 2,
+          "unit": "Nos",
+          "unit_rate_aed": 2550,
+          "total_aed": 5100,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "5.02",
+          "description": "D2 NFR single leaf solid wood door 970x2100mm",
+          "quantity": 2,
+          "unit": "Nos",
+          "unit_rate_aed": 5440,
+          "total_aed": 10880,
+          "is_subtotal": false
+        }
+      ]
+    },
+    {
+      "name": "Bill 1 - Reception: Joinery Works",
+      "category_total_aed": 90920,
+      "line_items": [
+        {
+          "sr_no": "6.01",
+          "description": "JN-01A Reception desk refurb - tile & metal trim clad",
+          "quantity": 2,
+          "unit": "No",
+          "unit_rate_aed": 18685,
+          "total_aed": 37370,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "6.02",
+          "description": "JN-02A Communal table MDF/Silestone with planter box",
+          "quantity": 1,
+          "unit": "No",
+          "unit_rate_aed": 53550,
+          "total_aed": 53550,
+          "is_subtotal": false
+        }
+      ]
+    },
+    {
+      "name": "Bill 1 - Reception: Loose Furniture & Accessories",
+      "category_total_aed": 23800,
+      "line_items": [
+        {
+          "sr_no": "7.01",
+          "description": "ACC-01A Wall mounted shelves",
+          "quantity": 1,
+          "unit": "No",
+          "unit_rate_aed": 5950,
+          "total_aed": 5950,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "7.02",
+          "description": "ACC-01B Wall mounted shelves",
+          "quantity": 1,
+          "unit": "No",
+          "unit_rate_aed": 5950,
+          "total_aed": 5950,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "7.03",
+          "description": "ACC-01C Wall mounted shelves",
+          "quantity": 1,
+          "unit": "No",
+          "unit_rate_aed": 5950,
+          "total_aed": 5950,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "7.04",
+          "description": "ACC-01D Wall mounted shelves",
+          "quantity": 1,
+          "unit": "No",
+          "unit_rate_aed": 5950,
+          "total_aed": 5950,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "7.05",
+          "description": "ACC-23 Planter (existing at site)",
+          "quantity": 2,
+          "unit": "Nos",
+          "unit_rate_aed": null,
+          "total_aed": 0,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "7.06",
+          "description": "ACC-24A Planter (existing at site)",
+          "quantity": 2,
+          "unit": "Nos",
+          "unit_rate_aed": null,
+          "total_aed": 0,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "7.07",
+          "description": "ACC-24B Planter (existing at site)",
+          "quantity": 2,
+          "unit": "Nos",
+          "unit_rate_aed": null,
+          "total_aed": 0,
+          "is_subtotal": false
+        }
+      ]
+    },
+    {
+      "name": "Bill 1 - Reception: Electrical Engineering",
+      "category_total_aed": 50501,
+      "line_items": [
+        {
+          "sr_no": "8.01",
+          "description": "LI-29 Decorative pendant light - set of 3",
+          "quantity": 2,
+          "unit": "Nos",
+          "unit_rate_aed": 14565,
+          "total_aed": 29130,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "8.02",
+          "description": "LI-31 Table light",
+          "quantity": 1,
+          "unit": "Nos",
+          "unit_rate_aed": 12043,
+          "total_aed": 12043,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "8.03",
+          "description": "Light points wiring and containment works",
+          "quantity": 3,
+          "unit": "Nos",
+          "unit_rate_aed": 281,
+          "total_aed": 843,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "8.04",
+          "description": "Interface new lights with existing lighting control",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": 7650,
+          "total_aed": 7650,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "8.05",
+          "description": "Twin socket",
+          "quantity": 1,
+          "unit": "Nos",
+          "unit_rate_aed": 111,
+          "total_aed": 111,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "8.06",
+          "description": "Small power points",
+          "quantity": 1,
+          "unit": "Nos",
+          "unit_rate_aed": 94,
+          "total_aed": 94,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "8.07",
+          "description": "Small power points wiring and containment works",
+          "quantity": 2,
+          "unit": "Nos",
+          "unit_rate_aed": 315,
+          "total_aed": 630,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "B1",
+          "description": "TOTAL SUMMARY FOR BILL NO.1 - RECEPTION",
+          "quantity": null,
+          "unit": null,
+          "unit_rate_aed": null,
+          "total_aed": 803146,
+          "is_subtotal": true
+        }
+      ]
+    },
+    {
+      "name": "Bill 2 - Lobby Lounge: Demolition & Alteration Works",
+      "category_total_aed": 10200,
+      "line_items": [
+        {
+          "sr_no": "1.01",
+          "description": "Removal of existing slated ceiling",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": null,
+          "total_aed": 0,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "1.02",
+          "description": "Removal of existing bench",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": null,
+          "total_aed": 0,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "1.03",
+          "description": "Removal of existing light fixtures",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": null,
+          "total_aed": 0,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "1.04",
+          "description": "Removal of existing loose furniture",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": null,
+          "total_aed": 0,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "1.00",
+          "description": "Demolition & Alteration Works subtotal",
+          "quantity": null,
+          "unit": null,
+          "unit_rate_aed": null,
+          "total_aed": 10200,
+          "is_subtotal": true
+        }
+      ]
+    },
+    {
+      "name": "Bill 2 - Lobby Lounge: Wall Finish",
+      "category_total_aed": 128605,
+      "line_items": [
+        {
+          "sr_no": "2.01",
+          "description": "PNT-01 Fenomastic Satin RAL 9010 wall paint",
+          "quantity": 285,
+          "unit": "Sqm",
+          "unit_rate_aed": 85,
+          "total_aed": 24225,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "2.02",
+          "description": "PNT-03 Fenomastic Satin terracotta NCS 3560-Y70R",
+          "quantity": 26,
+          "unit": "Sqm",
+          "unit_rate_aed": 255,
+          "total_aed": 6630,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "2.03",
+          "description": "PNT-42 Metal paint to match PNT-01",
+          "quantity": 10,
+          "unit": "Sqm",
+          "unit_rate_aed": 85,
+          "total_aed": 850,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "2.04",
+          "description": "SP-15 Corrugated acrylic panel framed",
+          "quantity": 57,
+          "unit": "Sqm",
+          "unit_rate_aed": 1700,
+          "total_aed": 96900,
+          "is_subtotal": false
+        }
+      ]
+    },
+    {
+      "name": "Bill 2 - Lobby Lounge: Ceiling Finish",
+      "category_total_aed": 19210,
+      "line_items": [
+        {
+          "sr_no": "3.01",
+          "description": "Repaint exposed slab PNT-04 dark grey RAL 7021",
+          "quantity": 226,
+          "unit": "Sqm",
+          "unit_rate_aed": 85,
+          "total_aed": 19210,
+          "is_subtotal": false
+        }
+      ]
+    },
+    {
+      "name": "Bill 2 - Lobby Lounge: Doors",
+      "category_total_aed": 10540,
+      "line_items": [
+        {
+          "sr_no": "4.01",
+          "description": "D3 Rework existing double door SP-05 vinyl wrap 2000x2100mm",
+          "quantity": 2,
+          "unit": "Nos",
+          "unit_rate_aed": 2550,
+          "total_aed": 5100,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "4.02",
+          "description": "D4 Non-FR single wood door solid core 1050x2120mm",
+          "quantity": 1,
+          "unit": "No",
+          "unit_rate_aed": 5440,
+          "total_aed": 5440,
+          "is_subtotal": false
+        }
+      ]
+    },
+    {
+      "name": "Bill 2 - Lobby Lounge: Joinery Works",
+      "category_total_aed": 290189,
+      "line_items": [
+        {
+          "sr_no": "5.01",
+          "description": "JN-05A Metal shelves MDF PU paint 1600x600x3050mm",
+          "quantity": 3,
+          "unit": "Nos",
+          "unit_rate_aed": 10200,
+          "total_aed": 30600,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "5.02",
+          "description": "JN-06B Console table veneer/ST-06/solid wood legs 3971x1075x780mm",
+          "quantity": 1,
+          "unit": "No",
+          "unit_rate_aed": 27200,
+          "total_aed": 27200,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "5.03",
+          "description": "JN-06C Console table MDF veneer/rattan/ST-06 1600x600x680mm",
+          "quantity": 2,
+          "unit": "Nos",
+          "unit_rate_aed": 16150,
+          "total_aed": 32300,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "5.04",
+          "description": "JN-18A Banquette seating leather upholstered 8270x520mm",
+          "quantity": 1,
+          "unit": "No",
+          "unit_rate_aed": 86777,
+          "total_aed": 86777,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "5.05",
+          "description": "JN-52 Linear metal shelving MDF veneer/rattan 6220x350x4600mm",
+          "quantity": 1,
+          "unit": "No",
+          "unit_rate_aed": 113312,
+          "total_aed": 113312,
+          "is_subtotal": false
+        }
+      ]
+    },
+    {
+      "name": "Bill 2 - Lobby Lounge: Loose Furniture & Accessories",
+      "category_total_aed": 5355,
+      "line_items": [
+        {
+          "sr_no": "6.01",
+          "description": "ACC-24A Planter (existing at site)",
+          "quantity": 4,
+          "unit": "Nos",
+          "unit_rate_aed": null,
+          "total_aed": 0,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "6.02",
+          "description": "ACC-26A Cushions",
+          "quantity": 6,
+          "unit": "Nos",
+          "unit_rate_aed": 595,
+          "total_aed": 3570,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "6.03",
+          "description": "ACC-26B Cushions",
+          "quantity": 3,
+          "unit": "Nos",
+          "unit_rate_aed": 595,
+          "total_aed": 1785,
+          "is_subtotal": false
+        }
+      ]
+    },
+    {
+      "name": "Bill 2 - Lobby Lounge: Electrical Engineering",
+      "category_total_aed": 242556,
+      "line_items": [
+        {
+          "sr_no": "7.01",
+          "description": "LI-32 Decorative pendant light",
+          "quantity": 20,
+          "unit": "Nos",
+          "unit_rate_aed": 5571,
+          "total_aed": 111420,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "7.02",
+          "description": "LI-33 Decorative pendant light",
+          "quantity": 2,
+          "unit": "Nos",
+          "unit_rate_aed": 12850,
+          "total_aed": 25700,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "7.03",
+          "description": "LI-34 Decorative pendant light",
+          "quantity": 1,
+          "unit": "Nos",
+          "unit_rate_aed": 10600,
+          "total_aed": 10600,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "7.04",
+          "description": "LI-35 Decorative pendant light",
+          "quantity": 3,
+          "unit": "Nos",
+          "unit_rate_aed": 10600,
+          "total_aed": 31800,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "7.05",
+          "description": "LI-36 Table light",
+          "quantity": 1,
+          "unit": "Nos",
+          "unit_rate_aed": 5330,
+          "total_aed": 5330,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "7.06",
+          "description": "LI-37 Table light",
+          "quantity": 4,
+          "unit": "Nos",
+          "unit_rate_aed": 5330,
+          "total_aed": 21320,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "7.07",
+          "description": "LED strip lights",
+          "quantity": 7,
+          "unit": "m",
+          "unit_rate_aed": 326,
+          "total_aed": 2282,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "7.08",
+          "description": "Light points wiring and containment works",
+          "quantity": 21,
+          "unit": "Nos",
+          "unit_rate_aed": 281,
+          "total_aed": 5901,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "7.09",
+          "description": "Light points wiring & containment for LED strips",
+          "quantity": 7,
+          "unit": "Nos",
+          "unit_rate_aed": 281,
+          "total_aed": 1967,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "7.10",
+          "description": "Interface new lights with existing lighting control",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": 16150,
+          "total_aed": 16150,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "7.11",
+          "description": "Twin Universal socket",
+          "quantity": 7,
+          "unit": "Nos",
+          "unit_rate_aed": 162,
+          "total_aed": 1134,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "7.12",
+          "description": "Single Universal socket",
+          "quantity": 4,
+          "unit": "Nos",
+          "unit_rate_aed": 128,
+          "total_aed": 512,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "7.13",
+          "description": "Floor box",
+          "quantity": 1,
+          "unit": "Nos",
+          "unit_rate_aed": 468,
+          "total_aed": 468,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "7.14",
+          "description": "6x New Universal socket for table",
+          "quantity": 1,
+          "unit": "Nos",
+          "unit_rate_aed": 94,
+          "total_aed": 94,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "7.15",
+          "description": "Power provision through joinery",
+          "quantity": 1,
+          "unit": "Nos",
+          "unit_rate_aed": 94,
+          "total_aed": 94,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "7.16",
+          "description": "Power provision for Framery Pods",
+          "quantity": 2,
+          "unit": "Nos",
+          "unit_rate_aed": 94,
+          "total_aed": 188,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "7.17",
+          "description": "New power socket for TV",
+          "quantity": 3,
+          "unit": "Nos",
+          "unit_rate_aed": 111,
+          "total_aed": 333,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "7.18",
+          "description": "Relocation of existing floor box",
+          "quantity": 3,
+          "unit": "Nos",
+          "unit_rate_aed": 111,
+          "total_aed": 333,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "7.19",
+          "description": "Small power points wiring and containment works",
+          "quantity": 22,
+          "unit": "Nos",
+          "unit_rate_aed": 315,
+          "total_aed": 6930,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "B2",
+          "description": "TOTAL SUMMARY FOR BILL NO.2 - LOBBY LOUNGE",
+          "quantity": null,
+          "unit": null,
+          "unit_rate_aed": null,
+          "total_aed": 706655,
+          "is_subtotal": true
+        }
+      ]
+    },
+    {
+      "name": "Bill 3 - F&B: Wall Finish",
+      "category_total_aed": 140165,
+      "line_items": [
+        {
+          "sr_no": "1.01",
+          "description": "PNT-01 Fenomastic Satin RAL 9010 wall paint",
+          "quantity": 250,
+          "unit": "Sqm",
+          "unit_rate_aed": 85,
+          "total_aed": 21250,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "1.02",
+          "description": "PNT-03 Fenomastic Satin terracotta NCS 3560-Y70R",
+          "quantity": 18,
+          "unit": "Sqm",
+          "unit_rate_aed": 255,
+          "total_aed": 4590,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "1.03",
+          "description": "PNT-06 Fenomastic Satin sage green NCS S3010-G20Y",
+          "quantity": 48,
+          "unit": "Sqm",
+          "unit_rate_aed": 85,
+          "total_aed": 4080,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "1.04",
+          "description": "PNT-42 Metal paint to match PNT-01",
+          "quantity": 3,
+          "unit": "Sqm",
+          "unit_rate_aed": 85,
+          "total_aed": 255,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "1.05",
+          "description": "SP-15 Corrugated acrylic panel framed",
+          "quantity": 18,
+          "unit": "Sqm",
+          "unit_rate_aed": 1700,
+          "total_aed": 30600,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "1.06",
+          "description": "TL-05 6x24mm wall tile Lume Off-white",
+          "quantity": 42,
+          "unit": "Sqm",
+          "unit_rate_aed": 595,
+          "total_aed": 24990,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "1.07",
+          "description": "TL-09 Glazed porcelain tile",
+          "quantity": 5,
+          "unit": "Sqm",
+          "unit_rate_aed": 680,
+          "total_aed": 3400,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "1.08",
+          "description": "Green wall",
+          "quantity": 12,
+          "unit": "Sqm",
+          "unit_rate_aed": 4250,
+          "total_aed": 51000,
+          "is_subtotal": false
+        }
+      ]
+    },
+    {
+      "name": "Bill 3 - F&B: Ceiling Finish",
+      "category_total_aed": 125885,
+      "line_items": [
+        {
+          "sr_no": "2.01",
+          "description": "Repaint exposed slab black Fenomastic Matt RAL:TBC",
+          "quantity": 268,
+          "unit": "Sqm",
+          "unit_rate_aed": 170,
+          "total_aed": 45560,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "2.02",
+          "description": "Suspended ceiling panel WD-01A Type 1",
+          "quantity": 20,
+          "unit": "Sqm",
+          "unit_rate_aed": 2125,
+          "total_aed": 42500,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "2.03",
+          "description": "Suspended ceiling panel WD-01A Type 2",
+          "quantity": 17,
+          "unit": "Sqm",
+          "unit_rate_aed": 2125,
+          "total_aed": 36125,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "2.04",
+          "description": "Repaint existing beam to match MT-02",
+          "quantity": 10,
+          "unit": "lm",
+          "unit_rate_aed": 170,
+          "total_aed": 1700,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "2.05",
+          "description": "Foam spray acoustic ceiling (excluded)",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": null,
+          "total_aed": 0,
+          "is_subtotal": false
+        }
+      ]
+    },
+    {
+      "name": "Bill 3 - F&B: Doors",
+      "category_total_aed": 22950,
+      "line_items": [
+        {
+          "sr_no": "3.01",
+          "description": "D5 Non-FR single wood door with vision panel 1050x2120mm (x2)",
+          "quantity": 2,
+          "unit": "No",
+          "unit_rate_aed": 7650,
+          "total_aed": 15300,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "3.02",
+          "description": "D6 Non-FR single wood door with vision panel 1050x2120mm",
+          "quantity": 1,
+          "unit": "No",
+          "unit_rate_aed": 7650,
+          "total_aed": 7650,
+          "is_subtotal": false
+        }
+      ]
+    },
+    {
+      "name": "Bill 3 - F&B: Joinery Works",
+      "category_total_aed": 443686,
+      "line_items": [
+        {
+          "sr_no": "4.01",
+          "description": "JN-49 Banquette seating tile/leather 3294+2303+1557x520mm",
+          "quantity": 1,
+          "unit": "No",
+          "unit_rate_aed": 66341,
+          "total_aed": 66341,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "4.02",
+          "description": "JN-50 Bar counter MDF veneer/rattan/ST-07 5650+3000x600mm",
+          "quantity": 1,
+          "unit": "No",
+          "unit_rate_aed": 90440,
+          "total_aed": 90440,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "4.03",
+          "description": "JN-51 High counter U-shape ST-07 stone 3012+1799+3012mm",
+          "quantity": 1,
+          "unit": "No",
+          "unit_rate_aed": 63410,
+          "total_aed": 63410,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "4.04",
+          "description": "JN-53 Long banquette seating veneer/tile/leather 4425+1888mm",
+          "quantity": 1,
+          "unit": "No",
+          "unit_rate_aed": 70125,
+          "total_aed": 70125,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "4.05",
+          "description": "JN-54 High table with planter solid wood/metal 3590x900mm",
+          "quantity": 1,
+          "unit": "No",
+          "unit_rate_aed": 25500,
+          "total_aed": 25500,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "4.06",
+          "description": "JN-55 Build-in curved seating MDF veneer/fabric 6200x500mm",
+          "quantity": 1,
+          "unit": "No",
+          "unit_rate_aed": 83470,
+          "total_aed": 83470,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "4.07",
+          "description": "JN-56 Rectangular high table solid wood/rattan 3676x518mm",
+          "quantity": 1,
+          "unit": "No",
+          "unit_rate_aed": 30600,
+          "total_aed": 30600,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "4.08",
+          "description": "JN-57A Waiter station MDF veneer/ST-07 900x600x1000mm",
+          "quantity": 1,
+          "unit": "No",
+          "unit_rate_aed": 11900,
+          "total_aed": 11900,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "4.09",
+          "description": "JN-57B Waiter station MDF veneer/ST-07 900x600x1000mm",
+          "quantity": 1,
+          "unit": "No",
+          "unit_rate_aed": 11900,
+          "total_aed": 11900,
+          "is_subtotal": false
+        }
+      ]
+    },
+    {
+      "name": "Bill 3 - F&B: Loose Furniture & Accessories",
+      "category_total_aed": 0,
+      "line_items": [
+        {
+          "sr_no": "5.01",
+          "description": "ACC-24A Planter (existing at site)",
+          "quantity": 3,
+          "unit": "Nos",
+          "unit_rate_aed": null,
+          "total_aed": 0,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "5.02",
+          "description": "Metal drapery (excluded - data not available)",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": null,
+          "total_aed": 0,
+          "is_subtotal": false
+        }
+      ]
+    },
+    {
+      "name": "Bill 3 - F&B: Electrical Engineering",
+      "category_total_aed": 399251,
+      "line_items": [
+        {
+          "sr_no": "6.01",
+          "description": "LI-06 Wall lamp",
+          "quantity": 1,
+          "unit": "Nos",
+          "unit_rate_aed": 5293,
+          "total_aed": 5293,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "6.02",
+          "description": "LI-08 New chandelier light",
+          "quantity": 2,
+          "unit": "Nos",
+          "unit_rate_aed": 26327,
+          "total_aed": 52654,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "6.03",
+          "description": "LI-09 Pendant light",
+          "quantity": 1,
+          "unit": "Nos",
+          "unit_rate_aed": 12060,
+          "total_aed": 12060,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "6.04",
+          "description": "LI-10 New chandelier light",
+          "quantity": 1,
+          "unit": "Nos",
+          "unit_rate_aed": 22577,
+          "total_aed": 22577,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "6.05",
+          "description": "LI-12 Suspended downlight",
+          "quantity": 12,
+          "unit": "Nos",
+          "unit_rate_aed": 643,
+          "total_aed": 7716,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "6.06",
+          "description": "LI-40 Pendant light",
+          "quantity": 4,
+          "unit": "Nos",
+          "unit_rate_aed": 20760,
+          "total_aed": 83040,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "6.07",
+          "description": "LI-41 Suspended light",
+          "quantity": 4,
+          "unit": "Nos",
+          "unit_rate_aed": 10754,
+          "total_aed": 43016,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "6.08",
+          "description": "LI-42 New chandelier light",
+          "quantity": 2,
+          "unit": "Nos",
+          "unit_rate_aed": 26327,
+          "total_aed": 52654,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "6.09",
+          "description": "LI-43 Wall light",
+          "quantity": 15,
+          "unit": "Nos",
+          "unit_rate_aed": 1705,
+          "total_aed": 25575,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "6.10",
+          "description": "LI-44 New chandelier light",
+          "quantity": 2,
+          "unit": "Nos",
+          "unit_rate_aed": 5357,
+          "total_aed": 10714,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "6.11",
+          "description": "Wall light",
+          "quantity": 3,
+          "unit": "Nos",
+          "unit_rate_aed": 7543,
+          "total_aed": 22629,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "6.12",
+          "description": "LED strip lights",
+          "quantity": 7,
+          "unit": "m",
+          "unit_rate_aed": 326,
+          "total_aed": 2282,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "6.13",
+          "description": "Light points wiring and containment works",
+          "quantity": 47,
+          "unit": "Nos",
+          "unit_rate_aed": 281,
+          "total_aed": 13207,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "6.14",
+          "description": "Light points wiring & containment for LED strips",
+          "quantity": 7,
+          "unit": "Nos",
+          "unit_rate_aed": 281,
+          "total_aed": 1967,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "6.15",
+          "description": "Interface new lights with existing lighting control",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": 16150,
+          "total_aed": 16150,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "6.16",
+          "description": "Twin Universal socket",
+          "quantity": 9,
+          "unit": "Nos",
+          "unit_rate_aed": 162,
+          "total_aed": 1458,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "6.17",
+          "description": "Single Universal socket",
+          "quantity": 3,
+          "unit": "Nos",
+          "unit_rate_aed": 128,
+          "total_aed": 384,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "6.18",
+          "description": "Floor box",
+          "quantity": 5,
+          "unit": "Nos",
+          "unit_rate_aed": 468,
+          "total_aed": 2340,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "6.19",
+          "description": "Power provision for wall lamp",
+          "quantity": 20,
+          "unit": "Nos",
+          "unit_rate_aed": 94,
+          "total_aed": 1880,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "6.20",
+          "description": "Small power points wiring and containment works",
+          "quantity": 37,
+          "unit": "Nos",
+          "unit_rate_aed": 315,
+          "total_aed": 11655,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "B3",
+          "description": "TOTAL SUMMARY FOR BILL NO.3 - F&B",
+          "quantity": null,
+          "unit": null,
+          "unit_rate_aed": null,
+          "total_aed": 1131937,
+          "is_subtotal": true
+        }
+      ]
+    },
+    {
+      "name": "Bill 4 - Locker Room: Wall Finish",
+      "category_total_aed": 30600,
+      "line_items": [
+        {
+          "sr_no": "1.01",
+          "description": "MT-02 New architrave opening",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": 30600,
+          "total_aed": 30600,
+          "is_subtotal": false
+        }
+      ]
+    },
+    {
+      "name": "Bill 4 - Locker Room: Joinery Works",
+      "category_total_aed": 22100,
+      "line_items": [
+        {
+          "sr_no": "2.01",
+          "description": "Locker Room 1 repaint existing locker 3240+4915+2160x600x2400mm",
+          "quantity": 1,
+          "unit": "No",
+          "unit_rate_aed": null,
+          "total_aed": 0,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "2.02",
+          "description": "Locker Room 2 repaint existing locker 2700+3780x600x2400mm",
+          "quantity": 1,
+          "unit": "No",
+          "unit_rate_aed": null,
+          "total_aed": 0,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "2.00",
+          "description": "Joinery Works subtotal",
+          "quantity": null,
+          "unit": null,
+          "unit_rate_aed": null,
+          "total_aed": 22100,
+          "is_subtotal": true
+        },
+        {
+          "sr_no": "B4",
+          "description": "TOTAL SUMMARY FOR BILL NO.4 - LOCKER ROOM",
+          "quantity": null,
+          "unit": null,
+          "unit_rate_aed": null,
+          "total_aed": 52700,
+          "is_subtotal": true
+        }
+      ]
+    },
+    {
+      "name": "Bill 5 - Pre Function: Demolition & Alteration Works",
+      "category_total_aed": 6800,
+      "line_items": [
+        {
+          "sr_no": "1.01",
+          "description": "Removal of existing carpet",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": 4250,
+          "total_aed": 4250,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "1.02",
+          "description": "Removal of joinery works next to column incl. wall",
+          "quantity": 3,
+          "unit": "Nos",
+          "unit_rate_aed": 850,
+          "total_aed": 2550,
+          "is_subtotal": false
+        }
+      ]
+    },
+    {
+      "name": "Bill 5 - Pre Function: Wall Finish",
+      "category_total_aed": 26605,
+      "line_items": [
+        {
+          "sr_no": "2.01",
+          "description": "PNT-01 Fenomastic Satin RAL 9010 wall paint",
+          "quantity": 245,
+          "unit": "Sqm",
+          "unit_rate_aed": 85,
+          "total_aed": 20825,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "2.02",
+          "description": "PNT-03 Fenomastic Satin terracotta NCS 3560-Y70R",
+          "quantity": 68,
+          "unit": "Sqm",
+          "unit_rate_aed": 85,
+          "total_aed": 5780,
+          "is_subtotal": false
+        }
+      ]
+    },
+    {
+      "name": "Bill 5 - Pre Function: Ceiling Finish",
+      "category_total_aed": 30535,
+      "line_items": [
+        {
+          "sr_no": "3.01",
+          "description": "Rectification works on existing ceiling",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": 8500,
+          "total_aed": 8500,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "3.02",
+          "description": "Paint ceiling PNT-07 white finish",
+          "quantity": 20,
+          "unit": "Sqm",
+          "unit_rate_aed": 60,
+          "total_aed": 1200,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "3.03",
+          "description": "Repaint exposed slab PNT-08 terracotta NCS S3560-Y70R",
+          "quantity": 57,
+          "unit": "Sqm",
+          "unit_rate_aed": 255,
+          "total_aed": 14535,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "3.04",
+          "description": "Repaint exposed slab black Fenomastic Matt",
+          "quantity": 105,
+          "unit": "Sqm",
+          "unit_rate_aed": 60,
+          "total_aed": 6300,
+          "is_subtotal": false
+        }
+      ]
+    },
+    {
+      "name": "Bill 5 - Pre Function: Doors",
+      "category_total_aed": 23800,
+      "line_items": [
+        {
+          "sr_no": "4.01",
+          "description": "D3 Rework existing double door SP-05 vinyl wrap 2000x2100mm",
+          "quantity": 2,
+          "unit": "Nos",
+          "unit_rate_aed": 2550,
+          "total_aed": 5100,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "4.02",
+          "description": "D7 Existing frameless door repaint PNT-03 1050x2120mm",
+          "quantity": 1,
+          "unit": "No",
+          "unit_rate_aed": 1700,
+          "total_aed": 1700,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "4.03",
+          "description": "D8 Existing door & panel repaint PNT-02",
+          "quantity": 1,
+          "unit": "No",
+          "unit_rate_aed": 3400,
+          "total_aed": 3400,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "4.04",
+          "description": "D9 Existing door & panel repaint PNT-02",
+          "quantity": 2,
+          "unit": "No",
+          "unit_rate_aed": 3400,
+          "total_aed": 6800,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "4.05",
+          "description": "D10 Existing door repaint PNT-02",
+          "quantity": 1,
+          "unit": "No",
+          "unit_rate_aed": 3400,
+          "total_aed": 3400,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "4.06",
+          "description": "D11 Existing door repaint PNT-02",
+          "quantity": 1,
+          "unit": "No",
+          "unit_rate_aed": 3400,
+          "total_aed": 3400,
+          "is_subtotal": false
+        }
+      ]
+    },
+    {
+      "name": "Bill 5 - Pre Function: Joinery Works",
+      "category_total_aed": 192546,
+      "line_items": [
+        {
+          "sr_no": "5.01",
+          "description": "JN-11 Suspended metal screen MT-02/MT-31 perforated mesh",
+          "quantity": 1,
+          "unit": "No",
+          "unit_rate_aed": 18636,
+          "total_aed": 18636,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "5.02",
+          "description": "JN-12 Seating/phone booth/shelf MDF veneer 5200x2010mm",
+          "quantity": 1,
+          "unit": "No",
+          "unit_rate_aed": 42500,
+          "total_aed": 42500,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "5.03",
+          "description": "JN-13 High table unit MDF veneer on column ST-07 top",
+          "quantity": 2,
+          "unit": "Nos",
+          "unit_rate_aed": 39780,
+          "total_aed": 79560,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "5.04",
+          "description": "JN-58 High table with planter solid wood/metal 3425x600mm",
+          "quantity": 1,
+          "unit": "No",
+          "unit_rate_aed": 31025,
+          "total_aed": 31025,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "5.05",
+          "description": "JN-59 Rectangular high table solid wood/rattan 2496x518mm",
+          "quantity": 1,
+          "unit": "No",
+          "unit_rate_aed": 20825,
+          "total_aed": 20825,
+          "is_subtotal": false
+        }
+      ]
+    },
+    {
+      "name": "Bill 5 - Pre Function: Loose Furniture & Accessories",
+      "category_total_aed": 5950,
+      "line_items": [
+        {
+          "sr_no": "6.01",
+          "description": "ACC-02 Ping pong table",
+          "quantity": 1,
+          "unit": "No",
+          "unit_rate_aed": 5950,
+          "total_aed": 5950,
+          "is_subtotal": false
+        }
+      ]
+    },
+    {
+      "name": "Bill 5 - Pre Function: Electrical Engineering",
+      "category_total_aed": 248536,
+      "line_items": [
+        {
+          "sr_no": "7.01",
+          "description": "LI-46A Decorative pendant light",
+          "quantity": 3,
+          "unit": "Nos",
+          "unit_rate_aed": 9060,
+          "total_aed": 27180,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "7.02",
+          "description": "LI-46B Decorative pendant light",
+          "quantity": 8,
+          "unit": "Nos",
+          "unit_rate_aed": 9060,
+          "total_aed": 72480,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "7.03",
+          "description": "LI-47 Decorative pendant light",
+          "quantity": 5,
+          "unit": "Nos",
+          "unit_rate_aed": 12060,
+          "total_aed": 60300,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "7.04",
+          "description": "LI-48 Track lights including tracks",
+          "quantity": 4,
+          "unit": "Nos",
+          "unit_rate_aed": 6810,
+          "total_aed": 27240,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "7.05",
+          "description": "Floor lamp",
+          "quantity": 4,
+          "unit": "Nos",
+          "unit_rate_aed": 7594,
+          "total_aed": 30376,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "7.06",
+          "description": "LED strip lights",
+          "quantity": null,
+          "unit": null,
+          "unit_rate_aed": null,
+          "total_aed": 0,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "7.07",
+          "description": "Light points wiring and containment works",
+          "quantity": 35,
+          "unit": "Nos",
+          "unit_rate_aed": 281,
+          "total_aed": 9835,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "7.08",
+          "description": "Light points wiring & containment for LED strips",
+          "quantity": 1,
+          "unit": "Nos",
+          "unit_rate_aed": 281,
+          "total_aed": 281,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "7.09",
+          "description": "Interface new lights with existing lighting control",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": 11475,
+          "total_aed": 11475,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "7.10",
+          "description": "Twin Universal socket",
+          "quantity": 9,
+          "unit": "Nos",
+          "unit_rate_aed": 162,
+          "total_aed": 1458,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "7.11",
+          "description": "Single Universal socket",
+          "quantity": 7,
+          "unit": "Nos",
+          "unit_rate_aed": 128,
+          "total_aed": 896,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "7.12",
+          "description": "Floor box",
+          "quantity": 2,
+          "unit": "Nos",
+          "unit_rate_aed": 468,
+          "total_aed": 936,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "7.13",
+          "description": "4x New Universal socket for table",
+          "quantity": 1,
+          "unit": "Nos",
+          "unit_rate_aed": 94,
+          "total_aed": 94,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "7.14",
+          "description": "Power provision for kitchen (existing retained)",
+          "quantity": null,
+          "unit": null,
+          "unit_rate_aed": null,
+          "total_aed": 0,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "7.15",
+          "description": "Small power points wiring and containment works",
+          "quantity": 19,
+          "unit": "Nos",
+          "unit_rate_aed": 315,
+          "total_aed": 5985,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "B5",
+          "description": "TOTAL SUMMARY FOR BILL NO.5 - PRE FUNCTION",
+          "quantity": null,
+          "unit": null,
+          "unit_rate_aed": null,
+          "total_aed": 534772,
+          "is_subtotal": true
+        }
+      ]
+    },
+    {
+      "name": "Bill 6 - Multi Function Area: Demolition & Alteration Works",
+      "category_total_aed": 8500,
+      "line_items": [
+        {
+          "sr_no": "1.01",
+          "description": "Removal of existing cabinets",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": null,
+          "total_aed": 0,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "1.02",
+          "description": "Removal of existing ceiling to receive new",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": null,
+          "total_aed": 0,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "1.00",
+          "description": "Demolition Works subtotal",
+          "quantity": null,
+          "unit": null,
+          "unit_rate_aed": null,
+          "total_aed": 8500,
+          "is_subtotal": true
+        }
+      ]
+    },
+    {
+      "name": "Bill 6 - Multi Function Area: Wall Finish",
+      "category_total_aed": 14025,
+      "line_items": [
+        {
+          "sr_no": "2.01",
+          "description": "PNT-01 Fenomastic Satin RAL 9010 wall paint",
+          "quantity": 60,
+          "unit": "Sqm",
+          "unit_rate_aed": 85,
+          "total_aed": 5100,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "2.02",
+          "description": "PNT-40 Special concrete effect matt NCS S1502-Y50R",
+          "quantity": 35,
+          "unit": "Sqm",
+          "unit_rate_aed": 255,
+          "total_aed": 8925,
+          "is_subtotal": false
+        }
+      ]
+    },
+    {
+      "name": "Bill 6 - Multi Function Area: Ceiling Finish",
+      "category_total_aed": 29880,
+      "line_items": [
+        {
+          "sr_no": "3.01",
+          "description": "New suspended gypsum ceiling with PNT-01 paint finish",
+          "quantity": 22,
+          "unit": "Sqm",
+          "unit_rate_aed": 60,
+          "total_aed": 1320,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "3.02",
+          "description": "Powder coated metal ceiling sage green NCS S3010-G20Y",
+          "quantity": 24,
+          "unit": "Sqm",
+          "unit_rate_aed": 1190,
+          "total_aed": 28560,
+          "is_subtotal": false
+        }
+      ]
+    },
+    {
+      "name": "Bill 6 - Multi Function Area: Doors",
+      "category_total_aed": 13600,
+      "line_items": [
+        {
+          "sr_no": "4.01",
+          "description": "D12 New glass door shutter GL-01 per door schedule",
+          "quantity": 1,
+          "unit": "No",
+          "unit_rate_aed": 13600,
+          "total_aed": 13600,
+          "is_subtotal": false
+        }
+      ]
+    },
+    {
+      "name": "Bill 6 - Multi Function Area: Joinery Works",
+      "category_total_aed": 112472,
+      "line_items": [
+        {
+          "sr_no": "5.01",
+          "description": "JN-60 Cabinet MDF veneer/ST-07/PU paint 2870+1482x787mm",
+          "quantity": 1,
+          "unit": "No",
+          "unit_rate_aed": 56100,
+          "total_aed": 56100,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "5.02",
+          "description": "JN-61 TV unit MDF veneer wall panel 1910x150x3000mm",
+          "quantity": 1,
+          "unit": "Nos",
+          "unit_rate_aed": 15300,
+          "total_aed": 15300,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "5.03",
+          "description": "JN-62 Shelving detail MDF veneer wall ledges",
+          "quantity": 1,
+          "unit": "No",
+          "unit_rate_aed": 10472,
+          "total_aed": 10472,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "5.04",
+          "description": "JN-63 Communal table MDF veneer/solid wood 5098x1400x980mm",
+          "quantity": 1,
+          "unit": "No",
+          "unit_rate_aed": 30600,
+          "total_aed": 30600,
+          "is_subtotal": false
+        }
+      ]
+    },
+    {
+      "name": "Bill 6 - Multi Function Area: Electrical Engineering",
+      "category_total_aed": 14318,
+      "line_items": [
+        {
+          "sr_no": "6.01",
+          "description": "LI-52 Decorative pendant light",
+          "quantity": 1,
+          "unit": "Nos",
+          "unit_rate_aed": 4327,
+          "total_aed": 4327,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "6.03",
+          "description": "LED strip lights (N/A)",
+          "quantity": null,
+          "unit": null,
+          "unit_rate_aed": null,
+          "total_aed": 0,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "6.04",
+          "description": "Light points wiring and containment works",
+          "quantity": 8,
+          "unit": "Nos",
+          "unit_rate_aed": 281,
+          "total_aed": 2248,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "6.05",
+          "description": "LED strip lights wiring & containment (N/A)",
+          "quantity": null,
+          "unit": null,
+          "unit_rate_aed": null,
+          "total_aed": 0,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "6.06",
+          "description": "Interface new lights with existing lighting control",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": 3825,
+          "total_aed": 3825,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "6.07",
+          "description": "Twin Universal socket",
+          "quantity": 4,
+          "unit": "Nos",
+          "unit_rate_aed": 162,
+          "total_aed": 648,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "6.08",
+          "description": "Floor box for table integrated sockets",
+          "quantity": 1,
+          "unit": "Nos",
+          "unit_rate_aed": 468,
+          "total_aed": 468,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "6.09",
+          "description": "Power provision for TV, wall lamp",
+          "quantity": 3,
+          "unit": "Nos",
+          "unit_rate_aed": 94,
+          "total_aed": 282,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "6.10",
+          "description": "Small power points wiring and containment works",
+          "quantity": 8,
+          "unit": "Nos",
+          "unit_rate_aed": 315,
+          "total_aed": 2520,
+          "is_subtotal": false
+        }
+      ]
+    },
+    {
+      "name": "Bill 6 - Multi Function Area: Mechanical Engineering",
+      "category_total_aed": 11560,
+      "line_items": [
+        {
+          "sr_no": "7.01",
+          "description": "HVAC modifications (contractor to verify at site)",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": 11560,
+          "total_aed": 11560,
+          "is_subtotal": false
+        }
+      ]
+    },
+    {
+      "name": "Bill 6 - Multi Function Area: Fire Safety Engineering",
+      "category_total_aed": 16745,
+      "line_items": [
+        {
+          "sr_no": "8.01",
+          "description": "FA, FF, emergency & exit light modifications",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": 16745,
+          "total_aed": 16745,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "B6",
+          "description": "TOTAL SUMMARY FOR BILL NO.6 - MULTI FUNCTION",
+          "quantity": null,
+          "unit": null,
+          "unit_rate_aed": null,
+          "total_aed": 221100,
+          "is_subtotal": true
+        }
+      ]
+    },
+    {
+      "name": "Bill 7 - Laundry: Wall & Joinery Works",
+      "category_total_aed": 7650,
+      "line_items": [
+        {
+          "sr_no": "1.01",
+          "description": "New cladding at laundry area per drg ZBR-00-DRG-ID-02400-010",
+          "quantity": null,
+          "unit": null,
+          "unit_rate_aed": null,
+          "total_aed": 0,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "2.01",
+          "description": "New bench at laundry area per drg ZBR-00-DRG-ID-02400-010",
+          "quantity": 1,
+          "unit": "No",
+          "unit_rate_aed": 7650,
+          "total_aed": 7650,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "B7",
+          "description": "TOTAL SUMMARY FOR BILL NO.7 - LAUNDRY",
+          "quantity": null,
+          "unit": null,
+          "unit_rate_aed": null,
+          "total_aed": 7650,
+          "is_subtotal": true
+        }
+      ]
+    },
+    {
+      "name": "Bill 8 - Pool Deck",
+      "category_total_aed": 39100,
+      "line_items": [
+        {
+          "sr_no": "1.01",
+          "description": "Removal of existing floor finish",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": null,
+          "total_aed": 0,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "1.02",
+          "description": "Removal of existing cabinets",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": null,
+          "total_aed": 0,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "1.00",
+          "description": "Demolition Works subtotal",
+          "quantity": null,
+          "unit": null,
+          "unit_rate_aed": null,
+          "total_aed": 5950,
+          "is_subtotal": true
+        },
+        {
+          "sr_no": "2.01",
+          "description": "Teak timber floor decking at shower column",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": 14450,
+          "total_aed": 14450,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "2.02",
+          "description": "Cone shaped tile podium (5 nos)",
+          "quantity": 5,
+          "unit": "Nos",
+          "unit_rate_aed": 2550,
+          "total_aed": 12750,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "2.03",
+          "description": "Additional waterproofing at shower area only",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": 5950,
+          "total_aed": 5950,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "3.01",
+          "description": "Monochrome mural on wall (by art work specialist)",
+          "quantity": null,
+          "unit": null,
+          "unit_rate_aed": null,
+          "total_aed": 0,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "B8",
+          "description": "TOTAL SUMMARY FOR BILL NO.8 - POOL DECK",
+          "quantity": null,
+          "unit": null,
+          "unit_rate_aed": null,
+          "total_aed": 39100,
+          "is_subtotal": true
+        }
+      ]
+    }
+  ],
+  "source_filename": "BOQ- ROVE DHCC LOBBY & PUBLIC AREA.pdf"
+}

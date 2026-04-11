@@ -1,4 +1,5 @@
 import { SCOPE_CATALOG } from '@/lib/scope/catalog'
+import type { HistoricalPricingStat, PricingOverride } from '@/lib/pricing/historical'
 
 export type PriceRange = { min: number; max: number }
 
@@ -134,6 +135,96 @@ export function computeQuickBallpark(params: {
     min: Math.round(withLocation.min * 0.90),
     max: Math.round(withLocation.max * 1.10),
   }
+}
+
+/**
+ * Calculate price range using historical data + CD overrides, falling back to static catalog.
+ *
+ * Priority chain:
+ * 1. CD override (from pricing_overrides table) - team's preferred rates
+ * 2. Historical P25-P75 (from pricing_summary view, 3+ samples)
+ * 3. Blended 50/50 historical + static (< 3 samples)
+ * 4. Static catalog fallback (no historical data)
+ */
+export function calculateDataDrivenPriceRange(
+  scopeIds: string[],
+  sizeSqft: number,
+  historicalStats: HistoricalPricingStat[],
+  overrides?: PricingOverride[]
+): PriceRange {
+  const statsMap = new Map<string, HistoricalPricingStat>()
+  for (const s of historicalStats) {
+    statsMap.set(s.scope_item_id, s)
+  }
+
+  const overrideMap = new Map<string, PricingOverride>()
+  if (overrides) {
+    for (const o of overrides) {
+      if (o.scope_item_id) overrideMap.set(o.scope_item_id, o)
+    }
+  }
+
+  return scopeIds.reduce(
+    (acc, id) => {
+      const item = SCOPE_CATALOG.find(s => s.id === id)
+      if (!item) return acc
+
+      const override = overrideMap.get(id)
+      const historical = statsMap.get(id)
+
+      let itemMin: number
+      let itemMax: number
+
+      if (override) {
+        // Priority 1: CD team override
+        if (sizeSqft > 0 && item.pricePerSqftMin > 0) {
+          itemMin = override.override_min_aed * sizeSqft
+          itemMax = override.override_max_aed * sizeSqft
+        } else {
+          itemMin = override.override_min_aed
+          itemMax = override.override_max_aed
+        }
+      } else if (historical && historical.sample_count >= 3) {
+        // Priority 2: Historical IQR (3+ data points)
+        if (sizeSqft > 0 && item.pricePerSqftMin > 0) {
+          itemMin = historical.rate_p25 * sizeSqft
+          itemMax = historical.rate_p75 * sizeSqft
+        } else {
+          itemMin = historical.rate_p25
+          itemMax = historical.rate_p75
+        }
+      } else if (historical) {
+        // Priority 3: Blend 50/50 with static catalog (< 3 data points)
+        const staticMin = item.pricePerSqftMin > 0 && sizeSqft > 0
+          ? item.pricePerSqftMin * sizeSqft : item.flatMin
+        const staticMax = item.pricePerSqftMax > 0 && sizeSqft > 0
+          ? item.pricePerSqftMax * sizeSqft : item.flatMax
+
+        const histMin = sizeSqft > 0 && item.pricePerSqftMin > 0
+          ? historical.rate_min * sizeSqft : historical.rate_min
+        const histMax = sizeSqft > 0 && item.pricePerSqftMax > 0
+          ? historical.rate_max * sizeSqft : historical.rate_max
+
+        itemMin = Math.round(0.5 * staticMin + 0.5 * histMin)
+        itemMax = Math.round(0.5 * staticMax + 0.5 * histMax)
+      } else {
+        // Priority 4: Static catalog fallback
+        if (item.pricePerSqftMin > 0 && sizeSqft > 0) {
+          itemMin = item.pricePerSqftMin * sizeSqft
+          itemMax = item.pricePerSqftMax * sizeSqft
+        } else {
+          itemMin = item.flatMin
+          itemMax = item.flatMax
+        }
+      }
+
+      return {
+        min: acc.min + Math.round(itemMin),
+        max: acc.max + Math.round(itemMax),
+      }
+    },
+    { min: 0, max: 0 }
+  )
 }
 
 export function getConfidenceLabel(score: number): string {

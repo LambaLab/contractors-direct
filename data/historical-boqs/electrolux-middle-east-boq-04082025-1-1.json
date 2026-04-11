@@ -1,0 +1,2098 @@
+{
+  "project_name": "Proposed Interior Fitout Works for Electrolux Middle East",
+  "grand_total_aed": 1628949.63,
+  "project_location": "29th Floor, Fortune Tower, JLT, Dubai, UAE",
+  "contractor_name": "CS Interiors",
+  "project_type": "office_fitout",
+  "categories": [
+    {
+      "name": "Preliminaries",
+      "category_total_aed": 94550,
+      "line_items": [
+        {
+          "sr_no": "1.01",
+          "description": "Site Management",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": 48000,
+          "total_aed": 48000,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "1.02",
+          "description": "Mobilization & Demobilization",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": 5850,
+          "total_aed": 5850,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "1.03",
+          "description": "Authority Approvals",
+          "quantity": 1,
+          "unit": "LS",
+          "unit_rate_aed": 26500,
+          "total_aed": 26500,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "1.03a",
+          "description": "Local authority approval fees (Civil Defence, Tecom, DEWA)",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": null,
+          "total_aed": 0,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "1.03b",
+          "description": "Payment & security deposit to Building Management",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": null,
+          "total_aed": 0,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "1.03c",
+          "description": "Building management approval fees (tenant manual)",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": null,
+          "total_aed": 0,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "1.04",
+          "description": "Insurance",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": 2500,
+          "total_aed": 2500,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "1.05",
+          "description": "Health & Safety Protection",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": 2000,
+          "total_aed": 2000,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "1.06",
+          "description": "Site Clearance & debris disposal",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": 3200,
+          "total_aed": 3200,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "1.07",
+          "description": "Temporary Water & Electricity",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": null,
+          "total_aed": 0,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "1.08",
+          "description": "Shop Drawings (Architectural & MEP)",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": 2500,
+          "total_aed": 2500,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "1.09",
+          "description": "Scaffolding (movable)",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": 2000,
+          "total_aed": 2000,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "1.10",
+          "description": "Final Cleaning",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": 2000,
+          "total_aed": 2000,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "1.00",
+          "description": "SUB TOTAL - Preliminaries",
+          "quantity": null,
+          "unit": null,
+          "unit_rate_aed": null,
+          "total_aed": 94550,
+          "is_subtotal": true
+        }
+      ]
+    },
+    {
+      "name": "Civil Works",
+      "category_total_aed": 38073,
+      "line_items": [
+        {
+          "sr_no": "2.01",
+          "description": "Cementitious waterproofing – Pantry & Toilets",
+          "quantity": 83,
+          "unit": "Sqm",
+          "unit_rate_aed": 74,
+          "total_aed": 6142,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "2.02",
+          "description": "Floor modification for new floor box installation",
+          "quantity": 1,
+          "unit": "LS",
+          "unit_rate_aed": 2000,
+          "total_aed": 2000,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "2.03a",
+          "description": "Demolition – Toilet floor & wall tiles",
+          "quantity": 68,
+          "unit": "Sqm",
+          "unit_rate_aed": 27,
+          "total_aed": 1836,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "2.03b",
+          "description": "Demolition – Skirting",
+          "quantity": 40,
+          "unit": "Lm",
+          "unit_rate_aed": 14,
+          "total_aed": 560,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "2.03c",
+          "description": "Demolition – Ceiling tiles",
+          "quantity": 409,
+          "unit": "Sqm",
+          "unit_rate_aed": 27,
+          "total_aed": 11043,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "2.03d",
+          "description": "Demolition – Partition with wall tiles",
+          "quantity": 271,
+          "unit": "Sqm",
+          "unit_rate_aed": 34,
+          "total_aed": 9214,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "2.03e",
+          "description": "Demolition – Glass partition (toilet)",
+          "quantity": 1,
+          "unit": "LS",
+          "unit_rate_aed": 534,
+          "total_aed": 534,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "2.03f",
+          "description": "Demolition – Joinery elements",
+          "quantity": 1,
+          "unit": "LS",
+          "unit_rate_aed": 1534,
+          "total_aed": 1534,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "2.03g",
+          "description": "Demolition – Sanitary fixtures",
+          "quantity": 1,
+          "unit": "LS",
+          "unit_rate_aed": 534,
+          "total_aed": 534,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "2.03h",
+          "description": "Demolition – Wooden & glass doors",
+          "quantity": 14,
+          "unit": "Nos",
+          "unit_rate_aed": 334,
+          "total_aed": 4676,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "2.00",
+          "description": "SUB TOTAL - Civil Works",
+          "quantity": null,
+          "unit": null,
+          "unit_rate_aed": null,
+          "total_aed": 38073,
+          "is_subtotal": true
+        }
+      ]
+    },
+    {
+      "name": "Floor Finish",
+      "category_total_aed": 62078,
+      "line_items": [
+        {
+          "sr_no": "3.01",
+          "description": "100mm concrete screed – Toilets",
+          "quantity": 24,
+          "unit": "Sqm",
+          "unit_rate_aed": 94,
+          "total_aed": 2256,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "3.02",
+          "description": "LVT flooring – Meeting rooms, Pantry, Reception, GM, Passage",
+          "quantity": 132,
+          "unit": "Sqm",
+          "unit_rate_aed": 131,
+          "total_aed": 17292,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "3.03",
+          "description": "50x50 carpet tile flooring – Workstations, Hot desk, Server, Store, POD",
+          "quantity": 171,
+          "unit": "Sqm",
+          "unit_rate_aed": 147,
+          "total_aed": 25137,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "3.04",
+          "description": "60x60 porcelain tile flooring – Toilets",
+          "quantity": 35,
+          "unit": "Sqm",
+          "unit_rate_aed": 183,
+          "total_aed": 6405,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "3.05",
+          "description": "Porcelain tile flooring – Window step areas",
+          "quantity": 20,
+          "unit": "Sqm",
+          "unit_rate_aed": 202,
+          "total_aed": 4040,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "3.06",
+          "description": "Threshold – Toilets, Server Room & Store Room",
+          "quantity": 4,
+          "unit": "Nos",
+          "unit_rate_aed": 267,
+          "total_aed": 1068,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "3.07",
+          "description": "SS transition strip – Between floor finishes",
+          "quantity": 49,
+          "unit": "Lm",
+          "unit_rate_aed": 120,
+          "total_aed": 5880,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "3.00",
+          "description": "SUB TOTAL - Floor Finish",
+          "quantity": null,
+          "unit": null,
+          "unit_rate_aed": null,
+          "total_aed": 62078,
+          "is_subtotal": true
+        }
+      ]
+    },
+    {
+      "name": "Walls and Wall Finishes",
+      "category_total_aed": 79567.07,
+      "line_items": [
+        {
+          "sr_no": "4.01",
+          "description": "100mm waterproof composite skirting, painted",
+          "quantity": 235.1,
+          "unit": "Rm",
+          "unit_rate_aed": 47,
+          "total_aed": 11049.7,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "4.02",
+          "description": "100mm gypsum board partition with Rockwool",
+          "quantity": 138.75,
+          "unit": "Sqm",
+          "unit_rate_aed": 140,
+          "total_aed": 19425,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "4.03",
+          "description": "150mm fire-rated gypsum partition – Server Room",
+          "quantity": 29.1,
+          "unit": "Sqm",
+          "unit_rate_aed": 160,
+          "total_aed": 4656,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "4.04",
+          "description": "100mm cement board partition – Toilet Area",
+          "quantity": 51,
+          "unit": "Sqm",
+          "unit_rate_aed": 174,
+          "total_aed": 8874,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "4.05",
+          "description": "60x60 porcelain wall tiles – Toilets",
+          "quantity": 88,
+          "unit": "Sqm",
+          "unit_rate_aed": 183,
+          "total_aed": 16104,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "4.06",
+          "description": "Green wall – Reception, GM Cabin, Step seating",
+          "quantity": 30,
+          "unit": "Sqm",
+          "unit_rate_aed": 134,
+          "total_aed": 4020,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "4.07",
+          "description": "Gypsum baffle over glass partition (300mm) – Above glass partition",
+          "quantity": 21.6,
+          "unit": "Rm",
+          "unit_rate_aed": 103,
+          "total_aed": 2224.8,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "4.08",
+          "description": "Jotun Fenomastic wall paint incl. base coats",
+          "quantity": 412.924,
+          "unit": "Sqm",
+          "unit_rate_aed": 32,
+          "total_aed": 13213.57,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "4.00",
+          "description": "SUB TOTAL - Walls and Wall Finishes",
+          "quantity": null,
+          "unit": null,
+          "unit_rate_aed": null,
+          "total_aed": 79567.07,
+          "is_subtotal": true
+        }
+      ]
+    },
+    {
+      "name": "Ceiling Finishes",
+      "category_total_aed": 63410.4,
+      "line_items": [
+        {
+          "sr_no": "5.01",
+          "description": "12.5mm plain gypsum board false ceiling on GI – Reception, Meeting, Server, POD, GM, Store",
+          "quantity": 140.1,
+          "unit": "Sqm",
+          "unit_rate_aed": 127,
+          "total_aed": 17792.7,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "5.02",
+          "description": "12.5mm MR gypsum board false ceiling – Toilets & Pantry",
+          "quantity": 29,
+          "unit": "Sqm",
+          "unit_rate_aed": 140,
+          "total_aed": 4060,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "5.03",
+          "description": "Gypsum light cove – GM Cabin & Focus POD",
+          "quantity": 57.3,
+          "unit": "Rm",
+          "unit_rate_aed": 100,
+          "total_aed": 5730,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "5.04",
+          "description": "Jotun Fenomastic ceiling paint – Gypsum ceilings",
+          "quantity": 169.1,
+          "unit": "Sqm",
+          "unit_rate_aed": 32,
+          "total_aed": 5411.2,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "5.05",
+          "description": "Open ceiling spray paint on slab incl. MEP – Workstations, Pantry, Reception",
+          "quantity": 239.5,
+          "unit": "Sqm",
+          "unit_rate_aed": 67,
+          "total_aed": 16046.5,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "5.06",
+          "description": "Rockwool on slab soffit – Workstations, Pantry, Reception",
+          "quantity": 239.5,
+          "unit": "Sqm",
+          "unit_rate_aed": 60,
+          "total_aed": 14370,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "5.00",
+          "description": "SUB TOTAL - Ceiling Finishes",
+          "quantity": null,
+          "unit": null,
+          "unit_rate_aed": null,
+          "total_aed": 63410.4,
+          "is_subtotal": true
+        }
+      ]
+    },
+    {
+      "name": "Glazing Works",
+      "category_total_aed": 76759.16,
+      "line_items": [
+        {
+          "sr_no": "6.01",
+          "description": "12mm single glazed partition, powder coated Al channels",
+          "quantity": 51.84,
+          "unit": "Sqm",
+          "unit_rate_aed": 467,
+          "total_aed": 24209.28,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "6.02",
+          "description": "Framed single leaf swing glass door 1000x2200mm",
+          "quantity": 5,
+          "unit": "Nos",
+          "unit_rate_aed": 3267,
+          "total_aed": 16335,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "6.03",
+          "description": "Acoustic framed glass swing door (32dB) 1000x2200mm – PODs",
+          "quantity": 2,
+          "unit": "Nos",
+          "unit_rate_aed": 7334,
+          "total_aed": 14668,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "6.04",
+          "description": "Bifolding glass door (4 leaf) 3600x2400mm",
+          "quantity": 1,
+          "unit": "LS",
+          "unit_rate_aed": 16000,
+          "total_aed": 16000,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "6.05",
+          "description": "Manifestation bands on glass partitions (full height)",
+          "quantity": 51.84,
+          "unit": "Sqm",
+          "unit_rate_aed": 107,
+          "total_aed": 5546.88,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "6.00",
+          "description": "SUB TOTAL - Glazing Works",
+          "quantity": null,
+          "unit": null,
+          "unit_rate_aed": null,
+          "total_aed": 76759.16,
+          "is_subtotal": true
+        }
+      ]
+    },
+    {
+      "name": "Sanitary Fittings & Fixtures",
+      "category_total_aed": 23618,
+      "line_items": [
+        {
+          "sr_no": "7.01",
+          "description": "Wall-mounted WC with seat cover & cistern/flush plate",
+          "quantity": 3,
+          "unit": "Nos",
+          "unit_rate_aed": 2875,
+          "total_aed": 8625,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "7.03",
+          "description": "Shattaf",
+          "quantity": 3,
+          "unit": "Nos",
+          "unit_rate_aed": 232,
+          "total_aed": 696,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "7.04",
+          "description": "Toilet roll holder",
+          "quantity": 3,
+          "unit": "Nos",
+          "unit_rate_aed": 175,
+          "total_aed": 525,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "7.05",
+          "description": "Wash basin",
+          "quantity": 3,
+          "unit": "Nos",
+          "unit_rate_aed": 525,
+          "total_aed": 1575,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "7.06",
+          "description": "Wash basin mixer",
+          "quantity": 3,
+          "unit": "Nos",
+          "unit_rate_aed": 1194,
+          "total_aed": 3582,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "7.07",
+          "description": "Hand dryer",
+          "quantity": 3,
+          "unit": "Nos",
+          "unit_rate_aed": 2257,
+          "total_aed": 6771,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "7.08",
+          "description": "Floor drain",
+          "quantity": 3,
+          "unit": "Nos",
+          "unit_rate_aed": 175,
+          "total_aed": 525,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "7.09",
+          "description": "Pantry sink",
+          "quantity": 1,
+          "unit": "Nos",
+          "unit_rate_aed": 950,
+          "total_aed": 950,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "7.10",
+          "description": "Sink mixer",
+          "quantity": 1,
+          "unit": "Nos",
+          "unit_rate_aed": 369,
+          "total_aed": 369,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "7.00",
+          "description": "SUB TOTAL - Sanitary Fittings & Fixtures",
+          "quantity": null,
+          "unit": null,
+          "unit_rate_aed": null,
+          "total_aed": 23618,
+          "is_subtotal": true
+        }
+      ]
+    },
+    {
+      "name": "Window Blinds",
+      "category_total_aed": 15015,
+      "line_items": [
+        {
+          "sr_no": "8.01",
+          "description": "Manual window blinds (all windows)",
+          "quantity": 1,
+          "unit": "LS",
+          "unit_rate_aed": 15015,
+          "total_aed": 15015,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "8.00",
+          "description": "SUB TOTAL - Window Blinds",
+          "quantity": null,
+          "unit": null,
+          "unit_rate_aed": null,
+          "total_aed": 15015,
+          "is_subtotal": true
+        }
+      ]
+    },
+    {
+      "name": "IT Works",
+      "category_total_aed": 12000,
+      "line_items": [
+        {
+          "sr_no": "9.01",
+          "description": "CCTV, WiFi, Telephones & Access Control",
+          "quantity": 1,
+          "unit": "LS",
+          "unit_rate_aed": 12000,
+          "total_aed": 12000,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "9.00",
+          "description": "SUB TOTAL - IT Works",
+          "quantity": null,
+          "unit": null,
+          "unit_rate_aed": null,
+          "total_aed": 12000,
+          "is_subtotal": true
+        }
+      ]
+    },
+    {
+      "name": "Pantry Appliances and Fittings",
+      "category_total_aed": 10476,
+      "line_items": [
+        {
+          "sr_no": "10.01",
+          "description": "Microwave oven",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": 400,
+          "total_aed": 400,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "10.02",
+          "description": "Coffee machine",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": 3292,
+          "total_aed": 3292,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "10.03",
+          "description": "Fridge",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": 2386,
+          "total_aed": 2386,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "10.04",
+          "description": "Water dispenser",
+          "quantity": 3,
+          "unit": "Item",
+          "unit_rate_aed": 1466,
+          "total_aed": 4398,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "10.00",
+          "description": "SUB TOTAL - Pantry Appliances and Fittings",
+          "quantity": null,
+          "unit": null,
+          "unit_rate_aed": null,
+          "total_aed": 10476,
+          "is_subtotal": true
+        }
+      ]
+    },
+    {
+      "name": "Miscellaneous",
+      "category_total_aed": 53148,
+      "line_items": [
+        {
+          "sr_no": "11.01",
+          "description": "Signage (as per renders)",
+          "quantity": 1,
+          "unit": "LS",
+          "unit_rate_aed": 15000,
+          "total_aed": 15000,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "11.02",
+          "description": "12mm HPL door & panel – Gents & Ladies Toilet",
+          "quantity": 1,
+          "unit": "LS",
+          "unit_rate_aed": 15550,
+          "total_aed": 15550,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "11.03",
+          "description": "Artificial plants & planter boxes",
+          "quantity": 1,
+          "unit": "LS",
+          "unit_rate_aed": 15000,
+          "total_aed": 15000,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "11.04",
+          "description": "55\" Samsung TV – 6 & 8 pax meeting rooms",
+          "quantity": 3,
+          "unit": "Nos",
+          "unit_rate_aed": 1600,
+          "total_aed": 4800,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "11.05",
+          "description": "43\" Samsung TV – 5 pax meeting room & GM room",
+          "quantity": 2,
+          "unit": "Nos",
+          "unit_rate_aed": 1399,
+          "total_aed": 2798,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "11.00",
+          "description": "SUB TOTAL - Miscellaneous",
+          "quantity": null,
+          "unit": null,
+          "unit_rate_aed": null,
+          "total_aed": 53148,
+          "is_subtotal": true
+        }
+      ]
+    },
+    {
+      "name": "Light Fittings",
+      "category_total_aed": 47864,
+      "line_items": [
+        {
+          "sr_no": "L.01",
+          "description": "Track mounted light 10W non-dimmable (Luz, blk/wht)",
+          "quantity": 8,
+          "unit": "Nos",
+          "unit_rate_aed": 222,
+          "total_aed": 1776,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "L.02",
+          "description": "Track mounted light 10W non-dimmable (Luz, blk/wht)",
+          "quantity": 15,
+          "unit": "Nos",
+          "unit_rate_aed": 222,
+          "total_aed": 3330,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "L.03",
+          "description": "Magnetic track (Luz, blk/wht)",
+          "quantity": 25,
+          "unit": "Lm",
+          "unit_rate_aed": 136,
+          "total_aed": 3400,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "L.04",
+          "description": "Trimless spotlight 6-9W, CRI90, Dia75mm (blk/wht)",
+          "quantity": 84,
+          "unit": "Nos",
+          "unit_rate_aed": 138,
+          "total_aed": 11592,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "L.05",
+          "description": "LED round downlight",
+          "quantity": 12,
+          "unit": "Nos",
+          "unit_rate_aed": 458,
+          "total_aed": 5496,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "L.06",
+          "description": "Pendant light",
+          "quantity": 8,
+          "unit": "Nos",
+          "unit_rate_aed": 429,
+          "total_aed": 3432,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "L.07",
+          "description": "Decorative pendant light 1200mm Dia",
+          "quantity": 2,
+          "unit": "Nos",
+          "unit_rate_aed": 4429,
+          "total_aed": 8858,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "L.08",
+          "description": "Decorative liner light 1000mm L",
+          "quantity": 2,
+          "unit": "Nos",
+          "unit_rate_aed": 3286,
+          "total_aed": 6572,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "L.09",
+          "description": "Table lamp",
+          "quantity": 2,
+          "unit": "Nos",
+          "unit_rate_aed": 443,
+          "total_aed": 886,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "L.10",
+          "description": "Wall light",
+          "quantity": 2,
+          "unit": "Nos",
+          "unit_rate_aed": 286,
+          "total_aed": 572,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "L.11",
+          "description": "LED strip light",
+          "quantity": 30,
+          "unit": "Rm",
+          "unit_rate_aed": 65,
+          "total_aed": 1950,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "12.00",
+          "description": "SUB TOTAL - Light Fittings",
+          "quantity": null,
+          "unit": null,
+          "unit_rate_aed": null,
+          "total_aed": 47864,
+          "is_subtotal": true
+        }
+      ]
+    },
+    {
+      "name": "Loose Furniture",
+      "category_total_aed": 150677,
+      "line_items": [
+        {
+          "sr_no": "13.01",
+          "description": "6-pax meeting room table",
+          "quantity": 2,
+          "unit": "Nos",
+          "unit_rate_aed": 3000,
+          "total_aed": 6000,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "13.02",
+          "description": "6-pax meeting room chair",
+          "quantity": 12,
+          "unit": "Nos",
+          "unit_rate_aed": 643,
+          "total_aed": 7716,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "13.03",
+          "description": "5-pax meeting room table",
+          "quantity": 1,
+          "unit": "Nos",
+          "unit_rate_aed": 2000,
+          "total_aed": 2000,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "13.04",
+          "description": "5-pax meeting room chair",
+          "quantity": 5,
+          "unit": "Nos",
+          "unit_rate_aed": 1215,
+          "total_aed": 6075,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "13.05",
+          "description": "8-pax meeting room table",
+          "quantity": 1,
+          "unit": "Nos",
+          "unit_rate_aed": 2572,
+          "total_aed": 2572,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "13.06",
+          "description": "8-pax meeting room chair",
+          "quantity": 8,
+          "unit": "Nos",
+          "unit_rate_aed": 1786,
+          "total_aed": 14288,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "13.07",
+          "description": "GM cabin table (main)",
+          "quantity": 1,
+          "unit": "Nos",
+          "unit_rate_aed": 3715,
+          "total_aed": 3715,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "13.08",
+          "description": "GM cabin table (side)",
+          "quantity": 1,
+          "unit": "Nos",
+          "unit_rate_aed": 2286,
+          "total_aed": 2286,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "13.09",
+          "description": "GM cabin chair – Excluded (reuse existing)",
+          "quantity": 1,
+          "unit": "Nos",
+          "unit_rate_aed": null,
+          "total_aed": 0,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "13.10",
+          "description": "GM cabin visitors table",
+          "quantity": 1,
+          "unit": "Nos",
+          "unit_rate_aed": 2000,
+          "total_aed": 2000,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "13.11",
+          "description": "GM cabin visitors chair – Excluded (reuse existing)",
+          "quantity": 3,
+          "unit": "Nos",
+          "unit_rate_aed": null,
+          "total_aed": 0,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "13.12",
+          "description": "Focus POD table",
+          "quantity": 2,
+          "unit": "Nos",
+          "unit_rate_aed": 929,
+          "total_aed": 1858,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "13.13",
+          "description": "Focus POD chair – Excluded (reuse existing)",
+          "quantity": 2,
+          "unit": "Nos",
+          "unit_rate_aed": null,
+          "total_aed": 0,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "13.14",
+          "description": "Lounge area 2-seater sofa",
+          "quantity": 1,
+          "unit": "Nos",
+          "unit_rate_aed": 1715,
+          "total_aed": 1715,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "13.15",
+          "description": "Lounge area 1-seater sofa",
+          "quantity": 1,
+          "unit": "Nos",
+          "unit_rate_aed": 1215,
+          "total_aed": 1215,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "13.16",
+          "description": "Lounge area coffee table",
+          "quantity": 1,
+          "unit": "Nos",
+          "unit_rate_aed": 929,
+          "total_aed": 929,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "13.17",
+          "description": "Reception chair – Excluded (reuse existing)",
+          "quantity": 1,
+          "unit": "Nos",
+          "unit_rate_aed": null,
+          "total_aed": 0,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "13.18",
+          "description": "4-pax workstation table",
+          "quantity": 6,
+          "unit": "Nos",
+          "unit_rate_aed": 6858,
+          "total_aed": 41148,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "13.19",
+          "description": "5-pax workstation table",
+          "quantity": 1,
+          "unit": "Nos",
+          "unit_rate_aed": 8572,
+          "total_aed": 8572,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "13.20",
+          "description": "10-pax workstation table",
+          "quantity": 1,
+          "unit": "Nos",
+          "unit_rate_aed": 17143,
+          "total_aed": 17143,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "13.21",
+          "description": "6-pax workstation table",
+          "quantity": 2,
+          "unit": "Nos",
+          "unit_rate_aed": 10286,
+          "total_aed": 20572,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "13.22",
+          "description": "2-pax workstation table",
+          "quantity": 2,
+          "unit": "Nos",
+          "unit_rate_aed": 3429,
+          "total_aed": 6858,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "13.23",
+          "description": "Workstation chairs (55) – Excluded (reuse existing)",
+          "quantity": 55,
+          "unit": "Nos",
+          "unit_rate_aed": null,
+          "total_aed": 0,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "13.24",
+          "description": "Hot desk table",
+          "quantity": 1,
+          "unit": "Nos",
+          "unit_rate_aed": 2643,
+          "total_aed": 2643,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "13.25",
+          "description": "Hot desk chair (6) – Excluded (reuse existing)",
+          "quantity": 6,
+          "unit": "Nos",
+          "unit_rate_aed": null,
+          "total_aed": 0,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "13.26",
+          "description": "Pantry area round table",
+          "quantity": 2,
+          "unit": "Nos",
+          "unit_rate_aed": 686,
+          "total_aed": 1372,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "13.27",
+          "description": "Pantry round table chair (4) – Excluded (reuse existing)",
+          "quantity": 4,
+          "unit": "Nos",
+          "unit_rate_aed": null,
+          "total_aed": 0,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "13.28",
+          "description": "Pantry area high chair (6) – Excluded (reuse existing)",
+          "quantity": 6,
+          "unit": "Nos",
+          "unit_rate_aed": null,
+          "total_aed": 0,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "13.00",
+          "description": "SUB TOTAL - Loose Furniture",
+          "quantity": null,
+          "unit": null,
+          "unit_rate_aed": null,
+          "total_aed": 150677,
+          "is_subtotal": true
+        }
+      ]
+    },
+    {
+      "name": "Joinery Works",
+      "category_total_aed": 426350,
+      "line_items": [
+        {
+          "sr_no": "J.01",
+          "description": "Pantry unit – MR MDF, oak veneer, quartz top, LED",
+          "quantity": 1,
+          "unit": "No",
+          "unit_rate_aed": 30945,
+          "total_aed": 30945,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "J.02",
+          "description": "Pantry high table – oak veneer MDF, 5492x800x1070mm",
+          "quantity": 1,
+          "unit": "No",
+          "unit_rate_aed": 12895,
+          "total_aed": 12895,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "J.03",
+          "description": "TV wooden panel cladding – oak veneer, 3050x2400mm",
+          "quantity": 1,
+          "unit": "No",
+          "unit_rate_aed": 9300,
+          "total_aed": 9300,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "J.04",
+          "description": "Step seating with storage & planter box, 5315x900mm",
+          "quantity": 1,
+          "unit": "No",
+          "unit_rate_aed": 52735,
+          "total_aed": 52735,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "J.05",
+          "description": "Wooden ribbed & plain panel cladding – Step seating back wall",
+          "quantity": 1,
+          "unit": "No",
+          "unit_rate_aed": 18675,
+          "total_aed": 18675,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "J.06",
+          "description": "Full height storage unit – Store room, 4443x600x2400mm",
+          "quantity": 1,
+          "unit": "No",
+          "unit_rate_aed": 18565,
+          "total_aed": 18565,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "J.07",
+          "description": "Vanity counter with mirror & LED – Ladies toilet",
+          "quantity": 1,
+          "unit": "No",
+          "unit_rate_aed": 13965,
+          "total_aed": 13965,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "J.08",
+          "description": "Cement board bench 1900x600x450mm – Ladies toilet",
+          "quantity": 1,
+          "unit": "No",
+          "unit_rate_aed": 2645,
+          "total_aed": 2645,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "J.09",
+          "description": "Vanity counter with mirror & LED – Gents toilet",
+          "quantity": 1,
+          "unit": "No",
+          "unit_rate_aed": 12370,
+          "total_aed": 12370,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "J.10",
+          "description": "Cement board bench 1000x600x450mm – Gents toilet",
+          "quantity": 1,
+          "unit": "No",
+          "unit_rate_aed": 1575,
+          "total_aed": 1575,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "J.11",
+          "description": "Full height storage unit – Janitor, 1300x600x2400mm",
+          "quantity": 1,
+          "unit": "No",
+          "unit_rate_aed": 5610,
+          "total_aed": 5610,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "J.12",
+          "description": "Full height wooden DB unit – Wide passage, 3537x415x2400mm",
+          "quantity": 1,
+          "unit": "No",
+          "unit_rate_aed": 15750,
+          "total_aed": 15750,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "J.13",
+          "description": "Full height printer bay & storage – Wide passage, 5645x415x2400mm",
+          "quantity": 1,
+          "unit": "No",
+          "unit_rate_aed": 28590,
+          "total_aed": 28590,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "J.14",
+          "description": "Full height display unit – Wide passage, 2479x600x2400mm",
+          "quantity": 1,
+          "unit": "No",
+          "unit_rate_aed": 12735,
+          "total_aed": 12735,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "J.15",
+          "description": "Wooden ribbed panel cladding – Reception, 2100x2400mm",
+          "quantity": 1,
+          "unit": "No",
+          "unit_rate_aed": 12200,
+          "total_aed": 12200,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "J.16",
+          "description": "Reception desk, curved, oak veneer/quartz/LED, 2100x800x1100mm",
+          "quantity": 1,
+          "unit": "No",
+          "unit_rate_aed": 26345,
+          "total_aed": 26345,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "J.17",
+          "description": "Divider (12 fins) oak veneer – Reception, 1188x2400mm",
+          "quantity": 1,
+          "unit": "No",
+          "unit_rate_aed": 8440,
+          "total_aed": 8440,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "J.18",
+          "description": "Divider (13 fins) oak veneer – Near POD & Workstation, 1300x2400mm",
+          "quantity": 3,
+          "unit": "Nos",
+          "unit_rate_aed": 9145,
+          "total_aed": 27435,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "J.19",
+          "description": "Ledge table & storage above – POD Focus, 1800x600x750mm",
+          "quantity": 2,
+          "unit": "No",
+          "unit_rate_aed": 8100,
+          "total_aed": 16200,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "J.20",
+          "description": "Full height printer bay & storage – Near POD, 1045x400x2400mm",
+          "quantity": 1,
+          "unit": "No",
+          "unit_rate_aed": 7235,
+          "total_aed": 7235,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "J.21",
+          "description": "Wooden featured wall panel cladding – Boardroom, 5550x2400mm",
+          "quantity": 1,
+          "unit": "No",
+          "unit_rate_aed": 17535,
+          "total_aed": 17535,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "J.22",
+          "description": "Full height storage unit – Boardroom, 3200x600x2400mm",
+          "quantity": 1,
+          "unit": "No",
+          "unit_rate_aed": 17400,
+          "total_aed": 17400,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "J.23",
+          "description": "TV wooden panel cladding ribbed – Boardroom, 3050x2400mm",
+          "quantity": 1,
+          "unit": "No",
+          "unit_rate_aed": 11075,
+          "total_aed": 11075,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "J.24",
+          "description": "TV wall with full height storage – 6 PAX meeting, 3182x600x2400mm",
+          "quantity": 1,
+          "unit": "No",
+          "unit_rate_aed": 15190,
+          "total_aed": 15190,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "J.25",
+          "description": "60-min FR single leaf door, oak veneer, 1000x2100mm – Store room",
+          "quantity": 1,
+          "unit": "No",
+          "unit_rate_aed": 5625,
+          "total_aed": 5625,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "J.26",
+          "description": "HPL single leaf door 800x2100mm – Ladies & Gents toilet",
+          "quantity": 5,
+          "unit": "No",
+          "unit_rate_aed": 2813,
+          "total_aed": 14065,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "J.27",
+          "description": "Hollow core oak veneer door 1000x2100mm – Toilet & Store room",
+          "quantity": 3,
+          "unit": "No",
+          "unit_rate_aed": 3750,
+          "total_aed": 11250,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "J.00",
+          "description": "SUB TOTAL - Joinery Works",
+          "quantity": null,
+          "unit": null,
+          "unit_rate_aed": null,
+          "total_aed": 426350,
+          "is_subtotal": true
+        }
+      ]
+    },
+    {
+      "name": "MEP Works",
+      "category_total_aed": 475364,
+      "line_items": [
+        {
+          "sr_no": "MEP.1.001",
+          "description": "Modification of DBs (breaker & termination)",
+          "quantity": 2,
+          "unit": "Nos",
+          "unit_rate_aed": 3867,
+          "total_aed": 7734,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "MEP.1.002",
+          "description": "Temporary power & lights for construction",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": 2000,
+          "total_aed": 2000,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "MEP.1.004",
+          "description": "H/L & L/L cable trunking for lighting & power",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": 5200,
+          "total_aed": 5200,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "MEP.0.001",
+          "description": "H/L & L/L cable tray for IT & power",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": 4400,
+          "total_aed": 4400,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "MEP.1.005",
+          "description": "13A twin socket – white PVC",
+          "quantity": 34,
+          "unit": "Nos",
+          "unit_rate_aed": 334,
+          "total_aed": 11356,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "MEP.1.006",
+          "description": "13A single socket – white PVC",
+          "quantity": 13,
+          "unit": "Nos",
+          "unit_rate_aed": 260,
+          "total_aed": 3380,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "MEP.1.007",
+          "description": "Floor box (2 twin socket + 4 data)",
+          "quantity": 40,
+          "unit": "Nos",
+          "unit_rate_aed": 634,
+          "total_aed": 25360,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "MEP.1.008",
+          "description": "HDMI point for TV",
+          "quantity": 5,
+          "unit": "Nos",
+          "unit_rate_aed": 334,
+          "total_aed": 1670,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "MEP.1.009",
+          "description": "Power for server rack",
+          "quantity": 3,
+          "unit": "Nos",
+          "unit_rate_aed": 400,
+          "total_aed": 1200,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "MEP.1.010",
+          "description": "Power switch with flex-outlet for AC",
+          "quantity": 8,
+          "unit": "Nos",
+          "unit_rate_aed": 530,
+          "total_aed": 4240,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "MEP.1.011",
+          "description": "Power for display",
+          "quantity": 3,
+          "unit": "Nos",
+          "unit_rate_aed": 531,
+          "total_aed": 1593,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "MEP.1.012",
+          "description": "Power isolator for coffee machine",
+          "quantity": 1,
+          "unit": "Nos",
+          "unit_rate_aed": 530,
+          "total_aed": 530,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "MEP.1.013",
+          "description": "Power isolator for screen",
+          "quantity": 1,
+          "unit": "Nos",
+          "unit_rate_aed": 531,
+          "total_aed": 531,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "MEP.1.014",
+          "description": "Power for pantry equipment",
+          "quantity": 8,
+          "unit": "Nos",
+          "unit_rate_aed": 530,
+          "total_aed": 4240,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "MEP.1.015",
+          "description": "Power for VAV",
+          "quantity": 5,
+          "unit": "Nos",
+          "unit_rate_aed": 467,
+          "total_aed": 2335,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "MEP.1.016",
+          "description": "Power for FACP panel",
+          "quantity": 1,
+          "unit": "Nos",
+          "unit_rate_aed": 467,
+          "total_aed": 467,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "MEP.1.017",
+          "description": "Power for exhaust fan",
+          "quantity": 3,
+          "unit": "Nos",
+          "unit_rate_aed": 467,
+          "total_aed": 1401,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "MEP.1.018",
+          "description": "Light fixture install – spot/hanging/wall/table lamp points",
+          "quantity": 100,
+          "unit": "Nos",
+          "unit_rate_aed": 187,
+          "total_aed": 18700,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "MEP.1.019",
+          "description": "Light fixture install – decorative liner/pendant points",
+          "quantity": 12,
+          "unit": "Nos",
+          "unit_rate_aed": 240,
+          "total_aed": 2880,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "MEP.1.020",
+          "description": "Light fixture install – magnetic track light points",
+          "quantity": 23,
+          "unit": "Nos",
+          "unit_rate_aed": 240,
+          "total_aed": 5520,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "MEP.1.021",
+          "description": "Light fixture install – LED (cove, curtains, joinery) points",
+          "quantity": 30,
+          "unit": "Nos",
+          "unit_rate_aed": 200,
+          "total_aed": 6000,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "MEP.1.022",
+          "description": "Lighting switches (MK)",
+          "quantity": 15,
+          "unit": "Nos",
+          "unit_rate_aed": 267,
+          "total_aed": 4005,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "MEP.1.023",
+          "description": "PVC conduits/containment for data, AV, CCTV, WiFi, access control",
+          "quantity": 1,
+          "unit": "Items",
+          "unit_rate_aed": 6667,
+          "total_aed": 6667,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "MEP.1.027",
+          "description": "Testing & commissioning – Electrical",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": 4000,
+          "total_aed": 4000,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "MEP.1.00",
+          "description": "SUB TOTAL - Electrical Works",
+          "quantity": null,
+          "unit": null,
+          "unit_rate_aed": null,
+          "total_aed": 125409,
+          "is_subtotal": true
+        },
+        {
+          "sr_no": "MEP.2.01",
+          "description": "Addressable smoke detector (new)",
+          "quantity": 5,
+          "unit": "Nos",
+          "unit_rate_aed": 1143,
+          "total_aed": 5715,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "MEP.2.02",
+          "description": "Relocation of existing smoke detector",
+          "quantity": 18,
+          "unit": "Nos",
+          "unit_rate_aed": 400,
+          "total_aed": 7200,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "MEP.2.03",
+          "description": "Heat detector (new)",
+          "quantity": 4,
+          "unit": "Nos",
+          "unit_rate_aed": 1067,
+          "total_aed": 4268,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "MEP.2.04",
+          "description": "Relocation of break glass unit",
+          "quantity": 2,
+          "unit": "Nos",
+          "unit_rate_aed": 467,
+          "total_aed": 934,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "MEP.2.05",
+          "description": "Fire alarm sounder (new)",
+          "quantity": 2,
+          "unit": "Nos",
+          "unit_rate_aed": 600,
+          "total_aed": 1200,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "MEP.2.06",
+          "description": "Relocation of voice evacuation",
+          "quantity": 2,
+          "unit": "Nos",
+          "unit_rate_aed": 467,
+          "total_aed": 934,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "MEP.2.07",
+          "description": "Interface unit control module",
+          "quantity": 4,
+          "unit": "Nos",
+          "unit_rate_aed": 2000,
+          "total_aed": 8000,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "MEP.2.08",
+          "description": "FA cables 1.5mm x 2C red",
+          "quantity": 1,
+          "unit": "Items",
+          "unit_rate_aed": 2667,
+          "total_aed": 2667,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "MEP.2.10",
+          "description": "Reprogramming, testing & commissioning – FA system",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": 7067,
+          "total_aed": 7067,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "MEP.2.11",
+          "description": "Emergency light self-contained",
+          "quantity": 17,
+          "unit": "Nos",
+          "unit_rate_aed": 560,
+          "total_aed": 9520,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "MEP.2.12",
+          "description": "Emergency exit light",
+          "quantity": 6,
+          "unit": "Nos",
+          "unit_rate_aed": 560,
+          "total_aed": 3360,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "MEP.2.13a",
+          "description": "Testing & commissioning – Emergency lighting",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": 1600,
+          "total_aed": 1600,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "MEP.2.13b",
+          "description": "Remove central battery lights & bypass existing line",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": 2134,
+          "total_aed": 2134,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "MEP.2.13c",
+          "description": "Sprinkler (new)",
+          "quantity": 10,
+          "unit": "Nos",
+          "unit_rate_aed": 600,
+          "total_aed": 6000,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "MEP.2.14",
+          "description": "Relocation of sprinkler",
+          "quantity": 43,
+          "unit": "Nos",
+          "unit_rate_aed": 334,
+          "total_aed": 14362,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "MEP.2.15",
+          "description": "CO2 fire extinguisher 5kg",
+          "quantity": 4,
+          "unit": "Nos",
+          "unit_rate_aed": 400,
+          "total_aed": 1600,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "MEP.2.16",
+          "description": "Dry chemical powder extinguisher 6kg",
+          "quantity": 4,
+          "unit": "Nos",
+          "unit_rate_aed": 334,
+          "total_aed": 1336,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "MEP.2.17",
+          "description": "Fire blanket",
+          "quantity": 1,
+          "unit": "Nos",
+          "unit_rate_aed": 200,
+          "total_aed": 200,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "MEP.2.19",
+          "description": "FA & FF system isolation charge (FLS maintenance team)",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": 3334,
+          "total_aed": 3334,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "MEP.2.20",
+          "description": "DCD inspection certificate & handover",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": 1334,
+          "total_aed": 1334,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "MEP.2.21",
+          "description": "Testing & commissioning – Fire Fighting",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": 2000,
+          "total_aed": 2000,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "MEP.2.00",
+          "description": "SUB TOTAL - Fire Protection Works",
+          "quantity": null,
+          "unit": null,
+          "unit_rate_aed": null,
+          "total_aed": 84765,
+          "is_subtotal": true
+        },
+        {
+          "sr_no": "MEP.3.01",
+          "description": "Remove existing FCUs & install new FCUs",
+          "quantity": 8,
+          "unit": "Nos",
+          "unit_rate_aed": 6000,
+          "total_aed": 48000,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "MEP.3.02",
+          "description": "VAV for meeting rooms",
+          "quantity": 5,
+          "unit": "Nos",
+          "unit_rate_aed": 2400,
+          "total_aed": 12000,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "MEP.3.03",
+          "description": "Thermostat",
+          "quantity": 13,
+          "unit": "Nos",
+          "unit_rate_aed": 400,
+          "total_aed": 5200,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "MEP.3.04",
+          "description": "CHW pipes with 25mm rubber insulation & supports",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": 30934,
+          "total_aed": 30934,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "MEP.3.05",
+          "description": "CHW valve packaged (PICV, gate valve, strainer, test point)",
+          "quantity": 8,
+          "unit": "Items",
+          "unit_rate_aed": 3734,
+          "total_aed": 29872,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "MEP.3.06",
+          "description": "Condensate drain pipe for FCU units",
+          "quantity": 8,
+          "unit": "Nos",
+          "unit_rate_aed": 200,
+          "total_aed": 1600,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "MEP.3.07",
+          "description": "Supply air duct (PI ducting) fabrication & installation",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": 46286,
+          "total_aed": 46286,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "MEP.3.08",
+          "description": "Flexible duct with round damper, rings & jubilee clips",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": 6667,
+          "total_aed": 6667,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "MEP.3.09",
+          "description": "Volume control dampers",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": 6667,
+          "total_aed": 6667,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "MEP.3.10",
+          "description": "Acoustic insulation for airflow noise control",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": 6000,
+          "total_aed": 6000,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "MEP.3.11",
+          "description": "Grilles & diffusers (flow bar grill & diffuser)",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": 22858,
+          "total_aed": 22858,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "MEP.3.12",
+          "description": "Testing, commissioning & air balancing",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": 4000,
+          "total_aed": 4000,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "MEP.0.01",
+          "description": "CHW chemical flushing",
+          "quantity": 2,
+          "unit": "Item",
+          "unit_rate_aed": 6000,
+          "total_aed": 12000,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "MEP.3.00",
+          "description": "SUB TOTAL - HVAC Works",
+          "quantity": null,
+          "unit": null,
+          "unit_rate_aed": null,
+          "total_aed": 232084,
+          "is_subtotal": true
+        },
+        {
+          "sr_no": "MEP.4.01",
+          "description": "Sanitary fitting installation",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": 5334,
+          "total_aed": 5334,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "MEP.4.03",
+          "description": "PPR domestic cold pipes, fittings & supports",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": 6140,
+          "total_aed": 6140,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "MEP.4.04",
+          "description": "Hot & cold water PEX pipes concealed in walls",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": 1627,
+          "total_aed": 1627,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "MEP.4.05",
+          "description": "Water heater 50L",
+          "quantity": 3,
+          "unit": "Item",
+          "unit_rate_aed": 1600,
+          "total_aed": 4800,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "MEP.4.06",
+          "description": "Water hammer arrestor",
+          "quantity": 5,
+          "unit": "Item",
+          "unit_rate_aed": 200,
+          "total_aed": 1000,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "MEP.4.07",
+          "description": "Cold & hot water gate valve",
+          "quantity": 8,
+          "unit": "Item",
+          "unit_rate_aed": 200,
+          "total_aed": 1600,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "MEP.4.08",
+          "description": "UPVC waste pipes incl. hangers, soil pipes",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": 6800,
+          "total_aed": 6800,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "MEP.4.09",
+          "description": "Floor trap",
+          "quantity": 8,
+          "unit": "Nos",
+          "unit_rate_aed": 267,
+          "total_aed": 2136,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "MEP.4.10",
+          "description": "Clean outs",
+          "quantity": 3,
+          "unit": "Nos",
+          "unit_rate_aed": 334,
+          "total_aed": 1002,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "MEP.4.11",
+          "description": "Testing & commissioning – Plumbing",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": 2667,
+          "total_aed": 2667,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "MEP.4.00",
+          "description": "SUB TOTAL - Plumbing Works",
+          "quantity": null,
+          "unit": null,
+          "unit_rate_aed": null,
+          "total_aed": 33106,
+          "is_subtotal": true
+        },
+        {
+          "sr_no": "MEP.00",
+          "description": "SUB TOTAL - MEP Works",
+          "quantity": null,
+          "unit": null,
+          "unit_rate_aed": null,
+          "total_aed": 475364,
+          "is_subtotal": true
+        }
+      ]
+    }
+  ],
+  "source_filename": "ELECTROLUX MIDDLE EAST BOQ - 04082025 (1) (1).pdf"
+}

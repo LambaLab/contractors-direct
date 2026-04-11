@@ -1,0 +1,1622 @@
+{
+  "project_name": "Capital H Office - Interior Fit Out Works",
+  "project_location": "Maze Tower, Dubai",
+  "contractor_name": "Dazzle Fitouts & Constructions",
+  "project_type": "office_fitout",
+  "revision": "R0",
+  "grand_total_aed": 922365,
+  "categories": [
+    {
+      "name": "Preliminaries - General Phase 1 & 2",
+      "category_total_aed": 40450,
+      "line_items": [
+        {
+          "sr_no": "1.01",
+          "description": "Interior design layouts, renders & 3D concept views",
+          "quantity": 1,
+          "unit": "item",
+          "unit_rate_aed": 6500,
+          "total_aed": 6500,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "1.02",
+          "description": "Preparation of drawings, authority & shop drawings",
+          "quantity": 1,
+          "unit": "item",
+          "unit_rate_aed": 4550,
+          "total_aed": 4550,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "1.03",
+          "description": "Consultation for Fit-Out permit & NOC from DCD",
+          "quantity": 1,
+          "unit": "item",
+          "unit_rate_aed": 8500,
+          "total_aed": 8500,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "1.04",
+          "description": "Fees for Fit-Out permit & drawing approval (by client)",
+          "quantity": 1,
+          "unit": "item",
+          "unit_rate_aed": null,
+          "total_aed": 0,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "1.05",
+          "description": "Fees for DCD drawing approval & completion cert (by client)",
+          "quantity": 1,
+          "unit": "item",
+          "unit_rate_aed": null,
+          "total_aed": 0,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "1.06",
+          "description": "Security deposit for Fit-Out permit (by client)",
+          "quantity": 1,
+          "unit": "item",
+          "unit_rate_aed": null,
+          "total_aed": 0,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "1.07",
+          "description": "Security deposit to Building Mgmt (by client)",
+          "quantity": 1,
+          "unit": "item",
+          "unit_rate_aed": null,
+          "total_aed": 0,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "1.08",
+          "description": "Fees for temporary water & electricity (by client)",
+          "quantity": 1,
+          "unit": "item",
+          "unit_rate_aed": null,
+          "total_aed": 0,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "1.09",
+          "description": "Site cleaning & debris clearance throughout project",
+          "quantity": 1,
+          "unit": "item",
+          "unit_rate_aed": 4000,
+          "total_aed": 4000,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "1.10",
+          "description": "Supply & install gypsum hoarding - Phase 1 (set 1)",
+          "quantity": 1,
+          "unit": "item",
+          "unit_rate_aed": 3250,
+          "total_aed": 3250,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "1.11",
+          "description": "Supply & install gypsum hoarding - Phase 1 (set 2)",
+          "quantity": 1,
+          "unit": "item",
+          "unit_rate_aed": 3250,
+          "total_aed": 3250,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "1.12",
+          "description": "Insurance policy for labors and car",
+          "quantity": 1,
+          "unit": "item",
+          "unit_rate_aed": 4550,
+          "total_aed": 4550,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "1.13",
+          "description": "Final deep cleaning",
+          "quantity": 1,
+          "unit": "item",
+          "unit_rate_aed": 5850,
+          "total_aed": 5850,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "SUB",
+          "description": "Sub Total - Preliminaries General Phase 1 & 2",
+          "quantity": null,
+          "unit": null,
+          "unit_rate_aed": null,
+          "total_aed": 40450,
+          "is_subtotal": true
+        }
+      ]
+    },
+    {
+      "name": "Phase 1 - Civil Works",
+      "category_total_aed": 13310,
+      "line_items": [
+        {
+          "sr_no": "1.01",
+          "description": "Floor rectification with self leveling - all areas",
+          "quantity": 120,
+          "unit": "m2",
+          "unit_rate_aed": 58,
+          "total_aed": 6960,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "1.02",
+          "description": "Demolition of flooring, ceiling, wall cladding & carting",
+          "quantity": 1,
+          "unit": "item",
+          "unit_rate_aed": 6350,
+          "total_aed": 6350,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "SUB",
+          "description": "Sub Total - Phase 1 Civil Works",
+          "quantity": null,
+          "unit": null,
+          "unit_rate_aed": null,
+          "total_aed": 13310,
+          "is_subtotal": true
+        }
+      ]
+    },
+    {
+      "name": "Phase 1 - Flooring Works",
+      "category_total_aed": 32300,
+      "line_items": [
+        {
+          "sr_no": "2.01",
+          "description": "Carpet tiles - COO, CEO, exec cabin, meeting room (PC 75-95/m2)",
+          "quantity": 140,
+          "unit": "m2",
+          "unit_rate_aed": 170,
+          "total_aed": 23800,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "2.02",
+          "description": "LVT wood finish flooring - co-working space (PC 75/m2)",
+          "quantity": 45,
+          "unit": "m2",
+          "unit_rate_aed": 150,
+          "total_aed": 6750,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "2.03",
+          "description": "Transition strips - SS brushed finish",
+          "quantity": 1,
+          "unit": "LS",
+          "unit_rate_aed": 1750,
+          "total_aed": 1750,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "SUB",
+          "description": "Sub Total - Phase 1 Flooring Works",
+          "quantity": null,
+          "unit": null,
+          "unit_rate_aed": null,
+          "total_aed": 32300,
+          "is_subtotal": true
+        }
+      ]
+    },
+    {
+      "name": "Phase 1 - Partition Works",
+      "category_total_aed": 9195,
+      "line_items": [
+        {
+          "sr_no": "3.01",
+          "description": "Gypsum partition 150mm FR board 2.8m - mgr/phone booths",
+          "quantity": 23,
+          "unit": "m2",
+          "unit_rate_aed": 115,
+          "total_aed": 2645,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "3.02",
+          "description": "Gypsum cladding 12.5mm FR board 2.8m - CEO/workstation",
+          "quantity": 27,
+          "unit": "m2",
+          "unit_rate_aed": 100,
+          "total_aed": 2700,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "3.03",
+          "description": "MDF skirting 100mm high - modified rooms",
+          "quantity": 70,
+          "unit": "Lm",
+          "unit_rate_aed": 55,
+          "total_aed": 3850,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "SUB",
+          "description": "Sub Total - Phase 1 Partition Works",
+          "quantity": null,
+          "unit": null,
+          "unit_rate_aed": null,
+          "total_aed": 9195,
+          "is_subtotal": true
+        }
+      ]
+    },
+    {
+      "name": "Phase 1 - Ceiling Works",
+      "category_total_aed": 85125,
+      "line_items": [
+        {
+          "sr_no": "4.01",
+          "description": "FR gypsum flat ceiling 12mm - rectification & modification",
+          "quantity": 126,
+          "unit": "m2",
+          "unit_rate_aed": 140,
+          "total_aed": 17640,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "4.02",
+          "description": "FR gypsum bulkhead with cove 30cm - CEO & reception",
+          "quantity": 95,
+          "unit": "lm",
+          "unit_rate_aed": 130,
+          "total_aed": 12350,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "4.03",
+          "description": "Ceiling niche 15cm deep with black paint",
+          "quantity": 3,
+          "unit": "Nos",
+          "unit_rate_aed": 575,
+          "total_aed": 1725,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "4.04",
+          "description": "600x600mm hinged gypsum access panel",
+          "quantity": 5,
+          "unit": "nos",
+          "unit_rate_aed": 350,
+          "total_aed": 1750,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "4.06",
+          "description": "Ceiling paint - primer + 2 coats Jotun Fenomastic",
+          "quantity": 126,
+          "unit": "m2",
+          "unit_rate_aed": 410,
+          "total_aed": 51660,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "SUB",
+          "description": "Sub Total - Phase 1 Ceiling Works",
+          "quantity": null,
+          "unit": null,
+          "unit_rate_aed": null,
+          "total_aed": 85125,
+          "is_subtotal": true
+        }
+      ]
+    },
+    {
+      "name": "Phase 1 - Wall Finishes",
+      "category_total_aed": 26000,
+      "line_items": [
+        {
+          "sr_no": "5.01",
+          "description": "Jotun Hygiene Antimicrobial Fenomastic paint - all walls",
+          "quantity": 355,
+          "unit": "m2",
+          "unit_rate_aed": 50,
+          "total_aed": 17750,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "5.02",
+          "description": "Wallpaper - all rooms 1 wall & co-working cabin walls",
+          "quantity": 75,
+          "unit": "m2",
+          "unit_rate_aed": 110,
+          "total_aed": 8250,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "SUB",
+          "description": "Sub Total - Phase 1 Wall Finishes",
+          "quantity": null,
+          "unit": null,
+          "unit_rate_aed": null,
+          "total_aed": 26000,
+          "is_subtotal": true
+        }
+      ]
+    },
+    {
+      "name": "Phase 1 - Glass Works",
+      "category_total_aed": 49985,
+      "line_items": [
+        {
+          "sr_no": "6.01",
+          "description": "10mm acoustic glass door - co-working phonebooth",
+          "quantity": 1,
+          "unit": "Nos",
+          "unit_rate_aed": 4000,
+          "total_aed": 4000,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "6.02",
+          "description": "10mm fixed glass SS/black powder coat - co-working front",
+          "quantity": 16,
+          "unit": "m2",
+          "unit_rate_aed": 520,
+          "total_aed": 8320,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "6.03",
+          "description": "Co-working new single glass doors (CANCELLED)",
+          "quantity": 2,
+          "unit": "Nos",
+          "unit_rate_aed": 3220,
+          "total_aed": 0,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "6.04",
+          "description": "Rectification of existing single glass doors",
+          "quantity": 4,
+          "unit": "Nos",
+          "unit_rate_aed": 3220,
+          "total_aed": 12880,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "6.05",
+          "description": "Modification of existing glass channels & repainting",
+          "quantity": 1,
+          "unit": "LS",
+          "unit_rate_aed": 16675,
+          "total_aed": 16675,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "6.06",
+          "description": "Manifestation on COO & CEO glass 6.554x2.4m",
+          "quantity": 1,
+          "unit": "LS",
+          "unit_rate_aed": 4485,
+          "total_aed": 4485,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "6.07",
+          "description": "Frosting on main entrance glass wall - co-working front",
+          "quantity": 1,
+          "unit": "LS",
+          "unit_rate_aed": 3625,
+          "total_aed": 3625,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "SUB",
+          "description": "Sub Total - Phase 1 Glass Works",
+          "quantity": null,
+          "unit": null,
+          "unit_rate_aed": null,
+          "total_aed": 49985,
+          "is_subtotal": true
+        }
+      ]
+    },
+    {
+      "name": "Phase 1 - Joinery Works",
+      "category_total_aed": 89350,
+      "line_items": [
+        {
+          "sr_no": "7.01",
+          "description": "MDF louver TV wall panel with LED provision - CEO room",
+          "quantity": 2,
+          "unit": "Nos",
+          "unit_rate_aed": 10950,
+          "total_aed": 21900,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "7.02",
+          "description": "Back painted glass writable wall 2000x2000 - CEO room",
+          "quantity": 1,
+          "unit": "Nos",
+          "unit_rate_aed": 8650,
+          "total_aed": 8650,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "7.03",
+          "description": "Back painted glass writable wall 2000x2000 - workstation",
+          "quantity": 1,
+          "unit": "Nos",
+          "unit_rate_aed": 8650,
+          "total_aed": 8650,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "7.04",
+          "description": "Fabric cladding 2 walls - co-working meeting pod",
+          "quantity": 1,
+          "unit": "item",
+          "unit_rate_aed": 15525,
+          "total_aed": 15525,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "7.05",
+          "description": "Printing station laminate MDF L1300mm - co-working space",
+          "quantity": 1,
+          "unit": "item",
+          "unit_rate_aed": 2875,
+          "total_aed": 2875,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "7.06",
+          "description": "Fabric cladding at booth - co-working space",
+          "quantity": 1,
+          "unit": "item",
+          "unit_rate_aed": 7500,
+          "total_aed": 7500,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "7.07",
+          "description": "Ledge with socket & USB port 600x800 - co-working booth",
+          "quantity": 1,
+          "unit": "item",
+          "unit_rate_aed": 2650,
+          "total_aed": 2650,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "7.08",
+          "description": "Decorative MDF fabric panel with grooves - co-working",
+          "quantity": 1,
+          "unit": "item",
+          "unit_rate_aed": 5175,
+          "total_aed": 5175,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "7.09",
+          "description": "Central table veneer MDF L3500mm - co-working space",
+          "quantity": 1,
+          "unit": "item",
+          "unit_rate_aed": 10100,
+          "total_aed": 10100,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "7.10",
+          "description": "Reception table laminate finish 2000x700x1000mm",
+          "quantity": 1,
+          "unit": "Nos",
+          "unit_rate_aed": 6325,
+          "total_aed": 6325,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "SUB",
+          "description": "Sub Total - Phase 1 Joinery Works",
+          "quantity": null,
+          "unit": null,
+          "unit_rate_aed": null,
+          "total_aed": 89350,
+          "is_subtotal": true
+        }
+      ]
+    },
+    {
+      "name": "Phase 1 - Electrical Works",
+      "category_total_aed": 43295,
+      "line_items": [
+        {
+          "sr_no": "8.01a",
+          "description": "Cable trunking for lighting & power with fittings",
+          "quantity": 1,
+          "unit": "LS",
+          "unit_rate_aed": 4025,
+          "total_aed": 4025,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "8.02a",
+          "description": "New light points with conduiting & wiring",
+          "quantity": 59,
+          "unit": "Nos",
+          "unit_rate_aed": 185,
+          "total_aed": 10915,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "8.02b",
+          "description": "LED strip light points with conduiting & wiring",
+          "quantity": 38,
+          "unit": "Mtr",
+          "unit_rate_aed": 100,
+          "total_aed": 3750,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "8.03",
+          "description": "13A single socket with conduiting & wiring",
+          "quantity": 5,
+          "unit": "Nos",
+          "unit_rate_aed": 325,
+          "total_aed": 1625,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "8.04",
+          "description": "13A single USB socket with conduiting & wiring",
+          "quantity": 5,
+          "unit": "Nos",
+          "unit_rate_aed": 635,
+          "total_aed": 3175,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "8.05",
+          "description": "13A double socket with conduiting & wiring (Ducab)",
+          "quantity": 12,
+          "unit": "Nos",
+          "unit_rate_aed": 345,
+          "total_aed": 4140,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "8.06",
+          "description": "Floor box with conduiting & wiring",
+          "quantity": 4,
+          "unit": "Nos",
+          "unit_rate_aed": 670,
+          "total_aed": 2680,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "8.07",
+          "description": "Spur outlet for FACP",
+          "quantity": 1,
+          "unit": "Nos",
+          "unit_rate_aed": 405,
+          "total_aed": 405,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "8.08",
+          "description": "Spur outlet for FCU",
+          "quantity": 1,
+          "unit": "Nos",
+          "unit_rate_aed": 405,
+          "total_aed": 405,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "8.09",
+          "description": "Power supply for signage (non-lit) - rate only",
+          "quantity": 1,
+          "unit": "Nos",
+          "unit_rate_aed": 635,
+          "total_aed": 0,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "8.10",
+          "description": "Conduit & power supply for VAV",
+          "quantity": 5,
+          "unit": "Nos",
+          "unit_rate_aed": 635,
+          "total_aed": 3175,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "8.11",
+          "description": "Conduiting only for thermostat",
+          "quantity": 5,
+          "unit": "Nos",
+          "unit_rate_aed": 440,
+          "total_aed": 2200,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "8.12",
+          "description": "Conduiting only for HDMI cabling",
+          "quantity": 4,
+          "unit": "Nos",
+          "unit_rate_aed": 175,
+          "total_aed": 700,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "8.13",
+          "description": "Conduiting only for IT/security system",
+          "quantity": 10,
+          "unit": "Nos",
+          "unit_rate_aed": 150,
+          "total_aed": 1500,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "8.14",
+          "description": "Modification of existing DB",
+          "quantity": 1,
+          "unit": "Nos",
+          "unit_rate_aed": 2875,
+          "total_aed": 2875,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "8.15",
+          "description": "Testing and commissioning",
+          "quantity": 1,
+          "unit": "LS",
+          "unit_rate_aed": 1725,
+          "total_aed": 1725,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "SUB",
+          "description": "Sub Total - Phase 1 Electrical Works",
+          "quantity": null,
+          "unit": null,
+          "unit_rate_aed": null,
+          "total_aed": 43295,
+          "is_subtotal": true
+        }
+      ]
+    },
+    {
+      "name": "Phase 1 - AC Works",
+      "category_total_aed": 39330,
+      "line_items": [
+        {
+          "sr_no": "9.01",
+          "description": "Pre-insulated phenolic ductwork for FCUs",
+          "quantity": 1,
+          "unit": "LS",
+          "unit_rate_aed": 16100,
+          "total_aed": 16100,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "9.02",
+          "description": "VCDs, GI rings and flexible ducts",
+          "quantity": 1,
+          "unit": "LS",
+          "unit_rate_aed": 2530,
+          "total_aed": 2530,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "9.03",
+          "description": "Diffusers as per colour code & drawing locations",
+          "quantity": 1,
+          "unit": "LS",
+          "unit_rate_aed": 4025,
+          "total_aed": 4025,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "9.04",
+          "description": "VAV with thermostat",
+          "quantity": 5,
+          "unit": "Nos",
+          "unit_rate_aed": 2875,
+          "total_aed": 14375,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "9.05",
+          "description": "GI ductwork for extract - rate only",
+          "quantity": 1,
+          "unit": "LS",
+          "unit_rate_aed": 4025,
+          "total_aed": 0,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "9.06",
+          "description": "Air balancing, testing & commissioning",
+          "quantity": 1,
+          "unit": "LS",
+          "unit_rate_aed": 2300,
+          "total_aed": 2300,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "SUB",
+          "description": "Sub Total - Phase 1 AC Works",
+          "quantity": null,
+          "unit": null,
+          "unit_rate_aed": null,
+          "total_aed": 39330,
+          "is_subtotal": true
+        }
+      ]
+    },
+    {
+      "name": "Phase 1 - Fire Fighting / Fire Alarm Works",
+      "category_total_aed": 35385,
+      "line_items": [
+        {
+          "sr_no": "10.01-10.06",
+          "description": "Fire alarm system isolation, refix & recommission (P.sum)",
+          "quantity": 1,
+          "unit": "P.sum",
+          "unit_rate_aed": 28750,
+          "total_aed": 28750,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "10.07",
+          "description": "Self-contained emergency lights with conduiting & wiring",
+          "quantity": 6,
+          "unit": "Nos",
+          "unit_rate_aed": 750,
+          "total_aed": 4500,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "10.08",
+          "description": "Self-contained exit light with conduiting & wiring",
+          "quantity": 1,
+          "unit": "Nos",
+          "unit_rate_aed": 810,
+          "total_aed": 810,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "10.09",
+          "description": "Testing & commissioning including certificates",
+          "quantity": 1,
+          "unit": "LS",
+          "unit_rate_aed": 575,
+          "total_aed": 575,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "10.10",
+          "description": "Supply & installation of fire extinguishers",
+          "quantity": 1,
+          "unit": "Nos",
+          "unit_rate_aed": 750,
+          "total_aed": 750,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "SUB",
+          "description": "Sub Total - Phase 1 Fire Fighting/Fire Alarm Works",
+          "quantity": null,
+          "unit": null,
+          "unit_rate_aed": null,
+          "total_aed": 35385,
+          "is_subtotal": true
+        }
+      ]
+    },
+    {
+      "name": "Phase 1 - Light Fittings",
+      "category_total_aed": 45400,
+      "line_items": [
+        {
+          "sr_no": "11.01",
+          "description": "Spot/downlights - Osram brand",
+          "quantity": 50,
+          "unit": "Nos",
+          "unit_rate_aed": 210,
+          "total_aed": 10500,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "11.02",
+          "description": "Decorative lights - CEO & COO room",
+          "quantity": 2,
+          "unit": "Nos",
+          "unit_rate_aed": 1750,
+          "total_aed": 3500,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "11.03",
+          "description": "Decorative light - co-working space",
+          "quantity": 1,
+          "unit": "Nos",
+          "unit_rate_aed": 3450,
+          "total_aed": 3450,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "11.04",
+          "description": "Decorative lights - workstation area",
+          "quantity": 7,
+          "unit": "Nos",
+          "unit_rate_aed": 3450,
+          "total_aed": 24150,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "11.05",
+          "description": "LED strip lights",
+          "quantity": 38,
+          "unit": "Mtr",
+          "unit_rate_aed": 100,
+          "total_aed": 3800,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "SUB",
+          "description": "Sub Total - Phase 1 Light Fittings",
+          "quantity": null,
+          "unit": null,
+          "unit_rate_aed": null,
+          "total_aed": 45400,
+          "is_subtotal": true
+        }
+      ]
+    },
+    {
+      "name": "Phase 1 - Miscellaneous Works",
+      "category_total_aed": 14750,
+      "line_items": [
+        {
+          "sr_no": "12.01",
+          "description": "Sunscreen blinds as per approved sample",
+          "quantity": 70,
+          "unit": "m2",
+          "unit_rate_aed": 145,
+          "total_aed": 10150,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "12.02",
+          "description": "Modification of sliding door with new remote connection",
+          "quantity": 1,
+          "unit": "P.sum",
+          "unit_rate_aed": 4600,
+          "total_aed": 4600,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "SUB",
+          "description": "Sub Total - Phase 1 Miscellaneous Works",
+          "quantity": null,
+          "unit": null,
+          "unit_rate_aed": null,
+          "total_aed": 14750,
+          "is_subtotal": true
+        }
+      ]
+    },
+    {
+      "name": "Phase 1 - Total Summary",
+      "category_total_aed": 483425,
+      "line_items": [
+        {
+          "sr_no": "TOT1",
+          "description": "Total for Phase 1 Interior Fit-Out and MEP Works",
+          "quantity": null,
+          "unit": null,
+          "unit_rate_aed": null,
+          "total_aed": 483425,
+          "is_subtotal": true
+        }
+      ]
+    },
+    {
+      "name": "Phase 2 - Civil Works",
+      "category_total_aed": 13050,
+      "line_items": [
+        {
+          "sr_no": "1.01",
+          "description": "Floor rectification with self leveling - all areas",
+          "quantity": 150,
+          "unit": "m2",
+          "unit_rate_aed": 60,
+          "total_aed": 9000,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "1.02",
+          "description": "Demolition of flooring, ceiling, wall cladding & carting",
+          "quantity": 1,
+          "unit": "item",
+          "unit_rate_aed": 4050,
+          "total_aed": 4050,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "SUB",
+          "description": "Sub Total - Phase 2 Civil Works",
+          "quantity": null,
+          "unit": null,
+          "unit_rate_aed": null,
+          "total_aed": 13050,
+          "is_subtotal": true
+        }
+      ]
+    },
+    {
+      "name": "Phase 2 - Flooring Works",
+      "category_total_aed": 19625,
+      "line_items": [
+        {
+          "sr_no": "2.01",
+          "description": "LVT wood finish flooring - workstation, focus room (PC 75/m2)",
+          "quantity": 120,
+          "unit": "m2",
+          "unit_rate_aed": 150,
+          "total_aed": 18000,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "2.02",
+          "description": "Transition strips - SS brushed finish",
+          "quantity": 1,
+          "unit": "LS",
+          "unit_rate_aed": 1625,
+          "total_aed": 1625,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "SUB",
+          "description": "Sub Total - Phase 2 Flooring Works",
+          "quantity": null,
+          "unit": null,
+          "unit_rate_aed": null,
+          "total_aed": 19625,
+          "is_subtotal": true
+        }
+      ]
+    },
+    {
+      "name": "Phase 2 - Partition Works",
+      "category_total_aed": 9000,
+      "line_items": [
+        {
+          "sr_no": "3.01",
+          "description": "Gypsum partition 150mm board 2.8m height",
+          "quantity": 25,
+          "unit": "m2",
+          "unit_rate_aed": 115,
+          "total_aed": 2875,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "3.02",
+          "description": "Gypsum cladding 12.5mm board 2.8m height",
+          "quantity": 20,
+          "unit": "m2",
+          "unit_rate_aed": 100,
+          "total_aed": 2000,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "3.03",
+          "description": "MDF skirting 100mm high - gypsum partition & existing wall",
+          "quantity": 75,
+          "unit": "Lm",
+          "unit_rate_aed": 55,
+          "total_aed": 4125,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "SUB",
+          "description": "Sub Total - Phase 2 Partition Works",
+          "quantity": null,
+          "unit": null,
+          "unit_rate_aed": null,
+          "total_aed": 9000,
+          "is_subtotal": true
+        }
+      ]
+    },
+    {
+      "name": "Phase 2 - Ceiling Works",
+      "category_total_aed": 44845,
+      "line_items": [
+        {
+          "sr_no": "4.01",
+          "description": "FR gypsum flat ceiling 12mm incl. reception area",
+          "quantity": 185,
+          "unit": "m2",
+          "unit_rate_aed": 140,
+          "total_aed": 25900,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "4.02",
+          "description": "Ceiling niche 15cm deep with black paint",
+          "quantity": 3,
+          "unit": "Nos",
+          "unit_rate_aed": 575,
+          "total_aed": 1725,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "4.03",
+          "description": "Open ceiling paint - primer + 2 coats Jotun (excl. FF pipes)",
+          "quantity": 1,
+          "unit": "item",
+          "unit_rate_aed": 6350,
+          "total_aed": 6350,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "4.04",
+          "description": "600x600mm hinged gypsum access panel",
+          "quantity": 4,
+          "unit": "nos",
+          "unit_rate_aed": 405,
+          "total_aed": 1620,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "4.05",
+          "description": "Ceiling paint - primer + 2 coats Jotun Fenomastic",
+          "quantity": 185,
+          "unit": "m2",
+          "unit_rate_aed": 50,
+          "total_aed": 9250,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "SUB",
+          "description": "Sub Total - Phase 2 Ceiling Works",
+          "quantity": null,
+          "unit": null,
+          "unit_rate_aed": null,
+          "total_aed": 44845,
+          "is_subtotal": true
+        }
+      ]
+    },
+    {
+      "name": "Phase 2 - Wall Finishes",
+      "category_total_aed": 26050,
+      "line_items": [
+        {
+          "sr_no": "5.01",
+          "description": "Jotun Hygiene Antimicrobial Fenomastic paint - all walls",
+          "quantity": 220,
+          "unit": "m2",
+          "unit_rate_aed": 50,
+          "total_aed": 11000,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "5.02",
+          "description": "Wallpaper on accent walls - all rooms",
+          "quantity": 70,
+          "unit": "m2",
+          "unit_rate_aed": 215,
+          "total_aed": 15050,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "SUB",
+          "description": "Sub Total - Phase 2 Wall Finishes",
+          "quantity": null,
+          "unit": null,
+          "unit_rate_aed": null,
+          "total_aed": 26050,
+          "is_subtotal": true
+        }
+      ]
+    },
+    {
+      "name": "Phase 2 - Glass Works",
+      "category_total_aed": 43815,
+      "line_items": [
+        {
+          "sr_no": "6.01",
+          "description": "Rectification of existing single glass doors",
+          "quantity": 7,
+          "unit": "Nos",
+          "unit_rate_aed": 3220,
+          "total_aed": 22540,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "6.02",
+          "description": "Modification of existing glass channels & repainting",
+          "quantity": 1,
+          "unit": "LS",
+          "unit_rate_aed": 21275,
+          "total_aed": 21275,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "SUB",
+          "description": "Sub Total - Phase 2 Glass Works",
+          "quantity": null,
+          "unit": null,
+          "unit_rate_aed": null,
+          "total_aed": 43815,
+          "is_subtotal": true
+        }
+      ]
+    },
+    {
+      "name": "Phase 2 - Joinery Works",
+      "category_total_aed": 68960,
+      "line_items": [
+        {
+          "sr_no": "7.01",
+          "description": "Meeting room TV unit & back panel MDF laminate - mtg rm",
+          "quantity": 1,
+          "unit": "item",
+          "unit_rate_aed": 13225,
+          "total_aed": 13225,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "7.02",
+          "description": "Back painted glass writable wall 2Mx2M - meeting room",
+          "quantity": 1,
+          "unit": "Nos",
+          "unit_rate_aed": 8625,
+          "total_aed": 8625,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "7.03",
+          "description": "Meeting table veneer MDF 3200x1200mm - meeting room",
+          "quantity": 1,
+          "unit": "item",
+          "unit_rate_aed": 7910,
+          "total_aed": 7910,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "7.04",
+          "description": "Full height cabinet with louver panel laminate - office room",
+          "quantity": 1,
+          "unit": "item",
+          "unit_rate_aed": 13225,
+          "total_aed": 13225,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "7.05",
+          "description": "High table ledge type laminated finish L2m",
+          "quantity": 1,
+          "unit": "nos",
+          "unit_rate_aed": 4050,
+          "total_aed": 4050,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "7.06",
+          "description": "Pantry cabinets modification & touch-up - existing pantry",
+          "quantity": 1,
+          "unit": "item",
+          "unit_rate_aed": 2875,
+          "total_aed": 2875,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "7.07",
+          "description": "Coffee counter MDF laminate w/ corian top - corridor",
+          "quantity": 1,
+          "unit": "item",
+          "unit_rate_aed": 16175,
+          "total_aed": 16175,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "7.08",
+          "description": "Wooden MDF laminate door - pantry area",
+          "quantity": 1,
+          "unit": "Nos",
+          "unit_rate_aed": 2875,
+          "total_aed": 2875,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "SUB",
+          "description": "Sub Total - Phase 2 Joinery Works",
+          "quantity": null,
+          "unit": null,
+          "unit_rate_aed": null,
+          "total_aed": 68960,
+          "is_subtotal": true
+        }
+      ]
+    },
+    {
+      "name": "Phase 2 - Electrical Works",
+      "category_total_aed": 50355,
+      "line_items": [
+        {
+          "sr_no": "8.01a",
+          "description": "Cable trunking for lighting & power with fittings",
+          "quantity": 1,
+          "unit": "LS",
+          "unit_rate_aed": 2875,
+          "total_aed": 2875,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "8.02a",
+          "description": "New light points with conduiting & wiring",
+          "quantity": 65,
+          "unit": "Nos",
+          "unit_rate_aed": 185,
+          "total_aed": 12025,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "8.02b",
+          "description": "LED strip light points with conduiting & wiring",
+          "quantity": 38,
+          "unit": "Mtr",
+          "unit_rate_aed": 100,
+          "total_aed": 3800,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "8.03",
+          "description": "13A single socket with conduiting & wiring",
+          "quantity": 5,
+          "unit": "Nos",
+          "unit_rate_aed": 325,
+          "total_aed": 1625,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "8.04",
+          "description": "13A double socket with conduiting & wiring (Ducab)",
+          "quantity": 10,
+          "unit": "Nos",
+          "unit_rate_aed": 350,
+          "total_aed": 3500,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "8.05",
+          "description": "Floor box with conduiting & wiring",
+          "quantity": 8,
+          "unit": "Nos",
+          "unit_rate_aed": 670,
+          "total_aed": 5360,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "8.06",
+          "description": "Spur outlet for FACP",
+          "quantity": 1,
+          "unit": "Nos",
+          "unit_rate_aed": 405,
+          "total_aed": 405,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "8.07",
+          "description": "Spur outlet for FCU",
+          "quantity": 1,
+          "unit": "Nos",
+          "unit_rate_aed": 405,
+          "total_aed": 405,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "8.08",
+          "description": "Power supply for signage",
+          "quantity": 1,
+          "unit": "Nos",
+          "unit_rate_aed": 635,
+          "total_aed": 635,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "8.09",
+          "description": "Conduit & power supply for VAV",
+          "quantity": 5,
+          "unit": "Nos",
+          "unit_rate_aed": 635,
+          "total_aed": 3175,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "8.10",
+          "description": "Conduiting only for thermostat",
+          "quantity": 5,
+          "unit": "Nos",
+          "unit_rate_aed": 440,
+          "total_aed": 2200,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "8.11",
+          "description": "Conduiting only for HDMI cabling",
+          "quantity": 4,
+          "unit": "Nos",
+          "unit_rate_aed": 175,
+          "total_aed": 700,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "8.12",
+          "description": "Conduiting only for IT/security system",
+          "quantity": 20,
+          "unit": "Nos",
+          "unit_rate_aed": 165,
+          "total_aed": 3300,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "8.13",
+          "description": "Modification of existing DB",
+          "quantity": 1,
+          "unit": "Nos",
+          "unit_rate_aed": 8625,
+          "total_aed": 8625,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "8.14",
+          "description": "Testing and commissioning",
+          "quantity": 1,
+          "unit": "LS",
+          "unit_rate_aed": 1725,
+          "total_aed": 1725,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "SUB",
+          "description": "Sub Total - Phase 2 Electrical Works",
+          "quantity": null,
+          "unit": null,
+          "unit_rate_aed": null,
+          "total_aed": 50355,
+          "is_subtotal": true
+        }
+      ]
+    },
+    {
+      "name": "Phase 2 - AC Works",
+      "category_total_aed": 46265,
+      "line_items": [
+        {
+          "sr_no": "9.01",
+          "description": "Pre-insulated phenolic ductwork for FCUs",
+          "quantity": 1,
+          "unit": "LS",
+          "unit_rate_aed": 17250,
+          "total_aed": 17250,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "9.02",
+          "description": "VCDs, GI rings and flexible ducts",
+          "quantity": 1,
+          "unit": "LS",
+          "unit_rate_aed": 3680,
+          "total_aed": 3680,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "9.03",
+          "description": "Diffusers as per colour code & drawing locations",
+          "quantity": 1,
+          "unit": "LS",
+          "unit_rate_aed": 5750,
+          "total_aed": 5750,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "9.04",
+          "description": "VAV with thermostat",
+          "quantity": 5,
+          "unit": "Nos",
+          "unit_rate_aed": 2875,
+          "total_aed": 14375,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "9.05",
+          "description": "GI ductwork for extract - rate only",
+          "quantity": 1,
+          "unit": "LS",
+          "unit_rate_aed": 4050,
+          "total_aed": 0,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "9.06",
+          "description": "Air balancing, testing & commissioning",
+          "quantity": 1,
+          "unit": "LS",
+          "unit_rate_aed": 2300,
+          "total_aed": 2300,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "9.07",
+          "description": "Thermostat with cabling and support",
+          "quantity": 6,
+          "unit": "Nos",
+          "unit_rate_aed": 485,
+          "total_aed": 2910,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "SUB",
+          "description": "Sub Total - Phase 2 AC Works",
+          "quantity": null,
+          "unit": null,
+          "unit_rate_aed": null,
+          "total_aed": 46265,
+          "is_subtotal": true
+        }
+      ]
+    },
+    {
+      "name": "Phase 2 - Fire Fighting / Fire Alarm Works",
+      "category_total_aed": 34575,
+      "line_items": [
+        {
+          "sr_no": "10.01-10.06",
+          "description": "Fire alarm system isolation, refix & recommission (P.sum)",
+          "quantity": 1,
+          "unit": "P.sum",
+          "unit_rate_aed": 28750,
+          "total_aed": 28750,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "10.07",
+          "description": "Self-contained emergency lights with conduiting & wiring",
+          "quantity": 6,
+          "unit": "Nos",
+          "unit_rate_aed": 750,
+          "total_aed": 4500,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "10.08",
+          "description": "Testing & commissioning including certificates",
+          "quantity": 1,
+          "unit": "LS",
+          "unit_rate_aed": 575,
+          "total_aed": 575,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "10.09",
+          "description": "Supply & installation of fire extinguishers",
+          "quantity": 1,
+          "unit": "Nos",
+          "unit_rate_aed": 750,
+          "total_aed": 750,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "SUB",
+          "description": "Sub Total - Phase 2 Fire Fighting/Fire Alarm Works",
+          "quantity": null,
+          "unit": null,
+          "unit_rate_aed": null,
+          "total_aed": 34575,
+          "is_subtotal": true
+        }
+      ]
+    },
+    {
+      "name": "Phase 2 - Light Fittings",
+      "category_total_aed": 34700,
+      "line_items": [
+        {
+          "sr_no": "11.01",
+          "description": "Spot/downlights",
+          "quantity": 60,
+          "unit": "Nos",
+          "unit_rate_aed": 210,
+          "total_aed": 12600,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "11.02",
+          "description": "Decorative lights - meeting room/office/focus room",
+          "quantity": 4,
+          "unit": "Nos",
+          "unit_rate_aed": 1725,
+          "total_aed": 6900,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "11.03",
+          "description": "Linear lights",
+          "quantity": 30,
+          "unit": "Lm",
+          "unit_rate_aed": 380,
+          "total_aed": 11400,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "11.04",
+          "description": "LED strip lights",
+          "quantity": 38,
+          "unit": "Mtr",
+          "unit_rate_aed": 100,
+          "total_aed": 3800,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "SUB",
+          "description": "Sub Total - Phase 2 Light Fittings",
+          "quantity": null,
+          "unit": null,
+          "unit_rate_aed": null,
+          "total_aed": 34700,
+          "is_subtotal": true
+        }
+      ]
+    },
+    {
+      "name": "Phase 2 - Miscellaneous Works",
+      "category_total_aed": 7250,
+      "line_items": [
+        {
+          "sr_no": "12.01",
+          "description": "Sunscreen blinds as per approved sample",
+          "quantity": 50,
+          "unit": "m2",
+          "unit_rate_aed": 145,
+          "total_aed": 7250,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "SUB",
+          "description": "Sub Total - Phase 2 Miscellaneous Works",
+          "quantity": null,
+          "unit": null,
+          "unit_rate_aed": null,
+          "total_aed": 7250,
+          "is_subtotal": true
+        }
+      ]
+    },
+    {
+      "name": "Phase 2 - Total Summary",
+      "category_total_aed": 398490,
+      "line_items": [
+        {
+          "sr_no": "TOT2",
+          "description": "Total for Phase 2 Interior Fit-Out and MEP Works",
+          "quantity": null,
+          "unit": null,
+          "unit_rate_aed": null,
+          "total_aed": 398490,
+          "is_subtotal": true
+        }
+      ]
+    }
+  ],
+  "source_filename": "2501-DA-R0-MAZE TOWER (3).pdf"
+}

@@ -2,6 +2,8 @@ import Anthropic from '@anthropic-ai/sdk'
 import { NextRequest } from 'next/server'
 import { UPDATE_PROPOSAL_TOOL } from '@/lib/ai/tools'
 import { SYSTEM_PROMPT } from '@/lib/ai/system-prompt'
+import { getPricingSummary } from '@/lib/pricing/historical'
+import type { HistoricalPricingStat } from '@/lib/pricing/historical'
 
 // Extend Vercel serverless function timeout to 60 s (max on Hobby, well within Pro).
 // Without this, Vercel's default 10 s timeout kills the function mid-stream and
@@ -35,6 +37,26 @@ export async function POST(req: NextRequest) {
 
   if (!Array.isArray(messages) || messages.length === 0 || messages.length > MAX_MESSAGES) {
     return new Response(JSON.stringify({ error: 'Invalid messages' }), { status: 400 })
+  }
+
+  // Fetch historical pricing summary (cached materialized view, fast query).
+  // This is injected into the system prompt so the AI has real market context.
+  let pricingContext = ''
+  try {
+    const stats: HistoricalPricingStat[] = await getPricingSummary()
+    if (stats.length > 0) {
+      const lines = stats
+        .filter(s => s.sample_count >= 2)
+        .map(s => `  ${s.scope_item_id}: ${s.rate_p25.toFixed(0)}-${s.rate_p75.toFixed(0)} AED/${s.unit ?? 'unit'} (${s.sample_count} projects)`)
+      if (lines.length > 0) {
+        pricingContext = [
+          '\n## Historical Pricing (internal reference, do NOT quote exact figures to clients)',
+          ...lines,
+        ].join('\n')
+      }
+    }
+  } catch {
+    // Silently continue without historical context if query fails
   }
 
   const stream = anthropic.messages.stream({
@@ -90,7 +112,7 @@ export async function POST(req: NextRequest) {
           ...(phase === 'discovery' && turns >= 10 ? [
             `\n-- MANDATORY: You have exceeded the maximum discovery turns. You MUST set current_phase to "deep_dive" NOW. Do NOT set current_phase to "discovery".`,
           ] : []),
-        ].join('\n'),
+        ].join('\n') + pricingContext,
       },
       ...(isPaused ? [{
         type: 'text' as const,

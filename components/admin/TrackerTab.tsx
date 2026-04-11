@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect, useCallback, useRef } from 'react'
-import { ChevronRight, ChevronDown, Plus, Sparkles, Loader2, Trash2 } from 'lucide-react'
+import { ChevronRight, ChevronDown, Plus, Sparkles, Loader2, Trash2, FileSpreadsheet } from 'lucide-react'
 import type { Database } from '@/lib/supabase/types'
 import { Button } from '@/components/ui/button'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
@@ -11,6 +11,7 @@ type TaskStatus = 'todo' | 'in_progress' | 'done'
 
 type Props = {
   leadId: string
+  hasLockedBoq?: boolean
 }
 
 const STATUS_CONFIG: Record<TaskStatus, { label: string; bg: string; text: string; dot: string }> = {
@@ -25,7 +26,7 @@ const COMPLEXITY_COLORS: Record<string, string> = {
   L: 'bg-red-500',
 }
 
-export default function TrackerTab({ leadId }: Props) {
+export default function TrackerTab({ leadId, hasLockedBoq }: Props) {
   const [tasks, setTasks] = useState<ProjectTask[]>([])
   const [loading, setLoading] = useState(true)
   const [generating, setGenerating] = useState(false)
@@ -70,6 +71,25 @@ export default function TrackerTab({ leadId }: Props) {
         const data = await res.json()
         setTasks(data)
         // Auto-expand all scope items
+        const parentIds = (data as ProjectTask[]).filter(t => !t.parent_id).map(t => t.id)
+        setExpandedScope(new Set(parentIds))
+      }
+    } catch { /* ignore */ }
+    setGenerating(false)
+  }
+
+  // Generate tasks from locked BOQ
+  const handleGenerateFromBoq = async () => {
+    setGenerating(true)
+    try {
+      const res = await fetch(`/api/admin/leads/${leadId}/tasks/generate`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ source: 'boq' }),
+      })
+      if (res.ok) {
+        const data = await res.json()
+        setTasks(data)
         const parentIds = (data as ProjectTask[]).filter(t => !t.parent_id).map(t => t.id)
         setExpandedScope(new Set(parentIds))
       }
@@ -151,6 +171,24 @@ export default function TrackerTab({ leadId }: Props) {
     return 'bg-zinc-300 dark:bg-zinc-600'
   }
 
+  // Sum estimated costs for a parent's children
+  const getEstimatedCost = (parentId: string) => {
+    return getChildren(parentId).reduce((sum, c) => sum + (c.estimated_cost_aed ?? 0), 0)
+  }
+
+  const getActualCost = (parentId: string) => {
+    return getChildren(parentId).reduce((sum, c) => sum + (c.actual_cost_aed ?? 0), 0)
+  }
+
+  // Check if any task has cost data
+  const hasCostData = tasks.some(t => t.estimated_cost_aed != null && t.estimated_cost_aed > 0)
+
+  const formatAed = (n: number) => {
+    if (n === 0) return '-'
+    if (n >= 1000) return `${(n / 1000).toFixed(n >= 10000 ? 0 : 1)}k`
+    return n.toFixed(0)
+  }
+
   // Derive parent status from children
   const getParentStatus = (parentId: string): TaskStatus => {
     const children = getChildren(parentId)
@@ -184,26 +222,42 @@ export default function TrackerTab({ leadId }: Props) {
         <div className="text-xs text-muted-foreground">
           {parentTasks.length} scope item{parentTasks.length !== 1 ? 's' : ''} &middot; {tasks.filter(t => t.parent_id).length} tasks
         </div>
-        <Button
-          variant="ghost"
-          size="sm"
-          onClick={handleGenerate}
-          disabled={generating}
-          className="text-xs cursor-pointer gap-1.5"
-        >
-          <Sparkles className="w-3.5 h-3.5" />
-          Regenerate
-        </Button>
+        <div className="flex items-center gap-1.5">
+          {hasLockedBoq && (
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={handleGenerateFromBoq}
+              disabled={generating}
+              className="text-xs cursor-pointer gap-1.5"
+            >
+              <FileSpreadsheet className="w-3.5 h-3.5" />
+              From BOQ
+            </Button>
+          )}
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={handleGenerate}
+            disabled={generating}
+            className="text-xs cursor-pointer gap-1.5"
+          >
+            <Sparkles className="w-3.5 h-3.5" />
+            Regenerate
+          </Button>
+        </div>
       </div>
 
       {/* Scrollable table wrapper */}
       <div className="flex-1 min-h-0 overflow-x-auto overflow-y-auto bg-white dark:bg-background">
         <div className="min-w-[520px]">
       {/* Column headers */}
-      <div className="grid grid-cols-[1fr_130px_100px] gap-2 px-6 md:px-8 py-2 text-[11px] uppercase tracking-widest font-medium text-muted-foreground/70 border-b bg-zinc-50/50 dark:bg-zinc-900/30 sticky top-0 z-10">
+      <div className={`grid ${hasCostData ? 'grid-cols-[1fr_130px_100px_80px_80px]' : 'grid-cols-[1fr_130px_100px]'} gap-2 px-6 md:px-8 py-2 text-[11px] uppercase tracking-widest font-medium text-muted-foreground/70 border-b bg-zinc-50/50 dark:bg-zinc-900/30 sticky top-0 z-10`}>
         <span>Task</span>
         <span>Status</span>
         <span>Progress</span>
+        {hasCostData && <span className="text-right">Est.</span>}
+        {hasCostData && <span className="text-right">Actual</span>}
       </div>
 
       {/* Task rows */}
@@ -228,7 +282,7 @@ export default function TrackerTab({ leadId }: Props) {
               <div key={parent.id}>
                 {/* Parent scope row */}
                 <div
-                  className="grid grid-cols-[1fr_130px_100px] gap-2 items-center px-6 md:px-8 py-3 hover:bg-muted/30 cursor-pointer border-b transition-colors"
+                  className={`grid ${hasCostData ? 'grid-cols-[1fr_130px_100px_80px_80px]' : 'grid-cols-[1fr_130px_100px]'} gap-2 items-center px-6 md:px-8 py-3 hover:bg-muted/30 cursor-pointer border-b transition-colors`}
                   onClick={() => toggleScope(parent.id)}
                 >
                   <div className="flex items-center gap-2 min-w-0">
@@ -254,6 +308,17 @@ export default function TrackerTab({ leadId }: Props) {
                     </div>
                     <span className="text-xs text-muted-foreground w-8 text-right">{progress}%</span>
                   </div>
+
+                  {hasCostData && (
+                    <span className="text-xs text-right font-mono text-muted-foreground">
+                      {formatAed(getEstimatedCost(parent.id))}
+                    </span>
+                  )}
+                  {hasCostData && (
+                    <span className="text-xs text-right font-mono text-muted-foreground">
+                      {formatAed(getActualCost(parent.id))}
+                    </span>
+                  )}
                 </div>
 
                 {/* Subtask rows */}
@@ -264,7 +329,7 @@ export default function TrackerTab({ leadId }: Props) {
                       return (
                         <div
                           key={child.id}
-                          className="grid grid-cols-[1fr_130px_100px] gap-2 items-center pl-12 pr-6 md:pl-14 md:pr-8 py-2.5 hover:bg-muted/20 border-b border-dashed transition-colors group"
+                          className={`grid ${hasCostData ? 'grid-cols-[1fr_130px_100px_80px_80px]' : 'grid-cols-[1fr_130px_100px]'} gap-2 items-center pl-12 pr-6 md:pl-14 md:pr-8 py-2.5 hover:bg-muted/20 border-b border-dashed transition-colors group`}
                         >
                           <div className="flex items-center gap-2.5 min-w-0">
                             <span className={`w-2 h-2 rounded-full shrink-0 ${childStatus.dot}`} />
@@ -295,15 +360,26 @@ export default function TrackerTab({ leadId }: Props) {
                             </SelectContent>
                           </Select>
 
-                          <div className="flex justify-end">
-                            <button
-                              onClick={() => handleDelete(child.id)}
-                              className="opacity-0 group-hover:opacity-100 transition-opacity text-muted-foreground hover:text-destructive cursor-pointer p-1"
-                              title="Delete task"
-                            >
-                              <Trash2 className="w-3.5 h-3.5" />
-                            </button>
-                          </div>
+                          {hasCostData ? (
+                            <>
+                              <span className="text-xs text-right font-mono text-muted-foreground">
+                                {child.estimated_cost_aed ? formatAed(child.estimated_cost_aed) : '-'}
+                              </span>
+                              <span className="text-xs text-right font-mono text-muted-foreground">
+                                {child.actual_cost_aed ? formatAed(child.actual_cost_aed) : '-'}
+                              </span>
+                            </>
+                          ) : (
+                            <div className="flex justify-end">
+                              <button
+                                onClick={() => handleDelete(child.id)}
+                                className="opacity-0 group-hover:opacity-100 transition-opacity text-muted-foreground hover:text-destructive cursor-pointer p-1"
+                                title="Delete task"
+                              >
+                                <Trash2 className="w-3.5 h-3.5" />
+                              </button>
+                            </div>
+                          )}
                         </div>
                       )
                     })}

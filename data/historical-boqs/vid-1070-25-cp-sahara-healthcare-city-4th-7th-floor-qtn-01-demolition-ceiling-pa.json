@@ -1,0 +1,105 @@
+{
+  "project_name": "Interior Fit-Out Works for Sahara Healthcare City",
+  "grand_total_aed": 222870,
+  "project_location": "Sharjah, UAE",
+  "contractor_name": "Verve Interior Decoration LLC",
+  "project_type": "healthcare",
+  "revision": "VID/1070/25/CP/QTN_01",
+  "total_area_sqm": 2950,
+  "categories": [
+    {
+      "name": "Preliminaries",
+      "category_total_aed": 64880,
+      "line_items": [
+        {
+          "sr_no": "1.01",
+          "description": "Contractor's preliminaries: mobilization, barricades, transport, PPE",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": 6450,
+          "total_aed": 6450,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "1.02",
+          "description": "CAR Insurance incl. third party liability for fit-out works",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": 10780,
+          "total_aed": 10780,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "1.03",
+          "description": "Regular site cleaning during & after construction",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": 21150,
+          "total_aed": 21150,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "1.04",
+          "description": "Site protection of common area finishes near workspace",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": 17200,
+          "total_aed": 17200,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "1.05",
+          "description": "Charges for scaffolding",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": 9300,
+          "total_aed": 9300,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "1.00",
+          "description": "Sub Total Preliminaries",
+          "quantity": null,
+          "unit": null,
+          "unit_rate_aed": null,
+          "total_aed": 64880,
+          "is_subtotal": true
+        }
+      ]
+    },
+    {
+      "name": "Demolition and Ceiling Painting Works",
+      "category_total_aed": 157990,
+      "line_items": [
+        {
+          "sr_no": "2.01",
+          "description": "Demolition of existing gypsum demise wall, cart to DM yard (4F Off. 9-24)",
+          "quantity": 1,
+          "unit": "LS",
+          "unit_rate_aed": 39490,
+          "total_aed": 39490,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "2.02",
+          "description": "White spray paint open ceiling: primer + 2 coats fenomestic matt (2950m²)",
+          "quantity": 1,
+          "unit": "LS",
+          "unit_rate_aed": 118500,
+          "total_aed": 118500,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "2.00",
+          "description": "Sub Total Demolition and Ceiling Painting Works",
+          "quantity": null,
+          "unit": null,
+          "unit_rate_aed": null,
+          "total_aed": 157990,
+          "is_subtotal": true
+        }
+      ]
+    }
+  ],
+  "source_filename": "VID-1070-25-CP_SAHARA HEALTHCARE CITY @ 4TH & 7TH FLOOR_QTN_01(DEMOLITION & CEILING PAINTING).pdf"
+}

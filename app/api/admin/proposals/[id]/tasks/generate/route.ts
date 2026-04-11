@@ -13,6 +13,14 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
   const supabase = createServiceClient()
   const { id } = await params
 
+  // Check if request wants BOQ-based generation
+  let body: { source?: string } = {}
+  try { body = await req.json() } catch { /* empty body is fine */ }
+
+  if (body.source === 'boq') {
+    return generateFromBoq(supabase, id)
+  }
+
   // Fetch lead data
   const { data: lead, error: leadError } = await supabase
     .from('leads')
@@ -150,6 +158,93 @@ Return the breakdown as structured JSON.`,
         .select()
 
       if (children) allTasks.push(...children)
+    }
+  }
+
+  return NextResponse.json(allTasks)
+}
+
+/**
+ * Generate tasks directly from a locked BOQ.
+ * Each BOQ category becomes a parent module, each line item becomes a child task.
+ */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+async function generateFromBoq(supabase: any, leadId: string) {
+  // Fetch the latest locked BOQ for this lead
+  const { data: boq, error: boqError } = await supabase
+    .from('boq_drafts')
+    .select('*')
+    .eq('lead_id', leadId)
+    .eq('locked', true)
+    .order('created_at', { ascending: false })
+    .limit(1)
+    .maybeSingle()
+
+  if (boqError || !boq) {
+    return NextResponse.json({ error: 'No locked BOQ found for this lead' }, { status: 404 })
+  }
+
+  const categories = boq.categories as Array<{
+    name: string
+    line_items: Array<{
+      description: string
+      unit: string
+      quantity: number
+      unit_price_aed: number
+      subtotal_aed: number
+    }>
+    category_subtotal_aed: number
+  }>
+
+  if (!Array.isArray(categories) || categories.length === 0) {
+    return NextResponse.json({ error: 'BOQ has no categories' }, { status: 400 })
+  }
+
+  // Delete existing tasks for this lead
+  await supabase.from('project_tasks').delete().eq('lead_id', leadId)
+
+  const allTasks = []
+
+  for (let i = 0; i < categories.length; i++) {
+    const category = categories[i]
+
+    // Insert parent (BOQ category as module)
+    const { data: parent } = await supabase
+      .from('project_tasks')
+      .insert({
+        lead_id: leadId,
+        parent_id: null,
+        title: category.name,
+        sort_order: i,
+        status: 'todo',
+        estimated_cost_aed: category.category_subtotal_aed ?? null,
+      })
+      .select()
+      .single()
+
+    if (!parent) continue
+    allTasks.push(parent)
+
+    // Insert each line item as a child task
+    const lineItems = (category.line_items ?? []).filter(item => item.description)
+    const children = lineItems.map((item, j) => ({
+      lead_id: leadId,
+      parent_id: parent.id,
+      title: item.description,
+      description: `${item.quantity ?? 0} ${item.unit ?? 'unit'} @ AED ${item.unit_price_aed?.toFixed(0) ?? '0'}`,
+      sort_order: j,
+      status: 'todo',
+      estimated_cost_aed: item.subtotal_aed ?? null,
+      boq_line_item_ref: `${i}:${j}`, // category_index:item_index
+    }))
+
+    if (children.length > 0) {
+      const { data: childRows } = await supabase
+        .from('project_tasks')
+        .insert(children)
+        .select()
+
+      if (childRows) allTasks.push(...childRows)
     }
   }
 

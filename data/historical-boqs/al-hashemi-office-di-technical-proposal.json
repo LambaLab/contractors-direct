@@ -1,0 +1,25 @@
+{
+  "project_name": "Fit-Out Works Towards Al Hashemi Roof Floor Office",
+  "grand_total_aed": 0,
+  "contractor_name": "Design Infinity",
+  "project_location": "Dubai",
+  "project_type": "office_fitout",
+  "categories": [
+    {
+      "name": "Technical Proposal – Company Overview (No BOQ Data Present)",
+      "category_total_aed": 0,
+      "line_items": [
+        {
+          "sr_no": "N/A",
+          "description": "This document is a Technical Proposal / Pre-Qualification submission by Design Infinity for the Al Hashemi Roof Floor Office Fit-Out project. It contains company overview, relevant experience, project organization chart, key personnel CVs, insurances, QHSE policy, and ISO certifications. No Bill of Quantities (BOQ) with line items, quantities, unit rates, or pricing was included in the provided document pages.",
+          "quantity": null,
+          "unit": null,
+          "unit_rate_aed": null,
+          "total_aed": 0,
+          "is_subtotal": false
+        }
+      ]
+    }
+  ],
+  "source_filename": "Al Hashemi Office- DI Technical Proposal.pdf"
+}

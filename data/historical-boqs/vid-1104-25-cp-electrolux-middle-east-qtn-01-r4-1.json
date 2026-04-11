@@ -1,0 +1,2297 @@
+{
+  "project_name": "Interior Fit-Out Works for Electrolux Office @ Dubai-UAE",
+  "project_location": "Dubai, UAE",
+  "contractor_name": "Verve Interior Decoration LLC",
+  "project_type": "office_fitout",
+  "revision": "R4",
+  "grand_total_aed": 1750000,
+  "categories": [
+    {
+      "name": "Preliminaries",
+      "category_total_aed": 33231,
+      "line_items": [
+        {
+          "sr_no": "1.01",
+          "description": "Contractor preliminaries, mobilization, site setup, PPE",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": 8387,
+          "total_aed": 8387,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "1.02",
+          "description": "Authority approval charges & security deposit (by client)",
+          "quantity": null,
+          "unit": null,
+          "unit_rate_aed": null,
+          "total_aed": 0,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "1.03",
+          "description": "Coordination charges for landlord/authority approvals",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": 2578,
+          "total_aed": 2578,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "1.04",
+          "description": "Technical drawings (Architectural & MEP) for submission",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": 7049,
+          "total_aed": 7049,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "1.05",
+          "description": "CAR insurance for fit-out works during execution",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": 2578,
+          "total_aed": 2578,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "1.06",
+          "description": "Regular & deep cleaning, debris removal to dump",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": 8123,
+          "total_aed": 8123,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "1.07",
+          "description": "Site protection (common areas, lift, corridor)",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": 1935,
+          "total_aed": 1935,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "1.08",
+          "description": "Scaffolding charges",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": 2581,
+          "total_aed": 2581,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "",
+          "description": "SUB TOTAL PRELIMINARIES",
+          "quantity": null,
+          "unit": null,
+          "unit_rate_aed": null,
+          "total_aed": 33231,
+          "is_subtotal": true
+        }
+      ]
+    },
+    {
+      "name": "Demolition Works",
+      "category_total_aed": 33380,
+      "line_items": [
+        {
+          "sr_no": "2.01",
+          "description": "Remove existing gypsum partition & dispose",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": 4058,
+          "total_aed": 4058,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "2.02",
+          "description": "Remove existing gypsum/60x60 ceiling & dispose",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": 9353,
+          "total_aed": 9353,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "2.03",
+          "description": "Remove existing tile flooring (entrance/WC/pantry only)",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": 3532,
+          "total_aed": 3532,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "2.04",
+          "description": "Remove existing wall tiles & dispose",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": 4215,
+          "total_aed": 4215,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "2.05",
+          "description": "Remove existing wooden/glass doors & dispose",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": 2386,
+          "total_aed": 2386,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "2.06",
+          "description": "Remove existing joinery (cladding/cabinets/vanity) & dispose",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": 3688,
+          "total_aed": 3688,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "2.07",
+          "description": "Remove existing MEP items (lights/AC/sanitary) & dispose",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": 6148,
+          "total_aed": 6148,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "",
+          "description": "SUB TOTAL DEMOLITION WORKS",
+          "quantity": null,
+          "unit": null,
+          "unit_rate_aed": null,
+          "total_aed": 33380,
+          "is_subtotal": true
+        }
+      ]
+    },
+    {
+      "name": "Civil Works",
+      "category_total_aed": 23758,
+      "line_items": [
+        {
+          "sr_no": "2.08",
+          "description": "Close existing plumbing points after sanitary removal",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": 1820,
+          "total_aed": 1820,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "2.09",
+          "description": "Chip existing floor tiles for self-levelling application",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": 14534,
+          "total_aed": 14534,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "2.10",
+          "description": "Cut & chase flooring for MEP works & floor boxes",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": 7404,
+          "total_aed": 7404,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "",
+          "description": "SUB TOTAL CIVIL WORKS",
+          "quantity": null,
+          "unit": null,
+          "unit_rate_aed": null,
+          "total_aed": 23758,
+          "is_subtotal": true
+        }
+      ]
+    },
+    {
+      "name": "Wall Partitions",
+      "category_total_aed": 140861,
+      "line_items": [
+        {
+          "sr_no": "4.01",
+          "description": "Cement board partition 100mm, WC/pantry, H=3170mm",
+          "quantity": 83,
+          "unit": "Sq.m",
+          "unit_rate_aed": 206,
+          "total_aed": 17098,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "4.02",
+          "description": "FR gypsum partition single layer, server room, H=3170mm",
+          "quantity": 37,
+          "unit": "Sq.m",
+          "unit_rate_aed": 154,
+          "total_aed": 5698,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "4.03",
+          "description": "Normal gypsum partition single layer, throughout, H=3170mm",
+          "quantity": 195,
+          "unit": "Sq.m",
+          "unit_rate_aed": 130,
+          "total_aed": 25350,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "4.04",
+          "description": "Cement board cladding, washroom existing wall, H=2400mm",
+          "quantity": 25,
+          "unit": "Sq.m",
+          "unit_rate_aed": 136,
+          "total_aed": 3400,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "4.05",
+          "description": "FR gypsum cladding, server room existing wall, H=3170mm",
+          "quantity": 17,
+          "unit": "Sq.m",
+          "unit_rate_aed": 126,
+          "total_aed": 2142,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "4.06",
+          "description": "Normal gypsum cladding, reception shaft/columns, H=3170mm",
+          "quantity": 60,
+          "unit": "Sq.m",
+          "unit_rate_aed": 99,
+          "total_aed": 5940,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "4.07",
+          "description": "Acoustic glass partition Kaprel Alpha 23, 12mm, 33dB, H=2400",
+          "quantity": 38,
+          "unit": "Sq.m",
+          "unit_rate_aed": 634,
+          "total_aed": 24092,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "4.08",
+          "description": "Movable partition Gibca/Hufcor 632, 51 STC, 4400x2400mm",
+          "quantity": 1,
+          "unit": "LS",
+          "unit_rate_aed": 31724,
+          "total_aed": 31724,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "4.09",
+          "description": "HPL toilet cubicles 25mm, male & female WC",
+          "quantity": 1,
+          "unit": "LS",
+          "unit_rate_aed": 28580,
+          "total_aed": 28580,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "4.10",
+          "description": "MDF reinforcement for TV screens & wall-mounted items",
+          "quantity": 15,
+          "unit": "Sq.m",
+          "unit_rate_aed": 415,
+          "total_aed": 6225,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "4.11",
+          "description": "MS support for sliding foldable partition track",
+          "quantity": 1,
+          "unit": "LS",
+          "unit_rate_aed": 5159,
+          "total_aed": 5159,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "4.12",
+          "description": "Acoustic sealant & foam for partition gaps/penetrations",
+          "quantity": 1,
+          "unit": "LS",
+          "unit_rate_aed": 4800,
+          "total_aed": 4800,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "4.13",
+          "description": "Fire stopping sealant for FR gypsum walls/MEP",
+          "quantity": 1,
+          "unit": "LS",
+          "unit_rate_aed": 2759,
+          "total_aed": 2759,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "4.14",
+          "description": "WC box-type wall cladding for flush tank, H=1500mm",
+          "quantity": 1,
+          "unit": "LS",
+          "unit_rate_aed": 1986,
+          "total_aed": 1986,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "",
+          "description": "SUB TOTAL PARTITION WORKS",
+          "quantity": null,
+          "unit": null,
+          "unit_rate_aed": null,
+          "total_aed": 164953,
+          "is_subtotal": true
+        }
+      ]
+    },
+    {
+      "name": "Floor Finish",
+      "category_total_aed": 158850,
+      "line_items": [
+        {
+          "sr_no": "5.01",
+          "description": "Anti-static raised access floor 600x600mm, server room",
+          "quantity": 11,
+          "unit": "Sq.m",
+          "unit_rate_aed": 489,
+          "total_aed": 5379,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "5.02",
+          "description": "Screed 100mm, WC/pantry for new plumbing works",
+          "quantity": 30,
+          "unit": "Sq.m",
+          "unit_rate_aed": 97,
+          "total_aed": 2910,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "5.03",
+          "description": "Screed levelling (max 60mm), entrance/WC/pantry areas",
+          "quantity": 63,
+          "unit": "Sq.m",
+          "unit_rate_aed": 73,
+          "total_aed": 4599,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "5.04",
+          "description": "Self-levelling 5-6mm to match floor level unit 2906",
+          "quantity": 230,
+          "unit": "Sq.m",
+          "unit_rate_aed": 67,
+          "total_aed": 15410,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "5.05",
+          "description": "Self-levelling 2-3mm for carpet & vinyl areas",
+          "quantity": 190,
+          "unit": "Sq.m",
+          "unit_rate_aed": 46,
+          "total_aed": 8740,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "5.06",
+          "description": "Cementitious waterproofing 2 coats, floor & wall to 1200mm",
+          "quantity": 75,
+          "unit": "Sq.m",
+          "unit_rate_aed": 114,
+          "total_aed": 8550,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "5.07",
+          "description": "Ceramic tile 60x60cm, WC corridor, PC 60 AED/sqm",
+          "quantity": 46,
+          "unit": "Sq.m",
+          "unit_rate_aed": 166,
+          "total_aed": 7636,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "5.08",
+          "description": "Carpet flooring Mohawk, closed rooms/workstation/corridor",
+          "quantity": 415,
+          "unit": "Sq.m",
+          "unit_rate_aed": 140,
+          "total_aed": 58100,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "5.09",
+          "description": "LVT flooring Amtico, pantry only",
+          "quantity": 30,
+          "unit": "Sq.m",
+          "unit_rate_aed": 134,
+          "total_aed": 4020,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "5.10",
+          "description": "Wooden steps seating with storage, semi-solid oak, pantry",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": 42171,
+          "total_aed": 42171,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "5.11",
+          "description": "Transition strip SS finish, between floor finishes",
+          "quantity": 15,
+          "unit": "Lm",
+          "unit_rate_aed": 89,
+          "total_aed": 1335,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "",
+          "description": "SUB TOTAL FLOOR FINISH",
+          "quantity": null,
+          "unit": null,
+          "unit_rate_aed": null,
+          "total_aed": 158850,
+          "is_subtotal": true
+        }
+      ]
+    },
+    {
+      "name": "Walls and Wall Finishes",
+      "category_total_aed": 133305,
+      "line_items": [
+        {
+          "sr_no": "6.01",
+          "description": "Wooden wall cladding MDF laminate, reception/MR/GM, H=2400",
+          "quantity": 45,
+          "unit": "Sq.m",
+          "unit_rate_aed": 761,
+          "total_aed": 34245,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "6.02",
+          "description": "Micro topping finish on window sill/periphery",
+          "quantity": 47,
+          "unit": "Sq.m",
+          "unit_rate_aed": 565,
+          "total_aed": 26555,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "6.03",
+          "description": "Acoustic PET grooved wall panels AcouMAX, focus pods/MR",
+          "quantity": 42,
+          "unit": "Sq.m",
+          "unit_rate_aed": 388,
+          "total_aed": 16296,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "6.04",
+          "description": "Backpainted glass 6mm MDF backing, pantry/display, H=600mm",
+          "quantity": 10,
+          "unit": "Sq.m",
+          "unit_rate_aed": 621,
+          "total_aed": 6210,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "6.05",
+          "description": "Ceramic wall tiles 60x60cm RAK, washrooms, H=2400mm",
+          "quantity": 86,
+          "unit": "Sq.m",
+          "unit_rate_aed": 166,
+          "total_aed": 14276,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "6.06",
+          "description": "Textured wall paint, GM office/pantry/TV wall, H=3170mm",
+          "quantity": 40,
+          "unit": "Sq.m",
+          "unit_rate_aed": 135,
+          "total_aed": 5400,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "6.07",
+          "description": "Fenomastic wall paint JOTUN, remaining areas, H=3170mm",
+          "quantity": 525,
+          "unit": "Sq.m",
+          "unit_rate_aed": 33,
+          "total_aed": 17325,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "6.08",
+          "description": "6mm silver mirror, above vanity counter, washrooms",
+          "quantity": 7,
+          "unit": "Sq.m",
+          "unit_rate_aed": 481,
+          "total_aed": 3367,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "6.09",
+          "description": "Manual roller blinds sunscreen, entire window periphery",
+          "quantity": 117,
+          "unit": "Sq.m",
+          "unit_rate_aed": 99,
+          "total_aed": 11583,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "6.10",
+          "description": "Straight MDF skirting 50mm veneer/PU, throughout",
+          "quantity": 145,
+          "unit": "Lm",
+          "unit_rate_aed": 55,
+          "total_aed": 7975,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "6.11",
+          "description": "Circular MDF skirting 50mm veneer/PU, circular columns",
+          "quantity": 3,
+          "unit": "Nos",
+          "unit_rate_aed": 552,
+          "total_aed": 1656,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "",
+          "description": "SUB TOTAL WALL FINISH",
+          "quantity": null,
+          "unit": null,
+          "unit_rate_aed": null,
+          "total_aed": 144888,
+          "is_subtotal": true
+        }
+      ]
+    },
+    {
+      "name": "Ceiling Finishes",
+      "category_total_aed": 120800,
+      "line_items": [
+        {
+          "sr_no": "7.01",
+          "description": "Stretch ceiling Euroceil translucent PVC, board/meeting rooms",
+          "quantity": 18,
+          "unit": "Sq.m",
+          "unit_rate_aed": 1263,
+          "total_aed": 22734,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "7.02",
+          "description": "Suspended acoustic cloud ceiling AcouMAX PET, corridor",
+          "quantity": 52,
+          "unit": "Sq.m",
+          "unit_rate_aed": 673,
+          "total_aed": 34996,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "7.03a",
+          "description": "Suspended acoustic panels AcouMAX 800x800mm, pantry",
+          "quantity": 2,
+          "unit": "Nos",
+          "unit_rate_aed": 688,
+          "total_aed": 1376,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "7.03b",
+          "description": "Suspended acoustic panels AcouMAX 500x500mm, pantry",
+          "quantity": 2,
+          "unit": "Nos",
+          "unit_rate_aed": 481,
+          "total_aed": 962,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "7.04",
+          "description": "Aluminium grid ceiling 600x600mm, WC & storeroom",
+          "quantity": 38,
+          "unit": "Sq.m",
+          "unit_rate_aed": 138,
+          "total_aed": 5244,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "7.05",
+          "description": "Plain normal gypsum ceiling 12.5mm, closed offices/focus pods",
+          "quantity": 86,
+          "unit": "Sq.m",
+          "unit_rate_aed": 117,
+          "total_aed": 10062,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "7.06",
+          "description": "Gypsum decorative cove, reception/GM/boardroom",
+          "quantity": 30,
+          "unit": "Lm",
+          "unit_rate_aed": 94,
+          "total_aed": 2820,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "7.07",
+          "description": "Gypsum bulkhead 150/250mm, above joinery & level change",
+          "quantity": 65,
+          "unit": "Lm",
+          "unit_rate_aed": 94,
+          "total_aed": 6110,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "7.09",
+          "description": "Shadow groove, closed rooms between wall & false ceiling",
+          "quantity": 90,
+          "unit": "Lm",
+          "unit_rate_aed": 48,
+          "total_aed": 4320,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "7.10",
+          "description": "Open ceiling stucco paint, entire open office area incl. pantry",
+          "quantity": 350,
+          "unit": "Sq.m",
+          "unit_rate_aed": 62,
+          "total_aed": 21700,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "7.11",
+          "description": "Fenomastic paint on gypsum ceiling/bulkheads/coves",
+          "quantity": 180,
+          "unit": "Sq.m",
+          "unit_rate_aed": 33,
+          "total_aed": 5940,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "7.12",
+          "description": "Gypsum access panels 600x600mm for MEP maintenance",
+          "quantity": 12,
+          "unit": "Nos",
+          "unit_rate_aed": 309,
+          "total_aed": 3708,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "7.14",
+          "description": "Support wooden framework for decorative lights in ceiling",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": 828,
+          "total_aed": 828,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "",
+          "description": "SUB TOTAL CEILING FINISH",
+          "quantity": null,
+          "unit": null,
+          "unit_rate_aed": null,
+          "total_aed": 120800,
+          "is_subtotal": true
+        }
+      ]
+    },
+    {
+      "name": "Doors",
+      "category_total_aed": 32845,
+      "line_items": [
+        {
+          "sr_no": "8.02",
+          "description": "Acoustic glass swing door single leaf Kaprel Ultra DC 34dB",
+          "quantity": 8,
+          "unit": "No",
+          "unit_rate_aed": 6773,
+          "total_aed": 54184,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "8.03",
+          "description": "Wooden FR 60min door, server room, 1000x2400mm",
+          "quantity": 1,
+          "unit": "No",
+          "unit_rate_aed": 5517,
+          "total_aed": 5517,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "8.04",
+          "description": "Single leaf wooden door non-FR PU, WC/storeroom, 900x2400",
+          "quantity": 3,
+          "unit": "Nos",
+          "unit_rate_aed": 3933,
+          "total_aed": 11799,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "8.05",
+          "description": "Concealed wooden door non-FR, storeroom/boardroom, 900x2400",
+          "quantity": 2,
+          "unit": "Nos",
+          "unit_rate_aed": 3586,
+          "total_aed": 7172,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "8.06",
+          "description": "Concealed DB shutters MDF paint finish, 2500x2400mm, corridor",
+          "quantity": 1,
+          "unit": "Nos",
+          "unit_rate_aed": 8357,
+          "total_aed": 8357,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "",
+          "description": "SUB TOTAL DOORS",
+          "quantity": null,
+          "unit": null,
+          "unit_rate_aed": null,
+          "total_aed": 87029,
+          "is_subtotal": true
+        }
+      ]
+    },
+    {
+      "name": "Window Blinds",
+      "category_total_aed": 11583,
+      "line_items": [
+        {
+          "sr_no": "6.09",
+          "description": "Manual roller blinds sunscreen, entire window periphery",
+          "quantity": 117,
+          "unit": "Sq.m",
+          "unit_rate_aed": 99,
+          "total_aed": 11583,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "",
+          "description": "SUB TOTAL WINDOW BLINDS",
+          "quantity": null,
+          "unit": null,
+          "unit_rate_aed": null,
+          "total_aed": 11583,
+          "is_subtotal": true
+        }
+      ]
+    },
+    {
+      "name": "Signage Works",
+      "category_total_aed": 24403,
+      "line_items": [
+        {
+          "sr_no": "9.01",
+          "description": "Signage logo MDF PU paint no illumination, reception, 1500x600",
+          "quantity": 1,
+          "unit": "Nos",
+          "unit_rate_aed": 9026,
+          "total_aed": 9026,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "9.02",
+          "description": "Illuminated text works on wall, pantry, 2500x150mm",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": 6207,
+          "total_aed": 6207,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "9.03",
+          "description": "Backlit acrylic signage 6mm LED, display near reception",
+          "quantity": 1,
+          "unit": "Nos",
+          "unit_rate_aed": 5804,
+          "total_aed": 5804,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "9.04",
+          "description": "Frosted/sandblast sticker on glass partitions & doors",
+          "quantity": 34,
+          "unit": "Sq.m",
+          "unit_rate_aed": 99,
+          "total_aed": 3366,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "",
+          "description": "SUB TOTAL SIGNAGE WORKS",
+          "quantity": null,
+          "unit": null,
+          "unit_rate_aed": null,
+          "total_aed": 24403,
+          "is_subtotal": true
+        }
+      ]
+    },
+    {
+      "name": "Joinery Works",
+      "category_total_aed": 303708,
+      "line_items": [
+        {
+          "sr_no": "10.01",
+          "description": "Reception desk JN01 curved MDF PU/laminate, 2220x700x1100",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": 20003,
+          "total_aed": 20003,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "10.02",
+          "description": "Wooden slats JN02 MDF laminate, entrance display, 200x40x2400",
+          "quantity": 5,
+          "unit": "Nos",
+          "unit_rate_aed": 993,
+          "total_aed": 4965,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "10.03",
+          "description": "Reception lounge seating JN03 MDF laminate w/ planter, reception",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": 18322,
+          "total_aed": 18322,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "10.04",
+          "description": "Display unit JN04 MDF laminate/Corian top, reception lounge",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": 16964,
+          "total_aed": 16964,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "10.05",
+          "description": "Wall mount ledge JN05 MDF laminate, focus pods, 1600x800",
+          "quantity": 2,
+          "unit": "Nos",
+          "unit_rate_aed": 1973,
+          "total_aed": 3946,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "10.06",
+          "description": "Printer cabinet JN06 MDF laminate/Corian top, behind reception",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": 10317,
+          "total_aed": 10317,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "10.07",
+          "description": "Niche seating JN07 MDF upholstered, boardroom/MR, 3930x650",
+          "quantity": 2,
+          "unit": "Nos",
+          "unit_rate_aed": 27034,
+          "total_aed": 54068,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "10.08a",
+          "description": "Hot bar desk JN08a MDF laminate, 5100x500x1100mm, near window",
+          "quantity": 1,
+          "unit": "Nos",
+          "unit_rate_aed": 14516,
+          "total_aed": 14516,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "10.08b",
+          "description": "Hot bar desk JN08b MDF laminate, 3425x500x1100mm, near window",
+          "quantity": 1,
+          "unit": "Nos",
+          "unit_rate_aed": 9740,
+          "total_aed": 9740,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "10.09",
+          "description": "Full height storage unit JN09 MDF laminate, corridor, 6200x400x2400",
+          "quantity": 1,
+          "unit": "Nos",
+          "unit_rate_aed": 29936,
+          "total_aed": 29936,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "10.10",
+          "description": "Display unit JN10 MDF laminate/Corian, corridor near pantry",
+          "quantity": 1,
+          "unit": "Nos",
+          "unit_rate_aed": 14797,
+          "total_aed": 14797,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "10.11",
+          "description": "Book shelf JN11 MDF laminate, pantry near server, 1200x450x2400",
+          "quantity": 1,
+          "unit": "Nos",
+          "unit_rate_aed": 6354,
+          "total_aed": 6354,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "10.12",
+          "description": "Water dispenser unit JN12 MDF laminate, pantry, 600x550x2400",
+          "quantity": 1,
+          "unit": "Nos",
+          "unit_rate_aed": 3265,
+          "total_aed": 3265,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "10.13",
+          "description": "Bar height table/ledge JN13 MDF laminate, pantry, 5700x500x1100",
+          "quantity": 1,
+          "unit": "Nos",
+          "unit_rate_aed": 14888,
+          "total_aed": 14888,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "10.14",
+          "description": "Open shelves JN14 MDF laminate L-angle, storeroom",
+          "quantity": 1,
+          "unit": "Nos",
+          "unit_rate_aed": 14086,
+          "total_aed": 14086,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "10.15",
+          "description": "Pantry unit JN15 MDF laminate/Corian base+OH, pantry",
+          "quantity": 1,
+          "unit": "Nos",
+          "unit_rate_aed": 23998,
+          "total_aed": 23998,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "10.16",
+          "description": "Vanity counter JN16 MDF/Corian + bench, female WC, 2600x700",
+          "quantity": 1,
+          "unit": "Nos",
+          "unit_rate_aed": 16303,
+          "total_aed": 16303,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "10.17",
+          "description": "Vanity counter JN17 MDF/Corian + bench, male WC, 1800x700",
+          "quantity": 1,
+          "unit": "Nos",
+          "unit_rate_aed": 10566,
+          "total_aed": 10566,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "10.18",
+          "description": "Janitor cabinet JN18 MDF laminate, near washroom, 1000x600x2400",
+          "quantity": 1,
+          "unit": "Nos",
+          "unit_rate_aed": 6207,
+          "total_aed": 6207,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "10.19",
+          "description": "Low height cabinet w/ planter JN19 MDF laminate, GM cabin",
+          "quantity": 1,
+          "unit": "Nos",
+          "unit_rate_aed": 2157,
+          "total_aed": 2157,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "10.20",
+          "description": "Low height planter box JN20, reception shaft, 1000x400x400",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": 2100,
+          "total_aed": 2100,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "10.21",
+          "description": "Loose cushions 50mm 600mm dia for step seating, pantry",
+          "quantity": 10,
+          "unit": "Nos",
+          "unit_rate_aed": 621,
+          "total_aed": 6210,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "",
+          "description": "SUB TOTAL JOINERY WORKS",
+          "quantity": null,
+          "unit": null,
+          "unit_rate_aed": null,
+          "total_aed": 303708,
+          "is_subtotal": true
+        }
+      ]
+    },
+    {
+      "name": "Toilet Work (Sanitary Fittings)",
+      "category_total_aed": 25804,
+      "line_items": [
+        {
+          "sr_no": "11.01",
+          "description": "WC wall mounted RAK Venice rimless, alpine white, 520x430mm",
+          "quantity": 5,
+          "unit": "Nos",
+          "unit_rate_aed": 1612,
+          "total_aed": 8060,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "11.02",
+          "description": "Bidet spray kit chrome finish, RAK ceramics",
+          "quantity": 5,
+          "unit": "Nos",
+          "unit_rate_aed": 143,
+          "total_aed": 715,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "11.03",
+          "description": "Wall hung waterless urinals RAK Jazira, alpine white",
+          "quantity": 3,
+          "unit": "Nos",
+          "unit_rate_aed": 873,
+          "total_aed": 2619,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "11.04",
+          "description": "Countertop wash basin RAK Feeling round, 420x430mm",
+          "quantity": 5,
+          "unit": "Nos",
+          "unit_rate_aed": 647,
+          "total_aed": 3235,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "11.05",
+          "description": "Single lever basin mixer chrome RAK Prime",
+          "quantity": 5,
+          "unit": "Nos",
+          "unit_rate_aed": 520,
+          "total_aed": 2600,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "11.06",
+          "description": "Toilet roll holder wall mounted chrome, RAK ceramics",
+          "quantity": 5,
+          "unit": "Nos",
+          "unit_rate_aed": 110,
+          "total_aed": 550,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "11.07",
+          "description": "Pedal bin 5 litre, 200x235x280mm",
+          "quantity": 8,
+          "unit": "Nos",
+          "unit_rate_aed": 197,
+          "total_aed": 1576,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "11.08",
+          "description": "Chrome wall mounted paper towel dispenser, Sanipex",
+          "quantity": 2,
+          "unit": "Nos",
+          "unit_rate_aed": 1744,
+          "total_aed": 3488,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "11.09",
+          "description": "Floor drain 150x150mm chrome finish",
+          "quantity": 9,
+          "unit": "Nos",
+          "unit_rate_aed": 181,
+          "total_aed": 1629,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "11.10",
+          "description": "Inset SS sink with drainboard, RAK ceramics",
+          "quantity": 1,
+          "unit": "No",
+          "unit_rate_aed": 619,
+          "total_aed": 619,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "11.11",
+          "description": "Deck mounted single lever mixer tap chrome RAK Peak",
+          "quantity": 1,
+          "unit": "No",
+          "unit_rate_aed": 713,
+          "total_aed": 713,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "",
+          "description": "SUB TOTAL SANITARY FITTINGS",
+          "quantity": null,
+          "unit": null,
+          "unit_rate_aed": null,
+          "total_aed": 25804,
+          "is_subtotal": true
+        }
+      ]
+    },
+    {
+      "name": "Light Fittings",
+      "category_total_aed": 62911,
+      "line_items": [
+        {
+          "sr_no": "12.01",
+          "description": "Suspended LED linear light 6500mm, 114W, 4000K, non-dim",
+          "quantity": 3,
+          "unit": "Nos",
+          "unit_rate_aed": 2197,
+          "total_aed": 6591,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "12.02",
+          "description": "Suspended LED linear light 5000mm, 114W, 4000K, non-dim",
+          "quantity": 1,
+          "unit": "Nos",
+          "unit_rate_aed": 2018,
+          "total_aed": 2018,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "12.03",
+          "description": "Suspended LED linear light 3800mm, 114W, 4000K, non-dim",
+          "quantity": 3,
+          "unit": "Nos",
+          "unit_rate_aed": 1284,
+          "total_aed": 3852,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "12.04",
+          "description": "Suspended LED linear light 2000mm, 114W, GM office, non-dim",
+          "quantity": 1,
+          "unit": "Nos",
+          "unit_rate_aed": 1050,
+          "total_aed": 1050,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "12.05",
+          "description": "Recessed LED linear 30W between acoustic ceiling panels",
+          "quantity": 35,
+          "unit": "Lm",
+          "unit_rate_aed": 342,
+          "total_aed": 11970,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "12.06",
+          "description": "LED track spot light 20W 4-line 3-phase, 4000K, non-dim",
+          "quantity": 45,
+          "unit": "Nos",
+          "unit_rate_aed": 401,
+          "total_aed": 18045,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "12.07",
+          "description": "Recessed LED trimless downlight 20W IP20, 4000K, non-dim",
+          "quantity": 65,
+          "unit": "Nos",
+          "unit_rate_aed": 184,
+          "total_aed": 11960,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "12.08",
+          "description": "Recessed LED downlight 20W IP65, 4000K, non-dim (WC)",
+          "quantity": 25,
+          "unit": "Nos",
+          "unit_rate_aed": 110,
+          "total_aed": 2750,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "12.09",
+          "description": "LED cove flex strip Lumileds 9.6W/m, ceiling/walls/joinery",
+          "quantity": 85,
+          "unit": "Lm",
+          "unit_rate_aed": 55,
+          "total_aed": 4675,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "",
+          "description": "SUB TOTAL LIGHT FITTINGS",
+          "quantity": null,
+          "unit": null,
+          "unit_rate_aed": null,
+          "total_aed": 62911,
+          "is_subtotal": true
+        }
+      ]
+    },
+    {
+      "name": "Electrical Works",
+      "category_total_aed": 124727,
+      "line_items": [
+        {
+          "sr_no": "14.01",
+          "description": "PVC conduit & wiring for light points (167 nos)",
+          "quantity": 167,
+          "unit": "Nos",
+          "unit_rate_aed": 161,
+          "total_aed": 26887,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "14.02",
+          "description": "Installation of light fittings",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": 4828,
+          "total_aed": 4828,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "14.03",
+          "description": "Dimmer controller wiring for stretch ceiling, MR/boardroom",
+          "quantity": 2,
+          "unit": "No",
+          "unit_rate_aed": 830,
+          "total_aed": 1660,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "14.04",
+          "description": "Grid switch lighting PVC Legrand/Schneider, open WS/corridor",
+          "quantity": 2,
+          "unit": "Nos",
+          "unit_rate_aed": 690,
+          "total_aed": 1380,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "14.05",
+          "description": "Single switch lighting PVC Legrand/Schneider, closed offices",
+          "quantity": 10,
+          "unit": "Nos",
+          "unit_rate_aed": 276,
+          "total_aed": 2760,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "14.06",
+          "description": "13A single wall power socket PVC, Schneider/Legrand",
+          "quantity": 16,
+          "unit": "Nos",
+          "unit_rate_aed": 310,
+          "total_aed": 4960,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "14.07",
+          "description": "13A twin wall power socket black PVC, Schneider/Legrand",
+          "quantity": 15,
+          "unit": "Nos",
+          "unit_rate_aed": 341,
+          "total_aed": 5115,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "14.08",
+          "description": "15A single wall power socket black PVC, Schneider/Legrand",
+          "quantity": 2,
+          "unit": "Nos",
+          "unit_rate_aed": 621,
+          "total_aed": 1242,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "14.09",
+          "description": "16A industrial socket PVC conduit, server racks",
+          "quantity": 3,
+          "unit": "Nos",
+          "unit_rate_aed": 807,
+          "total_aed": 2421,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "14.10",
+          "description": "20A DP switch & flex outlet for water heater",
+          "quantity": 3,
+          "unit": "Nos",
+          "unit_rate_aed": 683,
+          "total_aed": 2049,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "14.11",
+          "description": "Shared floor box 2x twin 13A + data provision, Obo equiv.",
+          "quantity": 30,
+          "unit": "Nos",
+          "unit_rate_aed": 759,
+          "total_aed": 22770,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "14.12",
+          "description": "Single floor box 1x twin 13A + data provision, Obo equiv.",
+          "quantity": 7,
+          "unit": "Nos",
+          "unit_rate_aed": 621,
+          "total_aed": 4347,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "14.13",
+          "description": "13A flex outlet PVC conduit for new FCU",
+          "quantity": 2,
+          "unit": "Nos",
+          "unit_rate_aed": 528,
+          "total_aed": 1056,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "14.14",
+          "description": "50mm conduit & cabling for HDMI/VGA provision",
+          "quantity": 8,
+          "unit": "Nos",
+          "unit_rate_aed": 262,
+          "total_aed": 2096,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "14.15",
+          "description": "PVC containment for Wi-Fi points (entrances/server room)",
+          "quantity": 6,
+          "unit": "Nos",
+          "unit_rate_aed": 124,
+          "total_aed": 744,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "14.16",
+          "description": "PVC containment for access control (provisional)",
+          "quantity": 3,
+          "unit": "Nos",
+          "unit_rate_aed": 124,
+          "total_aed": 372,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "14.17",
+          "description": "PVC containment for CCTV points (entrances/server room)",
+          "quantity": 3,
+          "unit": "Nos",
+          "unit_rate_aed": 124,
+          "total_aed": 372,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "14.18",
+          "description": "PVC containment for AV rack",
+          "quantity": 1,
+          "unit": "Nos",
+          "unit_rate_aed": 124,
+          "total_aed": 124,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "14.19",
+          "description": "13A flex outlet PVC conduit for VAV",
+          "quantity": 3,
+          "unit": "Nos",
+          "unit_rate_aed": 517,
+          "total_aed": 1551,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "14.20",
+          "description": "Modify existing SMDB with ELCB/MCB as per DEWA",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": 4966,
+          "total_aed": 4966,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "14.21",
+          "description": "New DB supply & installation",
+          "quantity": 1,
+          "unit": "No",
+          "unit_rate_aed": 8069,
+          "total_aed": 8069,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "14.22",
+          "description": "4C 35sqmm XLPE/SWA cable from SMDB to DB",
+          "quantity": 1,
+          "unit": "Lot",
+          "unit_rate_aed": 6741,
+          "total_aed": 6741,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "14.23",
+          "description": "GI trunking high level for lighting circuits",
+          "quantity": 1,
+          "unit": "Lot",
+          "unit_rate_aed": 6952,
+          "total_aed": 6952,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "14.24",
+          "description": "GI trunking high level for power circuits",
+          "quantity": 1,
+          "unit": "Lot",
+          "unit_rate_aed": 7386,
+          "total_aed": 7386,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "14.25",
+          "description": "GI trunking high level for network",
+          "quantity": 1,
+          "unit": "Lot",
+          "unit_rate_aed": 7821,
+          "total_aed": 7821,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "14.26",
+          "description": "DEWA submission, inspection and approval",
+          "quantity": 1,
+          "unit": "No",
+          "unit_rate_aed": 4828,
+          "total_aed": 4828,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "14.27",
+          "description": "Testing & commissioning electrical",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": 2759,
+          "total_aed": 2759,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "14.28",
+          "description": "PVC conduit for data/voice points",
+          "quantity": 85,
+          "unit": "Nos",
+          "unit_rate_aed": 124,
+          "total_aed": 10540,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "",
+          "description": "SUB TOTAL ELECTRICAL WORKS",
+          "quantity": null,
+          "unit": null,
+          "unit_rate_aed": null,
+          "total_aed": 146796,
+          "is_subtotal": true
+        }
+      ]
+    },
+    {
+      "name": "FLS (Fire, Life & Safety / Civil Defence Works)",
+      "category_total_aed": 157164,
+      "line_items": [
+        {
+          "sr_no": "15.01",
+          "description": "Supply & install smoke detector with base",
+          "quantity": 4,
+          "unit": "Nos",
+          "unit_rate_aed": null,
+          "total_aed": 0,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "15.02",
+          "description": "Relocate existing smoke detector",
+          "quantity": 21,
+          "unit": "Nos",
+          "unit_rate_aed": null,
+          "total_aed": 0,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "15.03",
+          "description": "Relocate existing heat detector",
+          "quantity": 1,
+          "unit": "Nos",
+          "unit_rate_aed": null,
+          "total_aed": 0,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "15.04",
+          "description": "Supply & install break glass",
+          "quantity": 2,
+          "unit": "Nos",
+          "unit_rate_aed": null,
+          "total_aed": 0,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "15.05",
+          "description": "Supply & install sounder",
+          "quantity": 2,
+          "unit": "Nos",
+          "unit_rate_aed": null,
+          "total_aed": 0,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "15.06",
+          "description": "Interfacing modules FACP + access control",
+          "quantity": 4,
+          "unit": "Nos",
+          "unit_rate_aed": null,
+          "total_aed": 0,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "15.07",
+          "description": "Isolation/de-isolation of fire alarm devices",
+          "quantity": 1,
+          "unit": "Lot",
+          "unit_rate_aed": null,
+          "total_aed": 0,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "15.08",
+          "description": "Fire alarm programming, testing & commissioning",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": null,
+          "total_aed": 0,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "15.09",
+          "description": "Fire alarm device certification charges",
+          "quantity": 1,
+          "unit": "Lot",
+          "unit_rate_aed": null,
+          "total_aed": 0,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "15.01-15.09",
+          "description": "Fire alarm works (LS package)",
+          "quantity": 1,
+          "unit": "LS",
+          "unit_rate_aed": 42581,
+          "total_aed": 42581,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "15.11",
+          "description": "Supply & install pendant sprinkler",
+          "quantity": 4,
+          "unit": "Nos",
+          "unit_rate_aed": null,
+          "total_aed": 0,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "15.12",
+          "description": "Relocate existing pendant sprinkler",
+          "quantity": 13,
+          "unit": "Nos",
+          "unit_rate_aed": null,
+          "total_aed": 0,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "15.13",
+          "description": "Relocate existing pendant to upright sprinkler",
+          "quantity": 25,
+          "unit": "Nos",
+          "unit_rate_aed": null,
+          "total_aed": 0,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "15.14",
+          "description": "CO2 & dry powder fire extinguishers set",
+          "quantity": 3,
+          "unit": "Sets",
+          "unit_rate_aed": null,
+          "total_aed": 0,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "15.15",
+          "description": "Supply & install fire blanket",
+          "quantity": 1,
+          "unit": "No",
+          "unit_rate_aed": null,
+          "total_aed": 0,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "15.16",
+          "description": "Shutdown & draining for fire fighting system",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": null,
+          "total_aed": 0,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "15.17",
+          "description": "Pressure test & commissioning fire fighting",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": null,
+          "total_aed": 0,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "15.18",
+          "description": "Certification charges fire fighting",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": null,
+          "total_aed": 0,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "15.11-15.18",
+          "description": "Fire fighting works (LS package)",
+          "quantity": 1,
+          "unit": "LS",
+          "unit_rate_aed": 49871,
+          "total_aed": 49871,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "15.19",
+          "description": "FM200 system for server room (provisional sum)",
+          "quantity": 1,
+          "unit": "PS",
+          "unit_rate_aed": 51615,
+          "total_aed": 51615,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "15.20",
+          "description": "Supply & install emergency light",
+          "quantity": 2,
+          "unit": "Nos",
+          "unit_rate_aed": null,
+          "total_aed": 0,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "15.21",
+          "description": "Relocate existing emergency light",
+          "quantity": 16,
+          "unit": "Nos",
+          "unit_rate_aed": null,
+          "total_aed": 0,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "15.22",
+          "description": "Supply & install exit light",
+          "quantity": 5,
+          "unit": "Nos",
+          "unit_rate_aed": null,
+          "total_aed": 0,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "15.23",
+          "description": "Emergency & exit lighting testing & commissioning",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": null,
+          "total_aed": 0,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "15.20-15.23",
+          "description": "Emergency works (LS package)",
+          "quantity": 1,
+          "unit": "LS",
+          "unit_rate_aed": 13097,
+          "total_aed": 13097,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "",
+          "description": "SUB TOTAL CIVIL DEFENCE / FLS WORKS",
+          "quantity": null,
+          "unit": null,
+          "unit_rate_aed": null,
+          "total_aed": 157164,
+          "is_subtotal": true
+        }
+      ]
+    },
+    {
+      "name": "Plumbing & Drainage Works",
+      "category_total_aed": 28966,
+      "line_items": [
+        {
+          "sr_no": "16.01",
+          "description": "PPR water supply pipe hot & cold with fittings",
+          "quantity": 1,
+          "unit": "LS",
+          "unit_rate_aed": null,
+          "total_aed": 0,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "16.02",
+          "description": "UPVC drainage pipe waste & soil connection to existing",
+          "quantity": 1,
+          "unit": "LS",
+          "unit_rate_aed": null,
+          "total_aed": 0,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "16.03",
+          "description": "Angle valve & gate valve supply & installation",
+          "quantity": 29,
+          "unit": "Nos",
+          "unit_rate_aed": null,
+          "total_aed": 0,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "16.04",
+          "description": "Pressure test & gravity test",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": null,
+          "total_aed": 0,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "16.05",
+          "description": "Installation of sanitary wares",
+          "quantity": 1,
+          "unit": "LS",
+          "unit_rate_aed": null,
+          "total_aed": 0,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "16.06",
+          "description": "Water heater 80L supply & installation",
+          "quantity": 3,
+          "unit": "Nos",
+          "unit_rate_aed": null,
+          "total_aed": 0,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "16.01-16.06",
+          "description": "Plumbing works (LS package)",
+          "quantity": 1,
+          "unit": "LS",
+          "unit_rate_aed": 28966,
+          "total_aed": 28966,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "",
+          "description": "SUB TOTAL PLUMBING & DRAINAGE WORKS",
+          "quantity": null,
+          "unit": null,
+          "unit_rate_aed": null,
+          "total_aed": 28966,
+          "is_subtotal": true
+        }
+      ]
+    },
+    {
+      "name": "HVAC Works",
+      "category_total_aed": 185467,
+      "line_items": [
+        {
+          "sr_no": "13.01",
+          "description": "CHW FCU Daikin/Mekar/Trosten 3.2TR 1200cfm, new supply",
+          "quantity": 2,
+          "unit": "Nos",
+          "unit_rate_aed": 4222,
+          "total_aed": 8444,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "13.02",
+          "description": "Relocate existing FCU units to new ceiling locations",
+          "quantity": 6,
+          "unit": "Nos",
+          "unit_rate_aed": 2522,
+          "total_aed": 15132,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "13.03",
+          "description": "Performance test of existing FCUs (6 nos)",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": 4542,
+          "total_aed": 4542,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "13.04",
+          "description": "PICV valves for new FCU supply & installation",
+          "quantity": 2,
+          "unit": "Nos",
+          "unit_rate_aed": 2483,
+          "total_aed": 4966,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "13.05",
+          "description": "New VAV supply & installation",
+          "quantity": 3,
+          "unit": "Nos",
+          "unit_rate_aed": 3448,
+          "total_aed": 10344,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "13.06",
+          "description": "Thermostat supply & installation incl. wiring (new)",
+          "quantity": 2,
+          "unit": "Nos",
+          "unit_rate_aed": 623,
+          "total_aed": 1246,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "13.07",
+          "description": "Relocate existing thermostat incl. wiring",
+          "quantity": 6,
+          "unit": "Nos",
+          "unit_rate_aed": 414,
+          "total_aed": 2484,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "13.08-13.11",
+          "description": "PI duct, acoustic liner, VCD, flex duct/plenum (LS)",
+          "quantity": 1,
+          "unit": "LS",
+          "unit_rate_aed": 33966,
+          "total_aed": 33966,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "13.12",
+          "description": "Cross talk attenuator supply & installation",
+          "quantity": 7,
+          "unit": "Nos",
+          "unit_rate_aed": 1241,
+          "total_aed": 8687,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "13.13",
+          "description": "Extension of existing supply air duct",
+          "quantity": 1,
+          "unit": "LS",
+          "unit_rate_aed": 9931,
+          "total_aed": 9931,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "13.14",
+          "description": "Extension of existing extract ducting",
+          "quantity": 1,
+          "unit": "LS",
+          "unit_rate_aed": 9931,
+          "total_aed": 9931,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "13.15-13.16",
+          "description": "Grills (2-slot) & diffusers with accessories (LS)",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": 38621,
+          "total_aed": 38621,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "13.17",
+          "description": "Condensate drain pipe for new FCU to existing drain",
+          "quantity": 1,
+          "unit": "LS",
+          "unit_rate_aed": 1379,
+          "total_aed": 1379,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "13.18",
+          "description": "CHW pipe ERW CH40 with insulation for new FCUs",
+          "quantity": 1,
+          "unit": "LS",
+          "unit_rate_aed": 6897,
+          "total_aed": 6897,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "13.19",
+          "description": "Fusible link FD supply & installation",
+          "quantity": 2,
+          "unit": "Nos",
+          "unit_rate_aed": 1276,
+          "total_aed": 2552,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "13.20",
+          "description": "Chemical flushing, Culligan",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": 13241,
+          "total_aed": 13241,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "13.21",
+          "description": "Air & CWH balancing by 3rd party",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": 6897,
+          "total_aed": 6897,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "13.22",
+          "description": "HVAC testing & commissioning",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": 6207,
+          "total_aed": 6207,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "",
+          "description": "SUB TOTAL HVAC WORKS",
+          "quantity": null,
+          "unit": null,
+          "unit_rate_aed": null,
+          "total_aed": 185467,
+          "is_subtotal": true
+        }
+      ]
+    },
+    {
+      "name": "IT Works (Containment Only)",
+      "category_total_aed": 22069,
+      "line_items": [
+        {
+          "sr_no": "14.28",
+          "description": "PVC conduit for data/voice (85 nos)",
+          "quantity": 85,
+          "unit": "Nos",
+          "unit_rate_aed": 124,
+          "total_aed": 10540,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "14.14",
+          "description": "50mm conduit for HDMI/VGA cabling provision",
+          "quantity": 8,
+          "unit": "Nos",
+          "unit_rate_aed": 262,
+          "total_aed": 2096,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "14.15",
+          "description": "PVC containment for Wi-Fi points (provisional)",
+          "quantity": 6,
+          "unit": "Nos",
+          "unit_rate_aed": 124,
+          "total_aed": 744,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "14.16",
+          "description": "PVC containment for access control (provisional)",
+          "quantity": 3,
+          "unit": "Nos",
+          "unit_rate_aed": 124,
+          "total_aed": 372,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "14.17",
+          "description": "PVC containment for CCTV (provisional)",
+          "quantity": 3,
+          "unit": "Nos",
+          "unit_rate_aed": 124,
+          "total_aed": 372,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "14.18",
+          "description": "PVC containment for AV rack",
+          "quantity": 1,
+          "unit": "Nos",
+          "unit_rate_aed": 124,
+          "total_aed": 124,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "",
+          "description": "SUB TOTAL IT WORKS (CONTAINMENT ONLY)",
+          "quantity": null,
+          "unit": null,
+          "unit_rate_aed": null,
+          "total_aed": 22069,
+          "is_subtotal": true
+        }
+      ]
+    },
+    {
+      "name": "Loose Furniture",
+      "category_total_aed": 128217,
+      "line_items": [
+        {
+          "sr_no": "18.01",
+          "description": "Executive O-leg table with storage, GM office, 1600x1800x750",
+          "quantity": 1,
+          "unit": "No",
+          "unit_rate_aed": 2996,
+          "total_aed": 2996,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "18.02",
+          "description": "MOV round meeting table 4-pax D90xH72cm, GM office",
+          "quantity": 1,
+          "unit": "No",
+          "unit_rate_aed": 1914,
+          "total_aed": 1914,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "18.03",
+          "description": "Tino visitor/meeting chairs 4-star base w/ fixed armrest",
+          "quantity": 4,
+          "unit": "No",
+          "unit_rate_aed": 1266,
+          "total_aed": 5064,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "18.04",
+          "description": "Foldable meeting table boardroom 1400x700x750, MFC",
+          "quantity": 10,
+          "unit": "Nos",
+          "unit_rate_aed": 1675,
+          "total_aed": 16750,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "18.09",
+          "description": "Grandeur MFC rect. freestanding table 1800x800, MR 5-pax",
+          "quantity": 1,
+          "unit": "Nos",
+          "unit_rate_aed": 1689,
+          "total_aed": 1689,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "18.10",
+          "description": "SUNON DUCK high chairs fabric MR 5-pax, 520x560x1080",
+          "quantity": 5,
+          "unit": "Nos",
+          "unit_rate_aed": 1212,
+          "total_aed": 6060,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "18.11",
+          "description": "Desktop modification new worktops on existing frames, 1400x700",
+          "quantity": 60,
+          "unit": "Nos",
+          "unit_rate_aed": 621,
+          "total_aed": 37260,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "18.12",
+          "description": "SUNON DUCK high chairs for hot desks/high bar, fabric",
+          "quantity": 9,
+          "unit": "Nos",
+          "unit_rate_aed": 1212,
+          "total_aed": 10908,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "18.13",
+          "description": "Pantry high bar chairs Chat fixed stool, fabric/PU",
+          "quantity": 6,
+          "unit": "Nos",
+          "unit_rate_aed": 669,
+          "total_aed": 4014,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "18.14",
+          "description": "Pantry tables MFC square 800x800x745mm w/ round base",
+          "quantity": 2,
+          "unit": "Nos",
+          "unit_rate_aed": 2183,
+          "total_aed": 4366,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "18.15",
+          "description": "Pantry dining chairs Keira upholstered w/ metal frame",
+          "quantity": 4,
+          "unit": "Nos",
+          "unit_rate_aed": 1716,
+          "total_aed": 6864,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "18.16",
+          "description": "SUNON D-series D2 pouf EPU leather, 650x550x430mm",
+          "quantity": 3,
+          "unit": "Nos",
+          "unit_rate_aed": 1277,
+          "total_aed": 3831,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "18.17",
+          "description": "SUNON MOGEE coffee table veneer 600dia x420H steel base",
+          "quantity": 1,
+          "unit": "Nos",
+          "unit_rate_aed": 1673,
+          "total_aed": 1673,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "18.19",
+          "description": "Shifting existing furniture (chairs/frames/cabinets) to new office",
+          "quantity": 1,
+          "unit": "Ls",
+          "unit_rate_aed": 24828,
+          "total_aed": 24828,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "",
+          "description": "TOTAL LOOSE FURNITURE",
+          "quantity": null,
+          "unit": null,
+          "unit_rate_aed": null,
+          "total_aed": 128217,
+          "is_subtotal": true
+        }
+      ]
+    },
+    {
+      "name": "Shifting of Decorative Items",
+      "category_total_aed": 14795,
+      "line_items": [
+        {
+          "sr_no": "19.01",
+          "description": "Relocate decorative feature planters from Mazaya to new boardroom",
+          "quantity": 5,
+          "unit": "Sets",
+          "unit_rate_aed": 1379,
+          "total_aed": 6895,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "19.02",
+          "description": "Replace damaged glass partition after planter removal, 10mm std glass",
+          "quantity": 20,
+          "unit": "Sq.m",
+          "unit_rate_aed": 395,
+          "total_aed": 7900,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "",
+          "description": "TOTAL SHIFTING OF DECORATIVE ITEMS",
+          "quantity": null,
+          "unit": null,
+          "unit_rate_aed": null,
+          "total_aed": 14795,
+          "is_subtotal": true
+        }
+      ]
+    },
+    {
+      "name": "Miscellaneous",
+      "category_total_aed": 0,
+      "line_items": [
+        {
+          "sr_no": "",
+          "description": "Miscellaneous (included within other categories)",
+          "quantity": 1,
+          "unit": "LS",
+          "unit_rate_aed": null,
+          "total_aed": 0,
+          "is_subtotal": false
+        }
+      ]
+    }
+  ],
+  "source_filename": "VID-1104-25-CP_Electrolux Middle East_QTN_01 -R4 (1).pdf"
+}

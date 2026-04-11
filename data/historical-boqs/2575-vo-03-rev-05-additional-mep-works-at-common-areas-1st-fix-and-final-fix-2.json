@@ -1,0 +1,536 @@
+{
+  "project_name": "AL HASHEMI - Lift Lobby (Additional MEP Works at Common Areas)",
+  "grand_total_aed": 216714,
+  "contractor_name": "Motif Interiors (Motif Interior Decoration LLC)",
+  "project_location": "Mazaya Business Avenue, Dubai",
+  "project_type": "commercial",
+  "revision": "REV05",
+  "categories": [
+    {
+      "name": "Omissions",
+      "category_total_aed": -9181,
+      "line_items": [
+        {
+          "sr_no": "1.01",
+          "description": "Installation of light fixtures supplied by client.",
+          "quantity": 1,
+          "unit": "LS",
+          "unit_rate_aed": 4455,
+          "total_aed": -4455,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "1.02",
+          "description": "Installation of Client Supplied 13A Single switched socket including pvc conduiting and wiring. (Conduit: pvc, Wire: Oman/NCI)",
+          "quantity": 5,
+          "unit": "Nos",
+          "unit_rate_aed": 270,
+          "total_aed": -1350,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "1.03",
+          "description": "Installation of Client Supplied 13A Twin switched socket including pvc conduiting and wiring. (Conduit: pvc, Wire: Oman/NCI)",
+          "quantity": 5,
+          "unit": "Nos",
+          "unit_rate_aed": 270,
+          "total_aed": -1350,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "1.04",
+          "description": "Supply and installation of Floor box with 1 No. of client supplied 13A double power socket outlet. (Conduit: PVC, Wire: Oman/NCI, Floor box: MK Ega/Davis). Note: Power modules for work station excluded.",
+          "quantity": 2,
+          "unit": "Nos",
+          "unit_rate_aed": 713,
+          "total_aed": -1426,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "1.05",
+          "description": "Modification of existing DB. Note: Relocation is possible within the cable limit",
+          "quantity": 1,
+          "unit": "Nos",
+          "unit_rate_aed": 600,
+          "total_aed": -600,
+          "is_subtotal": false
+        }
+      ]
+    },
+    {
+      "name": "Electrical Works",
+      "category_total_aed": 29696,
+      "line_items": [
+        {
+          "sr_no": "1.01",
+          "description": "Basement Floors - Installation of light fixtures supplied by client.",
+          "quantity": 1,
+          "unit": "LS",
+          "unit_rate_aed": 1035,
+          "total_aed": 1035,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "1.02",
+          "description": "Basement Floors - Supply and Installation of Light control switch",
+          "quantity": 1,
+          "unit": "LS",
+          "unit_rate_aed": 1380,
+          "total_aed": 1380,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "1.03",
+          "description": "Basement Floors - Supply and installation of 5A Single switched socket (Socket - MK/Legrand PVC white finish)",
+          "quantity": 12,
+          "unit": "Nos",
+          "unit_rate_aed": 150,
+          "total_aed": 1800,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "1.04",
+          "description": "Basement Floors - Supply and installation of 13A Twin switched socket (Socket - MK/Legrand PVC white finish)",
+          "quantity": 6,
+          "unit": "Item",
+          "unit_rate_aed": 200,
+          "total_aed": 1200,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "1.05",
+          "description": "Ground Floor - PVC Conduiting and wiring for the light points as per new design. (Conduit: PVC, Wire: Oman/NCI). Note: All light to be supplied by client.",
+          "quantity": 1,
+          "unit": "Nos",
+          "unit_rate_aed": 156,
+          "total_aed": 0,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "1.06",
+          "description": "Ground Floor - Installation of light fixtures supplied by client.",
+          "quantity": 1,
+          "unit": "LS",
+          "unit_rate_aed": 2818,
+          "total_aed": 2818,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "1.07",
+          "description": "Ground Floor - Supply and Installation of Light control switch",
+          "quantity": 1,
+          "unit": "LS",
+          "unit_rate_aed": 1725,
+          "total_aed": 1725,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "1.08",
+          "description": "Ground Floor - Supply and installation of 5A Single switched socket (Socket - MK/Legrand PVC white finish)",
+          "quantity": 10,
+          "unit": "Nos",
+          "unit_rate_aed": 150,
+          "total_aed": 1500,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "1.09",
+          "description": "Ground Floor - Supply and installation of 13A Twin switched socket (Socket - MK/Legrand PVC white finish)",
+          "quantity": 3,
+          "unit": "Nos",
+          "unit_rate_aed": 200,
+          "total_aed": 600,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "1.10",
+          "description": "Ground Floor - Installation of 13A Single switched socket faceplate. Note: Existing conduiting and wiring to be retained. Socket - MK/Legrand PVC white finish",
+          "quantity": 1,
+          "unit": "Nos",
+          "unit_rate_aed": 120,
+          "total_aed": 120,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "1.11",
+          "description": "Ground Floor - Installation of 13A Twin switched socket faceplate. Note: Existing conduiting and wiring to be retained. Socket - MK/Legrand PVC white finish",
+          "quantity": 1,
+          "unit": "Nos",
+          "unit_rate_aed": 180,
+          "total_aed": 180,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "1.12",
+          "description": "Ground Floor - Supply and installation of standalone type occupancy sensor",
+          "quantity": 6,
+          "unit": "Nos",
+          "unit_rate_aed": 633,
+          "total_aed": 3798,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "1.13",
+          "description": "Ground Floor - PVC Containment for the thermostat.",
+          "quantity": 2,
+          "unit": "Nos",
+          "unit_rate_aed": 120,
+          "total_aed": 240,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "1.14",
+          "description": "Ground Floor - Modification of existing DB. Note: Relocation is possible within the cable limit",
+          "quantity": 1,
+          "unit": "Nos",
+          "unit_rate_aed": 1800,
+          "total_aed": 1800,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "1.18",
+          "description": "First Floor - PVC Conduiting and wiring for the light points as per new design. (Conduit: PVC, Wire: Oman/NCI). Note: All light to be supplied by client.",
+          "quantity": 82,
+          "unit": "Nos",
+          "unit_rate_aed": 156,
+          "total_aed": 0,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "1.19",
+          "description": "First Floor - Installation of light fixtures supplied by client.",
+          "quantity": 1,
+          "unit": "LS",
+          "unit_rate_aed": 4715,
+          "total_aed": 4715,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "1.20",
+          "description": "First Floor - Supply and Installation of Light control switch",
+          "quantity": 1,
+          "unit": "LS",
+          "unit_rate_aed": 2875,
+          "total_aed": 2875,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "1.21",
+          "description": "First Floor - Supply and installation of 5A Single switched socket (Conduit: pvc, Wire: Oman/NCI, Socket - MK/Legrand PVC white finish)",
+          "quantity": 5,
+          "unit": "Nos",
+          "unit_rate_aed": 150,
+          "total_aed": 750,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "1.22",
+          "description": "First Floor - Supply and installation of 13A Single switched socket (Conduit: pvc, Wire: Oman/NCI, Socket - MK/Legrand PVC white finish)",
+          "quantity": 5,
+          "unit": "Nos",
+          "unit_rate_aed": 200,
+          "total_aed": 1000,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "1.23",
+          "description": "First Floor - Installation of 13A Twin switched socket faceplate. Note: Existing conduiting and wiring to be retained. Socket - MK/Legrand PVC white finish",
+          "quantity": 1,
+          "unit": "Nos",
+          "unit_rate_aed": 120,
+          "total_aed": 120,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "1.24",
+          "description": "First Floor - PVC Containment for the thermostat.",
+          "quantity": 2,
+          "unit": "Nos",
+          "unit_rate_aed": 120,
+          "total_aed": 240,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "1.25",
+          "description": "First Floor - Modification of existing DB. Note: Relocation is possible within the cable limit",
+          "quantity": 1,
+          "unit": "Nos",
+          "unit_rate_aed": 1800,
+          "total_aed": 1800,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "ST-E",
+          "description": "Sub Total - Electrical Works",
+          "quantity": null,
+          "unit": null,
+          "unit_rate_aed": null,
+          "total_aed": 29696,
+          "is_subtotal": true
+        }
+      ]
+    },
+    {
+      "name": "HVAC Works",
+      "category_total_aed": 70463,
+      "line_items": [
+        {
+          "sr_no": "2.01",
+          "description": "Basement, Ground Floor & First Floor - Installation of Client supplied Thermostat and Controller.",
+          "quantity": 1,
+          "unit": "Nos",
+          "unit_rate_aed": 403,
+          "total_aed": 0,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "2.02",
+          "description": "Basement, Ground Floor & First Floor - Supply and Installation of factory fabricated GI duct works, 13mm thick aluminum faced polyolefin foam insulation AC Duct works, plenum boxes etc.",
+          "quantity": 58,
+          "unit": "m2",
+          "unit_rate_aed": 252,
+          "total_aed": 14616,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "2.03",
+          "description": "Basement, Ground Floor & First Floor - Supply installation of 25mm thick with 16 KG/M³ density insulated flexible ducts.",
+          "quantity": 12,
+          "unit": "BOX",
+          "unit_rate_aed": 222,
+          "total_aed": 2664,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "2.04",
+          "description": "Basement, Ground Floor & First Floor - Supply and installation of 38mm width flow bar grill.",
+          "quantity": 160,
+          "unit": "Rm",
+          "unit_rate_aed": 258,
+          "total_aed": 41280,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "2.05",
+          "description": "Basement, Ground Floor & First Floor - Air balancing by third party.",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": 5175,
+          "total_aed": 5175,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "2.06",
+          "description": "Basement, Ground Floor & First Floor - Final Connections, handover, Testing & Commissioning of installed system.",
+          "quantity": 1,
+          "unit": "Nos",
+          "unit_rate_aed": 6728,
+          "total_aed": 6728,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "ST-H",
+          "description": "Sub Total - HVAC Works",
+          "quantity": null,
+          "unit": null,
+          "unit_rate_aed": null,
+          "total_aed": 70463,
+          "is_subtotal": true
+        }
+      ]
+    },
+    {
+      "name": "FAFF Works",
+      "category_total_aed": 123236,
+      "line_items": [
+        {
+          "sr_no": "3.01",
+          "description": "Basement, Ground Floor & First Floor - Relocation of existing pendant sprinkler.",
+          "quantity": 37,
+          "unit": "Nos",
+          "unit_rate_aed": 780,
+          "total_aed": 28860,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "3.02",
+          "description": "Basement, Ground Floor & First Floor - Supply and installation of new pendant sprinkler.",
+          "quantity": 3,
+          "unit": "Nos",
+          "unit_rate_aed": 863,
+          "total_aed": 2589,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "3.03",
+          "description": "Basement, Ground Floor & First Floor - Supply and installation of new upright sprinkler.",
+          "quantity": 31,
+          "unit": "Nos",
+          "unit_rate_aed": 805,
+          "total_aed": 24955,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "3.04",
+          "description": "Basement, Ground Floor & First Floor - Cancellation of existing pendant sprinkler.",
+          "quantity": 1,
+          "unit": "Nos",
+          "unit_rate_aed": 345,
+          "total_aed": 345,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "3.05",
+          "description": "Basement, Ground Floor & First Floor - Testing and commissioning charges for the fire fighting system",
+          "quantity": 1,
+          "unit": "LS",
+          "unit_rate_aed": 5750,
+          "total_aed": 5750,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "3.06",
+          "description": "Basement, Ground Floor & First Floor - Certification charges for the fire fighting devices.",
+          "quantity": 1,
+          "unit": "LS",
+          "unit_rate_aed": 1150,
+          "total_aed": 1150,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "3.07",
+          "description": "Basement, Ground Floor & First Floor - Shutdown and draining charges for the fire fighting system.",
+          "quantity": 1,
+          "unit": "Nos",
+          "unit_rate_aed": 3450,
+          "total_aed": 3450,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "3.08",
+          "description": "Basement, Ground Floor & First Floor - Removing and refixing of smoke detector.",
+          "quantity": 16,
+          "unit": "Nos",
+          "unit_rate_aed": 518,
+          "total_aed": 8288,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "3.09",
+          "description": "Basement, Ground Floor & First Floor - Supply and installation of new void smoke detector with LED indicator",
+          "quantity": 13,
+          "unit": "Nos",
+          "unit_rate_aed": 1265,
+          "total_aed": 16445,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "3.10",
+          "description": "Basement, Ground Floor & First Floor - Relocation of heat detector with base.",
+          "quantity": 3,
+          "unit": "Nos",
+          "unit_rate_aed": 518,
+          "total_aed": 1554,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "3.11",
+          "description": "Basement, Ground Floor & First Floor - Relocation of break glass with base.",
+          "quantity": 4,
+          "unit": "Nos",
+          "unit_rate_aed": 540,
+          "total_aed": 2160,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "3.12",
+          "description": "Basement, Ground Floor & First Floor - Relocation of sounder with base.",
+          "quantity": 4,
+          "unit": "Nos",
+          "unit_rate_aed": 540,
+          "total_aed": 2160,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "3.13",
+          "description": "Basement, Ground Floor & First Floor - Isolation/De-Isolation of fire alarm devices.",
+          "quantity": 1,
+          "unit": "LS",
+          "unit_rate_aed": 1150,
+          "total_aed": 1150,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "3.14",
+          "description": "Basement, Ground Floor & First Floor - Programming, Testing and commissioning charges for the fire alarm system",
+          "quantity": 1,
+          "unit": "LS",
+          "unit_rate_aed": 9775,
+          "total_aed": 9775,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "3.15",
+          "description": "Basement, Ground Floor & First Floor - Certification charges for the fire alarm devices.",
+          "quantity": 1,
+          "unit": "LS",
+          "unit_rate_aed": 1150,
+          "total_aed": 1150,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "3.16",
+          "description": "Basement, Ground Floor & First Floor - Removing and re fixing of emergency light.",
+          "quantity": 16,
+          "unit": "Nos",
+          "unit_rate_aed": 345,
+          "total_aed": 5520,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "3.17",
+          "description": "Basement, Ground Floor & First Floor - Removing and re fixing of exit light.",
+          "quantity": 11,
+          "unit": "Nos",
+          "unit_rate_aed": 345,
+          "total_aed": 3795,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "3.18",
+          "description": "Basement, Ground Floor & First Floor - Supply and installation of Fire extinguisher sets",
+          "quantity": 6,
+          "unit": "Nos",
+          "unit_rate_aed": 690,
+          "total_aed": 4140,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "ST-F",
+          "description": "Sub Total - FAFF Works",
+          "quantity": null,
+          "unit": null,
+          "unit_rate_aed": null,
+          "total_aed": 123236,
+          "is_subtotal": true
+        }
+      ]
+    },
+    {
+      "name": "Civil Works",
+      "category_total_aed": 2500,
+      "line_items": [
+        {
+          "sr_no": "3.19",
+          "description": "Necessary Civil Works related to MEP works",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": 2500,
+          "total_aed": 2500,
+          "is_subtotal": false
+        }
+      ]
+    }
+  ],
+  "source_filename": "2575 - VO 03 Rev 05 - Additional MEP Works at Common areas - 1st Fix and Final Fix (2).pdf"
+}

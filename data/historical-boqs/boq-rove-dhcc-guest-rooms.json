@@ -1,0 +1,416 @@
+{
+  "project_name": "Refurbishment Works at Rove Hotel, Dubai Health Care City – Guest Rooms Fit Out & MEP Works Package",
+  "grand_total_aed": 8318596,
+  "contractor_name": "HTS Interior Design LLC",
+  "project_location": "Dubai Health Care City",
+  "project_type": "hotel_refurb",
+  "revision": "R0",
+  "categories": [
+    {
+      "name": "Preliminaries",
+      "category_total_aed": 3300,
+      "line_items": [
+        {
+          "sr_no": "1.01",
+          "description": "General - Contractor's preliminaries for mobilization, site preparation, Provision for all temporary barricades",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": 300,
+          "total_aed": 300,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "1.02",
+          "description": "Charges for setting out transportations to/from site, material deliveries, small tools and equipment's, protection of finished products in on-going site, site attendance and call out attendance.",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": 150,
+          "total_aed": 150,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "1.03",
+          "description": "Charges for Preparation of Technical drawings (Architectural & MEP) and submission to Relevant authorities.",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": null,
+          "total_aed": 0,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "1.04",
+          "description": "Charges for Preparation of As built drawings (Architectural & MEP)",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": null,
+          "total_aed": 0,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "1.05",
+          "description": "Charges for Project management, site supervision & coordination and security.",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": 900,
+          "total_aed": 900,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "1.06",
+          "description": "Health, Safety and Environmental Procedures.",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": null,
+          "total_aed": 0,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "1.07",
+          "description": "Allow for coordination with government/authorities along with submission of proposed designs and obtaining completion certificate.",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": null,
+          "total_aed": 0,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "1.08",
+          "description": "Allow provisional Sum for Insurance for the entire fit-out period. Such as the following; - Contractors all Risk Insurance. - Third Party Liability Insurance. - Motor Vehicle Insurance. (Note: Motor Vehicle Insurance is excluded)",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": null,
+          "total_aed": 0,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "1.09",
+          "description": "Allow for providing scaffolding for the builder's works. (Included)",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": null,
+          "total_aed": 0,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "1.10",
+          "description": "Allow for providing hoarding up to 4 Mtr Height. (Included)",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": null,
+          "total_aed": 0,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "1.11",
+          "description": "Contractors facilities shall include: offices, toilets, stores, mess rooms. (By Client)",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": null,
+          "total_aed": 0,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "1.12",
+          "description": "Employers facilities shall include: offices, Temporary telephones, electronic mail and facsimile. (By Client)",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": null,
+          "total_aed": 0,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "1.13",
+          "description": "Control of noise and pollution. (Noted)",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": null,
+          "total_aed": 0,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "1.14",
+          "description": "Allow for Coordination for works done by others.",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": 300,
+          "total_aed": 300,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "1.15",
+          "description": "Allow for water for the works. (By Client)",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": null,
+          "total_aed": 0,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "1.16",
+          "description": "Allow for Electricity for the works. (By Client)",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": null,
+          "total_aed": 0,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "1.17",
+          "description": "Allow for establishing temporary storage facilities at the location provided by the Employer. (By Client)",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": null,
+          "total_aed": 0,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "1.18",
+          "description": "Contractors facilities shall include: offices, toilets, stores, mess rooms. (By Client)",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": null,
+          "total_aed": 0,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "1.19",
+          "description": "Employers facilities shall include: offices, Temporary telephones, electronic mail and facsimile. (By Client)",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": null,
+          "total_aed": 0,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "1.20",
+          "description": "Access for and Possession or use of the Site. (Noted)",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": null,
+          "total_aed": 0,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "1.21",
+          "description": "The Maintenance of existing services on, under or over the Site. (Excluded)",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": null,
+          "total_aed": 0,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "1.22",
+          "description": "Protection of existing finishes at site.",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": 750,
+          "total_aed": 750,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "1.23",
+          "description": "The Execution of the Works in the required specific order, sections or phases. (Included)",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": null,
+          "total_aed": 0,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "1.24",
+          "description": "Regular cleaning of site during construction period and after completion professional deep cleaning and made ready to occupy. Including carting away the debris to Municipal dumping area.",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": 900,
+          "total_aed": 900,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "1.25",
+          "description": "Advance and performance bond charges. (TBC)",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": null,
+          "total_aed": 0,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "1.00",
+          "description": "Carried to collection – Preliminaries (For 1 Guest Room Only)",
+          "quantity": null,
+          "unit": null,
+          "unit_rate_aed": null,
+          "total_aed": 3300,
+          "is_subtotal": true
+        }
+      ]
+    },
+    {
+      "name": "Finishes",
+      "category_total_aed": 3150,
+      "line_items": [
+        {
+          "sr_no": "2.01",
+          "description": "Allowance for Wall Paint works; fenomastic paint (Price includes sanding of existing paint to make the surface level and clean)",
+          "quantity": 53,
+          "unit": "sqm",
+          "unit_rate_aed": 42,
+          "total_aed": 2226,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "2.02",
+          "description": "Allowance for ceiling Paint works; fenomastic paint",
+          "quantity": 22,
+          "unit": "sqm",
+          "unit_rate_aed": 42,
+          "total_aed": 924,
+          "is_subtotal": false
+        }
+      ]
+    },
+    {
+      "name": "Loose Furniture & Accessories",
+      "category_total_aed": 19336,
+      "line_items": [
+        {
+          "sr_no": "3.01",
+          "description": "New Desk with Quartz top (Remains the same, only coating of the metal frame)",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": 450,
+          "total_aed": 450,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "3.02",
+          "description": "All Metal frame behind desk and TV",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": 2700,
+          "total_aed": 2700,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "3.03",
+          "description": "Circular mirror",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": 1118,
+          "total_aed": 1118,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "3.04",
+          "description": "Desk Lamp - Custom made (Considered 3 nos, VE option, HTS will provide sample for client approval)",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": 5400,
+          "total_aed": 5400,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "3.05",
+          "description": "TV wood frame + L shaped Shelf",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": 1725,
+          "total_aed": 1725,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "3.06",
+          "description": "Reupholstered Pouf (Fabric Price range 30 to 35 AED/m)",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": 525,
+          "total_aed": 525,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "3.07",
+          "description": "Reupholstered SofaBed (Fabric Price range 30 to 35 AED/m)",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": 1050,
+          "total_aed": 1050,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "3.08",
+          "description": "New top for Coffee Table",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": 3000,
+          "total_aed": 3000,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "3.09",
+          "description": "Reupholstered valance wrap (Fabric Price range 30 to 35 AED/m)",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": 3300,
+          "total_aed": 3300,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "3.10",
+          "description": "Headboard Vinyl with band (Fabric Price range 30 to 35 AED/m)",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": 1500,
+          "total_aed": 1500,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "3.11",
+          "description": "SW01 - Wall mounted magnifying mirror (Considered 1 nos)",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": 630,
+          "total_aed": 630,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "3.12",
+          "description": "New Day Curtains (Considered 3.3 meter, AED 40 Per RMT)",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": 495,
+          "total_aed": 495,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "3.13",
+          "description": "New Night Curtains (Considered 3.3 meter, AED 60 Per RMT)",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": 743,
+          "total_aed": 743,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "3.00",
+          "description": "Total for 1 Room",
+          "quantity": null,
+          "unit": null,
+          "unit_rate_aed": null,
+          "total_aed": 25786,
+          "is_subtotal": true
+        },
+        {
+          "sr_no": "3.00",
+          "description": "Total for 286 Rooms (11 Floors)",
+          "quantity": 286,
+          "unit": "nos",
+          "unit_rate_aed": null,
+          "total_aed": 8318596,
+          "is_subtotal": true
+        }
+      ]
+    }
+  ],
+  "source_filename": "BOQ- ROVE DHCC GUEST ROOMS.pdf"
+}

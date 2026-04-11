@@ -1,7 +1,9 @@
 'use client'
 
 import Image from 'next/image'
-import { ClipboardList, BarChart3, Users, Settings } from 'lucide-react'
+import Link from 'next/link'
+import { usePathname } from 'next/navigation'
+import { ClipboardList, BarChart3, Users, Settings, BookOpen } from 'lucide-react'
 import {
   Sidebar,
   SidebarContent,
@@ -23,6 +25,7 @@ type Props = {
 }
 
 export function AppSidebar({ adminRole, onTeamOpen }: Props) {
+  const pathname = usePathname()
   return (
     <Sidebar collapsible="icon">
       <SidebarHeader>
@@ -54,9 +57,19 @@ export function AppSidebar({ adminRole, onTeamOpen }: Props) {
           <SidebarGroupContent>
             <SidebarMenu>
               <SidebarMenuItem>
-                <SidebarMenuButton isActive tooltip="Leads">
-                  <ClipboardList />
-                  <span>Leads</span>
+                <SidebarMenuButton isActive={pathname === '/admin' || pathname.startsWith('/admin/proposals')} tooltip="Leads" asChild>
+                  <Link href="/admin">
+                    <ClipboardList />
+                    <span>Leads</span>
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+              <SidebarMenuItem>
+                <SidebarMenuButton isActive={pathname.startsWith('/admin/price-book')} tooltip="Price Book" asChild>
+                  <Link href="/admin/price-book">
+                    <BookOpen />
+                    <span>Price Book</span>
+                  </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
               <SidebarMenuItem>

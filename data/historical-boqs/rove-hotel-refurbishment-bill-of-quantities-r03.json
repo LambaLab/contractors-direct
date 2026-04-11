@@ -1,0 +1,3599 @@
+{
+  "project_name": "Rove Downtown Refurbishment, Public Areas & Guest Room",
+  "grand_total_aed": 12491099.73,
+  "project_location": "Downtown Dubai, United Arab Emirates",
+  "contractor_name": "Design Infinity",
+  "project_type": "hotel_refurb",
+  "revision": "R3",
+  "categories": [
+    {
+      "name": "Bill No. 1 – General Requirements (Public Area)",
+      "category_total_aed": 366550,
+      "line_items": [
+        {
+          "sr_no": "A1.2",
+          "description": "Advance Payment Guarantee",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": 23500,
+          "total_aed": 23500,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "A1.3",
+          "description": "Performance Bond",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": 38000,
+          "total_aed": 38000,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "A1.4",
+          "description": "Contractor's All Risk Policy",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": 8800,
+          "total_aed": 8800,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "A1-Sub",
+          "description": "Page 1/2 – Conditions of Contract subtotal",
+          "quantity": null,
+          "unit": null,
+          "unit_rate_aed": null,
+          "total_aed": 70300,
+          "is_subtotal": true
+        },
+        {
+          "sr_no": "A4.6",
+          "description": "Site administration",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": 17600,
+          "total_aed": 17600,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "A4.7",
+          "description": "Supervision",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": 63200,
+          "total_aed": 63200,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "A4.8",
+          "description": "Security",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": 10500,
+          "total_aed": 10500,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "A4.9",
+          "description": "Safety, health and welfare of work people",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": 9000,
+          "total_aed": 9000,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "A4.10",
+          "description": "Transport of work people",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": 10550,
+          "total_aed": 10550,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "A4-Sub",
+          "description": "Page 1/3 – Admin & Plant subtotal",
+          "quantity": null,
+          "unit": null,
+          "unit_rate_aed": null,
+          "total_aed": 110850,
+          "is_subtotal": true
+        },
+        {
+          "sr_no": "A5-Scaf",
+          "description": "Scaffolding establishment (fixed charges)",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": 30000,
+          "total_aed": 30000,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "A5-Sub",
+          "description": "Page 1/4 – Plant subtotal",
+          "quantity": null,
+          "unit": null,
+          "unit_rate_aed": null,
+          "total_aed": 30000,
+          "is_subtotal": true
+        },
+        {
+          "sr_no": "A7.4",
+          "description": "Temporary fencing, hoardings & guardrails",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": 21000,
+          "total_aed": 21000,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "A7.5",
+          "description": "Temporary roads and hard standings",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": 3500,
+          "total_aed": 3500,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "A8.11",
+          "description": "Protecting works from inclement weather",
+          "quantity": 1,
+          "unit": "LS",
+          "unit_rate_aed": null,
+          "total_aed": 5000,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "A8.12",
+          "description": "Removing rubbish and cleaning at completion",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": 12000,
+          "total_aed": 12000,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "A7-Sub",
+          "description": "Page 1/6 – Contractor's Facilities subtotal",
+          "quantity": null,
+          "unit": null,
+          "unit_rate_aed": null,
+          "total_aed": 41500,
+          "is_subtotal": true
+        },
+        {
+          "sr_no": "A8.2",
+          "description": "All Statutory obligations",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": 4500,
+          "total_aed": 4500,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "A8.3",
+          "description": "Coordination for Works done by Others",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": 6500,
+          "total_aed": 6500,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "A8.5",
+          "description": "Dust, Pest Control and Lighting protection",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": 8800,
+          "total_aed": 8800,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "A8.6",
+          "description": "Off site storage",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": 14500,
+          "total_aed": 14500,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "A8.8",
+          "description": "Specialist third party testing & commissioning",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": 1500,
+          "total_aed": 1500,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "A8.9",
+          "description": "Shop drawings",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": 9000,
+          "total_aed": 9000,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "A8.10",
+          "description": "Submittal program, drawings and revisions",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": 5500,
+          "total_aed": 5500,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "A8.14",
+          "description": "Final Cleaning for Project Handover",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": 28000,
+          "total_aed": 28000,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "A8-Sub",
+          "description": "Page 1/7 – Temporary Works subtotal",
+          "quantity": null,
+          "unit": null,
+          "unit_rate_aed": null,
+          "total_aed": 78300,
+          "is_subtotal": true
+        },
+        {
+          "sr_no": "A9.1",
+          "description": "Attic stock – PC rate items",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": 600,
+          "total_aed": 600,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "A9.2",
+          "description": "Attic stock – Non PC rate items",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": 500,
+          "total_aed": 500,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "A9.3",
+          "description": "Provision of as-built drawings",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": 4500,
+          "total_aed": 4500,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "A9-Sub",
+          "description": "Page 1/8 – Sundry Items subtotal",
+          "quantity": null,
+          "unit": null,
+          "unit_rate_aed": null,
+          "total_aed": 5600,
+          "is_subtotal": true
+        },
+        {
+          "sr_no": "A10.1",
+          "description": "Protection of existing finishes",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": 30000,
+          "total_aed": 30000,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "A10-Sub",
+          "description": "Page 1/9 – Additions & Omissions subtotal",
+          "quantity": null,
+          "unit": null,
+          "unit_rate_aed": null,
+          "total_aed": 30000,
+          "is_subtotal": true
+        },
+        {
+          "sr_no": "B1-Total",
+          "description": "Bill No.1 General Requirements – Total",
+          "quantity": null,
+          "unit": null,
+          "unit_rate_aed": null,
+          "total_aed": 366550,
+          "is_subtotal": true
+        }
+      ]
+    },
+    {
+      "name": "Bill No. 2 – Site Works (Public Area)",
+      "category_total_aed": 90447,
+      "line_items": [
+        {
+          "sr_no": "2.1",
+          "description": "Demolish & dispose existing door DR-11",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": 293,
+          "total_aed": 293,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "2.2",
+          "description": "Demolish & dispose partition 1200x3950mm",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": 472,
+          "total_aed": 472,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "2.3",
+          "description": "Demolish wall for luggage room signage",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": 459,
+          "total_aed": 459,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "2.4",
+          "description": "Remove existing slatted ceiling & fixtures",
+          "quantity": 94,
+          "unit": "m2",
+          "unit_rate_aed": 118,
+          "total_aed": 11092,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "2.5",
+          "description": "Remove & dispose existing lighting fixtures",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": 703,
+          "total_aed": 703,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "2.6",
+          "description": "Remove existing flooring in corridor to Fridays",
+          "quantity": 20,
+          "unit": "m2",
+          "unit_rate_aed": null,
+          "total_aed": 950,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "2-P1-Sub",
+          "description": "Page 1/2 subtotal",
+          "quantity": null,
+          "unit": null,
+          "unit_rate_aed": null,
+          "total_aed": 13969,
+          "is_subtotal": true
+        },
+        {
+          "sr_no": "2.7",
+          "description": "Remove sticker on glazed partition – Mtg Rm",
+          "quantity": 109,
+          "unit": "m2",
+          "unit_rate_aed": 20,
+          "total_aed": 2178,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "2.8",
+          "description": "Remove wallpaper – Mtg/Break/Podcast rooms",
+          "quantity": 156,
+          "unit": "m2",
+          "unit_rate_aed": 15,
+          "total_aed": 2340,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "2-P2-Sub",
+          "description": "Page 2/2 subtotal",
+          "quantity": null,
+          "unit": null,
+          "unit_rate_aed": null,
+          "total_aed": 4518,
+          "is_subtotal": true
+        },
+        {
+          "sr_no": "2.9",
+          "description": "Relocate existing wall mounted shelf",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": 586,
+          "total_aed": 586,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "2.10",
+          "description": "Remove & dispose existing floor – Tech Hub",
+          "quantity": 16,
+          "unit": "m2",
+          "unit_rate_aed": null,
+          "total_aed": 1200,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "2-P3-Sub",
+          "description": "Page 3/2 subtotal",
+          "quantity": null,
+          "unit": null,
+          "unit_rate_aed": null,
+          "total_aed": 1786,
+          "is_subtotal": true
+        },
+        {
+          "sr_no": "2.11",
+          "description": "Repaint existing frameless door DR-10 (PNT-02)",
+          "quantity": 1,
+          "unit": "Nos",
+          "unit_rate_aed": 515,
+          "total_aed": 515,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "2.12",
+          "description": "New MDF door shutter DR-11 catalyzed paint",
+          "quantity": 1,
+          "unit": "Nos",
+          "unit_rate_aed": 3245,
+          "total_aed": 3245,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "2.13",
+          "description": "Repaint existing pots ACC-17 in PNT-13",
+          "quantity": 2,
+          "unit": "Nos",
+          "unit_rate_aed": 586,
+          "total_aed": 1172,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "2.14",
+          "description": "Re-upholstery existing sofa FR-92",
+          "quantity": 2,
+          "unit": "Nos",
+          "unit_rate_aed": 5294,
+          "total_aed": 10588,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "2-P4-Sub",
+          "description": "Page 4/2 subtotal (Specified)",
+          "quantity": null,
+          "unit": null,
+          "unit_rate_aed": null,
+          "total_aed": 15520,
+          "is_subtotal": true
+        },
+        {
+          "sr_no": "2.15",
+          "description": "Refurb reception desk JN-01 (x2)",
+          "quantity": 2,
+          "unit": "Nos",
+          "unit_rate_aed": 9296,
+          "total_aed": 18592,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "2.16",
+          "description": "Repaint existing lockers – Luggage Room (x29)",
+          "quantity": 29,
+          "unit": "Nos",
+          "unit_rate_aed": 1112,
+          "total_aed": 32248,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "2.17",
+          "description": "Remove existing ceiling feature – Pre-function",
+          "quantity": 16,
+          "unit": "m2",
+          "unit_rate_aed": 100,
+          "total_aed": 1600,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "2.18",
+          "description": "Remove & dispose feature wall on column (x2)",
+          "quantity": 2,
+          "unit": "Nos",
+          "unit_rate_aed": 1107,
+          "total_aed": 2214,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "2-P5-Sub",
+          "description": "Page 5/2 subtotal",
+          "quantity": null,
+          "unit": null,
+          "unit_rate_aed": null,
+          "total_aed": 54654,
+          "is_subtotal": true
+        },
+        {
+          "sr_no": "B2-Total",
+          "description": "Bill No.2 Site Works – Total (Specified)",
+          "quantity": null,
+          "unit": null,
+          "unit_rate_aed": null,
+          "total_aed": 90447,
+          "is_subtotal": true
+        }
+      ]
+    },
+    {
+      "name": "Bill No. 3 – Finishes (Public Area)",
+      "category_total_aed": 572275.6,
+      "line_items": [
+        {
+          "sr_no": "3.1",
+          "description": "Making good existing wall finishes",
+          "quantity": 3552,
+          "unit": "m2",
+          "unit_rate_aed": 12,
+          "total_aed": 42624,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "3.2",
+          "description": "Paint PNT-02 white RAL9010 – Reception",
+          "quantity": 194,
+          "unit": "m2",
+          "unit_rate_aed": 27,
+          "total_aed": 5238,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "3.3",
+          "description": "Paint PNT-03 blue RAL 240 50 20 on MDF",
+          "quantity": 19,
+          "unit": "m2",
+          "unit_rate_aed": 88,
+          "total_aed": 1672,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "3.4",
+          "description": "Paint PNT-01 grey special paint NCS S1500-N",
+          "quantity": 156,
+          "unit": "m2",
+          "unit_rate_aed": 177,
+          "total_aed": 27642.09,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "3.5",
+          "description": "Paint PNT-07 blue RAL 240 50 20",
+          "quantity": 65,
+          "unit": "m2",
+          "unit_rate_aed": 27,
+          "total_aed": 1755,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "3.6",
+          "description": "Paint PNT-06 peach RAL 3012",
+          "quantity": 56,
+          "unit": "m2",
+          "unit_rate_aed": 27,
+          "total_aed": 1512,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "3.7",
+          "description": "Paint PNT-15 yellow RAL 1032",
+          "quantity": 12,
+          "unit": "m2",
+          "unit_rate_aed": 27,
+          "total_aed": 324,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "3-P1-Sub",
+          "description": "Page 1/3 – Wall Finishes Reception subtotal",
+          "quantity": null,
+          "unit": null,
+          "unit_rate_aed": null,
+          "total_aed": 80767.09,
+          "is_subtotal": true
+        },
+        {
+          "sr_no": "3.8",
+          "description": "Paint PNT-03 blue line 150mm height",
+          "quantity": 24,
+          "unit": "m",
+          "unit_rate_aed": 88,
+          "total_aed": 2112,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "3.9",
+          "description": "Paint PNT-07 blue line 125mm height",
+          "quantity": 9,
+          "unit": "m",
+          "unit_rate_aed": 17,
+          "total_aed": 153,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "3.10",
+          "description": "Paint PNT-06 peach line 501mm width",
+          "quantity": 9,
+          "unit": "m",
+          "unit_rate_aed": 22,
+          "total_aed": 198,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "3.11",
+          "description": "Paint PNT-18 mint NCS S2010-B30G – Luggage",
+          "quantity": 154,
+          "unit": "m2",
+          "unit_rate_aed": 27,
+          "total_aed": 4158,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "3.12",
+          "description": "Paint PNT-08 light red NCS S2040-Y70R",
+          "quantity": 2,
+          "unit": "m2",
+          "unit_rate_aed": 27,
+          "total_aed": 54,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "3-P2-Sub",
+          "description": "Page 2/3 – Wall Line & Luggage Rm subtotal",
+          "quantity": null,
+          "unit": null,
+          "unit_rate_aed": null,
+          "total_aed": 6675,
+          "is_subtotal": true
+        },
+        {
+          "sr_no": "3.13",
+          "description": "Paint PNT-02 off-white – Lobby Lounge",
+          "quantity": 87,
+          "unit": "m2",
+          "unit_rate_aed": 27,
+          "total_aed": 2349,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "3.14",
+          "description": "Paint PNT-10 dark grey RAL 7021",
+          "quantity": 14,
+          "unit": "m2",
+          "unit_rate_aed": 27,
+          "total_aed": 378,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "3.15",
+          "description": "Paint PNT-12A white RAL9002 on brick",
+          "quantity": 31,
+          "unit": "m2",
+          "unit_rate_aed": 27,
+          "total_aed": 837,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "3.16",
+          "description": "Paint PNT-14 concrete look NCS S1500-N",
+          "quantity": 192,
+          "unit": "m2",
+          "unit_rate_aed": 177,
+          "total_aed": 33984,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "3.17",
+          "description": "Paint PNT-15 yellow RAL 1032",
+          "quantity": 10,
+          "unit": "m2",
+          "unit_rate_aed": 27,
+          "total_aed": 270,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "3.18",
+          "description": "Paint PNT-17 light grey RAL 7030",
+          "quantity": 26,
+          "unit": "m2",
+          "unit_rate_aed": 27,
+          "total_aed": 702,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "3.19",
+          "description": "Paint PNT-29 terracotta NCS S4550-Y50R MDF",
+          "quantity": 28,
+          "unit": "m2",
+          "unit_rate_aed": 88,
+          "total_aed": 2464,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "3.20",
+          "description": "Paint PNT-03 blue line 50mm – Lobby Lounge",
+          "quantity": 12,
+          "unit": "m",
+          "unit_rate_aed": 88,
+          "total_aed": 1056,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "3.21",
+          "description": "Paint PNT-29 terracotta line 50mm",
+          "quantity": 12,
+          "unit": "m",
+          "unit_rate_aed": 88,
+          "total_aed": 1056,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "3.22",
+          "description": "Metal frame PNT-10 dark grey RAL 7021",
+          "quantity": 11,
+          "unit": "m",
+          "unit_rate_aed": 59,
+          "total_aed": 649,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "3-P3-Sub",
+          "description": "Page 3/3 – Lobby Lounge Wall subtotal",
+          "quantity": null,
+          "unit": null,
+          "unit_rate_aed": null,
+          "total_aed": 43745,
+          "is_subtotal": true
+        },
+        {
+          "sr_no": "3.23",
+          "description": "Paint PNT-02 off-white – Lift/Stairs GF",
+          "quantity": 33,
+          "unit": "m2",
+          "unit_rate_aed": 27,
+          "total_aed": 891,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "3.24",
+          "description": "Paint PNT-29 terracotta – Lift/Stairs GF",
+          "quantity": 20,
+          "unit": "m2",
+          "unit_rate_aed": 88,
+          "total_aed": 1760,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "3.25",
+          "description": "Paint PNT-02 off-white – Mtg/Podcast/Break",
+          "quantity": 106,
+          "unit": "m2",
+          "unit_rate_aed": 27,
+          "total_aed": 2862,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "3.26",
+          "description": "Paint PNT-03 blue MDF – Mtg rooms",
+          "quantity": 6,
+          "unit": "m2",
+          "unit_rate_aed": 88,
+          "total_aed": 528,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "3.27",
+          "description": "Paint PNT-32 grey RAL 7043 – Mtg rooms",
+          "quantity": 100,
+          "unit": "m2",
+          "unit_rate_aed": 27,
+          "total_aed": 2700,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "3.28",
+          "description": "Vinyl wallcovering WC-01 York crossing pattern",
+          "quantity": 138,
+          "unit": "m2",
+          "unit_rate_aed": 113,
+          "total_aed": 15594,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "3-P4-Sub",
+          "description": "Page 4/3 – Lift/Stairs/Mtg Rm Wall subtotal",
+          "quantity": null,
+          "unit": null,
+          "unit_rate_aed": null,
+          "total_aed": 24335,
+          "is_subtotal": true
+        },
+        {
+          "sr_no": "3.29",
+          "description": "Paint PNT-02 off-white – Lift/Stairs MZ",
+          "quantity": 164,
+          "unit": "m2",
+          "unit_rate_aed": 27,
+          "total_aed": 4433.75,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "3.30",
+          "description": "Paint PNT-02 off-white – Pre-function",
+          "quantity": 102,
+          "unit": "m2",
+          "unit_rate_aed": 27,
+          "total_aed": 2757.24,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "3.31",
+          "description": "Paint PNT-06 peach – Pre-function",
+          "quantity": 5,
+          "unit": "m2",
+          "unit_rate_aed": 27,
+          "total_aed": 141.75,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "3.32",
+          "description": "Paint PNT-07 blue RAL 240 50 20 – Pre-func",
+          "quantity": 9,
+          "unit": "m2",
+          "unit_rate_aed": 27,
+          "total_aed": 249.21,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "3.33",
+          "description": "Paint PNT-14 concrete look – Pre-function",
+          "quantity": 155,
+          "unit": "m2",
+          "unit_rate_aed": 177,
+          "total_aed": 27390.75,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "3.34",
+          "description": "Paint PNT-18 mint – Pre-function",
+          "quantity": 4,
+          "unit": "m2",
+          "unit_rate_aed": 27,
+          "total_aed": 102.33,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "3-P5-Sub",
+          "description": "Page 5/3 – MZ/Pre-function Wall subtotal",
+          "quantity": null,
+          "unit": null,
+          "unit_rate_aed": null,
+          "total_aed": 35075.03,
+          "is_subtotal": true
+        },
+        {
+          "sr_no": "3.35",
+          "description": "Shower column supply & install – Pool Deck",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": 5619,
+          "total_aed": 5619,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "3.36",
+          "description": "Paint PNT-36 outdoor RAL 7044 – Pool Deck",
+          "quantity": 151,
+          "unit": "m2",
+          "unit_rate_aed": 32,
+          "total_aed": 4832,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "3.37",
+          "description": "Glossy porcelain tile TL-04 shower column",
+          "quantity": 7,
+          "unit": "m2",
+          "unit_rate_aed": null,
+          "total_aed": 4650,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "3.38",
+          "description": "SS tile edge trim shower column",
+          "quantity": 12,
+          "unit": "m",
+          "unit_rate_aed": 82,
+          "total_aed": 984,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "3.39",
+          "description": "Paint PNT-07 blue – Washroom MZ",
+          "quantity": 27,
+          "unit": "m2",
+          "unit_rate_aed": 27,
+          "total_aed": 733.02,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "3-P6-Sub",
+          "description": "Page 6/3 – Pool Deck/Washroom subtotal",
+          "quantity": null,
+          "unit": null,
+          "unit_rate_aed": null,
+          "total_aed": 16818.02,
+          "is_subtotal": true
+        },
+        {
+          "sr_no": "3.40",
+          "description": "Making good existing floor finishes – screed",
+          "quantity": 20,
+          "unit": "m2",
+          "unit_rate_aed": 77,
+          "total_aed": 1540,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "3.41",
+          "description": "Glazed Porcelain Tile TL-03 – Lobby Lounge",
+          "quantity": 20,
+          "unit": "m2",
+          "unit_rate_aed": 415,
+          "total_aed": 8300,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "3.42",
+          "description": "Floor metal transition strip MT-24 – Tech Hub",
+          "quantity": 2,
+          "unit": "m2",
+          "unit_rate_aed": 88,
+          "total_aed": 132,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "3.43",
+          "description": "Floor metal transition strip MT-24 – Pre-func",
+          "quantity": 25,
+          "unit": "m",
+          "unit_rate_aed": 88,
+          "total_aed": 2228.16,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "3-P8-Sub",
+          "description": "Page 8/3 – Floor Finishes subtotal",
+          "quantity": null,
+          "unit": null,
+          "unit_rate_aed": null,
+          "total_aed": 12200.16,
+          "is_subtotal": true
+        },
+        {
+          "sr_no": "3.44",
+          "description": "Deep clean/polish existing tiled floor – Pool",
+          "quantity": 631,
+          "unit": "m2",
+          "unit_rate_aed": null,
+          "total_aed": 18930,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "3.45",
+          "description": "Paint floor tiles SP-04.A – Pool Deck",
+          "quantity": 27,
+          "unit": "m2",
+          "unit_rate_aed": 106,
+          "total_aed": 2862,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "3.46",
+          "description": "Paint floor tiles SP-04.B – Pool Deck",
+          "quantity": 32,
+          "unit": "m2",
+          "unit_rate_aed": 106,
+          "total_aed": 3392,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "3.47",
+          "description": "Paint floor tiles SP-04.C – Pool Deck",
+          "quantity": 11,
+          "unit": "m2",
+          "unit_rate_aed": 106,
+          "total_aed": 1166,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "3.48",
+          "description": "Paint floor tiles SP-04.D – Pool Deck",
+          "quantity": 15,
+          "unit": "m2",
+          "unit_rate_aed": 106,
+          "total_aed": 1590,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "3.49",
+          "description": "Paint floor tiles SP-04.E – Pool Deck",
+          "quantity": 12,
+          "unit": "m2",
+          "unit_rate_aed": 106,
+          "total_aed": 1272,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "3.50",
+          "description": "Teakwood decking WD-02 – Pool Deck",
+          "quantity": 4,
+          "unit": "m2",
+          "unit_rate_aed": null,
+          "total_aed": 3600,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "3-P9-Sub",
+          "description": "Page 9/3 – Pool Deck Floor subtotal",
+          "quantity": null,
+          "unit": null,
+          "unit_rate_aed": null,
+          "total_aed": 32812,
+          "is_subtotal": true
+        },
+        {
+          "sr_no": "3.51",
+          "description": "Making good existing ceiling finishes",
+          "quantity": 580,
+          "unit": "m2",
+          "unit_rate_aed": 17,
+          "total_aed": 9865.1,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "3.52",
+          "description": "New portal ceiling – Reception Area",
+          "quantity": 17,
+          "unit": "m2",
+          "unit_rate_aed": 656,
+          "total_aed": 11152,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "3.53",
+          "description": "Paint PNT-03 blue new portal ceiling",
+          "quantity": 17,
+          "unit": "m2",
+          "unit_rate_aed": 88,
+          "total_aed": 1496,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "3.54",
+          "description": "Repaint ceiling PNT-10 dark grey – Luggage",
+          "quantity": 33,
+          "unit": "m2",
+          "unit_rate_aed": 29,
+          "total_aed": 957,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "3.55",
+          "description": "Repaint exposed slab PNT-10 – Pre-function",
+          "quantity": 201,
+          "unit": "m2",
+          "unit_rate_aed": 54,
+          "total_aed": 10870.2,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "3.56",
+          "description": "Round hanging ceiling elements – Pre-function",
+          "quantity": 6,
+          "unit": "Nos",
+          "unit_rate_aed": 2336,
+          "total_aed": 14016,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "3-P10-Sub",
+          "description": "Page 10/3 – Ceiling Finishes subtotal",
+          "quantity": null,
+          "unit": null,
+          "unit_rate_aed": null,
+          "total_aed": 48356.3,
+          "is_subtotal": true
+        },
+        {
+          "sr_no": "3.57",
+          "description": "Repaint exposed slab PNT-10 – Lobby Lounge",
+          "quantity": 235,
+          "unit": "m2",
+          "unit_rate_aed": 54,
+          "total_aed": 12690,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "3.58",
+          "description": "Repaint slab PNT-09 light red – Lobby Lounge",
+          "quantity": 7,
+          "unit": "m2",
+          "unit_rate_aed": 54,
+          "total_aed": 378,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "3.59",
+          "description": "Paint PNT-03 blue ceiling – Lobby Lounge",
+          "quantity": 10,
+          "unit": "m2",
+          "unit_rate_aed": 88,
+          "total_aed": 880,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "3.60",
+          "description": "Suspended ceiling metal frame MT-08",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": 18845,
+          "total_aed": 18845,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "3.61",
+          "description": "Suspended ceiling MT-20 SP-09 green felt",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": 26000,
+          "total_aed": 26000,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "3.62",
+          "description": "Suspended ceiling MT-02 SP-10 blue felt",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": 26000,
+          "total_aed": 26000,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "3.63",
+          "description": "Suspended ceiling MT-11 SP-02 peach felt",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": 44000,
+          "total_aed": 44000,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "3-P11-Sub",
+          "description": "Page 11/3 – Lobby Lounge Ceiling subtotal",
+          "quantity": null,
+          "unit": null,
+          "unit_rate_aed": null,
+          "total_aed": 128793,
+          "is_subtotal": true
+        },
+        {
+          "sr_no": "3.64",
+          "description": "Suspended ceiling metal frame MT-09",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": 18845,
+          "total_aed": 18845,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "3.65",
+          "description": "Suspended ceiling MT-20 SP-09 green felt",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": 26000,
+          "total_aed": 26000,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "3.66",
+          "description": "Suspended ceiling MT-02 MT-18 SP-02 peach",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": 32216,
+          "total_aed": 32216,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "3.67",
+          "description": "Suspended ceiling MT-02 SP-10 blue felt",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": 26000,
+          "total_aed": 26000,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "3.68",
+          "description": "Repaint ceiling PNT-10 dark grey – Lift MZ",
+          "quantity": 60,
+          "unit": "m2",
+          "unit_rate_aed": 54,
+          "total_aed": 3240,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "3.69",
+          "description": "Repaint ceiling PNT-24 light red – Gym",
+          "quantity": 72,
+          "unit": "m2",
+          "unit_rate_aed": 54,
+          "total_aed": 3888,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "3.70",
+          "description": "Paint existing lighting light blue – Gym",
+          "quantity": 40,
+          "unit": "m",
+          "unit_rate_aed": 22,
+          "total_aed": 880,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "3-P12-Sub",
+          "description": "Page 12/3 – Lobby/MZ/Gym Ceiling subtotal",
+          "quantity": null,
+          "unit": null,
+          "unit_rate_aed": null,
+          "total_aed": 111069,
+          "is_subtotal": true
+        },
+        {
+          "sr_no": "3.71",
+          "description": "Metal signage Luggage Room – JN sigange",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": 7841,
+          "total_aed": 7841,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "3.72",
+          "description": "Circular neon signage – Lift Lobby",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": 352,
+          "total_aed": 352,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "3-P13-Sub",
+          "description": "Page 13/3 – Signwriting subtotal",
+          "quantity": null,
+          "unit": null,
+          "unit_rate_aed": null,
+          "total_aed": 8193,
+          "is_subtotal": true
+        },
+        {
+          "sr_no": "3.73",
+          "description": "Ceiling modification for new light fixtures",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": 20427,
+          "total_aed": 20427,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "3.74",
+          "description": "Paint PNT-08 light red – Lift/Stairs MZ",
+          "quantity": 35,
+          "unit": "m2",
+          "unit_rate_aed": 26,
+          "total_aed": 910,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "3.75",
+          "description": "Removal of wall covering – Luggage Room",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": 2100,
+          "total_aed": 2100,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "3-P14-Sub",
+          "description": "Page 14/3 – Additional Items subtotal",
+          "quantity": null,
+          "unit": null,
+          "unit_rate_aed": null,
+          "total_aed": 23437,
+          "is_subtotal": true
+        },
+        {
+          "sr_no": "B3-Total",
+          "description": "Bill No.3 Finishes – Total (Specified)",
+          "quantity": null,
+          "unit": null,
+          "unit_rate_aed": null,
+          "total_aed": 572275.6,
+          "is_subtotal": true
+        }
+      ]
+    },
+    {
+      "name": "Bill No. 4 – Furnishings (Public Area)",
+      "category_total_aed": 1486390.13,
+      "line_items": [
+        {
+          "sr_no": "4.1",
+          "description": "Side Table FR-04.A powder coated Al NCS S2010-B30G",
+          "quantity": 1,
+          "unit": "Nos",
+          "unit_rate_aed": 2826,
+          "total_aed": 2826,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "4.2",
+          "description": "Side Table FR-04.B powder coated Al NCS S1010-B",
+          "quantity": 2,
+          "unit": "Nos",
+          "unit_rate_aed": 2826,
+          "total_aed": 5652,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "4.3",
+          "description": "Side Table FR-04.C powder coated Al RAL 5001",
+          "quantity": 1,
+          "unit": "Nos",
+          "unit_rate_aed": 2826,
+          "total_aed": 2826,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "4.4",
+          "description": "Pouf FR-03.A Rho ottoman FB-06/FB-11",
+          "quantity": 1,
+          "unit": "Nos",
+          "unit_rate_aed": 2056,
+          "total_aed": 2056,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "4.5",
+          "description": "Pouf FR-03.B Rho ottoman FB-06/FB-12",
+          "quantity": 1,
+          "unit": "Nos",
+          "unit_rate_aed": 2056,
+          "total_aed": 2056,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "4.6",
+          "description": "Pouf FR-03.C Rho ottoman FB-06/FB-13",
+          "quantity": 1,
+          "unit": "Nos",
+          "unit_rate_aed": 2056,
+          "total_aed": 2056,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "4.7",
+          "description": "Pouf FR-03.D Rho ottoman FB-06/FB-14",
+          "quantity": 1,
+          "unit": "Nos",
+          "unit_rate_aed": 2056,
+          "total_aed": 2056,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "4-P1-Sub",
+          "description": "Page 1/4 – Reception Side Tables/Poufs",
+          "quantity": null,
+          "unit": null,
+          "unit_rate_aed": null,
+          "total_aed": 19528,
+          "is_subtotal": true
+        },
+        {
+          "sr_no": "4.8",
+          "description": "Communal Table JN-02 3200mm solid oak",
+          "quantity": 1,
+          "unit": "Nos",
+          "unit_rate_aed": 15127,
+          "total_aed": 15127,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "4.9",
+          "description": "Communal Table JN-02 2600mm solid oak",
+          "quantity": 1,
+          "unit": "Nos",
+          "unit_rate_aed": 12993,
+          "total_aed": 12993,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "4.10",
+          "description": "Nerd High Stool FR-01.B RAL 060 50 30",
+          "quantity": 8,
+          "unit": "Nos",
+          "unit_rate_aed": 2972,
+          "total_aed": 23776,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "4.11",
+          "description": "L'ecorce Dining Stool FR-02.A solid wood RAL1032",
+          "quantity": 2,
+          "unit": "Nos",
+          "unit_rate_aed": 7571,
+          "total_aed": 15142,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "4.12",
+          "description": "L'ecorce Dining Stool FR-02 solid wood RAL6009",
+          "quantity": 4,
+          "unit": "Nos",
+          "unit_rate_aed": 7747,
+          "total_aed": 30988,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "4-P2-Sub",
+          "description": "Page 2/4 – Reception Communal Tables/Stools",
+          "quantity": null,
+          "unit": null,
+          "unit_rate_aed": null,
+          "total_aed": 98026,
+          "is_subtotal": true
+        },
+        {
+          "sr_no": "4.13",
+          "description": "Luggage Storage JN-21 MT-02/MT-04/MT-18",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": 13271,
+          "total_aed": 13271,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "4.14",
+          "description": "Lobby bench FR-21B upholstered FB-23 MT-08A",
+          "quantity": 1,
+          "unit": "Nos",
+          "unit_rate_aed": 13076,
+          "total_aed": 13076,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "4.15",
+          "description": "Console FR-91 powder coated metal MT-11",
+          "quantity": 1,
+          "unit": "Nos",
+          "unit_rate_aed": 3480,
+          "total_aed": 3480,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "4.16",
+          "description": "PLUS modular Sofa FR-05D FB-06 (set)",
+          "quantity": 8,
+          "unit": "Nos",
+          "unit_rate_aed": null,
+          "total_aed": 168496,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "4-P3-Sub",
+          "description": "Page 3/4 – Luggage/Lobby Lounge Sofas",
+          "quantity": null,
+          "unit": null,
+          "unit_rate_aed": null,
+          "total_aed": 198323,
+          "is_subtotal": true
+        },
+        {
+          "sr_no": "4.17",
+          "description": "Side Table FR-14 white powder coated 500Dia",
+          "quantity": 1,
+          "unit": "Nos",
+          "unit_rate_aed": 3695,
+          "total_aed": 3695,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "4.18",
+          "description": "Ottoman Lounge Chair FR-09C FB-06/FB-20",
+          "quantity": 5,
+          "unit": "Nos",
+          "unit_rate_aed": 11324,
+          "total_aed": 56620,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "4.19",
+          "description": "Ottoman Lounge Chair FR-09D FB-20 (x5)",
+          "quantity": 5,
+          "unit": "Nos",
+          "unit_rate_aed": 11044,
+          "total_aed": 55220,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "4-P4-Sub",
+          "description": "Page 4/4 – Lobby Lounge Chairs/Table",
+          "quantity": null,
+          "unit": null,
+          "unit_rate_aed": null,
+          "total_aed": 115535,
+          "is_subtotal": true
+        },
+        {
+          "sr_no": "4.20",
+          "description": "Coffee Table FR-06B solid oak/black steel",
+          "quantity": 2,
+          "unit": "Nos",
+          "unit_rate_aed": 3016,
+          "total_aed": 6032,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "4.21",
+          "description": "Coffee Table FR-06A wood veneer/MT-19",
+          "quantity": 2,
+          "unit": "Nos",
+          "unit_rate_aed": 1972,
+          "total_aed": 3944,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "4.22",
+          "description": "Ottoman Pouf FR-03.H FB-17/FB-11",
+          "quantity": 1,
+          "unit": "Nos",
+          "unit_rate_aed": 2774,
+          "total_aed": 2774,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "4.23",
+          "description": "Side Table FR-31 dark green powder coated",
+          "quantity": 1,
+          "unit": "Nos",
+          "unit_rate_aed": 2507,
+          "total_aed": 2507,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "4.24",
+          "description": "Bench FR-21A upholstered FB-22 MT-15 2200mm",
+          "quantity": 1,
+          "unit": "Nos",
+          "unit_rate_aed": 13076,
+          "total_aed": 13076,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "4.25",
+          "description": "Alva Armchair FR-07 fabric FB-18",
+          "quantity": 4,
+          "unit": "Nos",
+          "unit_rate_aed": 8832,
+          "total_aed": 35328,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "4-P5-Sub",
+          "description": "Page 5/4 – Lobby Lounge Coffee Tables/Benches",
+          "quantity": null,
+          "unit": null,
+          "unit_rate_aed": null,
+          "total_aed": 63661,
+          "is_subtotal": true
+        },
+        {
+          "sr_no": "4.26",
+          "description": "Refurb Coffee Table FR-15 SP-13",
+          "quantity": 2,
+          "unit": "Nos",
+          "unit_rate_aed": 1377,
+          "total_aed": 2754,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "4.27",
+          "description": "Coffee Table FR-11 powder coated Al NCS S2010-B30G",
+          "quantity": 2,
+          "unit": "Nos",
+          "unit_rate_aed": 3155,
+          "total_aed": 6310,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "4.28",
+          "description": "Ottoman Pouf FR-03.G FB-12/FB-16",
+          "quantity": 1,
+          "unit": "Nos",
+          "unit_rate_aed": 2926,
+          "total_aed": 2926,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "4.29",
+          "description": "Ottoman Pouf FR-03.F FB-19/FB-16",
+          "quantity": 1,
+          "unit": "Nos",
+          "unit_rate_aed": 2774,
+          "total_aed": 2774,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "4-P6-Sub",
+          "description": "Page 6/4 – Lobby Lounge Poufs/Coffee Tables",
+          "quantity": null,
+          "unit": null,
+          "unit_rate_aed": null,
+          "total_aed": 14764,
+          "is_subtotal": true
+        },
+        {
+          "sr_no": "4.30",
+          "description": "Swivel Chair FR-08 Al frame woven polyester rope",
+          "quantity": 5,
+          "unit": "Nos",
+          "unit_rate_aed": 11176,
+          "total_aed": 55880,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "4.31",
+          "description": "Communal Console JN-06A ST-02/MT-04/MT-02",
+          "quantity": 1,
+          "unit": "Nos",
+          "unit_rate_aed": 11615,
+          "total_aed": 11615,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "4.32",
+          "description": "Communal Table JN-06B solid oak WD-01.B",
+          "quantity": 1,
+          "unit": "Nos",
+          "unit_rate_aed": 18401,
+          "total_aed": 18401,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "4.33",
+          "description": "Ottoman Lounge Chair FR-09B FB-11/FB-20",
+          "quantity": 2,
+          "unit": "Nos",
+          "unit_rate_aed": 11044,
+          "total_aed": 22088,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "4.34",
+          "description": "Tulou coffee side table FR-96 black powder coated",
+          "quantity": 3,
+          "unit": "Nos",
+          "unit_rate_aed": 1277,
+          "total_aed": 3831,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "4-P7-Sub",
+          "description": "Page 7/4 – Lobby Lounge Swivel/Console/Table",
+          "quantity": null,
+          "unit": null,
+          "unit_rate_aed": null,
+          "total_aed": 111815,
+          "is_subtotal": true
+        },
+        {
+          "sr_no": "4.35",
+          "description": "Console JN-04 ST-02/MT-02/MT-07/IM-03",
+          "quantity": 1,
+          "unit": "Nos",
+          "unit_rate_aed": 12665,
+          "total_aed": 12665,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "4.36",
+          "description": "Metal Shelf JN-05 powder coated mesh MT-11",
+          "quantity": 1,
+          "unit": "Nos",
+          "unit_rate_aed": 14243,
+          "total_aed": 14243,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "4.37",
+          "description": "Root coffee side table FR-10 oak veneer/black",
+          "quantity": 1,
+          "unit": "Nos",
+          "unit_rate_aed": 7994,
+          "total_aed": 7994,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "4.38",
+          "description": "Accent Chair FR-18 Al frame woven",
+          "quantity": 2,
+          "unit": "Nos",
+          "unit_rate_aed": 9159,
+          "total_aed": 18318,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "4.39",
+          "description": "Stool FR-54 silky concrete/fabric top",
+          "quantity": 2,
+          "unit": "Nos",
+          "unit_rate_aed": 2756,
+          "total_aed": 5512,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "4.40",
+          "description": "Stool FR-53 silky concrete/PNT-04 top",
+          "quantity": 1,
+          "unit": "Nos",
+          "unit_rate_aed": 1694,
+          "total_aed": 1694,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "4-P8-Sub",
+          "description": "Page 8/4 – Lobby Lounge Console/Chairs/Stools",
+          "quantity": null,
+          "unit": null,
+          "unit_rate_aed": null,
+          "total_aed": 60426,
+          "is_subtotal": true
+        },
+        {
+          "sr_no": "4.41",
+          "description": "Refurb existing armchair FR-17 FB-13/FB-21/MT-23",
+          "quantity": 2,
+          "unit": "Nos",
+          "unit_rate_aed": 961,
+          "total_aed": 1922,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "4.42",
+          "description": "Coffee Table FR-19 ST-02 top/WD-01B base",
+          "quantity": 2,
+          "unit": "Nos",
+          "unit_rate_aed": 2134,
+          "total_aed": 4268,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "4.43",
+          "description": "Refurb built-in sofa FR-22 FB-24/FB-25",
+          "quantity": 1,
+          "unit": "Nos",
+          "unit_rate_aed": 8785,
+          "total_aed": 8785,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "4.44",
+          "description": "Ottoman chair FR-09D FB-20 (x4)",
+          "quantity": 4,
+          "unit": "Nos",
+          "unit_rate_aed": 11044,
+          "total_aed": 44176,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "4.45",
+          "description": "Metal cladding JN-10 Tech Hub MT-08/MT-08A",
+          "quantity": 45,
+          "unit": "m2",
+          "unit_rate_aed": 761,
+          "total_aed": 34245,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "4.46",
+          "description": "Ottoman Pouf FR-03.I FB-16/FB-11",
+          "quantity": 2,
+          "unit": "Nos",
+          "unit_rate_aed": 2926,
+          "total_aed": 5852,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "4-P9-Sub",
+          "description": "Page 9/4 – Lobby Lounge Armchairs/Cladding",
+          "quantity": null,
+          "unit": null,
+          "unit_rate_aed": null,
+          "total_aed": 99248,
+          "is_subtotal": true
+        },
+        {
+          "sr_no": "4.47",
+          "description": "Console Table Shelf JN-07 WD-01A/MT-11/ST-02",
+          "quantity": 1,
+          "unit": "Nos",
+          "unit_rate_aed": 21794,
+          "total_aed": 21794,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "4.48",
+          "description": "Communal Table JN-08 ST-01 bricks/ST-02 top",
+          "quantity": 1,
+          "unit": "Nos",
+          "unit_rate_aed": 31353,
+          "total_aed": 31353,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "4.49",
+          "description": "Nerd High Stool FR-01.B RAL 060 50 30 (x12)",
+          "quantity": 12,
+          "unit": "Nos",
+          "unit_rate_aed": 2922,
+          "total_aed": 35064,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "4.50",
+          "description": "TV Wall JN-09 MT-09 blue/MDF/MT-11 skirting",
+          "quantity": 1,
+          "unit": "Nos",
+          "unit_rate_aed": 23228,
+          "total_aed": 23228,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "4-P10-Sub",
+          "description": "Page 10/4 – Lobby Lounge Console/Table/Stools",
+          "quantity": null,
+          "unit": null,
+          "unit_rate_aed": null,
+          "total_aed": 111439,
+          "is_subtotal": true
+        },
+        {
+          "sr_no": "4.51",
+          "description": "PlayStation TV Unit JN-27 PNT-03/MT-19",
+          "quantity": 1,
+          "unit": "Nos",
+          "unit_rate_aed": 8890,
+          "total_aed": 8890,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "4.52",
+          "description": "Easy Chair FR-20 FB-12 fluffy foam",
+          "quantity": 2,
+          "unit": "Nos",
+          "unit_rate_aed": 5883,
+          "total_aed": 11766,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "4.53",
+          "description": "Pouf FR-03.J FB-11/FB-14",
+          "quantity": 2,
+          "unit": "Nos",
+          "unit_rate_aed": 2876,
+          "total_aed": 5752,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "4.54",
+          "description": "Bench FR-21.C upholstered FB-22 MT-15 3000mm",
+          "quantity": 1,
+          "unit": "Nos",
+          "unit_rate_aed": 15099,
+          "total_aed": 15099,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "4.55",
+          "description": "Refurb TV frame painted PNT-29 AP-01",
+          "quantity": 1,
+          "unit": "Nos",
+          "unit_rate_aed": 464,
+          "total_aed": 464,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "4-P11-Sub",
+          "description": "Page 11/4 – Tech Hub/Lift Lobby subtotal",
+          "quantity": null,
+          "unit": null,
+          "unit_rate_aed": null,
+          "total_aed": 41971,
+          "is_subtotal": true
+        },
+        {
+          "sr_no": "4.56",
+          "description": "Bar counter JN-28 painted wood/stone ST-04",
+          "quantity": 1,
+          "unit": "Nos",
+          "unit_rate_aed": 5975,
+          "total_aed": 5975,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "4.57",
+          "description": "Ariel armchair FR-86 Kvadrat Remix 3 612",
+          "quantity": 4,
+          "unit": "Nos",
+          "unit_rate_aed": 20313,
+          "total_aed": 81252,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "4.58",
+          "description": "Low table FR-87 black powder coated/smoked glass",
+          "quantity": 2,
+          "unit": "Nos",
+          "unit_rate_aed": 1276,
+          "total_aed": 2552,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "4.59",
+          "description": "Low coffee table FR-85 black powder coated",
+          "quantity": 2,
+          "unit": "Nos",
+          "unit_rate_aed": 1763,
+          "total_aed": 3526,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "4.60",
+          "description": "Massas sofa FR-84 Kvadrat Divina MD 433 yellow",
+          "quantity": 1,
+          "unit": "Nos",
+          "unit_rate_aed": 12507,
+          "total_aed": 12507,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "4.61",
+          "description": "Reupholster armchair FR-95 FB-30 with cushions",
+          "quantity": 2,
+          "unit": "Nos",
+          "unit_rate_aed": 5871,
+          "total_aed": 11742,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "4-P12-Sub",
+          "description": "Page 12/4 – Meeting/Podcast/Pre-func subtotal",
+          "quantity": null,
+          "unit": null,
+          "unit_rate_aed": null,
+          "total_aed": 117554,
+          "is_subtotal": true
+        },
+        {
+          "sr_no": "4.62",
+          "description": "High bar stool FR-32 burnt orange (x2)",
+          "quantity": 2,
+          "unit": "Nos",
+          "unit_rate_aed": 2313,
+          "total_aed": 4626,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "4.63",
+          "description": "High bar stool FR-32.A burnt orange (x6)",
+          "quantity": 6,
+          "unit": "Nos",
+          "unit_rate_aed": 2313,
+          "total_aed": 13878,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "4.64",
+          "description": "Engineered Stone ST-03 3650x600mm",
+          "quantity": 2,
+          "unit": "m2",
+          "unit_rate_aed": 2827,
+          "total_aed": 6191.13,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "4.65",
+          "description": "Pouf FR-03.K Rho ottoman 50cm Dia (x4)",
+          "quantity": 4,
+          "unit": "Nos",
+          "unit_rate_aed": 2941,
+          "total_aed": 11764,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "4.66",
+          "description": "Xistera Armchair FR-30.A 990x1080x940mm (x6)",
+          "quantity": 6,
+          "unit": "Nos",
+          "unit_rate_aed": 15451,
+          "total_aed": 92706,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "4-P13-Sub",
+          "description": "Page 13/4 – Meeting Rm/Pre-func subtotal",
+          "quantity": null,
+          "unit": null,
+          "unit_rate_aed": null,
+          "total_aed": 129165.13,
+          "is_subtotal": true
+        },
+        {
+          "sr_no": "4.67",
+          "description": "Side Table FR-31 dark green powder coated (x4)",
+          "quantity": 4,
+          "unit": "Nos",
+          "unit_rate_aed": 2507,
+          "total_aed": 10028,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "4.68",
+          "description": "High bar stool FR-32 burnt orange (x6)",
+          "quantity": 6,
+          "unit": "Nos",
+          "unit_rate_aed": 2313,
+          "total_aed": 13878,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "4.69",
+          "description": "Bespoke Square Pouf FR-97.A L40xW40xH43.5cm x5",
+          "quantity": 5,
+          "unit": "Nos",
+          "unit_rate_aed": 4519,
+          "total_aed": 22595,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "4.70",
+          "description": "Bespoke Square Pouf FR-97.B x2",
+          "quantity": 2,
+          "unit": "Nos",
+          "unit_rate_aed": 4519,
+          "total_aed": 9038,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "4.71",
+          "description": "Bespoke Square Pouf FR-97.C x1",
+          "quantity": 1,
+          "unit": "Nos",
+          "unit_rate_aed": 4519,
+          "total_aed": 4519,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "4.72",
+          "description": "Seating Phonebooth/Shelf JN-12",
+          "quantity": 1,
+          "unit": "Nos",
+          "unit_rate_aed": 11711,
+          "total_aed": 11711,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "4.73",
+          "description": "High Table/Shelf Unit JN-13 WD-01A/MT-18",
+          "quantity": 1,
+          "unit": "Nos",
+          "unit_rate_aed": 13669,
+          "total_aed": 13669,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "4.74",
+          "description": "High Table with Planter JN-14 WD-01A/MT-09",
+          "quantity": 1,
+          "unit": "Nos",
+          "unit_rate_aed": 11232,
+          "total_aed": 11232,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "4-P14-Sub",
+          "description": "Page 14/4 – Pre-function Poufs/Tables subtotal",
+          "quantity": null,
+          "unit": null,
+          "unit_rate_aed": null,
+          "total_aed": 96670,
+          "is_subtotal": true
+        },
+        {
+          "sr_no": "4.75",
+          "description": "Niche Seating JN-16 WD-01B/PNT-22/MT-15/FB-31",
+          "quantity": 1,
+          "unit": "Nos",
+          "unit_rate_aed": 9130,
+          "total_aed": 9130,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "4.76",
+          "description": "Bench with Wall Panel JN-18 WT.18/MT-17/FB-32",
+          "quantity": 1,
+          "unit": "Nos",
+          "unit_rate_aed": 28844,
+          "total_aed": 28844,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "4.77",
+          "description": "Bench with Wall Panel JN-19 WT.18/PNT-18",
+          "quantity": 1,
+          "unit": "Nos",
+          "unit_rate_aed": 16346,
+          "total_aed": 16346,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "4.78",
+          "description": "Bespoke Metal pattern Ceiling JN-20 WT.18",
+          "quantity": 1,
+          "unit": "Nos",
+          "unit_rate_aed": 12641,
+          "total_aed": 12641,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "4.79",
+          "description": "Open Bespoke shelf JN-24 PNT-29 4868x860x3550",
+          "quantity": 1,
+          "unit": "Nos",
+          "unit_rate_aed": 18434,
+          "total_aed": 18434,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "4-P15-Sub",
+          "description": "Page 15/4 – Pre-function Seating/Shelves",
+          "quantity": null,
+          "unit": null,
+          "unit_rate_aed": null,
+          "total_aed": 85395,
+          "is_subtotal": true
+        },
+        {
+          "sr_no": "4.80",
+          "description": "Xistera Armchair FR-30.A FB-27/FB-28/FB-29 (x4)",
+          "quantity": 4,
+          "unit": "Nos",
+          "unit_rate_aed": 15451,
+          "total_aed": 61804,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "4.81",
+          "description": "Side Table FR-99 powder coated RAL 5008 (x4)",
+          "quantity": 4,
+          "unit": "Nos",
+          "unit_rate_aed": 1624,
+          "total_aed": 6496,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "4.82",
+          "description": "Suspended Perforated Metal screen JN-11 MT-14/15",
+          "quantity": 15,
+          "unit": "m2",
+          "unit_rate_aed": null,
+          "total_aed": 19535,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "4.83",
+          "description": "Console FR-27 tinted glass/acrylic",
+          "quantity": 1,
+          "unit": "Nos",
+          "unit_rate_aed": 12343,
+          "total_aed": 12343,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "4.84",
+          "description": "Bench FR-28 integrated planter MT-15/MT-11/FB-26",
+          "quantity": 1,
+          "unit": "Nos",
+          "unit_rate_aed": 9079,
+          "total_aed": 9079,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "4-P16-Sub",
+          "description": "Page 16/4 – Lift/Stairs/Circulation subtotal",
+          "quantity": null,
+          "unit": null,
+          "unit_rate_aed": null,
+          "total_aed": 109257,
+          "is_subtotal": true
+        },
+        {
+          "sr_no": "4.85",
+          "description": "Shower head & thermostat mixer SW-02 chrome (x4)",
+          "quantity": 4,
+          "unit": "Nos",
+          "unit_rate_aed": 1507,
+          "total_aed": 6028,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "4.86",
+          "description": "New rig and pull up bar – Pool Deck",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": 7585,
+          "total_aed": 7585,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "4-P17-Sub",
+          "description": "Page 17/4 – Pool Deck subtotal",
+          "quantity": null,
+          "unit": null,
+          "unit_rate_aed": null,
+          "total_aed": 13613,
+          "is_subtotal": true
+        },
+        {
+          "sr_no": "B4-Total",
+          "description": "Bill No.4 Furnishings – Total (Specified)",
+          "quantity": null,
+          "unit": null,
+          "unit_rate_aed": null,
+          "total_aed": 1486390.13,
+          "is_subtotal": true
+        }
+      ]
+    },
+    {
+      "name": "Bill No. 5 – MEP / Electrical Works (Public Area)",
+      "category_total_aed": 827797,
+      "line_items": [
+        {
+          "sr_no": "5.1",
+          "description": "Power provision for neon signage – lift circ GF",
+          "quantity": 1,
+          "unit": "No",
+          "unit_rate_aed": 527,
+          "total_aed": 527,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "5.2",
+          "description": "Power provision for LED signage – lobby GF (x5)",
+          "quantity": 5,
+          "unit": "No",
+          "unit_rate_aed": 527,
+          "total_aed": 2635,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "5.3",
+          "description": "Power provision for LED NEON signage – luggage GF",
+          "quantity": 1,
+          "unit": "No",
+          "unit_rate_aed": 527,
+          "total_aed": 527,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "5.4",
+          "description": "Double universal socket WP – Entrance Terrace",
+          "quantity": 3,
+          "unit": "No",
+          "unit_rate_aed": 444,
+          "total_aed": 1332,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "5.5",
+          "description": "Single socket for floor lamp WP – Entrance Terrace",
+          "quantity": 6,
+          "unit": "No",
+          "unit_rate_aed": 427,
+          "total_aed": 2562,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "5.6",
+          "description": "Single socket WP – Entrance Terrace",
+          "quantity": 5,
+          "unit": "No",
+          "unit_rate_aed": 427,
+          "total_aed": 2135,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "5.7",
+          "description": "Single socket for floor lamp – Lift circ GF",
+          "quantity": 1,
+          "unit": "No",
+          "unit_rate_aed": 427,
+          "total_aed": 427,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "5.8",
+          "description": "Double universal socket – Lift circ GF",
+          "quantity": 1,
+          "unit": "No",
+          "unit_rate_aed": 398,
+          "total_aed": 398,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "5.9",
+          "description": "Socket for TV – Lift circ GF (x3)",
+          "quantity": 3,
+          "unit": "No",
+          "unit_rate_aed": 398,
+          "total_aed": 1194,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "5.10",
+          "description": "Universal socket box on table top – Reception (x12)",
+          "quantity": 12,
+          "unit": "No",
+          "unit_rate_aed": 408,
+          "total_aed": 4896,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "5-P2-Sub",
+          "description": "Page 2/5 – Small Power subtotal",
+          "quantity": null,
+          "unit": null,
+          "unit_rate_aed": null,
+          "total_aed": 16633,
+          "is_subtotal": true
+        },
+        {
+          "sr_no": "5.11",
+          "description": "Universal socket box on table top – Lobby (x19)",
+          "quantity": 19,
+          "unit": "No",
+          "unit_rate_aed": 408,
+          "total_aed": 7752,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "5.12",
+          "description": "Double universal socket – Lobby GF (x4)",
+          "quantity": 4,
+          "unit": "No",
+          "unit_rate_aed": 398,
+          "total_aed": 1592,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "5.13",
+          "description": "Single universal socket – Lobby GF (x3)",
+          "quantity": 3,
+          "unit": "No",
+          "unit_rate_aed": 391,
+          "total_aed": 1173,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "5.14",
+          "description": "Single socket for floor lamp – Lobby GF",
+          "quantity": 1,
+          "unit": "No",
+          "unit_rate_aed": 427,
+          "total_aed": 427,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "5.15",
+          "description": "Single universal socket – Tech Hub GF (x2)",
+          "quantity": 2,
+          "unit": "No",
+          "unit_rate_aed": 391,
+          "total_aed": 782,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "5.16",
+          "description": "Double socket coffee machine – Pre-function MZ (x4)",
+          "quantity": 4,
+          "unit": "No",
+          "unit_rate_aed": 398,
+          "total_aed": 1592,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "5.17",
+          "description": "Double universal socket – Pre-function MZ (x4)",
+          "quantity": 4,
+          "unit": "No",
+          "unit_rate_aed": 398,
+          "total_aed": 1592,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "5.18",
+          "description": "Socket for ticket board – Pre-function MZ",
+          "quantity": 1,
+          "unit": "No",
+          "unit_rate_aed": 428,
+          "total_aed": 428,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "5.19",
+          "description": "Double universal socket WP – Pool Deck MZ (x2)",
+          "quantity": 2,
+          "unit": "No",
+          "unit_rate_aed": 444,
+          "total_aed": 888,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "5.20",
+          "description": "Socket for Framery pods – Pool Deck (x3)",
+          "quantity": 3,
+          "unit": "No",
+          "unit_rate_aed": 445,
+          "total_aed": 1335,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "5.21",
+          "description": "Double universal socket – Lift/Stairs MZ (x2)",
+          "quantity": 2,
+          "unit": "No",
+          "unit_rate_aed": 398,
+          "total_aed": 796,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "5.22",
+          "description": "Single socket for floor lamp – Lift/Stairs MZ (x2)",
+          "quantity": 2,
+          "unit": "No",
+          "unit_rate_aed": 427,
+          "total_aed": 854,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "5-P3-Sub",
+          "description": "Page 3/5 – Small Power (cont'd) subtotal",
+          "quantity": null,
+          "unit": null,
+          "unit_rate_aed": null,
+          "total_aed": 19211,
+          "is_subtotal": true
+        },
+        {
+          "sr_no": "5.23",
+          "description": "Re-installation double socket – Pre-func MZ (x4)",
+          "quantity": 4,
+          "unit": "No",
+          "unit_rate_aed": 194,
+          "total_aed": 776,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "5.24",
+          "description": "Re-installation single socket – Pre-func MZ (x2)",
+          "quantity": 2,
+          "unit": "No",
+          "unit_rate_aed": 194,
+          "total_aed": 388,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "5.25",
+          "description": "Re-installation sockets – Reception GF (x2)",
+          "quantity": 2,
+          "unit": "No",
+          "unit_rate_aed": 194,
+          "total_aed": 388,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "5-P4-Sub",
+          "description": "Page 4/5 – Re-installation Power subtotal",
+          "quantity": null,
+          "unit": null,
+          "unit_rate_aed": null,
+          "total_aed": 1552,
+          "is_subtotal": true
+        },
+        {
+          "sr_no": "5.26",
+          "description": "Light points conduit & wiring (x207)",
+          "quantity": 207,
+          "unit": "No",
+          "unit_rate_aed": 154,
+          "total_aed": 31878,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "5.27",
+          "description": "LED strip light conduit & wiring",
+          "quantity": 32,
+          "unit": "m",
+          "unit_rate_aed": 103,
+          "total_aed": 3296,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "5.28",
+          "description": "Linear light LI-25 conduit & wiring",
+          "quantity": 10,
+          "unit": "m",
+          "unit_rate_aed": 103,
+          "total_aed": 1030,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "5.29",
+          "description": "Light fitting LI-02.A.2 – Lobby Lounge GF (x3)",
+          "quantity": 3,
+          "unit": "No",
+          "unit_rate_aed": 4096,
+          "total_aed": 12288,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "5.30",
+          "description": "Light fitting LI-02.B – Lobby Lounge GF (x4)",
+          "quantity": 4,
+          "unit": "No",
+          "unit_rate_aed": 5177,
+          "total_aed": 20708,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "5.31",
+          "description": "Light fitting LI-04.A – Lobby Lounge GF (x3)",
+          "quantity": 3,
+          "unit": "No",
+          "unit_rate_aed": 10810,
+          "total_aed": 32430,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "5-P5-Sub",
+          "description": "Page 5/5 – Lighting Installations subtotal",
+          "quantity": null,
+          "unit": null,
+          "unit_rate_aed": null,
+          "total_aed": 101630,
+          "is_subtotal": true
+        },
+        {
+          "sr_no": "5.32",
+          "description": "Light fitting LI-04.B – Lobby Lounge GF (x3)",
+          "quantity": 3,
+          "unit": "No",
+          "unit_rate_aed": 7185,
+          "total_aed": 21555,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "5.33",
+          "description": "Light fitting LI-05 – Lobby Lounge GF (x2)",
+          "quantity": 2,
+          "unit": "No",
+          "unit_rate_aed": 7489,
+          "total_aed": 14978,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "5.34",
+          "description": "Light fitting LI-06 – Lobby Lounge GF",
+          "quantity": 1,
+          "unit": "No",
+          "unit_rate_aed": 8903,
+          "total_aed": 8903,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "5.35",
+          "description": "Light fitting LI-07 – Lobby Lounge GF (x16)",
+          "quantity": 16,
+          "unit": "No",
+          "unit_rate_aed": 386,
+          "total_aed": 6176,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "5.36",
+          "description": "Light fitting LI-08 incl track – Lobby (x23)",
+          "quantity": 23,
+          "unit": "No",
+          "unit_rate_aed": 711,
+          "total_aed": 16353,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "5.37",
+          "description": "LED strip light on shelving",
+          "quantity": 8,
+          "unit": "m",
+          "unit_rate_aed": 199,
+          "total_aed": 1592,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "5.38",
+          "description": "Light fitting LI-35 – Lobby Lounge",
+          "quantity": 1,
+          "unit": "No",
+          "unit_rate_aed": 11648,
+          "total_aed": 11648,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "5.39",
+          "description": "Light fitting LI-01.A – Reception GF (x2)",
+          "quantity": 2,
+          "unit": "No",
+          "unit_rate_aed": 4685,
+          "total_aed": 9370,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "5.40",
+          "description": "Light fitting LI-01.B – Reception GF (x2)",
+          "quantity": 2,
+          "unit": "No",
+          "unit_rate_aed": 2894,
+          "total_aed": 5788,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "5.41",
+          "description": "Light fitting LI-02.A.1 – Reception GF (x2)",
+          "quantity": 2,
+          "unit": "No",
+          "unit_rate_aed": 4000,
+          "total_aed": 8000,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "5.42",
+          "description": "LED strip light – Reception GF",
+          "quantity": 17,
+          "unit": "m",
+          "unit_rate_aed": 199,
+          "total_aed": 3383,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "5.43",
+          "description": "Light fitting LI-26 – Reception GF (x2)",
+          "quantity": 2,
+          "unit": "No",
+          "unit_rate_aed": 372,
+          "total_aed": 744,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "5.44",
+          "description": "Light fitting LI-31 – Reception GF (x4)",
+          "quantity": 4,
+          "unit": "No",
+          "unit_rate_aed": 549,
+          "total_aed": 2196,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "5.45",
+          "description": "Light fitting LI-33 – Reception GF (x2)",
+          "quantity": 2,
+          "unit": "No",
+          "unit_rate_aed": 1504,
+          "total_aed": 3008,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "5.46",
+          "description": "Light fitting LI-34 set – Reception GF",
+          "quantity": 1,
+          "unit": "Set",
+          "unit_rate_aed": 11648,
+          "total_aed": 11648,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "5-P6-Sub",
+          "description": "Page 6/5 – Lighting (cont'd) subtotal",
+          "quantity": null,
+          "unit": null,
+          "unit_rate_aed": null,
+          "total_aed": 125342,
+          "is_subtotal": true
+        },
+        {
+          "sr_no": "5.47",
+          "description": "Light fitting LI-27 – Tech Hub GF (x2)",
+          "quantity": 2,
+          "unit": "No",
+          "unit_rate_aed": 1677,
+          "total_aed": 3354,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "5.48",
+          "description": "Light fitting LI-29 length 200mm – Tech Hub (x7)",
+          "quantity": 7,
+          "unit": "No",
+          "unit_rate_aed": null,
+          "total_aed": 64400,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "5.49",
+          "description": "Light fitting LI-08.B – Tech Hub",
+          "quantity": 1,
+          "unit": "No",
+          "unit_rate_aed": 711,
+          "total_aed": 711,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "5.50",
+          "description": "Light fitting LI-28 – Luggage Room GF (x24)",
+          "quantity": 24,
+          "unit": "No",
+          "unit_rate_aed": 461,
+          "total_aed": 11064,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "5.51",
+          "description": "Light fitting LI-12 – Pre-function MZ (x3)",
+          "quantity": 3,
+          "unit": "No",
+          "unit_rate_aed": 515,
+          "total_aed": 1545,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "5.52",
+          "description": "Light fitting LI-13.A – Pre-function MZ (x4)",
+          "quantity": 4,
+          "unit": "No",
+          "unit_rate_aed": 2552,
+          "total_aed": 10208,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "5.53",
+          "description": "Light fitting LI-13.C – Pre-function MZ (x4)",
+          "quantity": 4,
+          "unit": "No",
+          "unit_rate_aed": 2893,
+          "total_aed": 11572,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "5.54",
+          "description": "Light fitting LI-14 incl track – Pre-func (x26)",
+          "quantity": 26,
+          "unit": "No",
+          "unit_rate_aed": 824,
+          "total_aed": 21424,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "5.55",
+          "description": "Light fitting LI-16 – Pre-function MZ (x2)",
+          "quantity": 2,
+          "unit": "No",
+          "unit_rate_aed": 1823,
+          "total_aed": 3646,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "5.56",
+          "description": "Light fitting LI-17 – Pre-function MZ (x4)",
+          "quantity": 4,
+          "unit": "No",
+          "unit_rate_aed": 3211,
+          "total_aed": 12844,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "5.57",
+          "description": "Light fitting LI-30 – Pre-function MZ (x8)",
+          "quantity": 8,
+          "unit": "No",
+          "unit_rate_aed": 427,
+          "total_aed": 3416,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "5.58",
+          "description": "LED strip light – Pre-function MZ",
+          "quantity": 7,
+          "unit": "m",
+          "unit_rate_aed": 199,
+          "total_aed": 1393,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "5.59",
+          "description": "Light fitting LI-14 incl track – Lift/Stairs MZ (x15)",
+          "quantity": 15,
+          "unit": "No",
+          "unit_rate_aed": 824,
+          "total_aed": 12360,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "5.60",
+          "description": "Light fitting LI-28 – Lift/Stairs MZ (x3)",
+          "quantity": 3,
+          "unit": "No",
+          "unit_rate_aed": 461,
+          "total_aed": 1383,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "5.61",
+          "description": "Light fitting LI-25 – Lift/Stairs MZ",
+          "quantity": 10,
+          "unit": "m",
+          "unit_rate_aed": 199,
+          "total_aed": 1990,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "5-P7-Sub",
+          "description": "Page 7/5 – Tech Hub/Pre-func/Lift subtotal",
+          "quantity": null,
+          "unit": null,
+          "unit_rate_aed": null,
+          "total_aed": 161310,
+          "is_subtotal": true
+        },
+        {
+          "sr_no": "5.62",
+          "description": "Light fitting LI-18 – Pool Deck MZ (x4)",
+          "quantity": 4,
+          "unit": "No",
+          "unit_rate_aed": 9946,
+          "total_aed": 39784,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "5.63",
+          "description": "Light fitting LI-31 – Pool Deck MZ (x39)",
+          "quantity": 39,
+          "unit": "No",
+          "unit_rate_aed": 566,
+          "total_aed": 22074,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "5.64",
+          "description": "Light fitting LI-32 – Pool Deck MZ (x4)",
+          "quantity": 4,
+          "unit": "No",
+          "unit_rate_aed": 21537,
+          "total_aed": 86148,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "5.65",
+          "description": "Pendant light relocation – Lobby Lounge (x11)",
+          "quantity": 11,
+          "unit": "No",
+          "unit_rate_aed": 53,
+          "total_aed": 583,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "5.66",
+          "description": "Interface new lights with lighting control system",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": 45063,
+          "total_aed": 45063,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "5-P8-Sub",
+          "description": "Page 8/5 – Pool Deck/Lighting Control subtotal",
+          "quantity": null,
+          "unit": null,
+          "unit_rate_aed": null,
+          "total_aed": 193652,
+          "is_subtotal": true
+        },
+        {
+          "sr_no": "5.67",
+          "description": "Single socket floor power provision (x12)",
+          "quantity": 12,
+          "unit": "No",
+          "unit_rate_aed": 445,
+          "total_aed": 5340,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "5.68",
+          "description": "Redressing existing DBs for light circuits",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": 7023,
+          "total_aed": 7023,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "5.69",
+          "description": "LED strip light – Reception/Lift Lobby GF",
+          "quantity": 5,
+          "unit": "m",
+          "unit_rate_aed": 205,
+          "total_aed": 1025,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "5.70",
+          "description": "Light fitting LI-02.A.1 – Reception/Lift",
+          "quantity": 1,
+          "unit": "No",
+          "unit_rate_aed": 4120,
+          "total_aed": 4120,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "5.71",
+          "description": "Light fitting LI-02.A.2 – Reception/Lift",
+          "quantity": 1,
+          "unit": "No",
+          "unit_rate_aed": 4219,
+          "total_aed": 4219,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "5.72",
+          "description": "Light fitting LI-12 – Reception/Lift (x5)",
+          "quantity": 5,
+          "unit": "No",
+          "unit_rate_aed": 531,
+          "total_aed": 2655,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "5.73",
+          "description": "Light fitting LI-28 – Reception/Lift",
+          "quantity": 1,
+          "unit": "No",
+          "unit_rate_aed": 475,
+          "total_aed": 475,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "5.74",
+          "description": "Light fitting LI-36 – Corridor to lifts",
+          "quantity": 1,
+          "unit": "No",
+          "unit_rate_aed": 14339,
+          "total_aed": 14339,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "5.75",
+          "description": "Double universal socket – Lobby/Terrace (x3)",
+          "quantity": 3,
+          "unit": "No",
+          "unit_rate_aed": 469,
+          "total_aed": 1407,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "5.76",
+          "description": "Single universal socket – Lobby/Terrace (x3)",
+          "quantity": 3,
+          "unit": "No",
+          "unit_rate_aed": 445,
+          "total_aed": 1335,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "5.77",
+          "description": "Single socket floor lamp – Lobby/Terrace (x6)",
+          "quantity": 6,
+          "unit": "No",
+          "unit_rate_aed": 445,
+          "total_aed": 2670,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "5.78",
+          "description": "Power provision LED signage lobby GF (x4)",
+          "quantity": 4,
+          "unit": "No",
+          "unit_rate_aed": 469,
+          "total_aed": 1876,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "5.79",
+          "description": "Light fitting LI-21 – Lobby/Terrace (x8)",
+          "quantity": 8,
+          "unit": "No",
+          "unit_rate_aed": 2045,
+          "total_aed": 16360,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "5.80",
+          "description": "Light fitting LI-26 – Lobby/Terrace (x2)",
+          "quantity": 2,
+          "unit": "No",
+          "unit_rate_aed": 383,
+          "total_aed": 766,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "5.81",
+          "description": "Light fitting LI-31 – Lobby/Terrace (x22)",
+          "quantity": 22,
+          "unit": "No",
+          "unit_rate_aed": 566,
+          "total_aed": 12452,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "5.82",
+          "description": "Power provision Neon Palm WP isolator (x4)",
+          "quantity": 4,
+          "unit": "Nos",
+          "unit_rate_aed": 761,
+          "total_aed": 3044,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "5.83",
+          "description": "WP single socket floor lamp – Pool Deck MZ",
+          "quantity": 1,
+          "unit": "No",
+          "unit_rate_aed": 451,
+          "total_aed": 451,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "5.84",
+          "description": "Light points wiring & conduiting – Pool Deck (x77)",
+          "quantity": 77,
+          "unit": "No",
+          "unit_rate_aed": 159,
+          "total_aed": 12243,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "5.85",
+          "description": "LED strip light wiring – Pool Deck",
+          "quantity": 90,
+          "unit": "m",
+          "unit_rate_aed": 53,
+          "total_aed": 4770,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "5.86",
+          "description": "HVAC modification – Reception ceiling (PS)",
+          "quantity": 1,
+          "unit": "PS",
+          "unit_rate_aed": 8779,
+          "total_aed": 8779,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "5.87",
+          "description": "Testing & commissioning modified DBs",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": 4682,
+          "total_aed": 4682,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "5.88",
+          "description": "HVAC modification – Lobby Lounge GF (PS)",
+          "quantity": 1,
+          "unit": "PS",
+          "unit_rate_aed": 47170,
+          "total_aed": 47170,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "5.89",
+          "description": "HVAC modification – Pre-function Level 1 (PS)",
+          "quantity": 1,
+          "unit": "PS",
+          "unit_rate_aed": 51266,
+          "total_aed": 51266,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "5-P9-Sub",
+          "description": "Page 9/5 – Additional Electrical/HVAC subtotal",
+          "quantity": null,
+          "unit": null,
+          "unit_rate_aed": null,
+          "total_aed": 208467,
+          "is_subtotal": true
+        },
+        {
+          "sr_no": "B5-Total",
+          "description": "Bill No.5 MEP – Total (Specified)",
+          "quantity": null,
+          "unit": null,
+          "unit_rate_aed": null,
+          "total_aed": 827797,
+          "is_subtotal": true
+        }
+      ]
+    },
+    {
+      "name": "Guest Room – Bill No. 1: General Requirements",
+      "category_total_aed": 822400,
+      "line_items": [
+        {
+          "sr_no": "GR-A1.2",
+          "description": "Advance Payment Guarantee – Guest Rooms",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": 55000,
+          "total_aed": 55000,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "GR-A1.3",
+          "description": "Performance Bond – Guest Rooms",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": 89700,
+          "total_aed": 89700,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "GR-A1.4",
+          "description": "Contractor's All Risk Policy – Guest Rooms",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": 20500,
+          "total_aed": 20500,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "GR-A1-Sub",
+          "description": "Page 1/2 – Conditions of Contract subtotal",
+          "quantity": null,
+          "unit": null,
+          "unit_rate_aed": null,
+          "total_aed": 165200,
+          "is_subtotal": true
+        },
+        {
+          "sr_no": "GR-A4.6",
+          "description": "Site administration – Guest Rooms",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": 55000,
+          "total_aed": 55000,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "GR-A4.7",
+          "description": "Supervision – Guest Rooms",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": 175000,
+          "total_aed": 175000,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "GR-A4.8",
+          "description": "Security – Guest Rooms",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": 25000,
+          "total_aed": 25000,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "GR-A4.9",
+          "description": "Safety, health and welfare – Guest Rooms",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": 20500,
+          "total_aed": 20500,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "GR-A4.10",
+          "description": "Transport of work people – Guest Rooms",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": 31650,
+          "total_aed": 31650,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "GR-A4-Sub",
+          "description": "Page 1/3 – Admin subtotal",
+          "quantity": null,
+          "unit": null,
+          "unit_rate_aed": null,
+          "total_aed": 307150,
+          "is_subtotal": true
+        },
+        {
+          "sr_no": "GR-A5.1",
+          "description": "Scaffolding establishment – Guest Rooms",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": 10000,
+          "total_aed": 10000,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "GR-A5-Sub",
+          "description": "Page 1/4 – Plant subtotal",
+          "quantity": null,
+          "unit": null,
+          "unit_rate_aed": null,
+          "total_aed": 10000,
+          "is_subtotal": true
+        },
+        {
+          "sr_no": "GR-A7.4",
+          "description": "Temporary fencing & hoardings – Guest Rooms",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": 49500,
+          "total_aed": 49500,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "GR-A7.5",
+          "description": "Temporary roads and hard standings",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": 8200,
+          "total_aed": 8200,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "GR-A8.11",
+          "description": "Protecting works from inclement weather",
+          "quantity": 1,
+          "unit": "LS",
+          "unit_rate_aed": null,
+          "total_aed": 14500,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "GR-A8.12",
+          "description": "Removing rubbish & cleaning at completion",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": 30250,
+          "total_aed": 30250,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "GR-A7-Sub",
+          "description": "Page 1/6 – Contractor's Facilities subtotal",
+          "quantity": null,
+          "unit": null,
+          "unit_rate_aed": null,
+          "total_aed": 102450,
+          "is_subtotal": true
+        },
+        {
+          "sr_no": "GR-A8.2",
+          "description": "All Statutory obligations – Guest Rooms",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": 10000,
+          "total_aed": 10000,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "GR-A8.6",
+          "description": "Off site storage – Guest Rooms",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": 37000,
+          "total_aed": 37000,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "GR-A8.8",
+          "description": "Specialist third party testing & commissioning",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": 3500,
+          "total_aed": 3500,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "GR-A8.9",
+          "description": "Shop drawings – Guest Rooms",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": 20500,
+          "total_aed": 20500,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "GR-A8.10",
+          "description": "Submittal program & revisions – Guest Rooms",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": 12500,
+          "total_aed": 12500,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "GR-A8.14",
+          "description": "Final Cleaning for Project Handover",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": 71200,
+          "total_aed": 71200,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "GR-A8-Sub",
+          "description": "Page 1/7 – Temporary Works subtotal",
+          "quantity": null,
+          "unit": null,
+          "unit_rate_aed": null,
+          "total_aed": 154700,
+          "is_subtotal": true
+        },
+        {
+          "sr_no": "GR-A9.1",
+          "description": "Attic stock – PC rate items",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": 1500,
+          "total_aed": 1500,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "GR-A9.2",
+          "description": "Attic stock – Non PC rate items",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": 900,
+          "total_aed": 900,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "GR-A9.3",
+          "description": "Provision of as-built drawings – Guest Rooms",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": 10500,
+          "total_aed": 10500,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "GR-A9-Sub",
+          "description": "Page 1/8 – Sundry Items subtotal",
+          "quantity": null,
+          "unit": null,
+          "unit_rate_aed": null,
+          "total_aed": 12900,
+          "is_subtotal": true
+        },
+        {
+          "sr_no": "GR-A10.1",
+          "description": "Protection of existing finishes – Guest Rooms",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": 70000,
+          "total_aed": 70000,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "GR-A10-Sub",
+          "description": "Page 1/9 – Additions & Omissions subtotal",
+          "quantity": null,
+          "unit": null,
+          "unit_rate_aed": null,
+          "total_aed": 70000,
+          "is_subtotal": true
+        },
+        {
+          "sr_no": "GR-B1-Total",
+          "description": "Guest Room General Requirements – Total",
+          "quantity": null,
+          "unit": null,
+          "unit_rate_aed": null,
+          "total_aed": 822400,
+          "is_subtotal": true
+        }
+      ]
+    },
+    {
+      "name": "Guest Room – Bill No. 2: Refurbishment Works (420 Rooms)",
+      "category_total_aed": 8325240,
+      "line_items": [
+        {
+          "sr_no": "GR.1",
+          "description": "New Desk JN-32 WD-01A white oak veneer 1400x600mm",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": 3302,
+          "total_aed": 3302,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "GR.2",
+          "description": "New Desk Mirror JN-35 GL-01 silver MT-23 orange frame",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": 586,
+          "total_aed": 586,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "GR.3",
+          "description": "Reupholster sofa bed FB-01/FB-09",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": 3725,
+          "total_aed": 3725,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "GR.4",
+          "description": "Reupholster Pouf FR-69 FB-05/FB-06/FB-08",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": 853,
+          "total_aed": 853,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "GR.5",
+          "description": "Reupholster valance wrap bed base FB-03/JN-34",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": 2337,
+          "total_aed": 2337,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "GR.6",
+          "description": "Repaint coffee table",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": 216,
+          "total_aed": 216,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "GR.7",
+          "description": "Headboard paint + new PU cover with printed straps",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": 1660,
+          "total_aed": 1660,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "GR.8",
+          "description": "Wall paint works – Blue Foyer + White walls",
+          "quantity": 63,
+          "unit": "Sqm",
+          "unit_rate_aed": 26,
+          "total_aed": 1638,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "GR.9",
+          "description": "PEG BOARD 20mm thick",
+          "quantity": 4.75,
+          "unit": "Sqm",
+          "unit_rate_aed": 844,
+          "total_aed": 4009,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "GR.9a",
+          "description": "5 Pegs + 15 letters per room",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": 398,
+          "total_aed": 398,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "GR.10",
+          "description": "Blue Shelf + Ledge fixed to PEG BOARD",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": 330,
+          "total_aed": 330,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "GR.11a",
+          "description": "Paint the Mirror Frame",
+          "quantity": 1,
+          "unit": "Item",
+          "unit_rate_aed": 228,
+          "total_aed": 228,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "GR.11b",
+          "description": "Ceiling painting",
+          "quantity": 18,
+          "unit": "Sqm",
+          "unit_rate_aed": 30,
+          "total_aed": 540,
+          "is_subtotal": false
+        },
+        {
+          "sr_no": "GR-CostPerKey",
+          "description": "Cost per key (1 room) – Specified",
+          "quantity": null,
+          "unit": null,
+          "unit_rate_aed": null,
+          "total_aed": 19822,
+          "is_subtotal": true
+        },
+        {
+          "sr_no": "GR-B2-Total",
+          "description": "Total 420 rooms refurbishment works",
+          "quantity": null,
+          "unit": null,
+          "unit_rate_aed": null,
+          "total_aed": 8325240,
+          "is_subtotal": true
+        }
+      ]
+    }
+  ],
+  "source_filename": "Rove Hotel Refurbishment - Bill of Quantities - R03.pdf"
+}

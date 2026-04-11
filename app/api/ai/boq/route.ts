@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from 'next/server'
 import Anthropic from '@anthropic-ai/sdk'
 import { createServerSupabaseClient, createServiceClient } from '@/lib/supabase/server'
 import type { Database, Json } from '@/lib/supabase/types'
+import { getHistoricalContext, getPricingSummary } from '@/lib/pricing/historical'
+import { flagDeviations } from '@/lib/pricing/deviation'
 
 type Lead = Database['public']['Tables']['leads']['Row']
 
@@ -37,9 +39,20 @@ export async function POST(req: NextRequest) {
   const rows = (messages ?? []) as { role: string; content: string }[]
   const chatHistory = rows.map((m) => `${m.role}: ${m.content}`).join('\n\n')
 
+  // Fetch historical pricing context for the detected scope
+  const scopeIds = (lead.scope as string[]) ?? []
+  const [historicalContext, pricingSummary] = await Promise.all([
+    getHistoricalContext(scopeIds),
+    getPricingSummary(),
+  ])
+
+  const historicalBlock = historicalContext
+    ? `\n\n${historicalContext}`
+    : ''
+
   const response = await anthropic.messages.create({
     model: 'claude-sonnet-4-6',
-    max_tokens: 4096,
+    max_tokens: 8192,
     messages: [
       {
         role: 'user',
@@ -50,19 +63,25 @@ ${chatHistory}
 
 DETECTED SCOPE: ${JSON.stringify(lead.scope)}
 PROJECT BRIEF: ${lead.brief}
+PROPERTY TYPE: ${lead.property_type ?? 'not specified'}
+LOCATION: ${lead.location ?? 'not specified'}
+SIZE: ${lead.size_sqft ? `${lead.size_sqft} sqft` : 'not specified'}
+CONDITION: ${lead.condition ?? 'not specified'}${historicalBlock}
 
 Generate a structured BOQ with the following:
-1. Categories: Group line items into standard construction categories (Structural, Finishes, Systems, Specialty). Use only the categories relevant to this project.
+1. Categories: Group line items into standard construction categories relevant to this project (e.g., Demolition, Flooring, Electrical, Joinery, Painting, HVAC, Plumbing). Use specific category names, not generic ones like "Structural" or "Finishes".
 2. Line Items: For each category, list specific work items with:
-   - Item description (clear, specific — e.g. "Supply and install 150mm reinforced concrete slab" not "Concrete work")
-   - Unit of measurement (m2, m3, nos, LS, kg, etc.)
+   - Item description (clear, specific, e.g. "Supply and install porcelain floor tiles 600x600mm" not "Flooring")
+   - Unit of measurement (sqm, m, nos, LS, kg, set, etc.)
    - Estimated quantity
    - Unit price in AED
    - Subtotal (quantity x unit price)
+   - historical_avg_rate: average historical rate for similar items if available from the reference data above (null if not available)
+   - deviation_pct: percentage deviation from historical average (positive = above, negative = below, null if no reference)
 3. Category subtotals and grand total
 4. Assumptions and exclusions
 
-Use realistic AED pricing for the UAE market. Be specific about materials and specifications where the conversation provides enough detail. Where details are missing, use reasonable defaults and note them in assumptions.
+Use realistic AED pricing for the UAE market grounded in the historical pricing reference above. Be specific about materials and specifications where the conversation provides enough detail. Where details are missing, use reasonable defaults and note them in assumptions.
 
 Format as structured JSON using the submit_boq_draft tool.`,
       },
@@ -86,7 +105,7 @@ Format as structured JSON using the submit_boq_draft tool.`,
                 properties: {
                   name: {
                     type: 'string',
-                    description: 'Category name (e.g. Structural, Finishes, Systems, Specialty)',
+                    description: 'Category name (e.g., Demolition, Flooring, Electrical Works, Joinery, Painting)',
                   },
                   line_items: {
                     type: 'array',
@@ -94,10 +113,12 @@ Format as structured JSON using the submit_boq_draft tool.`,
                       type: 'object',
                       properties: {
                         description: { type: 'string', description: 'Specific work item description' },
-                        unit: { type: 'string', description: 'Unit of measurement (m2, m3, nos, LS, kg, etc.)' },
+                        unit: { type: 'string', description: 'Unit of measurement (sqm, m, nos, LS, kg, set, etc.)' },
                         quantity: { type: 'number', description: 'Estimated quantity' },
                         unit_price_aed: { type: 'number', description: 'Unit price in AED' },
                         subtotal_aed: { type: 'number', description: 'Line item subtotal (quantity x unit_price_aed)' },
+                        historical_avg_rate: { type: ['number', 'null'], description: 'Average historical unit rate for similar items (AED), if available' },
+                        deviation_pct: { type: ['number', 'null'], description: 'Percentage deviation from historical average (-100 to +100)' },
                       },
                       required: ['description', 'unit', 'quantity', 'unit_price_aed', 'subtotal_aed'],
                     },
@@ -145,6 +166,12 @@ Format as structured JSON using the submit_boq_draft tool.`,
     exclusions: Json
   }
 
+  // Run deviation flagging against historical data
+  const deviationFlags = flagDeviations(
+    boqData.categories as Parameters<typeof flagDeviations>[0],
+    pricingSummary,
+  )
+
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { error: insertError } = await (supabase as any)
     .from('boq_drafts')
@@ -154,11 +181,12 @@ Format as structured JSON using the submit_boq_draft tool.`,
       grand_total_aed: boqData.grand_total_aed,
       assumptions: boqData.assumptions,
       exclusions: boqData.exclusions,
+      deviation_flags: deviationFlags.length > 0 ? deviationFlags : null,
     })
 
   if (insertError) {
     return NextResponse.json({ error: insertError.message }, { status: 500 })
   }
 
-  return NextResponse.json({ success: true })
+  return NextResponse.json({ success: true, deviationFlags })
 }

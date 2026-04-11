@@ -217,6 +217,7 @@ export interface Database {
           assumptions: string[]
           exclusions: string[]
           locked: boolean
+          deviation_flags: Json | null
           created_at: string
           updated_at: string
         }
@@ -229,6 +230,7 @@ export interface Database {
           assumptions?: string[]
           exclusions?: string[]
           locked?: boolean
+          deviation_flags?: Json | null
           created_at?: string
           updated_at?: string
         }
@@ -241,6 +243,7 @@ export interface Database {
           assumptions?: string[]
           exclusions?: string[]
           locked?: boolean
+          deviation_flags?: Json | null
           created_at?: string
           updated_at?: string
         }
@@ -443,6 +446,9 @@ export interface Database {
           complexity: string | null
           status: string
           sort_order: number
+          boq_line_item_ref: string | null
+          estimated_cost_aed: number | null
+          actual_cost_aed: number | null
           created_at: string
           updated_at: string
         }
@@ -456,6 +462,9 @@ export interface Database {
           complexity?: string | null
           status?: string
           sort_order?: number
+          boq_line_item_ref?: string | null
+          estimated_cost_aed?: number | null
+          actual_cost_aed?: number | null
           created_at?: string
           updated_at?: string
         }
@@ -469,13 +478,223 @@ export interface Database {
           complexity?: string | null
           status?: string
           sort_order?: number
+          boq_line_item_ref?: string | null
+          estimated_cost_aed?: number | null
+          actual_cost_aed?: number | null
           created_at?: string
           updated_at?: string
         }
         Relationships: []
       }
+      historical_projects: {
+        Row: {
+          id: string
+          project_name: string
+          contractor_name: string | null
+          project_location: string | null
+          project_type: string | null
+          total_area_sqm: number | null
+          grand_total_aed: number
+          source_filename: string
+          revision: string | null
+          is_latest_revision: boolean
+          source_boq_draft_id: string | null
+          extracted_at: string
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          project_name: string
+          contractor_name?: string | null
+          project_location?: string | null
+          project_type?: string | null
+          total_area_sqm?: number | null
+          grand_total_aed: number
+          source_filename: string
+          revision?: string | null
+          is_latest_revision?: boolean
+          source_boq_draft_id?: string | null
+          extracted_at?: string
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          project_name?: string
+          contractor_name?: string | null
+          project_location?: string | null
+          project_type?: string | null
+          total_area_sqm?: number | null
+          grand_total_aed?: number
+          source_filename?: string
+          revision?: string | null
+          is_latest_revision?: boolean
+          source_boq_draft_id?: string | null
+          extracted_at?: string
+          created_at?: string
+        }
+        Relationships: []
+      }
+      historical_categories: {
+        Row: {
+          id: string
+          project_id: string
+          name: string
+          normalized_name: string
+          category_total_aed: number
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          project_id: string
+          name: string
+          normalized_name: string
+          category_total_aed: number
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          project_id?: string
+          name?: string
+          normalized_name?: string
+          category_total_aed?: number
+          created_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "historical_categories_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "historical_projects"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
+      historical_line_items: {
+        Row: {
+          id: string
+          category_id: string
+          project_id: string
+          sr_no: string | null
+          description: string
+          quantity: number | null
+          unit: string | null
+          unit_rate_aed: number | null
+          total_aed: number
+          is_subtotal: boolean
+          normalized_description: string | null
+          scope_item_id: string | null
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          category_id: string
+          project_id: string
+          sr_no?: string | null
+          description: string
+          quantity?: number | null
+          unit?: string | null
+          unit_rate_aed?: number | null
+          total_aed?: number
+          is_subtotal?: boolean
+          normalized_description?: string | null
+          scope_item_id?: string | null
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          category_id?: string
+          project_id?: string
+          sr_no?: string | null
+          description?: string
+          quantity?: number | null
+          unit?: string | null
+          unit_rate_aed?: number | null
+          total_aed?: number
+          is_subtotal?: boolean
+          normalized_description?: string | null
+          scope_item_id?: string | null
+          created_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "historical_line_items_category_id_fkey"
+            columns: ["category_id"]
+            isOneToOne: false
+            referencedRelation: "historical_categories"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "historical_line_items_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "historical_projects"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
+      pricing_overrides: {
+        Row: {
+          id: string
+          scope_item_id: string | null
+          item_description: string
+          unit: string
+          override_min_aed: number
+          override_max_aed: number
+          notes: string | null
+          updated_by: string | null
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          scope_item_id?: string | null
+          item_description: string
+          unit: string
+          override_min_aed: number
+          override_max_aed: number
+          notes?: string | null
+          updated_by?: string | null
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          scope_item_id?: string | null
+          item_description?: string
+          unit?: string
+          override_min_aed?: number
+          override_max_aed?: number
+          notes?: string | null
+          updated_by?: string | null
+          created_at?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "pricing_overrides_updated_by_fkey"
+            columns: ["updated_by"]
+            isOneToOne: false
+            referencedRelation: "admin_users"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
     }
-    Views: Record<string, never>
+    Views: {
+      pricing_summary: {
+        Row: {
+          scope_item_id: string | null
+          unit: string | null
+          sample_count: number
+          rate_min: number
+          rate_max: number
+          rate_avg: number
+          rate_p25: number
+          rate_median: number
+          rate_p75: number
+        }
+      }
+    }
     Functions: Record<string, never>
     Enums: Record<string, never>
   }

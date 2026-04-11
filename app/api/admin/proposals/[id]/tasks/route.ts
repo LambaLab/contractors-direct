@@ -48,7 +48,7 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id
   const { id } = await params
   const { taskId, updates } = await req.json()
 
-  const allowedFields = ['title', 'description', 'status', 'sort_order', 'complexity']
+  const allowedFields = ['title', 'description', 'status', 'sort_order', 'complexity', 'estimated_cost_aed', 'actual_cost_aed']
   const filtered = Object.fromEntries(
     Object.entries(updates).filter(([key]) => allowedFields.includes(key))
   )
