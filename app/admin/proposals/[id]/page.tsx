@@ -9,7 +9,8 @@ export default async function AdminProposalDetailPage({ params }: { params: Prom
   const { id } = await params
   const supabase = await createServiceClient()
 
-  const { data: proposal } = await supabase
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const { data: proposal } = await (supabase as any)
     .from('proposals')
     .select('*')
     .eq('id', id)
@@ -17,7 +18,7 @@ export default async function AdminProposalDetailPage({ params }: { params: Prom
 
   if (!proposal) notFound()
 
-  const modules = proposal.modules as string[]
+  const modules = (proposal.modules ?? []) as string[]
 
   return (
     <div className="min-h-screen p-6 max-w-4xl mx-auto space-y-8">

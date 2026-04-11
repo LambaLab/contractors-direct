@@ -6,7 +6,8 @@ import Link from 'next/link'
 export default async function AdminProposalsPage() {
   const supabase = await createServiceClient()
 
-  const { data: proposals } = await supabase
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const { data: proposals } = await (supabase as any)
     .from('proposals')
     .select('id, status, brief, price_min, price_max, confidence_score, created_at')
     .order('created_at', { ascending: false })
@@ -16,7 +17,8 @@ export default async function AdminProposalsPage() {
       <h1 className="font-heading font-bold text-4xl text-brand-white mb-8">PROPOSAL QUEUE</h1>
 
       <div className="space-y-3">
-        {(proposals ?? []).map((p) => (
+        {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+        {(proposals ?? []).map((p: any) => (
           <Link
             key={p.id}
             href={`/admin/proposals/${p.id}`}
