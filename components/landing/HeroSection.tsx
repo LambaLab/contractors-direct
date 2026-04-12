@@ -83,17 +83,25 @@ export default function HeroSection({ onIntakeChange, onIntakeClose }: HeroProps
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   function fetchRestore(leadId: string) {
-    fetch(`/api/leads/${leadId}/restore`)
+    fetch(`/api/proposals/${leadId}/restore`)
       .then((res) => (res.ok ? res.json() : null))
       .then((data) => {
         if (!data) {
-          setRestoreGate({ leadId, sessionId: '' })
+          // Lead not found on server — clear the stale ?c= param silently
+          window.history.replaceState(null, '', '/')
+          return
+        }
+        // If the lead has no saved email, skip the gate and restore directly.
+        // Having the link (UUID) is sufficient auth for an unsaved project.
+        if (!data.email) {
+          handleLeadRestoreSuccess({ leadId, ...data })
           return
         }
         setRestoreGate(data)
       })
       .catch(() => {
-        setRestoreGate({ leadId, sessionId: '' })
+        // Network error — clear stale param rather than showing confusing modal
+        window.history.replaceState(null, '', '/')
       })
   }
 
