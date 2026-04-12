@@ -202,6 +202,7 @@ export default function ChatPanel({ messages, isStreaming, onSend, onEdit, onReq
                 location={msg.ballparkLocation ?? ''}
                 sizeSqft={msg.ballparkSizeSqft ?? 0}
                 condition={msg.ballparkCondition ?? ''}
+                stylePreference={msg.ballparkStylePreference ?? ''}
                 onDigDeeper={() => onUpgradeToFull?.()}
                 onSaveLater={() => onSaveLater?.()}
                 isLast={isLastVisible}
@@ -362,6 +363,7 @@ export default function ChatPanel({ messages, isStreaming, onSend, onEdit, onReq
                 }}
                 isLast={true}
                 isStreaming={isStreaming}
+                scopeContext={activeQR.scopeContext}
               />
             ) : (
               <QuickReplies

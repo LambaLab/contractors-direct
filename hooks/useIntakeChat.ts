@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback, useRef } from 'react'
 import { calculatePriceRange, applyComplexityAdjustment, tightenPriceRange, computeQuickBallpark, type PriceRange } from '@/lib/pricing/engine'
+import type { HistoricalPricingStat } from '@/lib/pricing/historical'
 import { expandWithDependencies } from '@/lib/scope/dependencies'
 import type { QuickReplies, UploadedFile } from '@/lib/intake-types'
 import { enrichCardOption } from '@/lib/card-images'
@@ -47,6 +48,7 @@ export type ChatMessage = {
   ballparkLocation?: string
   ballparkSizeSqft?: number
   ballparkCondition?: string
+  ballparkStylePreference?: string
 }
 
 type UpdateProposalInput = {
@@ -249,6 +251,7 @@ export function useIntakeChat({ proposalId, idea }: Props) {
   const currentScopeRef = useRef('')
   const scopeQueueRef = useRef<string[]>([])
   const completedScopeRef = useRef<string[]>([])
+  const historicalStatsRef = useRef<HistoricalPricingStat[]>([])
   const streamIdRef = useRef<string>('')  // ID of the currently-active stream; used to prevent
                                           // stale streams from clobbering newer state
 
@@ -678,7 +681,12 @@ export function useIntakeChat({ proposalId, idea }: Props) {
 
           const { event, data } = parsed
 
-          if (event === 'text') {
+          if (event === 'pricing_stats') {
+            // Historical pricing stats from the server for data-driven ballpark
+            if (Array.isArray(data)) {
+              historicalStatsRef.current = data as HistoricalPricingStat[]
+            }
+          } else if (event === 'text') {
             setMessages((prev) => {
               const last = prev[prev.length - 1]
               // Guard: only update the specific assistant message for this stream.
@@ -1270,6 +1278,8 @@ export function useIntakeChat({ proposalId, idea }: Props) {
                 sizeSqft: qf.size_sqft || 0,
                 condition: qf.condition || 'needs_refresh',
                 location: qf.location || '',
+                historicalStats: historicalStatsRef.current.length > 0
+                  ? historicalStatsRef.current : undefined,
               })
               const ballparkMsg: ChatMessage = {
                 id: crypto.randomUUID(),
@@ -1282,6 +1292,7 @@ export function useIntakeChat({ proposalId, idea }: Props) {
                 ballparkLocation: qf.location || '',
                 ballparkSizeSqft: qf.size_sqft || 0,
                 ballparkCondition: qf.condition || '',
+                ballparkStylePreference: qf.style_preference || '',
                 createdAt: Date.now(),
               }
               setMessages(prev => [...prev, ballparkMsg])

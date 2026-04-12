@@ -51,7 +51,7 @@ export const UPDATE_PROPOSAL_TOOL: Anthropic.Tool = {
           style: {
             type: 'string' as const,
             enum: ['list', 'pills', 'cards', 'sqft', 'budget', 'scope_grid'],
-            description: 'list = numbered items with descriptions (default for most decisions). pills = compact chips (simple/short answers like yes/no or platform choice). cards = swipeable image cards, ONLY for the 5 card-eligible questions listed in the system prompt (project type, current condition, style preference, flooring material, countertop material). sqft = a drag-scrub numeric picker, ONLY for Phase 1 Question 6 (property size in square feet). budget = a drag-scrub AED currency picker with preset tiers, ONLY for Phase 1 Question 7 (budget). scope_grid = 3-column checkbox grid of ALL scope catalog items, ONLY for scope selection questions (Phase 1 item 8, Phase 1A item 5). Never invent new card, sqft, budget, or scope_grid questions.',
+            description: 'list = numbered items with descriptions (default for most decisions). pills = compact chips (simple/short answers like yes/no or platform choice). cards = swipeable image cards, ONLY for the 5 card-eligible questions listed in the system prompt (project type, current condition, style preference, flooring material, countertop material). sqft = a drag-scrub numeric picker, ONLY for Phase 1 Question 6 (property size in square feet). budget = a drag-scrub AED currency picker with preset tiers, ONLY for Phase 1 Question 7 (budget). scope_grid = 3-column checkbox grid of scope catalog items filtered by scopeContext, ONLY for scope selection questions (Phase 1 item 8, Phase 1A item 5). Set scopeContext to filter items by project focus. Never invent new card, sqft, budget, or scope_grid questions.',
           },
           multiSelect: {
             type: 'boolean' as const,
@@ -75,6 +75,11 @@ export const UPDATE_PROPOSAL_TOOL: Anthropic.Tool = {
               },
               required: ['label', 'value', 'icon'],
             },
+          },
+          scopeContext: {
+            type: 'string' as const,
+            enum: ['kitchen', 'bathroom', 'bedroom', 'living', 'outdoor', 'office', ''],
+            description: 'For scope_grid style only. Filters the grid to show only items relevant to this project context. Set based on what the user has described so far (e.g. "kitchen" if they said they want a kitchen renovation). Leave empty for full renovations or when scope is broad/unclear.',
           },
         },
         required: ['style', 'options'],

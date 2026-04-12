@@ -40,12 +40,14 @@ export async function POST(req: NextRequest) {
   }
 
   // Fetch historical pricing summary (cached materialized view, fast query).
-  // This is injected into the system prompt so the AI has real market context.
+  // This is injected into the system prompt so the AI has real market context,
+  // and also sent to the client via SSE for data-driven ballpark pricing.
   let pricingContext = ''
+  let historicalStats: HistoricalPricingStat[] = []
   try {
-    const stats: HistoricalPricingStat[] = await getPricingSummary()
-    if (stats.length > 0) {
-      const lines = stats
+    historicalStats = await getPricingSummary()
+    if (historicalStats.length > 0) {
+      const lines = historicalStats
         .filter(s => s.sample_count >= 2)
         .map(s => `  ${s.scope_item_id}: ${s.rate_p25.toFixed(0)}-${s.rate_p75.toFixed(0)} AED/${s.unit ?? 'unit'} (${s.sample_count} projects)`)
       if (lines.length > 0) {
@@ -177,6 +179,11 @@ When suggesting to resume, always frame it as an invitation, not a demand. "Want
         controller.enqueue(
           encoder.encode(`data: ${JSON.stringify({ event, data })}\n\n`)
         )
+      }
+
+      // Send historical pricing stats to the client for data-driven ballpark
+      if (historicalStats.length > 0) {
+        send('pricing_stats', historicalStats)
       }
 
       // Buffer tool input JSON as it streams so we can send tool_result

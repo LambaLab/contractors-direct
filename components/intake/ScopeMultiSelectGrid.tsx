@@ -3,18 +3,25 @@
 import { useState } from 'react'
 import * as Icons from 'lucide-react'
 import { Check, ArrowRight } from 'lucide-react'
-import { SCOPE_CATALOG } from '@/lib/scope/catalog'
+import { SCOPE_CATALOG, SCOPE_CONTEXT_MAP } from '@/lib/scope/catalog'
 
 type Props = {
   onSubmit: (selectedIds: string[], displayText: string) => void
   isLast: boolean
   isStreaming: boolean
+  /** Limits items to those relevant for this project context (e.g. "kitchen"). Shows all if empty/absent. */
+  scopeContext?: string
 }
 
-export default function ScopeMultiSelectGrid({ onSubmit, isLast, isStreaming }: Props) {
+export default function ScopeMultiSelectGrid({ onSubmit, isLast, isStreaming, scopeContext }: Props) {
   const [selected, setSelected] = useState<Set<string>>(new Set())
   const [otherText, setOtherText] = useState('')
   const showActions = isLast && !isStreaming
+
+  const relevantIds = scopeContext ? SCOPE_CONTEXT_MAP[scopeContext] : null
+  const visibleItems = relevantIds
+    ? SCOPE_CATALOG.filter(item => relevantIds.includes(item.id))
+    : SCOPE_CATALOG
 
   function toggle(id: string) {
     setSelected(prev => {
@@ -37,7 +44,7 @@ export default function ScopeMultiSelectGrid({ onSubmit, isLast, isStreaming }: 
   return (
     <div className="w-full space-y-3 py-1">
       <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
-        {SCOPE_CATALOG.map((item) => {
+        {visibleItems.map((item) => {
           const isChecked = selected.has(item.id)
           const IconComponent = (Icons as unknown as Record<string, React.ComponentType<{ className?: string }>>)[item.icon] ?? Icons.Circle
           return (

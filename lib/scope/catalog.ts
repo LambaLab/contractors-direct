@@ -14,6 +14,40 @@ export type ScopeItem = {
   icon: string // lucide icon name
 }
 
+/**
+ * Maps a project context keyword to the scope item IDs relevant for that context.
+ * When the AI detects the user's project focus (e.g. "kitchen"), it passes the
+ * context string so the scope grid only shows related items.
+ * If the context is empty or not in this map, all items are shown.
+ */
+export const SCOPE_CONTEXT_MAP: Record<string, string[]> = {
+  kitchen: [
+    'demolition', 'kitchen', 'appliances', 'flooring', 'tiling',
+    'paint_walls', 'false_ceiling', 'joinery', 'electrical', 'plumbing', 'lighting',
+  ],
+  bathroom: [
+    'demolition', 'master_bathroom', 'family_bathroom', 'ensuite_bathroom', 'powder_room',
+    'flooring', 'tiling', 'paint_walls', 'false_ceiling', 'electrical', 'plumbing', 'lighting',
+  ],
+  bedroom: [
+    'demolition', 'flooring', 'paint_walls', 'false_ceiling', 'wardrobes',
+    'joinery', 'electrical', 'lighting', 'hvac', 'smart_home',
+  ],
+  living: [
+    'demolition', 'flooring', 'tiling', 'paint_walls', 'false_ceiling',
+    'joinery', 'electrical', 'lighting', 'hvac', 'smart_home', 'home_cinema',
+  ],
+  outdoor: [
+    'landscaping', 'garden_terrace', 'balconies', 'exterior_painting',
+    'lighting', 'electrical', 'plumbing',
+  ],
+  office: [
+    'demolition', 'flooring', 'paint_walls', 'false_ceiling', 'joinery',
+    'electrical', 'plumbing', 'hvac', 'lighting', 'smart_home',
+    'windows_glazing',
+  ],
+}
+
 export const SCOPE_CATALOG: ScopeItem[] = [
   // ── Structural ──
   {

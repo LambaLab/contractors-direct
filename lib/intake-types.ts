@@ -14,6 +14,8 @@ export type QuickReplies = {
   multiSelect?: boolean
   allowCustom?: boolean
   options: QuickReplyOption[]
+  /** For scope_grid style only. Limits the grid to items relevant to this project context (e.g. "kitchen", "bathroom"). If empty or absent, all items are shown. */
+  scopeContext?: string
 }
 
 /**
