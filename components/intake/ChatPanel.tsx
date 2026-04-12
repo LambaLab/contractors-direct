@@ -364,6 +364,10 @@ export default function ChatPanel({ messages, isStreaming, onSend, onEdit, onReq
                 isLast={true}
                 isStreaming={isStreaming}
                 scopeContext={activeQR.scopeContext}
+                onSkipQuestion={!reEditingQR && confidenceScore >= 40 ? onSkipQuestion : undefined}
+                onPauseQuestions={!reEditingQR ? onPauseQuestions : undefined}
+                onResumeQuestions={!reEditingQR ? onResumeQuestions : undefined}
+                isPaused={isPaused}
               />
             ) : (
               <QuickReplies

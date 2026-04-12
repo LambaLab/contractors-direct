@@ -11,9 +11,13 @@ type Props = {
   isStreaming: boolean
   /** Limits items to those relevant for this project context (e.g. "kitchen"). Shows all if empty/absent. */
   scopeContext?: string
+  onSkipQuestion?: () => void
+  onPauseQuestions?: () => void
+  onResumeQuestions?: () => void
+  isPaused?: boolean
 }
 
-export default function ScopeMultiSelectGrid({ onSubmit, isLast, isStreaming, scopeContext }: Props) {
+export default function ScopeMultiSelectGrid({ onSubmit, isLast, isStreaming, scopeContext, onSkipQuestion, onPauseQuestions, onResumeQuestions, isPaused }: Props) {
   const [selected, setSelected] = useState<Set<string>>(new Set())
   const [otherText, setOtherText] = useState('')
   const showActions = isLast && !isStreaming
@@ -98,6 +102,8 @@ export default function ScopeMultiSelectGrid({ onSubmit, isLast, isStreaming, sc
         placeholder="Type anything else..."
         value={otherText}
         onChange={(e) => setOtherText(e.target.value)}
+        enterKeyHint="done"
+        autoComplete="off"
         className="w-full px-3 py-2 rounded-lg text-sm bg-transparent border border-[var(--ov-border,rgba(255,255,255,0.12))] text-[var(--ov-text,#ffffff)] placeholder:text-[var(--ov-text-muted,#727272)] focus:outline-none focus:border-[var(--ov-accent-border,rgba(115,103,255,0.50))]"
       />
 
@@ -111,6 +117,31 @@ export default function ScopeMultiSelectGrid({ onSubmit, isLast, isStreaming, sc
           Continue
           <ArrowRight className="w-4 h-4" />
         </button>
+      )}
+
+      {/* Skip / Pause footer */}
+      {(onSkipQuestion || onPauseQuestions || onResumeQuestions) && (
+        <div className="flex items-center justify-between pt-2 border-t border-[var(--ov-border,rgba(255,255,255,0.06))]">
+          <div>
+            {onSkipQuestion && (
+              <button onClick={onSkipQuestion} disabled={isStreaming} className="text-xs text-[var(--ov-text-muted,#727272)] hover:text-[var(--ov-text,#ffffff)] transition-colors cursor-pointer disabled:cursor-not-allowed disabled:opacity-50">
+                Skip this question
+              </button>
+            )}
+          </div>
+          <div>
+            {(onPauseQuestions || onResumeQuestions) && (
+              <button
+                onClick={() => isPaused ? onResumeQuestions?.() : onPauseQuestions?.()}
+                disabled={isStreaming}
+                className="inline-flex items-center gap-1.5 text-xs text-[var(--ov-text-muted,#727272)] hover:text-[var(--ov-accent-strong,#7367ff)] transition-colors cursor-pointer disabled:cursor-not-allowed disabled:opacity-50"
+              >
+                {isPaused ? <Icons.Play className="w-3 h-3" /> : <Icons.Pause className="w-3 h-3" />}
+                {isPaused ? 'Resume Auto-questions' : 'Pause Auto-questions'}
+              </button>
+            )}
+          </div>
+        </div>
       )}
     </div>
   )
