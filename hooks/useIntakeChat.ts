@@ -93,19 +93,39 @@ type ApiMessage = { role: 'user' | 'assistant'; content: string }
 // safety net — the AI (Haiku) sometimes sends pills for 3+ options, or omits the
 // style field entirely. Both cases should render as the full card with rows.
 //
+/**
+ * Derive scopeContext from question text so the scope grid shows only
+ * relevant items. Runs deterministically instead of relying on the AI model.
+ */
+function deriveScopeContext(question: string): string {
+  const q = question.toLowerCase()
+  if (q.includes('kitchen')) return 'kitchen'
+  if (q.includes('bathroom') || q.includes('ensuite') || q.includes('powder room')) return 'bathroom'
+  if (q.includes('bedroom')) return 'bedroom'
+  if (q.includes('living') || q.includes('lounge') || q.includes('majlis')) return 'living'
+  if (q.includes('outdoor') || q.includes('garden') || q.includes('terrace') || q.includes('balcon') || q.includes('landscap')) return 'outdoor'
+  if (q.includes('office') || q.includes('retail') || q.includes('commercial') || q.includes('warehouse')) return 'office'
+  return '' // full renovation or unclear — show all items
+}
+
 // EXCEPTIONS:
 // - 'cards' style is preserved even with 3+ options, because cards are an
 //   intentional visual treatment for the whitelisted question types. A cards-style
 //   QR must also have imageUrl OR icon on every option, otherwise we fall back to list.
 // - 'sqft' and 'budget' styles are preserved regardless of options — the picker
 //   components generate their own values and don't need option entries at all.
-function normalizeQRStyle(qr: QuickReplies | undefined): QuickReplies | undefined {
+function normalizeQRStyle(qr: QuickReplies | undefined, question?: string): QuickReplies | undefined {
   if (!qr) return qr
   const hasMultipleOptions = Array.isArray(qr.options) && qr.options.length >= 3
   if (qr.style === 'sqft' || qr.style === 'budget' || qr.style === 'scope_grid') {
     // Force options to an empty array if the AI sent any, since the picker /
     // grid component handles its own content.
-    return { ...qr, options: [] }
+    // For scope_grid: derive scopeContext from the question text if the AI didn't set it.
+    const patched = { ...qr, options: [] }
+    if (qr.style === 'scope_grid' && !qr.scopeContext && question) {
+      patched.scopeContext = deriveScopeContext(question)
+    }
+    return patched
   }
   // Preserve 'cards' style. Enrich options with images from the static map
   // so the AI doesn't need to output imageUrl/imageAlt in the tool JSON.
@@ -153,7 +173,9 @@ function autoDetectQRStyle(qr: QuickReplies | undefined, question: string): Quic
 
   // Scope grid: question asks about scope areas / what the project covers
   if (q.includes('which areas') || q.includes('full scope') || q.includes('scope you have in mind') || q.includes('project cover')) {
-    if (qr.style !== 'scope_grid') return { ...qr, style: 'scope_grid' as const, options: [] }
+    if (qr.style !== 'scope_grid') return { ...qr, style: 'scope_grid' as const, options: [], scopeContext: deriveScopeContext(question) }
+    // If already scope_grid but missing scopeContext, inject it
+    if (!qr.scopeContext) return { ...qr, scopeContext: deriveScopeContext(question) }
   }
 
   // Cards: detect by question text OR by option values matching known card sets.
@@ -748,7 +770,7 @@ export function useIntakeChat({ proposalId, idea }: Props) {
             )
               ? detectedQR
               : undefined
-            const updatedQR = normalizeQRStyle(validQR)
+            const updatedQR = normalizeQRStyle(validQR, questionText)
 
             if (updatedQR) {
               const isListQR = updatedQR.style === 'list'
@@ -915,7 +937,7 @@ export function useIntakeChat({ proposalId, idea }: Props) {
                   questionText && !rawQR
                     ? autoDetectQRStyle({ style: 'list', options: [] }, questionText) ?? undefined
                     : undefined
-              const updatedQR = normalizeQRStyle(validQR)
+              const updatedQR = normalizeQRStyle(validQR, questionText)
 
               if (isPauseThisTurn) {
                 // PAUSE TURN: always create the checkpoint, even if the user responded
@@ -1072,7 +1094,7 @@ export function useIntakeChat({ proposalId, idea }: Props) {
               )
                 ? rawQRPeek
                 : undefined
-              const normQR = normalizeQRStyle(validQRPeek)
+              const normQR = normalizeQRStyle(validQRPeek, qText)
               if (normQR?.style === 'list' && qText) {
                 const qrData = { question: qText, quickReplies: normQR, messageId: activeBubbleId }
                 pausedQRRef.current = qrData
