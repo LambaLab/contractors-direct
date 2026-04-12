@@ -291,7 +291,7 @@ export default function BallparkResultCard({
 
       {/* ── Hero price ── */}
       <div className="mb-6">
-        <div className="text-[38px] font-bold text-white tracking-tight leading-tight">
+        <div className="text-[28px] sm:text-[34px] font-bold text-white tracking-tight leading-tight whitespace-nowrap">
           {formatPriceRange(activeRange)}
         </div>
       </div>
