@@ -107,7 +107,7 @@ export default function BallparkResultCard({
             className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm transition-colors cursor-pointer border border-[var(--ov-border,rgba(255,255,255,0.12))] text-[var(--ov-text,#ffffff)] hover:border-[var(--ov-accent-border,rgba(115,103,255,0.50))] hover:text-[var(--ov-accent-strong,#7367ff)]"
           >
             <span className="leading-none text-base">🔖</span>
-            Save &amp; get a call back
+            Save &amp; continue
           </button>
         </div>
       )}
