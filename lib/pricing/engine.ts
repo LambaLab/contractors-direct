@@ -317,3 +317,20 @@ export function computeStyleMidpoints(baseBallpark: PriceRange): Record<string, 
   }
   return result
 }
+
+/**
+ * Compute a tight price range for a specific style tier.
+ * Takes the style-neutral ballpark, finds the midpoint, applies the style
+ * multiplier, then wraps in +/- 15% to account for material/finish variance.
+ * Result: ~1.35x spread instead of the 8-10x from the full min-max.
+ */
+export function computeStyleRange(baseBallpark: PriceRange, styleKey: string): PriceRange {
+  const mid = (baseBallpark.min + baseBallpark.max) / 2
+  const multiplier = STYLE_MULTIPLIERS[styleKey] ?? 1.0
+  const center = mid * multiplier
+  const spread = 0.15
+  return {
+    min: Math.round(center * (1 - spread)),
+    max: Math.round(center * (1 + spread)),
+  }
+}

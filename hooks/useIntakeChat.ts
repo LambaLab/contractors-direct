@@ -151,31 +151,70 @@ function normalizeQRStyle(qr: QuickReplies | undefined, question?: string): Quic
   return qr
 }
 
+// ── Default card option sets for Haiku fallback ──
+// When the AI omits quick_replies or sends empty options for a known question
+// type, inject these defaults so the UI always shows rich interactive cards.
+const DEFAULT_PROPERTY_TYPE_OPTIONS = [
+  { label: 'Villa', value: 'villa', icon: '🏠' },
+  { label: 'Apartment', value: 'apartment', icon: '🏢' },
+  { label: 'Townhouse', value: 'townhouse', icon: '🏘️' },
+  { label: 'Penthouse', value: 'penthouse', icon: '🏙️' },
+  { label: 'Office', value: 'office', icon: '💼' },
+  { label: 'Retail', value: 'retail', icon: '🛍️' },
+  { label: 'Warehouse', value: 'warehouse', icon: '🏭' },
+]
+
+const DEFAULT_CONDITION_RESIDENTIAL_OPTIONS = [
+  { label: 'New', value: 'new', icon: '✨' },
+  { label: 'Needs Refresh', value: 'needs_refresh', icon: '🎨' },
+  { label: 'Major Renovation', value: 'major_renovation', icon: '🔨' },
+  { label: 'Shell', value: 'shell', icon: '🧱' },
+]
+
+const DEFAULT_CONDITION_COMMERCIAL_OPTIONS = [
+  { label: 'Fitted', value: 'fitted', icon: '✅' },
+  { label: 'Semi-Fitted', value: 'semi_fitted', icon: '🔧' },
+  { label: 'Shell & Core', value: 'shell_and_core', icon: '🏗️' },
+]
+
+const DEFAULT_OWNERSHIP_OPTIONS = [
+  { label: 'Owned', value: 'Owned', icon: '🏠' },
+  { label: 'Leased', value: 'Leased', icon: '📋' },
+]
+
 /**
  * Auto-detect custom QR styles from question text. Haiku often ignores the
  * style:'sqft' / style:'budget' / style:'cards' instructions and sends
- * style:'list' instead. This function examines the question and overrides
- * the style so the correct picker/carousel renders regardless.
+ * style:'list' instead (or omits quick_replies entirely). This function
+ * examines the question and overrides the style so the correct picker/carousel
+ * renders regardless. When the AI omits options for a known card type, default
+ * options are injected so the user always sees rich interactive choices.
  */
 function autoDetectQRStyle(qr: QuickReplies | undefined, question: string): QuickReplies | undefined {
-  if (!qr) return qr
   const q = question.toLowerCase()
+  // Create a synthetic QR shell when the AI omitted quick_replies entirely,
+  // so the detection logic below can still inject the correct style + options.
+  const base: QuickReplies = qr ?? { style: 'list' as const, options: [] }
+  const hasOptions = Array.isArray(base.options) && base.options.length > 0
 
   // Sqft picker: question asks about size, square feet, how big
   if (q.includes('square feet') || q.includes('sqft') || (q.includes('how big') && q.includes('space'))) {
-    if (qr.style !== 'sqft') return { ...qr, style: 'sqft' as const, options: [] }
+    if (base.style !== 'sqft') return { ...base, style: 'sqft' as const, options: [] }
+    return base
   }
 
   // Budget picker: question asks about budget
   if (q.includes('budget') || (q.includes('how much') && (q.includes('mind') || q.includes('spend')))) {
-    if (qr.style !== 'budget') return { ...qr, style: 'budget' as const, options: [] }
+    if (base.style !== 'budget') return { ...base, style: 'budget' as const, options: [] }
+    return base
   }
 
   // Scope grid: question asks about scope areas / what the project covers
   if (q.includes('which areas') || q.includes('full scope') || q.includes('scope you have in mind') || q.includes('project cover')) {
-    if (qr.style !== 'scope_grid') return { ...qr, style: 'scope_grid' as const, options: [], scopeContext: deriveScopeContext(question) }
+    if (base.style !== 'scope_grid') return { ...base, style: 'scope_grid' as const, options: [], scopeContext: deriveScopeContext(question) }
     // If already scope_grid but missing scopeContext, inject it
-    if (!qr.scopeContext) return { ...qr, scopeContext: deriveScopeContext(question) }
+    if (!base.scopeContext) return { ...base, scopeContext: deriveScopeContext(question) }
+    return base
   }
 
   // Cards: detect by question text OR by option values matching known card sets.
@@ -183,19 +222,44 @@ function autoDetectQRStyle(qr: QuickReplies | undefined, question: string): Quic
   // instead of "what type of project?").
   const PROPERTY_TYPE_VALUES = new Set(['villa', 'apartment', 'townhouse', 'penthouse', 'office', 'retail', 'warehouse'])
   const CONDITION_VALUES = new Set(['new', 'needs_refresh', 'major_renovation', 'shell', 'fitted', 'semi_fitted', 'shell_and_core'])
-  const optionValues = new Set(Array.isArray(qr.options) ? qr.options.map(o => o.value) : [])
+  const optionValues = new Set(Array.isArray(base.options) ? base.options.map(o => o.value) : [])
 
   const hasPropertyTypeOptions = [...optionValues].some(v => PROPERTY_TYPE_VALUES.has(v))
   const hasConditionOptions = [...optionValues].some(v => CONDITION_VALUES.has(v))
 
+  // Property type cards
   if (q.includes('type of project') || q.includes('type of property') || q.includes('what kind of property') || q.includes('residential') || q.includes('commercial') || hasPropertyTypeOptions) {
-    if (qr.style !== 'cards') return { ...qr, style: 'cards' as const }
-  }
-  if (q.includes('current condition') || q.includes('condition of the space') || q.includes('state of the space') || hasConditionOptions) {
-    if (qr.style !== 'cards') return { ...qr, style: 'cards' as const }
+    const options = hasOptions ? base.options : DEFAULT_PROPERTY_TYPE_OPTIONS
+    return { ...base, style: 'cards' as const, options }
   }
 
-  return qr
+  // Condition cards (detect residential vs commercial from question text)
+  if (q.includes('current condition') || q.includes('condition of the') || q.includes('state of the space') || hasConditionOptions) {
+    if (hasOptions) return { ...base, style: 'cards' as const }
+    const isCommercial = q.includes('office') || q.includes('retail') || q.includes('warehouse') || q.includes('commercial') || q.includes('fitted')
+    const options = isCommercial ? DEFAULT_CONDITION_COMMERCIAL_OPTIONS : DEFAULT_CONDITION_RESIDENTIAL_OPTIONS
+    return { ...base, style: 'cards' as const, options }
+  }
+
+  // Ownership pills
+  if ((q.includes('owned') && q.includes('leased')) || q.includes('ownership')) {
+    if (hasOptions) return { ...base, style: 'pills' as const }
+    return { ...base, style: 'pills' as const, options: DEFAULT_OWNERSHIP_OPTIONS }
+  }
+
+  // If we created a synthetic shell but no pattern matched, return undefined
+  // so callers know no auto-detection was possible.
+  if (!qr) return undefined
+
+  // Force list for 3+ options regardless of AI's style choice
+  if (hasOptions && base.options.length >= 3 && base.style !== 'list') {
+    return { ...base, style: 'list' }
+  }
+  // Default missing style
+  if (!base.style) {
+    return { ...base, style: hasOptions && base.options.length >= 3 ? 'list' : 'pills' }
+  }
+  return base
 }
 
 // Merge consecutive same-role messages into one. This is necessary because
