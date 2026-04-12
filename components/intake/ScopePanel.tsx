@@ -104,6 +104,7 @@ export default function ScopePanel({
   const [projectOpen, setProjectOpen] = useState(true)
   const [scopeOpen, setScopeOpen] = useState(true)
   const [resetConfirm, setResetConfirm] = useState(false)
+  const [addScopeOpen, setAddScopeOpen] = useState(false)
   const resetConfirmTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
   useEffect(() => {
@@ -242,28 +243,43 @@ export default function ScopePanel({
                     />
                   ))}
 
-                {/* Divider between detected and remaining catalog */}
-                {detectedScope.length > 0 && (
-                  <div className="py-2">
-                    <div className="h-px bg-[var(--ov-border,rgba(255,255,255,0.05))]" />
-                    <p className="text-xs text-[var(--ov-text-muted,#727272)] mt-2 mb-1">
-                      Add scope items
-                    </p>
-                  </div>
+                {/* Collapsible "Add scope items" section */}
+                {detectedScope.length > 0 && SCOPE_CATALOG.some((m) => !detectedScope.includes(m.id)) && (
+                  <>
+                    <div className="pt-2">
+                      <button
+                        type="button"
+                        onClick={() => setAddScopeOpen(o => !o)}
+                        className="w-full flex items-center justify-between py-2 cursor-pointer group"
+                      >
+                        <span className="flex items-center gap-1.5 text-xs text-[var(--ov-text-muted,#727272)] group-hover:text-[var(--ov-text,#ffffff)] transition-colors">
+                          <Plus className="w-3 h-3" />
+                          Add scope items
+                        </span>
+                        <ChevronDown
+                          className={`w-3.5 h-3.5 text-[var(--ov-text-muted,#727272)] transition-transform duration-200 ${
+                            addScopeOpen ? 'rotate-180' : ''
+                          }`}
+                        />
+                      </button>
+                    </div>
+                    {addScopeOpen && (
+                      <div className="space-y-2">
+                        {SCOPE_CATALOG
+                          .filter((m) => !detectedScope.includes(m.id))
+                          .map((m) => (
+                            <ScopeCard
+                              key={m.id}
+                              scopeId={m.id}
+                              status="inactive"
+                              detectedScope={detectedScope}
+                              onToggle={onToggle}
+                            />
+                          ))}
+                      </div>
+                    )}
+                  </>
                 )}
-
-                {/* 3. Remaining catalog (not detected) — grey 50% opacity */}
-                {SCOPE_CATALOG
-                  .filter((m) => !detectedScope.includes(m.id))
-                  .map((m) => (
-                    <ScopeCard
-                      key={m.id}
-                      scopeId={m.id}
-                      status="inactive"
-                      detectedScope={detectedScope}
-                      onToggle={onToggle}
-                    />
-                  ))}
               </div>
             </div>
           </div>
