@@ -424,6 +424,8 @@ export default function ChatPanel({ messages, isStreaming, onSend, onEdit, onReq
                 rows={1}
                 disabled={isStreaming}
                 aria-label="Chat input"
+                enterKeyHint="send"
+                autoComplete="off"
                 className="flex-1 bg-transparent text-[var(--ov-text,#ffffff)] placeholder:text-[var(--ov-text-muted,#727272)] resize-none outline-none text-sm leading-relaxed min-h-[20px] max-h-[120px] overflow-y-auto disabled:opacity-50"
               />
               {/* Pause/Play toggle — only visible after conversation has started */}

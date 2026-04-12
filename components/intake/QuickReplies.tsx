@@ -133,23 +133,24 @@ export default function QuickReplies({ quickReplies, onSelect, disabled, questio
           </button>
         )}
         {showCustomInput && (
-          <div className="w-full flex gap-2 mt-1">
+          <form onSubmit={(e) => { e.preventDefault(); handleCustomSubmit() }} className="w-full flex gap-2 mt-1">
             <input
               autoFocus
               value={customValue}
               onChange={(e) => setCustomValue(e.target.value)}
-              onKeyDown={(e) => e.key === 'Enter' && handleCustomSubmit()}
               placeholder="Type your answer..."
+              enterKeyHint="send"
+              autoComplete="off"
               className="flex-1 bg-[var(--ov-input-bg,rgba(255,255,255,0.05))] border border-[var(--ov-border,rgba(255,255,255,0.10))] rounded-xl px-3 py-2 text-sm text-[var(--ov-text,#ffffff)] placeholder:text-[var(--ov-text-muted,#727272)] outline-none focus:border-brand-purple/50"
             />
             <button
-              onClick={handleCustomSubmit}
+              type="submit"
               disabled={disabled || !customValue.trim()}
               className="px-3 py-2 bg-brand-purple text-white rounded-xl text-sm font-medium disabled:opacity-40 cursor-pointer disabled:cursor-not-allowed"
             >
               Send
             </button>
-          </div>
+          </form>
         )}
         {multiSelect && selected.length > 0 && (
           <button
@@ -181,23 +182,24 @@ export default function QuickReplies({ quickReplies, onSelect, disabled, questio
           </div>
           <div className="border-t border-[var(--ov-border,rgba(255,255,255,0.10))] first:border-t-0">
             {showCustomInput ? (
-              <div className="flex gap-2 p-3">
+              <form onSubmit={(e) => { e.preventDefault(); handleCustomSubmit() }} className="flex gap-2 p-3">
                 <input
                   autoFocus
                   value={customValue}
                   onChange={(e) => setCustomValue(e.target.value)}
-                  onKeyDown={(e) => e.key === 'Enter' && handleCustomSubmit()}
                   placeholder="Type your answer..."
+                  enterKeyHint="send"
+                  autoComplete="off"
                   className="flex-1 bg-[var(--ov-input-bg,rgba(255,255,255,0.05))] border border-[var(--ov-border,rgba(255,255,255,0.10))] rounded-lg px-3 py-2 text-sm text-[var(--ov-text,#ffffff)] placeholder:text-[var(--ov-text-muted,#727272)] outline-none focus:border-brand-purple/50"
                 />
                 <button
-                  onClick={handleCustomSubmit}
+                  type="submit"
                   disabled={disabled || !customValue.trim()}
                   className="px-3 py-2 bg-brand-purple text-white rounded-lg text-sm font-medium disabled:opacity-40 cursor-pointer disabled:cursor-not-allowed"
                 >
                   Send
                 </button>
-              </div>
+              </form>
             ) : (
               <button
                 onClick={() => setShowCustomInput(true)}
@@ -270,23 +272,24 @@ export default function QuickReplies({ quickReplies, onSelect, disabled, questio
           return (
             <div key="custom" className="border-t border-[var(--ov-border,rgba(255,255,255,0.10))] first:border-t-0">
               {showCustomInput ? (
-                <div className="flex gap-2 p-3">
+                <form onSubmit={(e) => { e.preventDefault(); handleCustomSubmit() }} className="flex gap-2 p-3">
                   <input
                     autoFocus
                     value={customValue}
                     onChange={(e) => setCustomValue(e.target.value)}
-                    onKeyDown={(e) => e.key === 'Enter' && handleCustomSubmit()}
                     placeholder="Type your answer..."
+                    enterKeyHint="send"
+                    autoComplete="off"
                     className="flex-1 bg-[var(--ov-input-bg,rgba(255,255,255,0.05))] border border-[var(--ov-border,rgba(255,255,255,0.10))] rounded-lg px-3 py-2 text-sm text-[var(--ov-text,#ffffff)] placeholder:text-[var(--ov-text-muted,#727272)] outline-none focus:border-brand-purple/50"
                   />
                   <button
-                    onClick={handleCustomSubmit}
+                    type="submit"
                     disabled={disabled || !customValue.trim()}
                     className="px-3 py-2 bg-brand-purple text-white rounded-lg text-sm font-medium disabled:opacity-40 cursor-pointer disabled:cursor-not-allowed"
                   >
                     Send
                   </button>
-                </div>
+                </form>
               ) : (
                 <button
                   onClick={() => setShowCustomInput(true)}
