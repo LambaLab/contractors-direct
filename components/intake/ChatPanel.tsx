@@ -163,7 +163,7 @@ const isCardsQR = lastQR?.style === 'cards' && !isConditionQR
   return (
     <div className="flex flex-col h-full">
       {/* Messages — scroll container stays full-width always; content div handles centering */}
-      <div ref={scrollContainerRef} className="flex-1 overflow-y-auto py-4 scrollbar-hide relative">
+      <div ref={scrollContainerRef} className="flex-1 overflow-y-auto py-4 scrollbar-hide relative overscroll-none">
         <div
           className="px-6 space-y-4 mx-auto w-full"
           style={{ maxWidth: '760px' }}

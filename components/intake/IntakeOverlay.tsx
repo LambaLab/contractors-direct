@@ -611,7 +611,7 @@ export default function IntakeOverlay({ initialMessage, onClose }: Props) {
 
       {/* Full overlay — always mounted once session is ready, hidden via CSS when minimized */}
       {session && (
-        <div className={`fixed inset-0 z-50 flex flex-col transition-opacity duration-300 bg-brand-dark ${mounted ? 'opacity-100' : 'opacity-0'} ${minimized ? 'hidden' : ''}`}>
+        <div className={`fixed inset-0 z-50 flex flex-col transition-opacity duration-300 bg-brand-dark overflow-hidden ${mounted ? 'opacity-100' : 'opacity-0'} ${minimized ? 'hidden' : ''}`}>
           {/* Top bar */}
           <div className={`flex items-center justify-between px-4 py-3 border-b flex-shrink-0 border-white/5`}>
 
