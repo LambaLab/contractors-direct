@@ -987,18 +987,21 @@ export function useIntakeChat({ proposalId, idea }: Props) {
             }
 
             // ── File upload widget injection ──
-            // Fire once, when the AI first sets has_floor_plans to "yes" AND
-            // leaves the question field empty (our signal that the item-5 upload
-            // handoff is happening). The widget renders inline in the chat and
-            // the hook continues the conversation on __files_uploaded__ or
-            // __files_share_later__.
-            const emptyQuestion = !(typeof input?.question === 'string' && input.question.trim())
+            // Fire once when the AI first sets has_floor_plans to "yes".
+            // The system prompt tells the AI to leave question empty on this turn,
+            // but Haiku often ignores this and bundles the next checklist item
+            // (e.g. budget picker) into the same turn. We force the upload widget
+            // regardless and strip the question/QR from this turn so the user
+            // gets a clean upload experience without mixed topics.
             if (
               !uploadWidgetInjectedRef.current &&
               input?.has_floor_plans === 'yes' &&
-              emptyQuestion &&
               !isPausedRef.current
             ) {
+              // Force question/QR to empty so the budget/next-item picker
+              // doesn't appear alongside the upload widget
+              if (input.question) input.question = ''
+              if (input.quick_replies) input.quick_replies = undefined
               uploadWidgetInjectedRef.current = true
               const widgetMsg: ChatMessage = {
                 id: crypto.randomUUID(),
