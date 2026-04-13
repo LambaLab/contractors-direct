@@ -272,6 +272,16 @@ export function calculateDataDrivenPriceRange(
       let itemMin: number
       let itemMax: number
 
+      // Static catalog price for this item (our trusted baseline)
+      const catalogMin = item.pricePerSqftMin > 0 && sizeSqft > 0
+        ? item.pricePerSqftMin * sizeSqft : item.flatMin
+      const catalogMax = item.pricePerSqftMax > 0 && sizeSqft > 0
+        ? item.pricePerSqftMax * sizeSqft : item.flatMax
+      // Sanity cap: historical/override rates should not exceed 3x the catalog max.
+      // This prevents lump-sum totals (stored as unit_rate_aed in 'ls'/'lot' rows)
+      // from being treated as individual item prices.
+      const sanityCap = catalogMax > 0 ? catalogMax * 3 : Infinity
+
       if (override) {
         // Priority 1: CD team override
         if (canMultiplyOverride) {
@@ -287,32 +297,23 @@ export function calculateDataDrivenPriceRange(
           itemMin = historical.rate_p25 * histArea
           itemMax = historical.rate_p75 * histArea
         } else {
-          itemMin = historical.rate_p25
-          itemMax = historical.rate_p75
+          // Non-area unit: use as flat rate, but sanity-check against catalog
+          itemMin = Math.min(historical.rate_p25, sanityCap)
+          itemMax = Math.min(historical.rate_p75, sanityCap)
         }
       } else if (historical) {
         // Priority 3: Blend 50/50 with static catalog (< 3 data points)
-        const staticMin = item.pricePerSqftMin > 0 && sizeSqft > 0
-          ? item.pricePerSqftMin * sizeSqft : item.flatMin
-        const staticMax = item.pricePerSqftMax > 0 && sizeSqft > 0
-          ? item.pricePerSqftMax * sizeSqft : item.flatMax
-
         const histMin = canMultiplyHist
-          ? historical.rate_min * histArea : historical.rate_min
+          ? historical.rate_min * histArea : Math.min(historical.rate_min, sanityCap)
         const histMax = canMultiplyHist
-          ? historical.rate_max * histArea : historical.rate_max
+          ? historical.rate_max * histArea : Math.min(historical.rate_max, sanityCap)
 
-        itemMin = Math.round(0.5 * staticMin + 0.5 * histMin)
-        itemMax = Math.round(0.5 * staticMax + 0.5 * histMax)
+        itemMin = Math.round(0.5 * catalogMin + 0.5 * histMin)
+        itemMax = Math.round(0.5 * catalogMax + 0.5 * histMax)
       } else {
         // Priority 4: Static catalog fallback
-        if (item.pricePerSqftMin > 0 && sizeSqft > 0) {
-          itemMin = item.pricePerSqftMin * sizeSqft
-          itemMax = item.pricePerSqftMax * sizeSqft
-        } else {
-          itemMin = item.flatMin
-          itemMax = item.flatMax
-        }
+        itemMin = catalogMin
+        itemMax = catalogMax
       }
 
       return {
