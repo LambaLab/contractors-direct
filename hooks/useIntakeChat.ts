@@ -127,6 +127,13 @@ function normalizeQRStyle(qr: QuickReplies | undefined, question?: string): Quic
     }
     return patched
   }
+  // Location / area: suppress all QR options — free-text only
+  if (question) {
+    const qLower = question.toLowerCase()
+    if (qLower.includes('which area') || qLower.includes('community') || qLower.includes('location') || qLower.includes('where is')) {
+      return undefined
+    }
+  }
   // Condition options should render as pills, not cards — even if the AI
   // returns style:'cards'. Only apply when the question text confirms this
   // is a condition question (not property type which also uses cards).
