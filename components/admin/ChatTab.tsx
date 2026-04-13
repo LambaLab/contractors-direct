@@ -88,10 +88,22 @@ export default function ChatTab({ leadId }: Props) {
   // Load messages via admin API (bypasses RLS) and poll for updates
   useEffect(() => {
     const supabase = supabaseRef.current
+    let cancelled = false
+
+    // Clear previous lead's data immediately on lead switch
+    setMessages([])
+    setLoading(true)
+    setIsLive(false)
+    setIsJoined(false)
+    setClientOnline(false)
+    setNewMessageCount(0)
+    setNewMessageStartId(null)
+    prevMessageCountRef.current = 0
 
     async function loadMessages() {
       try {
         const res = await fetch(`/api/admin/chat/${leadId}`)
+        if (cancelled) return
         if (res.ok) {
           const data = await res.json() as ChatMessage[]
           setMessages(data)
@@ -100,7 +112,7 @@ export default function ChatTab({ leadId }: Props) {
           setTimeout(() => scrollToBottom(false), 50)
         }
       } catch { /* ignore */ }
-      setLoading(false)
+      if (!cancelled) setLoading(false)
     }
 
     loadMessages()
@@ -109,6 +121,7 @@ export default function ChatTab({ leadId }: Props) {
     const pollInterval = setInterval(async () => {
       try {
         const res = await fetch(`/api/admin/chat/${leadId}`)
+        if (cancelled) return
         if (res.ok) {
           const data = await res.json() as ChatMessage[]
           setMessages((prev) => {
@@ -155,6 +168,7 @@ export default function ChatTab({ leadId }: Props) {
     }
 
     return () => {
+      cancelled = true
       clearInterval(pollInterval)
       if (broadcastChannelRef.current) {
         supabase.removeChannel(broadcastChannelRef.current)

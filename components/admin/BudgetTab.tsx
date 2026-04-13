@@ -43,7 +43,7 @@ export default function BudgetTab({ leadId, leadEmail, leadSlug }: Props) {
       const { data } = await supabase
         .from('budget_proposals')
         .select('*')
-        .eq('proposal_id', leadId)
+        .eq('lead_id', leadId)
         .order('created_at', { ascending: true })
 
       if (data) setBudgets(data)
