@@ -202,15 +202,29 @@ export function computeQuickBallpark(params: {
  * 3. Blended 50/50 historical + static (< 3 samples)
  * 4. Static catalog fallback (no historical data)
  */
+/**
+ * Units that represent per-sqft rates and can safely be multiplied by area.
+ * All other units (lot, nr, lm, set, etc.) are treated as flat rates.
+ */
+const PER_SQFT_UNITS = new Set(['sqft', 'sq ft', 'sqm', 'sq m', 'sft'])
+
 export function calculateDataDrivenPriceRange(
   scopeIds: string[],
   sizeSqft: number,
   historicalStats: HistoricalPricingStat[],
   overrides?: PricingOverride[]
 ): PriceRange {
+  // Index historical stats by scope_item_id. Prefer sqft-unit entries
+  // for per-sqft items so we don't multiply a flat/lot rate by area.
   const statsMap = new Map<string, HistoricalPricingStat>()
   for (const s of historicalStats) {
-    statsMap.set(s.scope_item_id, s)
+    const existing = statsMap.get(s.scope_item_id)
+    const isSqft = PER_SQFT_UNITS.has((s.unit ?? '').toLowerCase())
+    const existingIsSqft = existing && PER_SQFT_UNITS.has((existing.unit ?? '').toLowerCase())
+    // Prefer sqft-unit entries; otherwise keep first seen
+    if (!existing || (isSqft && !existingIsSqft)) {
+      statsMap.set(s.scope_item_id, s)
+    }
   }
 
   const overrideMap = new Map<string, PricingOverride>()
@@ -228,12 +242,21 @@ export function calculateDataDrivenPriceRange(
       const override = overrideMap.get(id)
       const historical = statsMap.get(id)
 
+      // Determine if the historical rate is actually per-sqft.
+      // Only multiply by area when BOTH the catalog item is per-sqft
+      // AND the historical unit is a sqft variant. Otherwise treat
+      // the historical rate as a flat/lump-sum price.
+      const historicalIsSqft = historical && PER_SQFT_UNITS.has((historical.unit ?? '').toLowerCase())
+      const canMultiplySqft = sizeSqft > 0 && item.pricePerSqftMin > 0 && historicalIsSqft
+      const overrideIsSqft = override && PER_SQFT_UNITS.has((override.unit ?? '').toLowerCase())
+      const canMultiplyOverride = sizeSqft > 0 && item.pricePerSqftMin > 0 && overrideIsSqft
+
       let itemMin: number
       let itemMax: number
 
       if (override) {
         // Priority 1: CD team override
-        if (sizeSqft > 0 && item.pricePerSqftMin > 0) {
+        if (canMultiplyOverride) {
           itemMin = override.override_min_aed * sizeSqft
           itemMax = override.override_max_aed * sizeSqft
         } else {
@@ -242,7 +265,7 @@ export function calculateDataDrivenPriceRange(
         }
       } else if (historical && historical.sample_count >= 3) {
         // Priority 2: Historical IQR (3+ data points)
-        if (sizeSqft > 0 && item.pricePerSqftMin > 0) {
+        if (canMultiplySqft) {
           itemMin = historical.rate_p25 * sizeSqft
           itemMax = historical.rate_p75 * sizeSqft
         } else {
@@ -256,9 +279,9 @@ export function calculateDataDrivenPriceRange(
         const staticMax = item.pricePerSqftMax > 0 && sizeSqft > 0
           ? item.pricePerSqftMax * sizeSqft : item.flatMax
 
-        const histMin = sizeSqft > 0 && item.pricePerSqftMin > 0
+        const histMin = canMultiplySqft
           ? historical.rate_min * sizeSqft : historical.rate_min
-        const histMax = sizeSqft > 0 && item.pricePerSqftMax > 0
+        const histMax = canMultiplySqft
           ? historical.rate_max * sizeSqft : historical.rate_max
 
         itemMin = Math.round(0.5 * staticMin + 0.5 * histMin)
