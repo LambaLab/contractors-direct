@@ -218,8 +218,8 @@ export function computeQuickBallpark(params: {
  * Units that represent per-area rates and can be multiplied by property size.
  * All other units (lot, nr, lm, set, etc.) are treated as flat rates.
  */
-const SQFT_UNITS = new Set(['sqft', 'sq ft', 'sft'])
-const SQM_UNITS = new Set(['sqm', 'sq m'])
+const SQFT_UNITS = new Set(['sqft', 'sq ft', 'sft', 'sq.ft', 'sq.ft.'])
+const SQM_UNITS = new Set(['sqm', 'sq m', 'sq.m', 'sq.m.', 'm2', 'm²', 'msq', 'sqmt'])
 const PER_AREA_UNITS = new Set([...SQFT_UNITS, ...SQM_UNITS])
 const SQFT_PER_SQM = 10.764
 

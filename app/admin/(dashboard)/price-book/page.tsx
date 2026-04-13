@@ -46,8 +46,8 @@ type CategoryGroup = {
 // ── Unit conversion ──
 
 const SQFT_PER_SQM = 10.764
-const SQM_UNITS = new Set(['sqm', 'sq m', 'm2', 'm²'])
-const SQFT_UNITS = new Set(['sqft', 'sq ft', 'sft'])
+const SQM_UNITS = new Set(['sqm', 'sq m', 'sq.m', 'sq.m.', 'm2', 'm²', 'msq', 'sqmt'])
+const SQFT_UNITS = new Set(['sqft', 'sq ft', 'sft', 'sq.ft', 'sq.ft.'])
 
 function isAreaUnit(unit: string | null): boolean {
   if (!unit) return false
