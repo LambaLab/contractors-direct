@@ -203,10 +203,20 @@ export function computeQuickBallpark(params: {
  * 4. Static catalog fallback (no historical data)
  */
 /**
- * Units that represent per-sqft rates and can safely be multiplied by area.
+ * Units that represent per-area rates and can be multiplied by property size.
  * All other units (lot, nr, lm, set, etc.) are treated as flat rates.
  */
-const PER_SQFT_UNITS = new Set(['sqft', 'sq ft', 'sqm', 'sq m', 'sft'])
+const SQFT_UNITS = new Set(['sqft', 'sq ft', 'sft'])
+const SQM_UNITS = new Set(['sqm', 'sq m'])
+const PER_AREA_UNITS = new Set([...SQFT_UNITS, ...SQM_UNITS])
+const SQFT_PER_SQM = 10.764
+
+/** Convert a rate to per-sqft if it's in sqm. Returns the area to multiply by. */
+function getEffectiveSizeForUnit(unit: string, sizeSqft: number): number {
+  const u = unit.toLowerCase()
+  if (SQM_UNITS.has(u)) return sizeSqft / SQFT_PER_SQM  // convert sqft to sqm
+  return sizeSqft  // already sqft
+}
 
 export function calculateDataDrivenPriceRange(
   scopeIds: string[],
@@ -214,15 +224,18 @@ export function calculateDataDrivenPriceRange(
   historicalStats: HistoricalPricingStat[],
   overrides?: PricingOverride[]
 ): PriceRange {
-  // Index historical stats by scope_item_id. Prefer sqft-unit entries
-  // for per-sqft items so we don't multiply a flat/lot rate by area.
+  // Index historical stats by scope_item_id. Prefer sqft > sqm > other units
+  // so per-area items use the most compatible rate for our sqft-native system.
   const statsMap = new Map<string, HistoricalPricingStat>()
+  function unitPriority(unit: string): number {
+    const u = unit.toLowerCase()
+    if (SQFT_UNITS.has(u)) return 2  // best: native sqft
+    if (SQM_UNITS.has(u)) return 1   // ok: needs conversion
+    return 0                          // flat rate
+  }
   for (const s of historicalStats) {
     const existing = statsMap.get(s.scope_item_id)
-    const isSqft = PER_SQFT_UNITS.has((s.unit ?? '').toLowerCase())
-    const existingIsSqft = existing && PER_SQFT_UNITS.has((existing.unit ?? '').toLowerCase())
-    // Prefer sqft-unit entries; otherwise keep first seen
-    if (!existing || (isSqft && !existingIsSqft)) {
+    if (!existing || unitPriority((s.unit ?? '')) > unitPriority((existing.unit ?? ''))) {
       statsMap.set(s.scope_item_id, s)
     }
   }
@@ -242,14 +255,19 @@ export function calculateDataDrivenPriceRange(
       const override = overrideMap.get(id)
       const historical = statsMap.get(id)
 
-      // Determine if the historical rate is actually per-sqft.
+      // Determine if the historical rate is per-area (sqft or sqm).
       // Only multiply by area when BOTH the catalog item is per-sqft
-      // AND the historical unit is a sqft variant. Otherwise treat
-      // the historical rate as a flat/lump-sum price.
-      const historicalIsSqft = historical && PER_SQFT_UNITS.has((historical.unit ?? '').toLowerCase())
-      const canMultiplySqft = sizeSqft > 0 && item.pricePerSqftMin > 0 && historicalIsSqft
-      const overrideIsSqft = override && PER_SQFT_UNITS.has((override.unit ?? '').toLowerCase())
-      const canMultiplyOverride = sizeSqft > 0 && item.pricePerSqftMin > 0 && overrideIsSqft
+      // AND the historical/override unit is an area unit. If the unit
+      // is sqm, convert sizeSqft to sqm before multiplying.
+      const histUnit = (historical?.unit ?? '').toLowerCase()
+      const historicalIsArea = historical && PER_AREA_UNITS.has(histUnit)
+      const canMultiplyHist = sizeSqft > 0 && item.pricePerSqftMin > 0 && historicalIsArea
+      const histArea = canMultiplyHist ? getEffectiveSizeForUnit(histUnit, sizeSqft) : 0
+
+      const ovrUnit = (override?.unit ?? '').toLowerCase()
+      const overrideIsArea = override && PER_AREA_UNITS.has(ovrUnit)
+      const canMultiplyOverride = sizeSqft > 0 && item.pricePerSqftMin > 0 && overrideIsArea
+      const ovrArea = canMultiplyOverride ? getEffectiveSizeForUnit(ovrUnit, sizeSqft) : 0
 
       let itemMin: number
       let itemMax: number
@@ -257,17 +275,17 @@ export function calculateDataDrivenPriceRange(
       if (override) {
         // Priority 1: CD team override
         if (canMultiplyOverride) {
-          itemMin = override.override_min_aed * sizeSqft
-          itemMax = override.override_max_aed * sizeSqft
+          itemMin = override.override_min_aed * ovrArea
+          itemMax = override.override_max_aed * ovrArea
         } else {
           itemMin = override.override_min_aed
           itemMax = override.override_max_aed
         }
       } else if (historical && historical.sample_count >= 3) {
         // Priority 2: Historical IQR (3+ data points)
-        if (canMultiplySqft) {
-          itemMin = historical.rate_p25 * sizeSqft
-          itemMax = historical.rate_p75 * sizeSqft
+        if (canMultiplyHist) {
+          itemMin = historical.rate_p25 * histArea
+          itemMax = historical.rate_p75 * histArea
         } else {
           itemMin = historical.rate_p25
           itemMax = historical.rate_p75
@@ -279,10 +297,10 @@ export function calculateDataDrivenPriceRange(
         const staticMax = item.pricePerSqftMax > 0 && sizeSqft > 0
           ? item.pricePerSqftMax * sizeSqft : item.flatMax
 
-        const histMin = canMultiplySqft
-          ? historical.rate_min * sizeSqft : historical.rate_min
-        const histMax = canMultiplySqft
-          ? historical.rate_max * sizeSqft : historical.rate_max
+        const histMin = canMultiplyHist
+          ? historical.rate_min * histArea : historical.rate_min
+        const histMax = canMultiplyHist
+          ? historical.rate_max * histArea : historical.rate_max
 
         itemMin = Math.round(0.5 * staticMin + 0.5 * histMin)
         itemMax = Math.round(0.5 * staticMax + 0.5 * histMax)
