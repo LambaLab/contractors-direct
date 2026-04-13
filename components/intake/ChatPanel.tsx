@@ -122,12 +122,15 @@ export default function ChatPanel({ messages, isStreaming, onSend, onEdit, onReq
   const lastQR = lastMsg?.role === 'assistant' && !lastMsg?.isPause && lastMsg.quickReplies && !!lastMsg.content
     ? lastMsg.quickReplies
     : null
-  const isCardsQR = lastQR?.style === 'cards'
+  // Condition options must render as pills, not cards — detect by option values
+  const CONDITION_VALUES = new Set(['new', 'needs_refresh', 'major_renovation', 'shell', 'fitted', 'semi_fitted', 'shell_and_core'])
+  const isConditionQR = lastQR && Array.isArray(lastQR.options) && lastQR.options.some((o: { value: string }) => CONDITION_VALUES.has(o.value))
+const isCardsQR = lastQR?.style === 'cards' && !isConditionQR
   const isSqftQR = lastQR?.style === 'sqft'
   const isBudgetQR = lastQR?.style === 'budget'
   const isScopeGridQR = lastQR?.style === 'scope_grid'
   const isCustomPicker = isCardsQR || isSqftQR || isBudgetQR || isScopeGridQR
-  const shouldBeList = lastQR && !isCustomPicker && (lastQR.style === 'list' || (Array.isArray(lastQR.options) && lastQR.options.length >= 3))
+  const shouldBeList = lastQR && !isCustomPicker && !isConditionQR && (lastQR.style === 'list' || (Array.isArray(lastQR.options) && lastQR.options.length >= 3))
   const listQR = shouldBeList
     ? { ...lastQR!, style: 'list' as const }
     : isCustomPicker
@@ -307,7 +310,6 @@ export default function ChatPanel({ messages, isStreaming, onSend, onEdit, onReq
                 disabled={isStreaming}
                 question={activeQuestion}
                 questionNumber={!reEditingQR ? questionNumber : undefined}
-                onSkipQuestion={!reEditingQR && confidenceScore >= 40 ? onSkipQuestion : undefined}
                 onPauseQuestions={!reEditingQR ? onPauseQuestions : undefined}
                 onResumeQuestions={!reEditingQR ? onResumeQuestions : undefined}
                 isPaused={isPaused}
@@ -326,7 +328,7 @@ export default function ChatPanel({ messages, isStreaming, onSend, onEdit, onReq
                 disabled={isStreaming}
                 question={activeQuestion}
                 questionNumber={!reEditingQR ? questionNumber : undefined}
-                onSkipQuestion={!reEditingQR && confidenceScore >= 40 ? onSkipQuestion : undefined}
+                onSkipQuestion={!reEditingQR ? onSkipQuestion : undefined}
                 onPauseQuestions={!reEditingQR ? onPauseQuestions : undefined}
                 onResumeQuestions={!reEditingQR ? onResumeQuestions : undefined}
                 isPaused={isPaused}
@@ -345,7 +347,7 @@ export default function ChatPanel({ messages, isStreaming, onSend, onEdit, onReq
                 disabled={isStreaming}
                 question={activeQuestion}
                 questionNumber={!reEditingQR ? questionNumber : undefined}
-                onSkipQuestion={!reEditingQR && confidenceScore >= 40 ? onSkipQuestion : undefined}
+                onSkipQuestion={!reEditingQR ? onSkipQuestion : undefined}
                 onPauseQuestions={!reEditingQR ? onPauseQuestions : undefined}
                 onResumeQuestions={!reEditingQR ? onResumeQuestions : undefined}
                 isPaused={isPaused}
@@ -364,7 +366,7 @@ export default function ChatPanel({ messages, isStreaming, onSend, onEdit, onReq
                 isLast={true}
                 isStreaming={isStreaming}
                 scopeContext={activeQR.scopeContext}
-                onSkipQuestion={!reEditingQR && confidenceScore >= 40 ? onSkipQuestion : undefined}
+                onSkipQuestion={!reEditingQR ? onSkipQuestion : undefined}
                 onPauseQuestions={!reEditingQR ? onPauseQuestions : undefined}
                 onResumeQuestions={!reEditingQR ? onResumeQuestions : undefined}
                 isPaused={isPaused}
@@ -392,7 +394,7 @@ export default function ChatPanel({ messages, isStreaming, onSend, onEdit, onReq
                 disabled={isStreaming}
                 question={activeQuestion}
                 questionNumber={!reEditingQR ? questionNumber : undefined}
-                onSkipQuestion={!reEditingQR && confidenceScore >= 40 ? onSkipQuestion : undefined}
+                onSkipQuestion={!reEditingQR ? onSkipQuestion : undefined}
                 onPauseQuestions={!reEditingQR ? onPauseQuestions : undefined}
                 onResumeQuestions={!reEditingQR ? onResumeQuestions : undefined}
                 isPaused={isPaused}

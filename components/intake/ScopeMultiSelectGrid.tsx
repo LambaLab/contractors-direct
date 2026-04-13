@@ -107,40 +107,40 @@ export default function ScopeMultiSelectGrid({ onSubmit, isLast, isStreaming, sc
         className="w-full px-3 py-2 rounded-lg text-sm bg-transparent border border-[var(--ov-border,rgba(255,255,255,0.12))] text-[var(--ov-text,#ffffff)] placeholder:text-[var(--ov-text-muted,#727272)] focus:outline-none focus:border-[var(--ov-accent-border,rgba(115,103,255,0.50))]"
       />
 
-      {/* Continue button */}
-      {showActions && (selected.size > 0 || otherText.trim()) && (
-        <button
-          type="button"
-          onClick={handleSubmit}
-          className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-medium transition-colors cursor-pointer bg-brand-purple border border-brand-purple text-brand-dark hover:bg-brand-purple/90"
-        >
-          Continue
-          <ArrowRight className="w-4 h-4" />
-        </button>
+      {/* Continue / Skip row */}
+      {showActions && (
+        <div className="flex items-center gap-3">
+          <button
+            type="button"
+            onClick={handleSubmit}
+            disabled={selected.size === 0 && !otherText.trim()}
+            className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-medium transition-colors cursor-pointer bg-brand-purple border border-brand-purple text-brand-dark hover:bg-brand-purple/90 disabled:opacity-40 disabled:cursor-not-allowed"
+          >
+            Continue
+            <ArrowRight className="w-4 h-4" />
+          </button>
+          <button
+            type="button"
+            onClick={() => onSkipQuestion ? onSkipQuestion() : onSubmit([], 'Skipped')}
+            disabled={isStreaming}
+            className="px-4 py-2 rounded-full text-sm font-medium border border-[var(--ov-border,rgba(255,255,255,0.12))] text-[var(--ov-text-muted,#a0a0a0)] hover:text-[var(--ov-text,#ffffff)] hover:border-[var(--ov-accent-border,rgba(115,103,255,0.30))] transition-colors cursor-pointer disabled:cursor-not-allowed disabled:opacity-50"
+          >
+            Skip
+          </button>
+        </div>
       )}
 
-      {/* Skip / Pause footer */}
-      {(onSkipQuestion || onPauseQuestions || onResumeQuestions) && (
-        <div className="flex items-center justify-between pt-2 border-t border-[var(--ov-border,rgba(255,255,255,0.06))]">
-          <div>
-            {onSkipQuestion && (
-              <button onClick={onSkipQuestion} disabled={isStreaming} className="text-xs text-[var(--ov-text-muted,#727272)] hover:text-[var(--ov-text,#ffffff)] transition-colors cursor-pointer disabled:cursor-not-allowed disabled:opacity-50">
-                Skip this question
-              </button>
-            )}
-          </div>
-          <div>
-            {(onPauseQuestions || onResumeQuestions) && (
-              <button
-                onClick={() => isPaused ? onResumeQuestions?.() : onPauseQuestions?.()}
-                disabled={isStreaming}
-                className="inline-flex items-center gap-1.5 text-xs text-[var(--ov-text-muted,#727272)] hover:text-[var(--ov-accent-strong,#7367ff)] transition-colors cursor-pointer disabled:cursor-not-allowed disabled:opacity-50"
-              >
-                {isPaused ? <Icons.Play className="w-3 h-3" /> : <Icons.Pause className="w-3 h-3" />}
-                {isPaused ? 'Resume Auto-questions' : 'Pause Auto-questions'}
-              </button>
-            )}
-          </div>
+      {/* Pause footer */}
+      {(onPauseQuestions || onResumeQuestions) && (
+        <div className="flex justify-end pt-2 border-t border-[var(--ov-border,rgba(255,255,255,0.06))]">
+          <button
+            onClick={() => isPaused ? onResumeQuestions?.() : onPauseQuestions?.()}
+            disabled={isStreaming}
+            className="inline-flex items-center gap-1.5 text-xs text-[var(--ov-text-muted,#727272)] hover:text-[var(--ov-accent-strong,#7367ff)] transition-colors cursor-pointer disabled:cursor-not-allowed disabled:opacity-50"
+          >
+            {isPaused ? <Icons.Play className="w-3 h-3" /> : <Icons.Pause className="w-3 h-3" />}
+            {isPaused ? 'Resume Auto-questions' : 'Pause Auto-questions'}
+          </button>
         </div>
       )}
     </div>

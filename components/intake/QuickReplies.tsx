@@ -210,28 +210,25 @@ export default function QuickReplies({ quickReplies, onSelect, disabled, questio
               </button>
             )}
           </div>
-          {/* Skip / Pause footer */}
-          {(onSkipQuestion || onPauseQuestions || onResumeQuestions) && (
-            <div className="flex items-center justify-between px-4 py-2.5 border-t border-[var(--ov-border,rgba(255,255,255,0.06))]">
-              <div>
-                {onSkipQuestion && (
-                  <button onClick={onSkipQuestion} disabled={disabled} className="text-xs text-[var(--ov-text-muted,#727272)] hover:text-[var(--ov-text,#ffffff)] transition-colors cursor-pointer disabled:cursor-not-allowed disabled:opacity-50">
-                    Skip this question
-                  </button>
-                )}
-              </div>
-              <div>
-                {(onPauseQuestions || onResumeQuestions) && (
-                  <button
-                    onClick={() => isPaused ? onResumeQuestions?.() : onPauseQuestions?.()}
-                    disabled={disabled}
-                    className="inline-flex items-center gap-1.5 text-xs text-[var(--ov-text-muted,#727272)] hover:text-[var(--ov-accent-strong,#7367ff)] transition-colors cursor-pointer disabled:cursor-not-allowed disabled:opacity-50"
-                  >
-                    {isPaused ? <Play className="w-3 h-3" /> : <Pause className="w-3 h-3" />}
-                    {isPaused ? 'Resume Auto-questions' : 'Pause Auto-questions'}
-                  </button>
-                )}
-              </div>
+          {/* Skip CTA */}
+          {onSkipQuestion && (
+            <div className="px-4 pb-1">
+              <button onClick={onSkipQuestion} disabled={disabled} className="px-4 py-2 rounded-full text-sm font-medium border border-[var(--ov-border,rgba(255,255,255,0.12))] text-[var(--ov-text-muted,#a0a0a0)] hover:text-[var(--ov-text,#ffffff)] hover:border-[var(--ov-accent-border,rgba(115,103,255,0.30))] transition-colors cursor-pointer disabled:cursor-not-allowed disabled:opacity-50">
+                Skip
+              </button>
+            </div>
+          )}
+          {/* Pause footer */}
+          {(onPauseQuestions || onResumeQuestions) && (
+            <div className="flex justify-end px-4 py-2.5 border-t border-[var(--ov-border,rgba(255,255,255,0.06))]">
+              <button
+                onClick={() => isPaused ? onResumeQuestions?.() : onPauseQuestions?.()}
+                disabled={disabled}
+                className="inline-flex items-center gap-1.5 text-xs text-[var(--ov-text-muted,#727272)] hover:text-[var(--ov-accent-strong,#7367ff)] transition-colors cursor-pointer disabled:cursor-not-allowed disabled:opacity-50"
+              >
+                {isPaused ? <Play className="w-3 h-3" /> : <Pause className="w-3 h-3" />}
+                {isPaused ? 'Resume Auto-questions' : 'Pause Auto-questions'}
+              </button>
             </div>
           )}
         </div>
@@ -349,35 +346,26 @@ export default function QuickReplies({ quickReplies, onSelect, disabled, questio
         </div>
       )}
 
-      {/* Skip / Pause footer */}
-      {(onSkipQuestion || onPauseQuestions || onResumeQuestions) && (
-        <div className="flex items-center justify-between px-4 py-2.5 border-t border-[var(--ov-border,rgba(255,255,255,0.06))]">
-          {/* Left: Skip (only on non-essential questions) */}
-          <div>
-            {onSkipQuestion && (
-              <button
-                onClick={onSkipQuestion}
-                disabled={disabled}
-                className="text-xs text-[var(--ov-text-muted,#727272)] hover:text-[var(--ov-text,#ffffff)] transition-colors cursor-pointer disabled:cursor-not-allowed disabled:opacity-50"
-              >
-                Skip this question
-              </button>
-            )}
-          </div>
-          {/* Right: Pause/Resume toggle with icon + label */}
-          <div>
-            {(onPauseQuestions || onResumeQuestions) && (
-              <button
-                onClick={() => isPaused ? onResumeQuestions?.() : onPauseQuestions?.()}
-                disabled={disabled}
-                title={isPaused ? 'Resume Auto-questions' : 'Pause Auto-questions'}
-                className="inline-flex items-center gap-1.5 text-xs text-[var(--ov-text-muted,#727272)] hover:text-[var(--ov-accent-strong,#7367ff)] transition-colors cursor-pointer disabled:cursor-not-allowed disabled:opacity-50"
-              >
-                {isPaused ? <Play className="w-3 h-3" /> : <Pause className="w-3 h-3" />}
-                {isPaused ? 'Resume Auto-questions' : 'Pause Auto-questions'}
-              </button>
-            )}
-          </div>
+      {/* Skip CTA */}
+      {onSkipQuestion && (
+        <div className="px-4 pb-1">
+          <button onClick={onSkipQuestion} disabled={disabled} className="px-4 py-2 rounded-full text-sm font-medium border border-[var(--ov-border,rgba(255,255,255,0.12))] text-[var(--ov-text-muted,#a0a0a0)] hover:text-[var(--ov-text,#ffffff)] hover:border-[var(--ov-accent-border,rgba(115,103,255,0.30))] transition-colors cursor-pointer disabled:cursor-not-allowed disabled:opacity-50">
+            Skip
+          </button>
+        </div>
+      )}
+      {/* Pause footer */}
+      {(onPauseQuestions || onResumeQuestions) && (
+        <div className="flex justify-end px-4 py-2.5 border-t border-[var(--ov-border,rgba(255,255,255,0.06))]">
+          <button
+            onClick={() => isPaused ? onResumeQuestions?.() : onPauseQuestions?.()}
+            disabled={disabled}
+            title={isPaused ? 'Resume Auto-questions' : 'Pause Auto-questions'}
+            className="inline-flex items-center gap-1.5 text-xs text-[var(--ov-text-muted,#727272)] hover:text-[var(--ov-accent-strong,#7367ff)] transition-colors cursor-pointer disabled:cursor-not-allowed disabled:opacity-50"
+          >
+            {isPaused ? <Play className="w-3 h-3" /> : <Pause className="w-3 h-3" />}
+            {isPaused ? 'Resume Auto-questions' : 'Pause Auto-questions'}
+          </button>
         </div>
       )}
     </div>

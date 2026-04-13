@@ -74,9 +74,12 @@ export default function MessageBubble({ message, isStreaming, onQuickReply, isLa
   // Safety net: treat pills with 3+ options as list (normalizeQRStyle should have
   // caught this, but defend at render level too).
   const qr = message.quickReplies
+  // Condition options render inline as pills, never as cards or list
+  const CONDITION_VALUES_MB = new Set(['new', 'needs_refresh', 'major_renovation', 'shell', 'fitted', 'semi_fitted', 'shell_and_core'])
+  const isConditionQR = qr && Array.isArray(qr.options) && qr.options.some((o) => CONDITION_VALUES_MB.has(o.value))
   const isCustomPickerStyle =
-    qr?.style === 'cards' || qr?.style === 'sqft' || qr?.style === 'budget' || qr?.style === 'scope_grid'
-  const shouldBeList = qr && (
+    (qr?.style === 'cards' && !isConditionQR) || qr?.style === 'sqft' || qr?.style === 'budget' || qr?.style === 'scope_grid'
+  const shouldBeList = qr && !isConditionQR && (
     qr.style === 'list' ||
     (!isCustomPickerStyle && Array.isArray(qr.options) && qr.options.length >= 3)
   )
@@ -247,7 +250,7 @@ export default function MessageBubble({ message, isStreaming, onQuickReply, isLa
         {/* Inline quick replies — pills only; list style is handled at ChatPanel bottom */}
         {showInlineQR && (
           <QuickReplies
-            quickReplies={message.quickReplies!}
+            quickReplies={isConditionQR ? { ...message.quickReplies!, style: 'pills' as const } : message.quickReplies!}
             onSelect={onQuickReply!}
             disabled={isStreaming}
           />

@@ -127,6 +127,17 @@ function normalizeQRStyle(qr: QuickReplies | undefined, question?: string): Quic
     }
     return patched
   }
+  // Condition options should render as pills, not cards — even if the AI
+  // returns style:'cards'. Only apply when the question text confirms this
+  // is a condition question (not property type which also uses cards).
+  if (question) {
+    const qLower = question.toLowerCase()
+    const isConditionQuestion = qLower.includes('condition') || qLower.includes('state of the space')
+    if (isConditionQuestion) {
+      return { ...qr, style: 'pills' as const }
+    }
+  }
+
   // Preserve 'cards' style. Enrich options with images from the static map
   // so the AI doesn't need to output imageUrl/imageAlt in the tool JSON.
   if (qr.style === 'cards') {
@@ -233,12 +244,17 @@ function autoDetectQRStyle(qr: QuickReplies | undefined, question: string): Quic
     return { ...base, style: 'cards' as const, options }
   }
 
-  // Condition cards (detect residential vs commercial from question text)
+  // Condition chips (detect residential vs commercial from question text)
   if (q.includes('current condition') || q.includes('condition of the') || q.includes('state of the space') || hasConditionOptions) {
-    if (hasOptions) return { ...base, style: 'cards' as const }
+    if (hasOptions) return { ...base, style: 'pills' as const }
     const isCommercial = q.includes('office') || q.includes('retail') || q.includes('warehouse') || q.includes('commercial') || q.includes('fitted')
     const options = isCommercial ? DEFAULT_CONDITION_COMMERCIAL_OPTIONS : DEFAULT_CONDITION_RESIDENTIAL_OPTIONS
-    return { ...base, style: 'cards' as const, options }
+    return { ...base, style: 'pills' as const, options }
+  }
+
+  // Location / area: free-text only, no suggested options
+  if (q.includes('which area') || q.includes('community') || q.includes('location') || q.includes('where is')) {
+    return undefined
   }
 
   // Ownership pills
