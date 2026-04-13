@@ -487,6 +487,9 @@ export function useIntakeChat({ proposalId, idea }: Props) {
   // Auto-saves messages to localStorage and syncs to Supabase on every completed turn.
   useEffect(() => {
     if (messages.length > 0 && proposalId) {
+      // Don't persist the empty welcome bubble — wait for content to arrive
+      const hasOnlyEmptyAssistant = messages.length === 1 && messages[0].role === 'assistant' && !messages[0].content
+      if (hasOnlyEmptyAssistant) return
       localStorage.setItem(MSGS_KEY(proposalId), JSON.stringify(messages))
 
       if (!isStreaming && !syncInProgressRef.current) {
