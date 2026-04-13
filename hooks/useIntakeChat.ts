@@ -105,6 +105,7 @@ function deriveScopeContext(question: string): string {
   if (q.includes('living') || q.includes('lounge') || q.includes('majlis')) return 'living'
   if (q.includes('outdoor') || q.includes('garden') || q.includes('terrace') || q.includes('balcon') || q.includes('landscap')) return 'outdoor'
   if (q.includes('office') || q.includes('retail') || q.includes('commercial') || q.includes('warehouse')) return 'office'
+  if (q.includes('room') || q.includes('addition') || q.includes('extension') || q.includes('new space')) return 'room_addition'
   return '' // full renovation or unclear — show all items
 }
 

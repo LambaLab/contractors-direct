@@ -46,6 +46,10 @@ export const SCOPE_CONTEXT_MAP: Record<string, string[]> = {
     'electrical', 'plumbing', 'hvac', 'lighting', 'smart_home',
     'windows_glazing',
   ],
+  room_addition: [
+    'demolition', 'flooring', 'tiling', 'paint_walls', 'false_ceiling',
+    'wardrobes', 'joinery', 'electrical', 'plumbing', 'hvac', 'lighting',
+  ],
 }
 
 export const SCOPE_CATALOG: ScopeItem[] = [
