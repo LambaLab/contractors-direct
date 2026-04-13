@@ -43,6 +43,46 @@ type CategoryGroup = {
   samples: SampleItem[]
 }
 
+// ── Unit conversion ──
+
+const SQFT_PER_SQM = 10.764
+const SQM_UNITS = new Set(['sqm', 'sq m', 'm2', 'm²'])
+const SQFT_UNITS = new Set(['sqft', 'sq ft', 'sft'])
+
+function isAreaUnit(unit: string | null): boolean {
+  if (!unit) return false
+  const u = unit.toLowerCase()
+  return SQM_UNITS.has(u) || SQFT_UNITS.has(u)
+}
+
+function convertRate(rate: number | null | undefined, fromUnit: string | null, toUnit: 'sqft' | 'sqm'): number | null {
+  if (rate == null) return null
+  if (!fromUnit) return rate
+  const from = fromUnit.toLowerCase()
+  const fromIsSqm = SQM_UNITS.has(from)
+  const fromIsSqft = SQFT_UNITS.has(from)
+  if (!fromIsSqm && !fromIsSqft) return rate
+  if (toUnit === 'sqft' && fromIsSqm) return rate * SQFT_PER_SQM
+  if (toUnit === 'sqm' && fromIsSqft) return rate / SQFT_PER_SQM
+  return rate
+}
+
+function unconvertRate(rate: number, displayUnit: 'sqft' | 'sqm', originalUnit: string): number {
+  const from = originalUnit.toLowerCase()
+  const fromIsSqm = SQM_UNITS.has(from)
+  const fromIsSqft = SQFT_UNITS.has(from)
+  if (!fromIsSqm && !fromIsSqft) return rate
+  if (displayUnit === 'sqft' && fromIsSqm) return rate / SQFT_PER_SQM
+  if (displayUnit === 'sqm' && fromIsSqft) return rate * SQFT_PER_SQM
+  return rate
+}
+
+function unitLabel(originalUnit: string | null, toUnit: 'sqft' | 'sqm'): string {
+  if (!originalUnit) return '-'
+  if (isAreaUnit(originalUnit)) return toUnit
+  return originalUnit
+}
+
 // ── Helpers ──
 
 function fmt(n: number | null | undefined): string {
@@ -86,6 +126,7 @@ export default function PriceBookPage() {
   const [sampleItems, setSampleItems] = useState<SampleItem[]>([])
   const [projectCount, setProjectCount] = useState(0)
   const [viewMode, setViewMode] = useState<'category' | 'flat'>('category')
+  const [displayUnit, setDisplayUnit] = useState<'sqft' | 'sqm'>('sqft')
   const [searchQuery, setSearchQuery] = useState('')
   const [expandedCategories, setExpandedCategories] = useState<Set<string>>(new Set())
 
@@ -135,18 +176,23 @@ export default function PriceBookPage() {
 
   const openEditDialog = (item: SampleItem, scopeId: string) => {
     const override = overrides.find(o => o.item_description === item.description && o.unit === (item.unit ?? ''))
+    const rawRate = override ? override.override_min_aed : item.unit_rate_aed
+    const converted = convertRate(rawRate, item.unit, displayUnit)
     setEditItem(item)
     setEditScopeId(scopeId)
     setEditDesc(item.description)
-    setEditRate(override ? override.override_min_aed.toString() : (item.unit_rate_aed?.toString() ?? ''))
-    setEditUnit(item.unit ?? '')
+    setEditRate(converted != null ? Math.round(converted).toString() : '')
+    setEditUnit(unitLabel(item.unit, displayUnit))
     setEditNotes(override?.notes ?? '')
     setEditOpen(true)
   }
 
   const handleSaveEdit = async () => {
-    const rate = parseFloat(editRate)
-    if (isNaN(rate) || rate < 0 || !editDesc.trim()) return
+    const displayRate = parseFloat(editRate)
+    if (isNaN(displayRate) || displayRate < 0 || !editDesc.trim()) return
+    // Convert the displayed rate back to the original stored unit
+    const originalUnit = editItem?.unit ?? ''
+    const storageRate = unconvertRate(displayRate, displayUnit, originalUnit)
     setSaving(true)
     try {
       const res = await fetch('/api/admin/price-book', {
@@ -154,10 +200,10 @@ export default function PriceBookPage() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           item_description: editDesc.trim(),
-          unit: editUnit || 'unit',
+          unit: originalUnit || 'unit',
           scope_item_id: editScopeId,
-          override_min_aed: rate,
-          override_max_aed: rate,
+          override_min_aed: storageRate,
+          override_max_aed: storageRate,
           notes: editNotes || null,
         }),
       })
@@ -174,6 +220,8 @@ export default function PriceBookPage() {
   const handleAddItem = async (scopeId: string) => {
     const rate = parseFloat(addRate)
     if (isNaN(rate) || rate < 0 || !addDesc.trim()) return
+    // Store in the display unit (new items are entered in whatever unit is shown)
+    const storeUnit = addUnit || displayUnit
     setSaving(true)
     try {
       const res = await fetch('/api/admin/price-book', {
@@ -181,7 +229,7 @@ export default function PriceBookPage() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           item_description: addDesc.trim(),
-          unit: addUnit || 'unit',
+          unit: storeUnit,
           scope_item_id: scopeId,
           override_min_aed: rate,
           override_max_aed: rate,
@@ -327,6 +375,21 @@ export default function PriceBookPage() {
           </button>
         </div>
 
+        <div className="flex items-center gap-1 border rounded-md p-0.5">
+          <button
+            onClick={() => setDisplayUnit('sqft')}
+            className={`px-2 py-1 rounded text-xs cursor-pointer transition-colors ${displayUnit === 'sqft' ? 'bg-muted text-foreground font-medium' : 'text-muted-foreground hover:text-foreground'}`}
+          >
+            sqft
+          </button>
+          <button
+            onClick={() => setDisplayUnit('sqm')}
+            className={`px-2 py-1 rounded text-xs cursor-pointer transition-colors ${displayUnit === 'sqm' ? 'bg-muted text-foreground font-medium' : 'text-muted-foreground hover:text-foreground'}`}
+          >
+            sqm
+          </button>
+        </div>
+
         <span className="text-xs text-muted-foreground">
           {projectCount} projects &middot; {overrides.length} overrides
         </span>
@@ -387,7 +450,8 @@ export default function PriceBookPage() {
                     <div className="border-b">
                       {group.samples.map((sample, idx) => {
                         const override = getOverrideForItem(sample.description, sample.unit ?? '')
-                        const displayRate = override ? override.override_min_aed : sample.unit_rate_aed
+                        const rawRate = override ? override.override_min_aed : sample.unit_rate_aed
+                        const displayRate = convertRate(rawRate, sample.unit, displayUnit)
 
                         return (
                           <div
@@ -404,7 +468,7 @@ export default function PriceBookPage() {
                             <span className="text-right text-xs text-muted-foreground truncate" title={sample.historical_projects?.project_name ?? ''}>
                               {sample.historical_projects?.project_name ?? '-'}
                             </span>
-                            <span className="text-right text-xs text-muted-foreground">{sample.unit ?? '-'}</span>
+                            <span className="text-right text-xs text-muted-foreground">{unitLabel(sample.unit, displayUnit)}</span>
                             <div className="flex justify-end">
                               <Pencil className="w-3 h-3 opacity-0 group-hover:opacity-100 text-muted-foreground transition-opacity" />
                             </div>
@@ -433,7 +497,7 @@ export default function PriceBookPage() {
                           <Input
                             value={addUnit}
                             onChange={(e) => setAddUnit(e.target.value)}
-                            placeholder="sqm"
+                            placeholder={displayUnit}
                             className="h-7 text-xs text-right"
                             onKeyDown={(e) => {
                               if (e.key === 'Enter') handleAddItem(group.scopeId)
@@ -484,10 +548,10 @@ export default function PriceBookPage() {
                   className="grid grid-cols-[1fr_80px_100px_100px_50px] gap-3 items-center px-6 py-2.5 hover:bg-muted/20 border-b transition-colors"
                 >
                   <span className="text-sm truncate">{SCOPE_CATALOG.find(s => s.id === stat.scope_item_id)?.name ?? stat.scope_item_id}</span>
-                  <span className="text-xs text-right font-mono">{fmt(stat.rate_avg)}</span>
-                  <span className="text-xs text-right font-mono text-muted-foreground">{fmt(stat.rate_p25)} - {fmt(stat.rate_p75)}</span>
+                  <span className="text-xs text-right font-mono">{fmt(convertRate(stat.rate_avg, stat.unit, displayUnit))}</span>
+                  <span className="text-xs text-right font-mono text-muted-foreground">{fmt(convertRate(stat.rate_p25, stat.unit, displayUnit))} - {fmt(convertRate(stat.rate_p75, stat.unit, displayUnit))}</span>
                   <span className="text-xs text-right text-muted-foreground">{stat.sample_count}</span>
-                  <span className="text-xs text-right text-muted-foreground">{stat.unit ?? '-'}</span>
+                  <span className="text-xs text-right text-muted-foreground">{unitLabel(stat.unit, displayUnit)}</span>
                 </div>
               ))
             }
@@ -556,7 +620,7 @@ export default function PriceBookPage() {
                     {history.map((h, i) => (
                       <div key={i} className="flex items-center justify-between px-3 py-1.5 text-xs">
                         <span className="truncate text-muted-foreground flex-1 mr-2">{h.historical_projects?.project_name ?? '-'}</span>
-                        <span className="font-mono shrink-0">{fmt(h.unit_rate_aed)} AED</span>
+                        <span className="font-mono shrink-0">{fmt(convertRate(h.unit_rate_aed, h.unit, displayUnit))} AED/{unitLabel(h.unit, displayUnit)}</span>
                       </div>
                     ))}
                   </div>
