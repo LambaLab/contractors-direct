@@ -16,6 +16,10 @@ import {
   getIdeaForSession,
   clearProposalData,
   validateSession,
+  addKnownProposal,
+  updateKnownProposal,
+  removeKnownProposal,
+  getKnownProposals,
   type SessionData,
 } from '@/lib/session'
 import SessionLoadingScreen from './SessionLoadingScreen'
@@ -122,6 +126,7 @@ export default function IntakeOverlay({ initialMessage, onClose }: Props) {
     localStorage.setItem('cd_project_name', trimmed)
     if (session) {
       updateSlug(session.proposalId, trimmed)
+      updateKnownProposal(session.proposalId, { projectName: trimmed })
     }
     setEditingName(false)
   }
@@ -256,6 +261,22 @@ export default function IntakeOverlay({ initialMessage, onClose }: Props) {
     }
   }, [emailVerified, session, fetchProposals, fetchLeadEmails])
 
+  // Track the current session locally and populate proposals from local tracking.
+  // This ensures unverified users see all their projects in the sidebar.
+  useEffect(() => {
+    if (!session) return
+    addKnownProposal(session.proposalId)
+    if (!emailVerified) {
+      const known = getKnownProposals()
+      setProposals(known.map(k => ({
+        id: k.id,
+        projectName: k.projectName,
+        confidenceScore: k.confidenceScore,
+        savedAt: k.createdAt,
+      })))
+    }
+  }, [session, emailVerified]) // eslint-disable-line react-hooks/exhaustive-deps
+
   // Refetch when drawer opens and data is stale
   useEffect(() => {
     if (drawerOpen && emailVerified && session && fetchedForProposalRef.current !== session.proposalId) {
@@ -382,6 +403,7 @@ export default function IntakeOverlay({ initialMessage, onClose }: Props) {
       if (!res.ok) throw new Error('Failed to create session')
       const newSessionData: SessionData = await res.json()
       storeSession(newSessionData)
+      addKnownProposal(newSessionData.proposalId)
 
       if (email) {
         localStorage.setItem(`cd_email_verified_${newSessionData.proposalId}`, '1')
@@ -406,6 +428,14 @@ export default function IntakeOverlay({ initialMessage, onClose }: Props) {
 
       if (email) {
         fetchProposals(newSessionData.proposalId)
+      } else {
+        // Unverified: update proposals from local tracking
+        setProposals(getKnownProposals().map(k => ({
+          id: k.id,
+          projectName: k.projectName,
+          confidenceScore: k.confidenceScore,
+          savedAt: k.createdAt,
+        })))
       }
     } catch (err) {
       console.error('Failed to create new lead:', err)
@@ -427,6 +457,7 @@ export default function IntakeOverlay({ initialMessage, onClose }: Props) {
       setProposals(prev => prev.filter(p => p.id !== targetId))
       // Clear localStorage for deleted lead
       clearProposalData(targetId)
+      removeKnownProposal(targetId)
 
       // If we deleted the current lead, switch to first remaining or create new
       if (targetId === session.proposalId) {
@@ -458,6 +489,13 @@ export default function IntakeOverlay({ initialMessage, onClose }: Props) {
     if (syncedAt && syncedAt !== lastSyncedAtRef.current) {
       lastSyncedAtRef.current = syncedAt
       setShowSaved(true)
+    }
+    // Keep local proposal tracking in sync
+    if (session) {
+      updateKnownProposal(session.proposalId, {
+        ...(pName?.trim() ? { projectName: pName.trim() } : {}),
+        confidenceScore: c,
+      })
     }
   }, [session, updateSlug])
 

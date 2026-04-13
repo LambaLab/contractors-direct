@@ -260,6 +260,55 @@ export function hydrateProposalFromRestore(data: {
   )
 }
 
+// ── Local proposal tracking ──
+// Tracks all projects created in this browser so the sidebar can list them
+// even before email verification.
+
+const KNOWN_PROPOSALS_KEY = 'cd_known_proposals'
+
+export type KnownProposal = {
+  id: string
+  projectName: string
+  confidenceScore: number
+  createdAt: string
+}
+
+export function getKnownProposals(): KnownProposal[] {
+  if (typeof window === 'undefined') return []
+  try {
+    const raw = localStorage.getItem(KNOWN_PROPOSALS_KEY)
+    return raw ? JSON.parse(raw) : []
+  } catch { return [] }
+}
+
+export function addKnownProposal(id: string, projectName?: string): void {
+  if (typeof window === 'undefined') return
+  const proposals = getKnownProposals()
+  if (proposals.some(p => p.id === id)) return
+  proposals.unshift({
+    id,
+    projectName: projectName || 'Untitled Project',
+    confidenceScore: 0,
+    createdAt: new Date().toISOString(),
+  })
+  localStorage.setItem(KNOWN_PROPOSALS_KEY, JSON.stringify(proposals))
+}
+
+export function updateKnownProposal(id: string, updates: Partial<Omit<KnownProposal, 'id'>>): void {
+  if (typeof window === 'undefined') return
+  const proposals = getKnownProposals()
+  const idx = proposals.findIndex(p => p.id === id)
+  if (idx === -1) return
+  proposals[idx] = { ...proposals[idx], ...updates }
+  localStorage.setItem(KNOWN_PROPOSALS_KEY, JSON.stringify(proposals))
+}
+
+export function removeKnownProposal(id: string): void {
+  if (typeof window === 'undefined') return
+  const proposals = getKnownProposals().filter(p => p.id !== id)
+  localStorage.setItem(KNOWN_PROPOSALS_KEY, JSON.stringify(proposals))
+}
+
 /** Remove all localStorage keys for a given proposal. */
 export function clearProposalData(proposalId: string): void {
   if (typeof window === 'undefined') return

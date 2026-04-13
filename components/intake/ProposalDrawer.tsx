@@ -151,53 +151,109 @@ export default function ProposalDrawer({
 
         {/* Content */}
         <div className="flex-1 overflow-y-auto">
-          {!emailVerified ? (
-            /* ── Unverified state ── */
-            <div className="p-4 space-y-4">
-              {/* New Project + current project card */}
-              <button
-                onClick={onNewProposal}
-                className={`w-full flex items-center gap-2 px-3 py-2.5 rounded-lg text-sm transition-colors cursor-pointer
-                  ${isLight ? 'text-[#727272] hover:bg-black/[0.03] hover:text-[#1a1a1a]' : 'text-[#888] hover:bg-white/5 hover:text-white'}`}
-              >
-                <Plus className="w-3.5 h-3.5" />
-                New Project
-              </button>
-
-              {/* Current project card with delete */}
-              <div className={`rounded-lg p-3 relative group ${isLight ? 'bg-white border border-[rgba(0,0,0,0.06)]' : 'bg-white/5 border border-white/5'}`}>
-                <p className={`text-sm font-medium truncate pr-6 ${isLight ? 'text-[#1a1a1a]' : 'text-white'}`}>
-                  {currentAppName || 'Untitled Project'}
-                </p>
-                <div className="flex items-center gap-2 mt-1.5">
-                  <div className={`flex-1 h-1.5 rounded-full overflow-hidden ${isLight ? 'bg-black/5' : 'bg-white/10'}`}>
-                    <div
-                      className="h-full bg-brand-purple rounded-full transition-all duration-500"
-                      style={{ width: `${Math.min(currentConfidence, 100)}%` }}
-                    />
-                  </div>
-                  <span className={`text-xs tabular-nums ${isLight ? 'text-[#727272]' : 'text-[#727272]'}`}>
-                    {currentConfidence}%
-                  </span>
-                </div>
-                {/* Delete button */}
-                <div className="absolute right-2 top-2.5">
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation()
-                      setConfirmDeleteId(currentProposalId)
-                    }}
-                    className={`w-6 h-6 rounded flex items-center justify-center transition-opacity opacity-40 hover:opacity-100
-                      ${isLight ? 'hover:bg-black/5 text-[#999]' : 'hover:bg-white/10 text-[#666]'}`}
-                    aria-label="Delete project"
-                  >
-                    <Trash2 className="w-3.5 h-3.5" />
-                  </button>
-                </div>
+          <div className="p-2">
+            <button
+              onClick={onNewProposal}
+              className={`w-full flex items-center gap-2 px-3 py-2.5 rounded-lg text-sm transition-colors cursor-pointer mb-1
+                ${isLight ? 'text-[#727272] hover:bg-black/[0.03] hover:text-[#1a1a1a]' : 'text-[#888] hover:bg-white/5 hover:text-white'}`}
+            >
+              <Plus className="w-3.5 h-3.5" />
+              New Project
+            </button>
+            {loading ? (
+              <div className="flex items-center justify-center py-8">
+                <Loader2 className={`w-5 h-5 animate-spin ${isLight ? 'text-[#727272]' : 'text-[#727272]'}`} />
               </div>
+            ) : proposals.length === 0 ? (
+              <div className={`text-center py-8 text-sm ${isLight ? 'text-[#727272]' : 'text-[#727272]'}`}>
+                No projects yet
+              </div>
+            ) : (
+              <ul className="space-y-1">
+                {proposals.map((p) => {
+                  const isActive = p.id === currentProposalId
+                  // Active project uses live data from props
+                  const displayName = isActive ? (currentAppName || p.projectName || 'Untitled Project') : (p.projectName || 'Untitled Project')
+                  const displayConfidence = isActive ? currentConfidence : p.confidenceScore
+                  return (
+                    <li key={p.id} className="relative group">
+                      <button
+                        onClick={() => {
+                          if (!isActive) onSwitchProposal(p.id)
+                        }}
+                        disabled={isActive}
+                        className={`w-full text-left rounded-lg px-3 py-2.5 transition-colors cursor-pointer
+                          ${isActive
+                            ? isLight
+                              ? 'bg-[rgba(0,0,0,0.04)] border-l-2 border-[#1A1A1A]'
+                              : 'bg-brand-purple/10 border-l-2 border-brand-purple'
+                            : isLight
+                              ? 'hover:bg-black/[0.03] border-l-2 border-transparent'
+                              : 'hover:bg-white/5 border-l-2 border-transparent'
+                          }`}
+                      >
+                        <p className={`text-sm font-medium truncate pr-6 ${isLight ? 'text-[#1a1a1a]' : 'text-white'}`}>
+                          {displayName}
+                        </p>
+                        <div className="flex items-center gap-2 mt-1">
+                          <div className={`flex-1 h-1 rounded-full overflow-hidden ${isLight ? 'bg-black/5' : 'bg-white/10'}`}>
+                            <div
+                              className="h-full bg-brand-purple rounded-full transition-all"
+                              style={{ width: `${Math.min(displayConfidence, 100)}%` }}
+                            />
+                          </div>
+                          <span className={`text-[11px] tabular-nums ${isLight ? 'text-[#999]' : 'text-[#666]'}`}>
+                            {displayConfidence}%
+                          </span>
+                          {p.savedAt && (
+                            <span className={`text-[11px] ${isLight ? 'text-[#999]' : 'text-[#555]'}`}>
+                              · {relativeDate(p.savedAt)}
+                            </span>
+                          )}
+                        </div>
+                      </button>
+                      {!isActive && (
+                        <div className="absolute right-2 top-2.5" onClick={(e) => e.stopPropagation()}>
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation()
+                              setMenuOpenId(menuOpenId === p.id ? null : p.id)
+                            }}
+                            className={`w-6 h-6 rounded flex items-center justify-center transition-opacity
+                              ${menuOpenId === p.id ? 'opacity-100' : 'opacity-40 md:opacity-0 md:group-hover:opacity-100'}
+                              ${isLight ? 'hover:bg-black/5 text-[#999]' : 'hover:bg-white/10 text-[#666]'}`}
+                            aria-label="More options"
+                          >
+                            <MoreHorizontal className="w-3.5 h-3.5" />
+                          </button>
+                          {menuOpenId === p.id && (
+                            <div className={`absolute right-0 top-7 z-10 rounded-lg shadow-lg py-1 min-w-[120px]
+                              ${isLight ? 'bg-white border border-[rgba(0,0,0,0.08)]' : 'bg-[#2a2a2a] border border-white/10'}`}>
+                              <button
+                                onClick={(e) => {
+                                  e.stopPropagation()
+                                  setMenuOpenId(null)
+                                  setConfirmDeleteId(p.id)
+                                }}
+                                className={`w-full text-left px-3 py-1.5 text-sm flex items-center gap-2 transition-colors cursor-pointer
+                                  ${isLight ? 'text-red-600 hover:bg-red-50' : 'text-red-400 hover:bg-white/5'}`}
+                              >
+                                <Trash2 className="w-3.5 h-3.5" />
+                                Delete
+                              </button>
+                            </div>
+                          )}
+                        </div>
+                      )}
+                    </li>
+                  )
+                })}
+              </ul>
+            )}
 
-              {/* CTA to save email */}
-              <div className={`rounded-lg p-4 text-center ${isLight ? 'bg-[rgba(0,0,0,0.03)] border border-[rgba(0,0,0,0.08)]' : 'bg-brand-purple/5 border border-brand-purple/10'}`}>
+            {/* CTA to save email — shown for unverified users */}
+            {!emailVerified && (
+              <div className={`rounded-lg p-4 text-center mt-3 ${isLight ? 'bg-[rgba(0,0,0,0.03)] border border-[rgba(0,0,0,0.08)]' : 'bg-brand-purple/5 border border-brand-purple/10'}`}>
                 <p className={`text-xs mb-3 ${isLight ? 'text-[#1a1a1a]/70' : 'text-white/60'}`}>
                   Save your email to pick up where you left off on any device.
                 </p>
@@ -212,107 +268,8 @@ export default function ProposalDrawer({
                   Save project for later
                 </button>
               </div>
-            </div>
-          ) : (
-            /* ── Verified state — project list ── */
-            <div className="p-2">
-              <button
-                onClick={onNewProposal}
-                className={`w-full flex items-center gap-2 px-3 py-2.5 rounded-lg text-sm transition-colors cursor-pointer mb-1
-                  ${isLight ? 'text-[#727272] hover:bg-black/[0.03] hover:text-[#1a1a1a]' : 'text-[#888] hover:bg-white/5 hover:text-white'}`}
-              >
-                <Plus className="w-3.5 h-3.5" />
-                New Project
-              </button>
-              {loading ? (
-                <div className="flex items-center justify-center py-8">
-                  <Loader2 className={`w-5 h-5 animate-spin ${isLight ? 'text-[#727272]' : 'text-[#727272]'}`} />
-                </div>
-              ) : proposals.length === 0 ? (
-                <div className={`text-center py-8 text-sm ${isLight ? 'text-[#727272]' : 'text-[#727272]'}`}>
-                  No projects yet
-                </div>
-              ) : (
-                <ul className="space-y-1">
-                  {proposals.map((p) => {
-                    const isActive = p.id === currentProposalId
-                    return (
-                      <li key={p.id} className="relative group">
-                        <button
-                          onClick={() => {
-                            if (!isActive) onSwitchProposal(p.id)
-                          }}
-                          disabled={isActive}
-                          className={`w-full text-left rounded-lg px-3 py-2.5 transition-colors cursor-pointer
-                            ${isActive
-                              ? isLight
-                                ? 'bg-[rgba(0,0,0,0.04)] border-l-2 border-[#1A1A1A]'
-                                : 'bg-brand-purple/10 border-l-2 border-brand-purple'
-                              : isLight
-                                ? 'hover:bg-black/[0.03] border-l-2 border-transparent'
-                                : 'hover:bg-white/5 border-l-2 border-transparent'
-                            }`}
-                        >
-                          <p className={`text-sm font-medium truncate pr-6 ${isLight ? 'text-[#1a1a1a]' : 'text-white'}`}>
-                            {p.projectName || 'Untitled Project'}
-                          </p>
-                          <div className="flex items-center gap-2 mt-1">
-                            <div className={`flex-1 h-1 rounded-full overflow-hidden ${isLight ? 'bg-black/5' : 'bg-white/10'}`}>
-                              <div
-                                className="h-full bg-brand-purple rounded-full transition-all"
-                                style={{ width: `${Math.min(p.confidenceScore, 100)}%` }}
-                              />
-                            </div>
-                            <span className={`text-[11px] tabular-nums ${isLight ? 'text-[#999]' : 'text-[#666]'}`}>
-                              {p.confidenceScore}%
-                            </span>
-                            {p.savedAt && (
-                              <span className={`text-[11px] ${isLight ? 'text-[#999]' : 'text-[#555]'}`}>
-                                · {relativeDate(p.savedAt)}
-                              </span>
-                            )}
-                          </div>
-                        </button>
-                        {!isActive && (
-                          <div className="absolute right-2 top-2.5" onClick={(e) => e.stopPropagation()}>
-                            <button
-                              onClick={(e) => {
-                                e.stopPropagation()
-                                setMenuOpenId(menuOpenId === p.id ? null : p.id)
-                              }}
-                              className={`w-6 h-6 rounded flex items-center justify-center transition-opacity
-                                ${menuOpenId === p.id ? 'opacity-100' : 'opacity-40 md:opacity-0 md:group-hover:opacity-100'}
-                                ${isLight ? 'hover:bg-black/5 text-[#999]' : 'hover:bg-white/10 text-[#666]'}`}
-                              aria-label="More options"
-                            >
-                              <MoreHorizontal className="w-3.5 h-3.5" />
-                            </button>
-                            {menuOpenId === p.id && (
-                              <div className={`absolute right-0 top-7 z-10 rounded-lg shadow-lg py-1 min-w-[120px]
-                                ${isLight ? 'bg-white border border-[rgba(0,0,0,0.08)]' : 'bg-[#2a2a2a] border border-white/10'}`}>
-                                <button
-                                  onClick={(e) => {
-                                    e.stopPropagation()
-                                    setMenuOpenId(null)
-                                    setConfirmDeleteId(p.id)
-                                  }}
-                                  className={`w-full text-left px-3 py-1.5 text-sm flex items-center gap-2 transition-colors cursor-pointer
-                                    ${isLight ? 'text-red-600 hover:bg-red-50' : 'text-red-400 hover:bg-white/5'}`}
-                                >
-                                  <Trash2 className="w-3.5 h-3.5" />
-                                  Delete
-                                </button>
-                              </div>
-                            )}
-                          </div>
-                        )}
-                      </li>
-                    )
-                  })}
-                </ul>
-              )}
-            </div>
-          )}
+            )}
+          </div>
         </div>
 
         {/* Email Management Section */}

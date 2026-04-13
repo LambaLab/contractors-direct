@@ -223,6 +223,18 @@ function autoDetectQRStyle(qr: QuickReplies | undefined, question: string): Quic
     return base
   }
 
+  // Floor plans: question asks about floor plans or CAD files → pills Yes/No/Not sure
+  if (q.includes('floor plan') || q.includes('cad file') || q.includes('cad drawing') || q.includes('architectural drawing')) {
+    return {
+      style: 'pills' as const,
+      options: [
+        { label: 'Yes', value: 'Yes' },
+        { label: 'No', value: 'No' },
+        { label: 'Not sure', value: 'Not sure' },
+      ],
+    }
+  }
+
   // Budget picker: question asks about budget
   if (q.includes('budget') || (q.includes('how much') && (q.includes('mind') || q.includes('spend')))) {
     if (base.style !== 'budget') return { ...base, style: 'budget' as const, options: [] }
@@ -982,6 +994,7 @@ export function useIntakeChat({ proposalId, idea }: Props) {
             const newScore = Math.max(0, Math.min(85, confidenceRef.current + delta))
 
             setDetectedScope(newScope)
+            detectedScopeRef.current = newScope  // sync ref immediately so ballpark card below sees updated scope
             setConfidenceScore(newScore)
             setComplexityMultiplier(newMultiplier)
             setPriceRange(computePriceRange(newScope, newMultiplier, newScore))
@@ -1092,7 +1105,7 @@ export function useIntakeChat({ proposalId, idea }: Props) {
               const last = prev[prev.length - 1]
               const userAlreadyResponded = last?.id !== activeBubbleId
               const followUp = typeof input?.follow_up_question === 'string' ? input.follow_up_question : ''
-              const questionText = typeof input?.question === 'string' ? input.question.trim() : ''
+              let questionText = typeof input?.question === 'string' ? input.question.trim() : ''
               // Auto-detect custom styles from question text (Haiku fallback).
               // Then validate and normalize.
               const rawQR = input?.quick_replies
@@ -1108,7 +1121,29 @@ export function useIntakeChat({ proposalId, idea }: Props) {
                   questionText && !rawQR
                     ? autoDetectQRStyle({ style: 'list', options: [] }, questionText) ?? undefined
                     : undefined
-              const updatedQR = normalizeQRStyle(validQR, questionText)
+              let updatedQR = normalizeQRStyle(validQR, questionText)
+
+              // ── Floor plans / budget mismatch fix ──
+              // The AI sometimes combines the floor plans question (item #5) with
+              // the budget picker (item #7) in one turn: floor plans text in the
+              // bubble, budget picker in quick_replies. Override to pills when the
+              // response text asks about floor plans but QR is a budget picker.
+              const _responseLC = (last.content || followUp).toLowerCase()
+              if (
+                updatedQR?.style === 'budget' &&
+                !input?.has_floor_plans &&
+                (_responseLC.includes('floor plan') || _responseLC.includes('cad file'))
+              ) {
+                updatedQR = {
+                  style: 'pills' as const,
+                  options: [
+                    { label: 'Yes', value: 'Yes' },
+                    { label: 'No', value: 'No' },
+                    { label: 'Not sure', value: 'Not sure' },
+                  ],
+                }
+                questionText = 'Do you have floor plans or CAD files for the space?'
+              }
 
               if (isPauseThisTurn) {
                 // PAUSE TURN: always create the checkpoint, even if the user responded
