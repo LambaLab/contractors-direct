@@ -4,7 +4,7 @@ import { useState, useRef, useEffect, useCallback } from 'react'
 import Image from 'next/image'
 import { X, ChevronDown, Info } from 'lucide-react'
 import { SCOPE_CATALOG } from '@/lib/scope/catalog'
-import { formatPriceRange, formatPrice, computeStyleMidpoints, computeStyleRange, type PriceRange } from '@/lib/pricing/engine'
+import { formatPriceRange, formatPrice, computeStyleMidpoints, computeStyleRange, computeQuickBallpark, type PriceRange } from '@/lib/pricing/engine'
 import { getStyleInfo, STYLE_INFO_ORDERED } from '@/lib/styles/descriptions'
 import {
   Dialog,
@@ -258,10 +258,19 @@ export default function BallparkResultCard({
   const propertyLabel = propertyType.charAt(0).toUpperCase() + propertyType.slice(1)
   const summaryParts = [propertyLabel, location, sizeSqft > 0 ? `${sizeSqft.toLocaleString()} sqft` : null, conditionLabel(condition)].filter(Boolean)
 
-  const styleMidpoints = computeStyleMidpoints(range)
+  // Always recompute from the static catalog so stale cached cards
+  // (from before pricing fixes) show correct prices on reload.
+  // Historical stats are not available client-side on restore, but
+  // the static catalog is the trusted baseline.
+  const freshRange = (scopeIds.length > 0 && sizeSqft > 0)
+    ? computeQuickBallpark({ scopeIds, sizeSqft, condition, location })
+    : range
+  const effectiveRange = freshRange
+
+  const styleMidpoints = computeStyleMidpoints(effectiveRange)
   const activeStyleInfo = getStyleInfo(activeStyle)
   const activeTierIndex = STYLE_INFO_ORDERED.findIndex((s) => s.key === activeStyle)
-  const activeRange = computeStyleRange(range, activeStyle)
+  const activeRange = computeStyleRange(effectiveRange, activeStyle)
 
   const navPills = getNavStyles(userStyleKey, styleMidpoints)
   const modalStyleInfo = activeStyleKey ? getStyleInfo(activeStyleKey) : null
