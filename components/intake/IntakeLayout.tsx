@@ -57,6 +57,7 @@ export default function IntakeLayout({ proposalId, initialMessage, onStateChange
     handleFileUploaded,
     handleFileUploadDone,
     handleFileUploadSkipped,
+    pickerHints,
   } = useIntakeChat({ proposalId, idea: initialMessage })
 
   // Session ID for direct-to-Supabase file uploads. The stored session is
@@ -182,6 +183,7 @@ export default function IntakeLayout({ proposalId, initialMessage, onStateChange
             onFileUploadDone={handleFileUploadDone}
             onFileUploadSkipped={handleFileUploadSkipped}
             onUpgradeToFull={upgradeToFull}
+            pickerHints={pickerHints}
           />
         </div>
 
@@ -255,6 +257,7 @@ export default function IntakeLayout({ proposalId, initialMessage, onStateChange
             onFileUploadDone={handleFileUploadDone}
             onFileUploadSkipped={handleFileUploadSkipped}
             onUpgradeToFull={upgradeToFull}
+            pickerHints={pickerHints}
           />
         </div>
         <MobileBottomDrawer

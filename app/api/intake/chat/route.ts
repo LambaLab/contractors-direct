@@ -127,7 +127,7 @@ export async function POST(req: NextRequest) {
           ] : []),
           // Turn 1 in full discovery: stay in discovery and walk the Priority Question Checklist.
           ...(phase === 'discovery' && turns === 0 && journeyMode !== 'upgraded' ? [
-            `\n-- TURN 1 INSTRUCTION: This is the user's first discovery turn. You are in Phase 1 Discovery. Walk the Priority Question Checklist in order (project type, location, ownership, condition, floor plans, size, budget, full scope). SKIP any items the user already answered in their opening message. Set current_phase: "discovery" and ask the FIRST unanswered checklist item. Do NOT jump to deep_dive yet, deep_dive only happens after item 8 (full scope probing).`,
+            `\n-- TURN 1 INSTRUCTION: This is the user's first discovery turn. You are in Phase 1 Discovery. FIRST: Parse the user's opening message and extract ALL field values mentioned (property_type, location, size_sqft, condition, budget_aed_stated, etc.). Set every detected field in your tool call. Confirm what you extracted in follow_up_question (e.g. "3,500 sq ft shell-and-core office in JLT with a 2.5-3M AED budget, great starting point."). Then ask the FIRST unanswered checklist item. Do NOT re-ask fields the user already stated. Do NOT jump to deep_dive yet, deep_dive only happens after item 8 (full scope probing).`,
           ] : []),
           // Force transition when discovery has gone too long
           ...(phase === 'discovery' && turns >= 8 ? [

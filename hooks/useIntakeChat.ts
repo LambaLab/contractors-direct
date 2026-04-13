@@ -366,6 +366,10 @@ export function useIntakeChat({ proposalId, idea }: Props) {
   const streamIdRef = useRef<string>('')  // ID of the currently-active stream; used to prevent
                                           // stale streams from clobbering newer state
 
+  // Picker hints: expose extracted size/budget so pickers can pre-populate.
+  // Updated whenever the AI tool_result includes these values.
+  const [pickerHints, setPickerHints] = useState<{ size_sqft?: number; budget_aed?: number }>({})
+
   // Daniel-script qualifying fields: accumulate across the conversation and
   // persist into leads.metadata alongside the existing projectOverview etc.
   const qualifyingFieldsRef = useRef<{
@@ -655,6 +659,12 @@ export function useIntakeChat({ proposalId, idea }: Props) {
             const p = JSON.parse(localStorage.getItem(PROPOSAL_KEY(proposalId)) ?? '{}')
             if (p.qualifyingFields && typeof p.qualifyingFields === 'object') {
               qualifyingFieldsRef.current = p.qualifyingFields
+              // Restore picker hints from persisted qualifying fields
+              const qf = p.qualifyingFields
+              const restored: { size_sqft?: number; budget_aed?: number } = {}
+              if (typeof qf.size_sqft === 'number' && qf.size_sqft > 0) restored.size_sqft = qf.size_sqft
+              if (typeof qf.budget_aed_stated === 'number' && qf.budget_aed_stated > 0) restored.budget_aed = qf.budget_aed_stated
+              if (restored.size_sqft || restored.budget_aed) setPickerHints(restored)
             }
           } catch { /* ignore */ }
 
@@ -959,11 +969,21 @@ export function useIntakeChat({ proposalId, idea }: Props) {
               if (typeof input?.condition === 'string' && input.condition) q.condition = input.condition
               if (typeof input?.style_preference === 'string' && input.style_preference) q.style_preference = input.style_preference
               if (typeof input?.ownership === 'string' && input.ownership) q.ownership = input.ownership
-              if (typeof input?.budget_aed_stated === 'number' && input.budget_aed_stated > 0) q.budget_aed_stated = input.budget_aed_stated
+              if (typeof input?.budget_aed_stated === 'number' && input.budget_aed_stated > 0) {
+                q.budget_aed_stated = input.budget_aed_stated
+              }
               if (typeof input?.has_floor_plans === 'string' && input.has_floor_plans) q.has_floor_plans = input.has_floor_plans
               if (typeof input?.wants_project_management === 'string' && input.wants_project_management) q.wants_project_management = input.wants_project_management
               if (typeof input?.contractor_quote_count === 'number' && input.contractor_quote_count > 0) q.contractor_quote_count = input.contractor_quote_count
               if (typeof input?.full_scope_notes === 'string' && input.full_scope_notes) q.full_scope_notes = input.full_scope_notes
+
+              // Update picker hints so budget/sqft pickers pre-populate
+              const newHints: { size_sqft?: number; budget_aed?: number } = {}
+              if (q.size_sqft && q.size_sqft > 0) newHints.size_sqft = q.size_sqft
+              if (q.budget_aed_stated && q.budget_aed_stated > 0) newHints.budget_aed = q.budget_aed_stated
+              if (newHints.size_sqft || newHints.budget_aed) {
+                setPickerHints(prev => ({ ...prev, ...newHints }))
+              }
             }
 
             // ── File upload widget injection ──
@@ -1876,5 +1896,6 @@ export function useIntakeChat({ proposalId, idea }: Props) {
     handleFileUploaded,
     handleFileUploadDone,
     handleFileUploadSkipped,
+    pickerHints,
   }
 }

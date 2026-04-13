@@ -40,9 +40,10 @@ type Props = {
   onFileUploadDone?: (messageId: string) => void
   onFileUploadSkipped?: (messageId: string) => void
   onUpgradeToFull?: () => void
+  pickerHints?: { size_sqft?: number; budget_aed?: number }
 }
 
-export default function ChatPanel({ messages, isStreaming, onSend, onEdit, onRequestViewProposal, onSaveLater, constrained = false, theme, isPaused, pausedQuestion, questionRevealed, onPauseQuestions, onResumeQuestions, onRevealPausedQuestion, onSkipQuestion, confidenceScore = 0, emailVerified, leadId, sessionId, onFileUploaded, onFileUploadDone, onFileUploadSkipped, onUpgradeToFull }: Props) {
+export default function ChatPanel({ messages, isStreaming, onSend, onEdit, onRequestViewProposal, onSaveLater, constrained = false, theme, isPaused, pausedQuestion, questionRevealed, onPauseQuestions, onResumeQuestions, onRevealPausedQuestion, onSkipQuestion, confidenceScore = 0, emailVerified, leadId, sessionId, onFileUploaded, onFileUploadDone, onFileUploadSkipped, onUpgradeToFull, pickerHints }: Props) {
   const [input, setInput] = useState('')
   const [reEditingMessageId, setReEditingMessageId] = useState<string | null>(null)
   const [showScrollBtn, setShowScrollBtn] = useState(false)
@@ -348,6 +349,7 @@ const isCardsQR = lastQR?.style === 'cards' && !isConditionQR
                 onPauseQuestions={!reEditingQR ? onPauseQuestions : undefined}
                 onResumeQuestions={!reEditingQR ? onResumeQuestions : undefined}
                 isPaused={isPaused}
+                initialValue={pickerHints?.size_sqft}
               />
             ) : activeQR.style === 'budget' ? (
               <BudgetPicker
@@ -367,6 +369,7 @@ const isCardsQR = lastQR?.style === 'cards' && !isConditionQR
                 onPauseQuestions={!reEditingQR ? onPauseQuestions : undefined}
                 onResumeQuestions={!reEditingQR ? onResumeQuestions : undefined}
                 isPaused={isPaused}
+                initialValue={pickerHints?.budget_aed}
               />
             ) : activeQR.style === 'scope_grid' ? (
               <ScopeMultiSelectGrid
