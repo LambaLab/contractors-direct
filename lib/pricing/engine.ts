@@ -182,9 +182,21 @@ export function computeQuickBallpark(params: {
   historicalStats?: HistoricalPricingStat[]
 }): PriceRange {
   const effectiveArea = getEffectiveArea(params.scopeIds, params.sizeSqft)
-  const base = params.historicalStats && params.historicalStats.length > 0
-    ? calculateDataDrivenPriceRange(params.scopeIds, effectiveArea, params.historicalStats)
-    : calculatePriceRange(params.scopeIds, effectiveArea)
+  const staticBase = calculatePriceRange(params.scopeIds, effectiveArea)
+
+  let base = staticBase
+  if (params.historicalStats && params.historicalStats.length > 0) {
+    const historicalBase = calculateDataDrivenPriceRange(params.scopeIds, effectiveArea, params.historicalStats)
+    // Sanity check: if historical data produces a result more than 5x the
+    // static catalog, the historical rates are likely corrupted (total costs
+    // stored as unit rates, or wrong unit mappings). Fall back to static.
+    const ratio = staticBase.max > 0 ? historicalBase.max / staticBase.max : 1
+    if (ratio <= 5) {
+      base = historicalBase
+    }
+    // else: silently discard historical data and use static catalog
+  }
+
   const withCondition = applyConditionMultiplier(base, params.condition)
   const withLocation = applyLocationFactor(withCondition, params.location)
   return {
