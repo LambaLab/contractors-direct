@@ -46,7 +46,7 @@ export const UPDATE_PROPOSAL_TOOL: Anthropic.Tool = {
       },
       quick_replies: {
         type: 'object' as const,
-        description: 'Include on almost every turn (see system prompt). For open-ended or numeric questions, provide 2-3 example options with allowCustom: true so users have a starting point. Every option MUST include an icon (single emoji).',
+        description: 'Include on almost every turn (see system prompt). For open-ended or numeric questions, provide 2-3 example options with allowCustom: true so users have a starting point. Do NOT include emoji in any field.',
         properties: {
           style: {
             type: 'string' as const,
@@ -68,12 +68,12 @@ export const UPDATE_PROPOSAL_TOOL: Anthropic.Tool = {
               properties: {
                 label: { type: 'string' as const, description: 'Short bold label (5 words max)' },
                 description: { type: 'string' as const, description: 'Subtitle for list style only (12 words max)' },
-                icon: { type: 'string' as const, description: 'Single emoji that represents this option. Required for every option. Also used as fallback if imageUrl fails to load for cards style.' },
+                icon: { type: 'string' as const, description: 'DEPRECATED. Always set to empty string "". Do NOT include emoji.' },
                 value: { type: 'string' as const, description: 'Text sent as user message when tapped' },
                 imageUrl: { type: 'string' as const, description: 'Optional. The UI auto-attaches images for cards style based on the value field. You do not need to set this.' },
                 imageAlt: { type: 'string' as const, description: 'Optional. The UI auto-attaches alt text for cards style. You do not need to set this.' },
               },
-              required: ['label', 'value', 'icon'],
+              required: ['label', 'value'],
             },
           },
           scopeContext: {

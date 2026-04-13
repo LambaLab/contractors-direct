@@ -19,8 +19,8 @@ type Pill = {
 }
 
 const COMPLETE_PILLS: Pill[] = [
-  { value: '__continue__', label: 'Keep going', icon: '💬', primary: true },
-  { value: '__view_proposal__', label: 'View proposal', icon: '📋', primary: false },
+  { value: '__continue__', label: 'Keep going', icon: '', primary: true },
+  { value: '__view_proposal__', label: 'View proposal', icon: '', primary: false },
 ]
 
 // Lookup a scope item's display name from the catalog; fall back to formatted ID
@@ -75,8 +75,7 @@ export default function ScopeDivider({ message, onSend, onRequestViewProposal, i
       <div className="w-full py-3">
         <div className="flex items-center gap-3">
           <div className="flex-1 h-px bg-[var(--ov-border,rgba(255,255,255,0.07))]" />
-          <span className="text-[10px] tracking-[0.18em] uppercase text-[var(--ov-text-muted,#727272)] select-none whitespace-nowrap flex items-center gap-1.5">
-            <span className="text-sm">{emoji}</span>
+          <span className="text-[10px] tracking-[0.18em] uppercase text-[var(--ov-text-muted,#727272)] select-none whitespace-nowrap">
             {scopeName}{posText}
           </span>
           <div className="flex-1 h-px bg-[var(--ov-border,rgba(255,255,255,0.07))]" />
@@ -121,7 +120,7 @@ export default function ScopeDivider({ message, onSend, onRequestViewProposal, i
                     : 'border border-[var(--ov-border,rgba(255,255,255,0.12))] text-[var(--ov-text,#ffffff)] hover:border-[var(--ov-accent-border,rgba(115,103,255,0.50))] hover:text-[var(--ov-accent-strong,#7367ff)]',
                 ].join(' ')}
               >
-                <span className="leading-none text-base">{pill.icon}</span>
+                {pill.icon && <span className="leading-none text-base">{pill.icon}</span>}
                 {pill.label}
               </button>
             ))}

@@ -118,7 +118,6 @@ export default function QuickReplies({ quickReplies, onSelect, disabled, questio
                   : 'bg-[var(--ov-surface-subtle,rgba(255,255,255,0.05))] text-[var(--ov-text,#ffffff)] border-[var(--ov-border,rgba(255,255,255,0.10))] hover:border-[var(--ov-accent-border,rgba(115,103,255,0.40))]'
               }`}
             >
-              {opt.icon && <span className="mr-1">{opt.icon}</span>}
               {opt.label}
             </button>
           )
@@ -129,7 +128,7 @@ export default function QuickReplies({ quickReplies, onSelect, disabled, questio
             disabled={disabled}
             className="px-3 py-1.5 rounded-full border border-[var(--ov-border,rgba(255,255,255,0.10))] bg-[var(--ov-surface-subtle,rgba(255,255,255,0.05))] text-[var(--ov-text-muted,#727272)] text-sm hover:border-[var(--ov-accent-border,rgba(115,103,255,0.40))] transition-all cursor-pointer disabled:cursor-not-allowed"
           >
-            ✏️ Other...
+            Other...
           </button>
         )}
         {showCustomInput && (
@@ -321,7 +320,6 @@ export default function QuickReplies({ quickReplies, onSelect, disabled, questio
               )}
               <div className="flex-1 min-w-0">
                 <p className="text-sm font-medium text-[var(--ov-text,#ffffff)]">
-                  {option.icon && <span className="mr-1.5">{option.icon}</span>}
                   {option.label}
                 </p>
                 {option.description && (

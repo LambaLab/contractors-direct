@@ -21,15 +21,15 @@ type Pill = {
 
 // Pills when lead is NOT saved yet — lead with Save for later (primary)
 const UNSAVED_PILLS: Pill[] = [
-  { value: '__save_later__',    label: 'Save for later',          icon: '🔖', primary: true  },
-  { value: '__continue__',      label: 'Keep going',              icon: '💬', primary: false },
-  { value: '__view_proposal__', label: 'Get ballpark estimate',   icon: '📋', primary: false },
+  { value: '__save_later__',    label: 'Save for later',          icon: '', primary: true  },
+  { value: '__continue__',      label: 'Keep going',              icon: '', primary: false },
+  { value: '__view_proposal__', label: 'Get ballpark estimate',   icon: '', primary: false },
 ]
 
 // Pills when lead IS saved — lead with Get ballpark estimate (primary)
 const SAVED_PILLS: Pill[] = [
-  { value: '__view_proposal__', label: 'Get ballpark estimate',   icon: '📋', primary: true  },
-  { value: '__continue__',      label: 'Keep going',              icon: '💬', primary: false },
+  { value: '__view_proposal__', label: 'Get ballpark estimate',   icon: '', primary: true  },
+  { value: '__continue__',      label: 'Keep going',              icon: '', primary: false },
 ]
 
 export default function PauseCheckpoint({ message, onSend, onRequestViewProposal, onSaveLater, isLast, isStreaming, emailVerified }: Props) {
@@ -83,7 +83,6 @@ export default function PauseCheckpoint({ message, onSend, onRequestViewProposal
                   : 'border border-[var(--ov-border,rgba(255,255,255,0.12))] text-[var(--ov-text,#ffffff)] hover:border-[var(--ov-accent-border,rgba(115,103,255,0.50))] hover:text-[var(--ov-accent-strong,#7367ff)]',
               ].join(' ')}
             >
-              <span className="leading-none text-base">{pill.icon}</span>
               {pill.label}
             </button>
           ))}

@@ -175,31 +175,31 @@ function normalizeQRStyle(qr: QuickReplies | undefined, question?: string): Quic
 // When the AI omits quick_replies or sends empty options for a known question
 // type, inject these defaults so the UI always shows rich interactive cards.
 const DEFAULT_PROPERTY_TYPE_OPTIONS = [
-  { label: 'Villa', value: 'villa', icon: '🏠' },
-  { label: 'Apartment', value: 'apartment', icon: '🏢' },
-  { label: 'Townhouse', value: 'townhouse', icon: '🏘️' },
-  { label: 'Penthouse', value: 'penthouse', icon: '🏙️' },
-  { label: 'Office', value: 'office', icon: '💼' },
-  { label: 'Retail', value: 'retail', icon: '🛍️' },
-  { label: 'Warehouse', value: 'warehouse', icon: '🏭' },
+  { label: 'Villa', value: 'villa' },
+  { label: 'Apartment', value: 'apartment' },
+  { label: 'Townhouse', value: 'townhouse' },
+  { label: 'Penthouse', value: 'penthouse' },
+  { label: 'Office', value: 'office' },
+  { label: 'Retail', value: 'retail' },
+  { label: 'Warehouse', value: 'warehouse' },
 ]
 
 const DEFAULT_CONDITION_RESIDENTIAL_OPTIONS = [
-  { label: 'New', value: 'new', icon: '✨' },
-  { label: 'Needs Refresh', value: 'needs_refresh', icon: '🎨' },
-  { label: 'Major Renovation', value: 'major_renovation', icon: '🔨' },
-  { label: 'Shell', value: 'shell', icon: '🧱' },
+  { label: 'New', value: 'new' },
+  { label: 'Needs Refresh', value: 'needs_refresh' },
+  { label: 'Major Renovation', value: 'major_renovation' },
+  { label: 'Shell', value: 'shell' },
 ]
 
 const DEFAULT_CONDITION_COMMERCIAL_OPTIONS = [
-  { label: 'Fitted', value: 'fitted', icon: '✅' },
-  { label: 'Semi-Fitted', value: 'semi_fitted', icon: '🔧' },
-  { label: 'Shell & Core', value: 'shell_and_core', icon: '🏗️' },
+  { label: 'Fitted', value: 'fitted' },
+  { label: 'Semi-Fitted', value: 'semi_fitted' },
+  { label: 'Shell & Core', value: 'shell_and_core' },
 ]
 
 const DEFAULT_OWNERSHIP_OPTIONS = [
-  { label: 'Owned', value: 'Owned', icon: '🏠' },
-  { label: 'Leased', value: 'Leased', icon: '📋' },
+  { label: 'Owned', value: 'Owned' },
+  { label: 'Leased', value: 'Leased' },
 ]
 
 /**
@@ -759,6 +759,19 @@ export function useIntakeChat({ proposalId, idea }: Props) {
     let activeBubbleId = assistantMessage.id
     let partialResultApplied = false  // tracks if partial_result already built bubbleContent
     setMessages((prev) => [...prev, assistantMessage])
+
+    // Safety timeout: if the stream produces no content within 30s, show an error
+    // instead of leaving an empty "..." bubble indefinitely.
+    const emptyBubbleTimeout = setTimeout(() => {
+      setMessages((prev) => {
+        const last = prev[prev.length - 1]
+        if (last?.id === activeBubbleId && last.role === 'assistant' && !last.content.trim()) {
+          return [...prev.slice(0, -1), { ...last, content: 'Taking too long to respond. Please try again.', isError: true }]
+        }
+        return prev
+      })
+      if (streamIdRef.current === myStreamId) setIsStreaming(false)
+    }, 30_000)
 
     try {
       const res = await fetch('/api/intake/chat', {
@@ -1482,6 +1495,7 @@ export function useIntakeChat({ proposalId, idea }: Props) {
         return [...prev.slice(0, -1), { ...last, content: errorMsg, isError: true }]
       })
     } finally {
+      clearTimeout(emptyBubbleTimeout)
       // Guard: if the stream closed without ever producing a tool_result (e.g. Vercel
       // timeout, network drop), replace the empty bubble with a visible error.
       // We check the message ID so a stale stream doesn't clobber a newer one that
