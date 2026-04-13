@@ -240,7 +240,14 @@ export function hydrateProposalFromRestore(data: {
       }
     }
   }
-  if (Array.isArray(data.messages) && data.messages.length > 0) {
+  // Only write DB messages to localStorage if there are no richer locally-stored
+  // messages already. Local messages have quickReplies, isBallpark, etc. which the
+  // DB does not store. Overwriting them with flat DB messages causes data loss on
+  // same-device restore when the user has a different active session in cd_session.
+  const existingMsgs = localStorage.getItem(`cd_msgs_${data.proposalId}`)
+  const existingParsed = existingMsgs ? (() => { try { return JSON.parse(existingMsgs) } catch { return null } })() : null
+  const existingIsRicher = Array.isArray(existingParsed) && existingParsed.length >= (data.messages?.length ?? 0)
+  if (!existingIsRicher && Array.isArray(data.messages) && data.messages.length > 0) {
     localStorage.setItem(`cd_msgs_${data.proposalId}`, JSON.stringify(data.messages))
   }
 

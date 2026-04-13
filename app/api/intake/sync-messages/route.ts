@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createServiceClient } from '@/lib/supabase/server'
 
-type MessageInput = { role: 'user' | 'assistant'; content: string }
+type MessageInput = { role: 'user' | 'assistant'; content: string; [key: string]: unknown }
 
 export async function POST(req: NextRequest) {
   const body = await req.json()
@@ -29,11 +29,14 @@ export async function POST(req: NextRequest) {
   }
 
   if (messages.length > 0) {
-    const incoming = (messages as MessageInput[]).map((m) => ({
-      lead_id: leadId,
-      role: m.role,
-      content: m.content,
-    }))
+    const incoming = (messages as MessageInput[]).map((m) => {
+      const { role, content, ...extra } = m
+      const row: Record<string, unknown> = { lead_id: leadId, role, content }
+      // Store rich fields (question, quickReplies, isBallpark, etc.) in metadata
+      // so cross-device restore can reconstruct interactive elements
+      if (Object.keys(extra).length > 0) row.metadata = extra
+      return row
+    })
 
     // Deduplicate: fetch the last N messages for this lead and filter out
     // any that already exist (matching role + content). This prevents

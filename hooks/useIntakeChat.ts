@@ -551,7 +551,26 @@ export function useIntakeChat({ proposalId, idea }: Props) {
               body: JSON.stringify({
                 proposalId,
                 sessionId: storedSession.sessionId,
-                messages: newMessages.filter((m) => m.role !== 'admin' && !m.isError).map((m) => ({ role: m.role, content: m.content })),
+                messages: newMessages.filter((m) => m.role !== 'admin' && !m.isError).map((m) => {
+                  const msg: Record<string, unknown> = { role: m.role, content: m.content }
+                  // Persist rich fields so cross-device restore can reconstruct interactive elements
+                  if (m.question) msg.question = m.question
+                  if (m.quickReplies) msg.quickReplies = m.quickReplies
+                  if (m.isBallpark) {
+                    msg.isBallpark = true
+                    if (m.ballparkRange) msg.ballparkRange = m.ballparkRange
+                    if (m.ballparkScopeIds) msg.ballparkScopeIds = m.ballparkScopeIds
+                    if (m.ballparkPropertyType) msg.ballparkPropertyType = m.ballparkPropertyType
+                    if (m.ballparkLocation) msg.ballparkLocation = m.ballparkLocation
+                    if (m.ballparkSizeSqft) msg.ballparkSizeSqft = m.ballparkSizeSqft
+                    if (m.ballparkCondition) msg.ballparkCondition = m.ballparkCondition
+                  }
+                  if (m.isPause) msg.isPause = true
+                  if (m.isScopeStart) { msg.isScopeStart = true; msg.scopeId = m.scopeId }
+                  if (m.isScopeComplete) { msg.isScopeComplete = true; msg.scopeId = m.scopeId; msg.scopeSummary = m.scopeSummary }
+                  if (m.displayContent) msg.displayContent = m.displayContent
+                  return msg
+                }),
                 brief: syncBrief,
                 scope: syncScope,
                 confidenceScore: syncConfidence,

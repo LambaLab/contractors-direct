@@ -24,7 +24,7 @@ export async function GET(
 
   const { data: dbMessages, error: messagesError } = await supabase
     .from('chat_messages')
-    .select('role, content')
+    .select('role, content, metadata')
     .eq('lead_id', leadId)
     .order('created_at', { ascending: true })
 
@@ -33,11 +33,20 @@ export async function GET(
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
   }
 
-  const messages = (dbMessages ?? []).map((m) => ({
-    id: crypto.randomUUID(),
-    role: m.role as 'user' | 'assistant',
-    content: m.content,
-  }))
+  const messages = (dbMessages ?? []).map((m) => {
+    const msg: Record<string, unknown> = {
+      id: crypto.randomUUID(),
+      role: m.role as 'user' | 'assistant',
+      content: m.content,
+    }
+    // Merge rich fields from metadata (question, quickReplies, isBallpark, etc.)
+    // so the client can reconstruct interactive elements on restore
+    const extra = m.metadata as Record<string, unknown> | null
+    if (extra && typeof extra === 'object') {
+      Object.assign(msg, extra)
+    }
+    return msg
+  })
 
   // brief may be null if it was never persisted — fall back to first user message
   const brief = lead.brief
