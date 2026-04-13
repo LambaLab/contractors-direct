@@ -156,7 +156,7 @@ export function tightenPriceRange(base: PriceRange, confidenceScore: number): Pr
   if (confidenceScore <= 30) return base
   const midpoint = (base.min + base.max) / 2
   const halfSpread = (base.max - base.min) / 2
-  const tightenFactor = ((confidenceScore - 30) / 70) * 0.9
+  const tightenFactor = Math.min(1, ((confidenceScore - 30) / 70) * 0.9)
   const newHalfSpread = halfSpread * (1 - tightenFactor)
   return {
     min: Math.round(midpoint - newHalfSpread),

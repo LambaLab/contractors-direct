@@ -77,7 +77,7 @@ export default function BudgetPicker({
   onResumeQuestions,
   initialValue = 250_000,
 }: Props) {
-  const [value, setValue] = useState(initialValue)
+  const [value, setValue] = useState(Math.max(MIN, Math.min(MAX, initialValue || 250_000)))
   const [isDragging, setIsDragging] = useState(false)
   const trackRef = useRef<HTMLDivElement>(null)
 

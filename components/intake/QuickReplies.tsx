@@ -31,8 +31,8 @@ export default function QuickReplies({ quickReplies, onSelect, disabled, questio
       : incomingStyle !== 'list' && Array.isArray(options) && options.length >= 3
       ? ('list' as const)
       : incomingStyle
-  // Always show "Type something else..." for list style
-  const effectiveAllowCustom = style === 'list' ? true : (allowCustom ?? false)
+  // Show "Type something else..." for list style unless explicitly disabled
+  const effectiveAllowCustom = style === 'list' ? (allowCustom !== false) : (allowCustom ?? false)
   const [selected, setSelected] = useState<string[]>([])
   // Auto-expand text input when there are no predefined options (e.g. location question)
   const noOptions = options.length === 0 && effectiveAllowCustom

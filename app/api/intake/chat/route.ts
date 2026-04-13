@@ -660,10 +660,6 @@ When suggesting to resume, always frame it as an invitation, not a demand. "Want
       }
       } // end retry loop
 
-      if (lastError && !(lastError instanceof Error)) {
-        send('error', { code: 'unknown', message: 'Something went wrong. Please try again.' })
-      }
-
       controller.close()
     },
   })

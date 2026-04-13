@@ -15,7 +15,7 @@ export default function ConfidenceBar({ score }: Props) {
       <div className="h-1.5 bg-[var(--ov-track,rgba(255,255,255,0.08))] rounded-full overflow-hidden">
         <div
           className="h-full brand-gradient-bg rounded-full transition-all duration-700"
-          style={{ width: `${score}%` }}
+          style={{ width: `${Math.min(100, Math.max(0, score))}%` }}
         />
       </div>
     </div>

@@ -21,7 +21,11 @@ export async function GET(
     .eq('id', proposalId)
     .single()
 
-  const metadata = lead?.metadata as Record<string, unknown> | null
+  if (!lead) {
+    return NextResponse.json({ error: 'Lead not found' }, { status: 404 })
+  }
+
+  const metadata = lead.metadata as Record<string, unknown> | null
   const adminActive = metadata?.admin_active === true
 
   // Get new admin messages since timestamp

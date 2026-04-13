@@ -36,7 +36,7 @@ type Props = {
 // Also handles cases where the AI puts all sections in one block separated by single
 // newlines instead of double newlines.
 function ProjectOverview({ text }: { text: string }) {
-  const normalized = text.replace(/\\n/g, '\n')
+  const normalized = text.replace(/\\n/g, '\n').replace(/\\t/g, '\t')
 
   // Known section labels the AI uses — split on these even if only single-newline separated
   const sectionLabels = ['What it is', 'Who it\'s for', 'How it works', 'Key features', 'Monetization', 'Why it matters']

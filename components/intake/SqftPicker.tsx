@@ -63,7 +63,7 @@ export default function SqftPicker({
   onResumeQuestions,
   initialValue = 1500,
 }: Props) {
-  const [value, setValue] = useState(initialValue)
+  const [value, setValue] = useState(Math.max(MIN, Math.min(MAX, initialValue || 1500)))
   const [isDragging, setIsDragging] = useState(false)
   const trackRef = useRef<HTMLDivElement>(null)
 

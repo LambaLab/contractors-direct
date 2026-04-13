@@ -47,7 +47,7 @@ export default function PauseCheckpoint({ message, onSend, onRequestViewProposal
     }
   }
 
-  const paragraphs = message.content ? message.content.split('\n\n').filter(Boolean) : []
+  const paragraphs = message.content ? message.content.replace(/\\n/g, '\n').split('\n\n').filter(Boolean) : []
 
   return (
     <div className="w-full space-y-4 py-1">
