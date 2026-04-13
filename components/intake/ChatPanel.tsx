@@ -46,6 +46,7 @@ export default function ChatPanel({ messages, isStreaming, onSend, onEdit, onReq
   const [input, setInput] = useState('')
   const [reEditingMessageId, setReEditingMessageId] = useState<string | null>(null)
   const [showScrollBtn, setShowScrollBtn] = useState(false)
+  const [contentOverflows, setContentOverflows] = useState(false)
   const bottomRef = useRef<HTMLDivElement>(null)
   const scrollContainerRef = useRef<HTMLDivElement>(null)
   const textareaRef = useRef<HTMLTextAreaElement>(null)
@@ -74,6 +75,17 @@ export default function ChatPanel({ messages, isStreaming, onSend, onEdit, onReq
     container.addEventListener('scroll', handleScroll, { passive: true })
     return () => container.removeEventListener('scroll', handleScroll)
   }, [])
+
+  // Track whether content overflows — only enable scroll when it does
+  useEffect(() => {
+    const container = scrollContainerRef.current
+    if (!container) return
+    const check = () => setContentOverflows(container.scrollHeight > container.clientHeight + 2)
+    check()
+    const ro = new ResizeObserver(check)
+    ro.observe(container)
+    return () => ro.disconnect()
+  }, [messages])
 
   // After the panel open/close animation completes, snap to bottom so
   // the latest message is always in view regardless of reflow from width change
@@ -163,7 +175,7 @@ const isCardsQR = lastQR?.style === 'cards' && !isConditionQR
   return (
     <div className="flex flex-col h-full">
       {/* Messages — scroll container stays full-width always; content div handles centering */}
-      <div ref={scrollContainerRef} className="flex-1 overflow-y-auto py-4 scrollbar-hide relative overscroll-none">
+      <div ref={scrollContainerRef} className={`flex-1 py-4 scrollbar-hide relative overscroll-none ${contentOverflows ? 'overflow-y-auto' : 'overflow-hidden'}`}>
         <div
           className="px-6 space-y-4 mx-auto w-full"
           style={{ maxWidth: '760px' }}

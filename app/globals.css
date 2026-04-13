@@ -119,6 +119,7 @@
   }
   body {
     @apply bg-brand-dark text-foreground antialiased;
+    overscroll-behavior: none;
   }
   html {
     @apply font-sans;
