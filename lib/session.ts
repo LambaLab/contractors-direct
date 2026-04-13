@@ -155,6 +155,18 @@ export function hydrateProposalFromRestore(data: {
 
   const meta = data.metadata && typeof data.metadata === 'object' ? data.metadata : {} as Record<string, unknown>
 
+  // Extract qualifying fields from metadata (property_type, location, size_sqft, etc.)
+  // These are stored at the top level of metadata by sync-messages.
+  const qualifyingFields: Record<string, unknown> = {}
+  const QF_KEYS = ['property_type', 'location', 'size_sqft', 'condition', 'style_preference',
+    'ownership', 'budget_aed_stated', 'has_floor_plans', 'wants_project_management',
+    'contractor_quote_count', 'full_scope_notes', 'uploaded_files']
+  for (const k of QF_KEYS) {
+    if (meta[k] !== undefined && meta[k] !== null && meta[k] !== '') {
+      qualifyingFields[k] = meta[k]
+    }
+  }
+
   localStorage.setItem(
     `cd_proposal_${data.proposalId}`,
     JSON.stringify({
@@ -165,11 +177,52 @@ export function hydrateProposalFromRestore(data: {
       scopeSummaries: meta.scopeSummaries || {},
       projectName: meta.projectName || '',
       brief: data.brief || '',
+      ...(Object.keys(qualifyingFields).length > 0 ? { qualifyingFields } : {}),
     })
   )
 
   if (meta.projectName) {
     localStorage.setItem('cd_project_name', String(meta.projectName))
+  }
+
+  // Restore phase state so the conversation resumes from the correct phase.
+  // Infer phase from available data if not explicitly stored.
+  const hasScope = Array.isArray(data.scope) && data.scope.length > 0
+  const hasMessages = Array.isArray(data.messages) && data.messages.length > 0
+  const confidence = typeof data.confidenceScore === 'number' ? data.confidenceScore : 0
+
+  if (meta.currentPhase) {
+    // Explicit phase state from metadata (if sync-messages saved it)
+    localStorage.setItem(`cd_phase_${data.proposalId}`, JSON.stringify({
+      currentPhase: meta.currentPhase,
+      currentScope: meta.currentScope || '',
+      scopeQueue: Array.isArray(meta.scopeQueue) ? meta.scopeQueue : [],
+      completedScope: Array.isArray(meta.completedScope) ? meta.completedScope : [],
+    }))
+  } else if (hasScope && confidence > 30) {
+    // Infer: if we have scope + decent confidence, likely in deep_dive or wrap_up
+    localStorage.setItem(`cd_phase_${data.proposalId}`, JSON.stringify({
+      currentPhase: confidence >= 60 ? 'wrap_up' : 'deep_dive',
+      currentScope: '',
+      scopeQueue: [],
+      completedScope: Array.isArray(data.scope) ? data.scope : [],
+    }))
+  } else if (hasMessages) {
+    // Infer: if we have messages but no scope, likely in discovery
+    localStorage.setItem(`cd_phase_${data.proposalId}`, JSON.stringify({
+      currentPhase: 'discovery',
+      currentScope: '',
+      scopeQueue: [],
+      completedScope: [],
+    }))
+  }
+
+  // Restore journey mode
+  if (meta.journeyMode) {
+    localStorage.setItem(`cd_journey_mode_${data.proposalId}`, String(meta.journeyMode))
+  } else if (hasMessages) {
+    // Default to 'full' if we have a substantial conversation
+    localStorage.setItem(`cd_journey_mode_${data.proposalId}`, 'full')
   }
 
   // Attach last QR state to the final assistant message so the card renders on restore.

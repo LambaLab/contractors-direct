@@ -526,6 +526,12 @@ export function useIntakeChat({ proposalId, idea }: Props) {
                 ...(typeof p.projectOverview === 'string' && p.projectOverview ? { projectOverview: p.projectOverview } : {}),
                 ...(p.scopeSummaries && typeof p.scopeSummaries === 'object' ? { scopeSummaries: p.scopeSummaries } : {}),
                 ...(p.qualifyingFields && typeof p.qualifyingFields === 'object' ? p.qualifyingFields : {}),
+                // Phase + journey state for cross-device restore
+                currentPhase: currentPhaseRef.current,
+                currentScope: currentScopeRef.current,
+                scopeQueue: scopeQueueRef.current,
+                completedScope: completedScopeRef.current,
+                journeyMode: journeyModeRef.current,
               }
             } catch { /* ignore */ }
 

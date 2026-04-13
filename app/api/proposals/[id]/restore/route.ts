@@ -53,7 +53,7 @@ export async function GET(
     userId: lead.user_id ?? '',
     brief,
     email: lead.email ?? null,
-    modules: Array.isArray(lead.scope) ? lead.scope : [],
+    scope: Array.isArray(lead.scope) ? lead.scope : [],
     confidenceScore: typeof lead.confidence_score === 'number' ? lead.confidence_score : 0,
     messages,
     metadata: meta ?? null,
