@@ -51,6 +51,10 @@ export default function ChatPanel({ messages, isStreaming, onSend, onEdit, onReq
   const textareaRef = useRef<HTMLTextAreaElement>(null)
 
   const scrollToBottom = useCallback((behavior: ScrollBehavior = 'smooth') => {
+    const container = scrollContainerRef.current
+    if (!container) return
+    // Only scroll if content actually overflows the container
+    if (container.scrollHeight <= container.clientHeight) return
     bottomRef.current?.scrollIntoView({ behavior })
   }, [])
 
