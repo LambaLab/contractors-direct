@@ -192,7 +192,9 @@ export default function MessageBubble({ message, isStreaming, onQuickReply, isLa
                   ? `bg-[var(--ov-bubble-user-bg,transparent)] border border-[var(--ov-bubble-user-border,#7367ff)] text-[var(--ov-bubble-user-text,var(--ov-text,#ffffff))] font-medium rounded-br-sm ${isBeingReEdited ? 'ring-2 ring-[var(--ov-focus-ring,rgba(115,103,255,0.60))] ring-offset-2 ring-offset-[var(--ov-input-bg,#1a1a1a)]' : ''}`
                   : isAdmin
                     ? 'bg-[#0082fe]/10 border border-[#0082fe]/20 text-[var(--ov-text,#ffffff)] rounded-bl-sm'
-                    : 'bg-[var(--ov-bubble-ai-bg,rgba(255,255,255,0.05))] text-[var(--ov-text,#ffffff)] border border-[var(--ov-bubble-ai-border,transparent)] rounded-bl-sm'
+                    : message.isError
+                      ? 'bg-red-500/10 text-red-300 border border-red-500/20 rounded-bl-sm'
+                      : 'bg-[var(--ov-bubble-ai-bg,rgba(255,255,255,0.05))] text-[var(--ov-text,#ffffff)] border border-[var(--ov-bubble-ai-border,transparent)] rounded-bl-sm'
               }`}
             >
               {/* Loading indicator while streaming (before content arrives) */}

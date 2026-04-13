@@ -13,6 +13,28 @@ export const maxDuration = 60
 const anthropic = new Anthropic()
 
 const MAX_MESSAGES = 50
+const MAX_RETRIES = 2
+
+// Classify Anthropic errors into actionable categories for the client.
+function classifyError(err: unknown): { code: string; message: string; retryable: boolean } {
+  if (err instanceof Anthropic.AuthenticationError) {
+    return { code: 'auth_error', message: 'AI service authentication failed. Please contact support.', retryable: false }
+  }
+  if (err instanceof Anthropic.RateLimitError) {
+    return { code: 'rate_limit', message: 'AI service is busy. Retrying...', retryable: true }
+  }
+  if (err instanceof Anthropic.APIError) {
+    // 529 = overloaded, 500/502/503 = transient server errors
+    if (err.status === 529 || err.status === 500 || err.status === 502 || err.status === 503) {
+      return { code: 'overloaded', message: 'AI service is temporarily overloaded. Retrying...', retryable: true }
+    }
+    if (err.status === 400) {
+      return { code: 'bad_request', message: 'Message could not be processed. Try shortening your message.', retryable: false }
+    }
+    return { code: 'api_error', message: `AI service error (${err.status}). Please try again.`, retryable: false }
+  }
+  return { code: 'unknown', message: 'Something went wrong. Please try again.', retryable: false }
+}
 
 export async function POST(req: NextRequest) {
   const {
@@ -61,7 +83,7 @@ export async function POST(req: NextRequest) {
     // Silently continue without historical context if query fails
   }
 
-  const stream = anthropic.messages.stream({
+  const streamParams = {
     model: process.env.INTAKE_MODEL || 'claude-haiku-4-5-20251001',
     max_tokens: 1500,
     system: [
@@ -169,7 +191,7 @@ When suggesting to resume, always frame it as an invitation, not a demand. "Want
     tools: [UPDATE_PROPOSAL_TOOL],
     tool_choice: { type: 'any' },
     messages,
-  })
+  } as Parameters<typeof anthropic.messages.stream>[0]
 
   const readable = new ReadableStream({
     async start(controller) {
@@ -185,6 +207,19 @@ When suggesting to resume, always frame it as an invitation, not a demand. "Want
       if (historicalStats.length > 0) {
         send('pricing_stats', historicalStats)
       }
+
+      // Retry loop for transient Anthropic API errors (429, 529, 5xx).
+      // On the first attempt we stream normally. If a retryable error occurs
+      // before any text was sent to the client, we wait briefly and retry.
+      let lastError: unknown = null
+      for (let attempt = 0; attempt <= MAX_RETRIES; attempt++) {
+        if (attempt > 0) {
+          // Exponential backoff: 1s, 2s
+          await new Promise(r => setTimeout(r, 1000 * attempt))
+          console.warn(`Anthropic API retry attempt ${attempt}/${MAX_RETRIES}`)
+        }
+
+        const stream = anthropic.messages.stream(streamParams)
 
       // Buffer tool input JSON as it streams so we can send tool_result
       // the moment the block ends -- no need to wait for finalMessage().
@@ -610,11 +645,26 @@ When suggesting to resume, always frame it as an invitation, not a demand. "Want
         }
 
         send('done', {})
+        lastError = null
+        break // Success -- exit retry loop
       } catch (err) {
-        send('error', { message: err instanceof Error ? err.message : 'Unknown error' })
-      } finally {
-        controller.close()
+        lastError = err
+        const classified = classifyError(err)
+        console.error(`Anthropic API error (attempt ${attempt + 1}/${MAX_RETRIES + 1}):`, classified.code, err instanceof Error ? err.message : err)
+
+        if (!classified.retryable || attempt >= MAX_RETRIES) {
+          send('error', { code: classified.code, message: classified.message })
+          break
+        }
+        // Retryable -- loop will wait and try again
       }
+      } // end retry loop
+
+      if (lastError && !(lastError instanceof Error)) {
+        send('error', { code: 'unknown', message: 'Something went wrong. Please try again.' })
+      }
+
+      controller.close()
     },
   })
 

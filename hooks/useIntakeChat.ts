@@ -49,6 +49,7 @@ export type ChatMessage = {
   ballparkSizeSqft?: number
   ballparkCondition?: string
   ballparkStylePreference?: string
+  isError?: boolean               // true = this message is an error placeholder (excluded from API history)
 }
 
 type UpdateProposalInput = {
@@ -540,7 +541,7 @@ export function useIntakeChat({ proposalId, idea }: Props) {
               body: JSON.stringify({
                 proposalId,
                 sessionId: storedSession.sessionId,
-                messages: newMessages.filter((m) => m.role !== 'admin').map((m) => ({ role: m.role, content: m.content })),
+                messages: newMessages.filter((m) => m.role !== 'admin' && !m.isError).map((m) => ({ role: m.role, content: m.content })),
                 brief: syncBrief,
                 scope: syncScope,
                 confidenceScore: syncConfidence,
@@ -574,9 +575,11 @@ export function useIntakeChat({ proposalId, idea }: Props) {
     if (stored) {
       try {
         const parsed: ChatMessage[] = JSON.parse(stored)
-        if (parsed.length > 0) {
-          messagesRef.current = parsed
-          setMessages(parsed)
+        // Strip error placeholder messages so failed turns don't persist across reloads
+        const cleaned = parsed.filter(m => !m.isError)
+        if (cleaned.length > 0) {
+          messagesRef.current = cleaned
+          setMessages(cleaned)
 
           // Also restore proposal state so the panel isn't blank on reload
           const storedProposal = localStorage.getItem(PROPOSAL_KEY(proposalId))
@@ -765,6 +768,17 @@ export function useIntakeChat({ proposalId, idea }: Props) {
         }),
       })
 
+      if (!res.ok) {
+        // The API returned a non-200 status (400 bad request, 500 server error, etc.)
+        // Try to extract an error message from the JSON response body.
+        let errorMsg = 'Something went wrong. Please try again.'
+        try {
+          const errorBody = await res.json()
+          if (typeof errorBody?.error === 'string') errorMsg = errorBody.error
+        } catch { /* body wasn't JSON, use default */ }
+        throw new Error(errorMsg)
+      }
+
       if (!res.body) throw new Error('No response body')
 
       const reader = res.body.getReader()
@@ -812,11 +826,13 @@ export function useIntakeChat({ proposalId, idea }: Props) {
             // Route explicitly signalled an error (e.g. Anthropic API failure).
             // Show a visible message immediately instead of leaving an empty bubble.
             const msg = typeof data.message === 'string' ? data.message : ''
-            console.error('SSE error from route:', msg)
+            const code = typeof data.code === 'string' ? data.code : ''
+            console.error('SSE error from route:', code, msg)
+            const displayMsg = msg || 'Something went wrong. Please try again.'
             setMessages((prev) => {
               const last = prev[prev.length - 1]
               if (last?.id !== activeBubbleId) return prev
-              return [...prev.slice(0, -1), { ...last, content: 'Something went wrong. Please try again.' }]
+              return [...prev.slice(0, -1), { ...last, content: displayMsg, isError: true }]
             })
           } else if (event === 'bubble_split') {
             // The AI produced a non-empty transition_text — create a second assistant
@@ -1431,10 +1447,13 @@ export function useIntakeChat({ proposalId, idea }: Props) {
       }
     } catch (err) {
       console.error('Chat error:', err)
+      const errorMsg = err instanceof Error && err.message !== 'No response body'
+        ? err.message
+        : 'Something went wrong. Please try again.'
       setMessages((prev) => {
         const last = prev[prev.length - 1]
         if (last?.role !== 'assistant') return prev
-        return [...prev.slice(0, -1), { ...last, content: 'Something went wrong. Please try again.' }]
+        return [...prev.slice(0, -1), { ...last, content: errorMsg, isError: true }]
       })
     } finally {
       // Guard: if the stream closed without ever producing a tool_result (e.g. Vercel
@@ -1444,7 +1463,7 @@ export function useIntakeChat({ proposalId, idea }: Props) {
       setMessages((prev) => {
         const last = prev[prev.length - 1]
         if (last?.id === activeBubbleId && last.role === 'assistant' && !last.content.trim()) {
-          return [...prev.slice(0, -1), { ...last, content: 'Something went wrong. Please try again.' }]
+          return [...prev.slice(0, -1), { ...last, content: 'Something went wrong. Please try again.', isError: true }]
         }
         return prev
       })
@@ -1491,8 +1510,9 @@ export function useIntakeChat({ proposalId, idea }: Props) {
         // - Scope dividers (empty content, UI-only)
         // - Pause checkpoints (synthetic breather prompts)
         // - Admin messages (not part of AI conversation)
+        // - Error messages (failed API responses, not real AI output)
         // - Any message with empty/missing content (Claude API rejects these)
-        .filter(m => !m.isScopeStart && !m.isScopeComplete && !m.isPause && m.role !== 'admin' && m.content)
+        .filter(m => !m.isScopeStart && !m.isScopeComplete && !m.isPause && !m.isError && m.role !== 'admin' && m.content)
         .map((m): ApiMessage => ({ role: m.role === 'admin' ? 'user' : m.role, content: m.content })),
       { role: 'user', content: safeContent },
     ])
@@ -1624,7 +1644,7 @@ export function useIntakeChat({ proposalId, idea }: Props) {
 
       const aiHistory = mergeConsecutiveMessages(
         [...kept, replacedMsg]
-          .filter(m => !m.isScopeStart && !m.isScopeComplete && !m.isPause && m.role !== 'admin' && m.content)
+          .filter(m => !m.isScopeStart && !m.isScopeComplete && !m.isPause && !m.isError && m.role !== 'admin' && m.content)
           .map((m): ApiMessage => ({ role: m.role as 'user' | 'assistant', content: m.content }))
       )
 
