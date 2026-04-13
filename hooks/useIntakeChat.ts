@@ -1038,10 +1038,13 @@ export function useIntakeChat({ proposalId, idea }: Props) {
             const aiWantsPause = input?.suggest_pause === true
             const phase = input?.current_phase || currentPhaseRef.current
             const isUpgradeTransition = journeyModeRef.current === 'upgraded' && turnCount.current <= 2
-            const clientWantsPause = (phase === 'discovery' && newScore >= 60 && turnsSinceLast >= 6)
+            // In discovery, don't trigger AI pause before turn 4 (Haiku can be trigger-happy
+            // with suggest_pause on detailed opening messages)
+            const effectiveAiPause = phase === 'discovery' ? aiWantsPause && turnCount.current >= 4 : aiWantsPause
+            const clientWantsPause = (phase === 'discovery' && newScore >= 60 && turnCount.current >= 6)
               // Safety net: wrap_up phase should ALWAYS show pills
               || phase === 'wrap_up'
-            const isPauseThisTurn = !isUpgradeTransition && (aiWantsPause || clientWantsPause) && turnsSinceLast >= 4
+            const isPauseThisTurn = !isUpgradeTransition && (effectiveAiPause || clientWantsPause) && turnsSinceLast >= 4
             if (isPauseThisTurn) lastPauseTurn.current = turnCount.current
 
             setMessages((prev) => {
