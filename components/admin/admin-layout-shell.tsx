@@ -27,6 +27,7 @@ type Props = {
 const PAGE_TITLES: Record<string, string> = {
   '/admin': 'Leads',
   '/admin/price-book': 'Price Book',
+  '/admin/budget-estimator': 'Budget Estimator',
 }
 
 export function AdminLayoutShell({ children, adminEmail, adminRole }: Props) {

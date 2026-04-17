@@ -3,7 +3,7 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { ClipboardList, BarChart3, Users, Settings, BookOpen } from 'lucide-react'
+import { ClipboardList, BarChart3, Users, Settings, BookOpen, Calculator } from 'lucide-react'
 import {
   Sidebar,
   SidebarContent,
@@ -69,6 +69,14 @@ export function AppSidebar({ adminRole, onTeamOpen }: Props) {
                   <Link href="/admin/price-book">
                     <BookOpen />
                     <span>Price Book</span>
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+              <SidebarMenuItem>
+                <SidebarMenuButton isActive={pathname.startsWith('/admin/budget-estimator')} tooltip="Budget Estimator" asChild>
+                  <Link href="/admin/budget-estimator">
+                    <Calculator />
+                    <span>Budget Estimator</span>
                   </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
