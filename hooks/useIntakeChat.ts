@@ -8,6 +8,29 @@ import type { QuickReplies, UploadedFile } from '@/lib/intake-types'
 import { enrichCardOption } from '@/lib/card-images'
 import { getStoredSession } from '@/lib/session'
 import { createClient } from '@/lib/supabase/client'
+import type {
+  EstimatorBreakdown,
+  EstimatorInputs,
+  FinishLevel,
+} from '@/lib/estimator/types'
+
+// Payload sent by the API after each turn once the 3 hard keys
+// (project_nature, property_type, size_sqft) are known. Contains the selected
+// tier's full breakdown plus totals at all 4 tiers for the comparison row.
+export type EstimatorBallparkPayload = {
+  inputs: EstimatorInputs
+  breakdown: EstimatorBreakdown
+  factor: number
+  finalAed: number
+  perSqmAed: number
+  tiers: Record<FinishLevel, number>
+  finishLevelUsed: FinishLevel
+  locationUsed: string
+  natureUsed?: string
+  assumedFinish: boolean
+  assumedLocation: boolean
+  assumedNature?: boolean
+}
 
 export type ChatMessage = {
   id: string
@@ -74,6 +97,8 @@ type UpdateProposalInput = {
   scope_queue?: string[]
   // Core Four (existing)
   property_type?: string
+  project_nature?: string
+  finish_level?: string
   location?: string
   size_sqft?: number
   condition?: string
@@ -380,12 +405,18 @@ export function useIntakeChat({ proposalId, idea }: Props) {
 
   // Picker hints: expose extracted size/budget so pickers can pre-populate.
   // Updated whenever the AI tool_result includes these values.
-  const [pickerHints, setPickerHints] = useState<{ size_sqft?: number; budget_aed?: number }>({})
+  const [pickerHints, setPickerHints] = useState<{ size_sqft?: number; budget_aed?: number; property_type?: string }>({})
+
+  // Estimator ballpark: the server computes this after each turn once enough
+  // fields are known. Seeds the BallparkResultCard in the Quick Estimate flow.
+  const [estimatorBallpark, setEstimatorBallpark] = useState<EstimatorBallparkPayload | null>(null)
 
   // Daniel-script qualifying fields: accumulate across the conversation and
   // persist into leads.metadata alongside the existing projectOverview etc.
   const qualifyingFieldsRef = useRef<{
     property_type?: string
+    project_nature?: string
+    finish_level?: string
     location?: string
     size_sqft?: number
     condition?: string
@@ -698,10 +729,24 @@ export function useIntakeChat({ proposalId, idea }: Props) {
               qualifyingFieldsRef.current = p.qualifyingFields
               // Restore picker hints from persisted qualifying fields
               const qf = p.qualifyingFields
-              const restored: { size_sqft?: number; budget_aed?: number } = {}
+              const restored: { size_sqft?: number; budget_aed?: number; property_type?: string } = {}
               if (typeof qf.size_sqft === 'number' && qf.size_sqft > 0) restored.size_sqft = qf.size_sqft
               if (typeof qf.budget_aed_stated === 'number' && qf.budget_aed_stated > 0) restored.budget_aed = qf.budget_aed_stated
-              if (restored.size_sqft || restored.budget_aed) setPickerHints(restored)
+              if (typeof qf.property_type === 'string' && qf.property_type) restored.property_type = qf.property_type
+              if (restored.size_sqft || restored.budget_aed || restored.property_type) setPickerHints(restored)
+            }
+          } catch { /* ignore */ }
+
+          // Rehydrate the estimator ballpark payload so the new 4-tier card
+          // re-renders on reload (instead of falling back to the legacy
+          // BallparkResultCard scrubber).
+          try {
+            const cached = localStorage.getItem(`cd_estimator_${proposalId}`)
+            if (cached) {
+              const parsedEstimator = JSON.parse(cached) as EstimatorBallparkPayload
+              if (parsedEstimator && typeof parsedEstimator === 'object') {
+                setEstimatorBallpark(parsedEstimator)
+              }
             }
           } catch { /* ignore */ }
 
@@ -825,6 +870,7 @@ export function useIntakeChat({ proposalId, idea }: Props) {
           scopeQueue: scopeQueueRef.current,
           completedScope: completedScopeRef.current,
           turnCount: turnCount.current,
+          knownFields: qualifyingFieldsRef.current,
         }),
       })
 
@@ -872,6 +918,50 @@ export function useIntakeChat({ proposalId, idea }: Props) {
             // Historical pricing stats from the server for data-driven ballpark
             if (Array.isArray(data)) {
               historicalStatsRef.current = data as HistoricalPricingStat[]
+            }
+          } else if (event === 'estimator_ballpark') {
+            // Live calculator ballpark computed server-side from the new Dubai
+            // residential estimator. Stored in state so BallparkResultCard can
+            // render the tier comparison and assumption chips.
+            if (data && typeof data === 'object') {
+              const payload = data as EstimatorBallparkPayload
+              setEstimatorBallpark(payload)
+              if (proposalId) {
+                try {
+                  localStorage.setItem(
+                    `cd_estimator_${proposalId}`,
+                    JSON.stringify(payload),
+                  )
+                } catch { /* quota exceeded, ignore */ }
+              }
+              // Insert a ballpark message so BallparkResultCard renders inline
+              // in the chat. The card itself reads from estimatorBallpark; the
+              // ballparkRange is derived from the tier totals so the legacy
+              // shape stays valid for any downstream consumers.
+              const tierVals = Object.values(payload.tiers).filter(v => v > 0)
+              if (tierVals.length > 0) {
+                const min = Math.min(...tierVals)
+                const max = Math.max(...tierVals)
+                setMessages(prev => {
+                  if (prev.some(m => m.isBallpark)) return prev
+                  const qf = qualifyingFieldsRef.current
+                  const ballparkMsg: ChatMessage = {
+                    id: crypto.randomUUID(),
+                    role: 'assistant',
+                    content: '',
+                    isBallpark: true,
+                    ballparkRange: { min, max },
+                    ballparkScopeIds: [...detectedScopeRef.current],
+                    ballparkPropertyType: qf.property_type || '',
+                    ballparkLocation: qf.location || payload.locationUsed || '',
+                    ballparkSizeSqft: qf.size_sqft || 0,
+                    ballparkCondition: qf.condition || '',
+                    ballparkStylePreference: qf.style_preference || '',
+                    createdAt: Date.now(),
+                  }
+                  return [...prev, ballparkMsg]
+                })
+              }
             }
           } else if (event === 'text') {
             setMessages((prev) => {
@@ -1015,6 +1105,8 @@ export function useIntakeChat({ proposalId, idea }: Props) {
             {
               const q = qualifyingFieldsRef.current
               if (typeof input?.property_type === 'string' && input.property_type) q.property_type = input.property_type
+              if (typeof input?.project_nature === 'string' && input.project_nature) q.project_nature = input.project_nature
+              if (typeof input?.finish_level === 'string' && input.finish_level) q.finish_level = input.finish_level
               if (typeof input?.location === 'string' && input.location) q.location = input.location
               if (typeof input?.size_sqft === 'number' && input.size_sqft > 0) q.size_sqft = input.size_sqft
               if (typeof input?.condition === 'string' && input.condition) q.condition = input.condition
@@ -1029,10 +1121,11 @@ export function useIntakeChat({ proposalId, idea }: Props) {
               if (typeof input?.full_scope_notes === 'string' && input.full_scope_notes) q.full_scope_notes = input.full_scope_notes
 
               // Update picker hints so budget/sqft pickers pre-populate
-              const newHints: { size_sqft?: number; budget_aed?: number } = {}
+              const newHints: { size_sqft?: number; budget_aed?: number; property_type?: string } = {}
               if (q.size_sqft && q.size_sqft > 0) newHints.size_sqft = q.size_sqft
               if (q.budget_aed_stated && q.budget_aed_stated > 0) newHints.budget_aed = q.budget_aed_stated
-              if (newHints.size_sqft || newHints.budget_aed) {
+              if (q.property_type) newHints.property_type = q.property_type
+              if (newHints.size_sqft || newHints.budget_aed || newHints.property_type) {
                 setPickerHints(prev => ({ ...prev, ...newHints }))
               }
             }
@@ -1523,7 +1616,7 @@ export function useIntakeChat({ proposalId, idea }: Props) {
                 ballparkStylePreference: qf.style_preference || '',
                 createdAt: Date.now(),
               }
-              setMessages(prev => [...prev, ballparkMsg])
+              setMessages(prev => prev.some(m => m.isBallpark) ? prev : [...prev, ballparkMsg])
             }
 
             // Stage-setting auto-continue: if AI transitioned to deep_dive with
@@ -1676,8 +1769,11 @@ export function useIntakeChat({ proposalId, idea }: Props) {
     // impact since we can't introspect what field they set.
     if (!qr) return 'high'
 
-    // Numeric pickers are self-contained values that feed metadata only.
-    if (qr.style === 'sqft' || qr.style === 'budget') return 'low'
+    // Size and budget feed directly into the estimator and the AI's downstream
+    // reaction text. Editing them MUST reset the conversation from that point
+    // so the budget card recomputes and stale "your 1,500 sqft project" lines
+    // get replaced.
+    if (qr.style === 'sqft' || qr.style === 'budget') return 'high'
 
     // Cards: check the first option to distinguish factual/flow-critical
     // selections (property_type, condition, style, flooring, countertop) from
@@ -1741,6 +1837,32 @@ export function useIntakeChat({ proposalId, idea }: Props) {
       // that would otherwise leave the conversation inconsistent.
       const kept = messagesRef.current.slice(0, msgIndex)
       setMessages([...kept, replacedMsg])
+
+      // Sync the qualifying field for known picker styles directly so the
+      // server sees the new value even if Haiku doesn't re-include it in the
+      // next tool call. Without this, knownFields would still carry the old
+      // size and the recomputed ballpark would silently use stale data.
+      const qrStyle = originalMsg.sourceQuickReplies?.style
+      if (qrStyle === 'sqft') {
+        const parsed = parseInt(newContent, 10)
+        if (!isNaN(parsed) && parsed > 0) {
+          qualifyingFieldsRef.current.size_sqft = parsed
+          setPickerHints(prev => ({ ...prev, size_sqft: parsed }))
+        }
+      } else if (qrStyle === 'budget') {
+        const parsed = parseInt(newContent, 10)
+        if (!isNaN(parsed) && parsed > 0) {
+          qualifyingFieldsRef.current.budget_aed_stated = parsed
+          setPickerHints(prev => ({ ...prev, budget_aed: parsed }))
+        }
+      }
+
+      // Drop the cached estimator payload so a stale 4-tier card doesn't
+      // flash on the new turn before the recomputed one arrives.
+      setEstimatorBallpark(null)
+      if (proposalId) {
+        try { localStorage.removeItem(`cd_estimator_${proposalId}`) } catch { /* ignore */ }
+      }
 
       const aiHistory = mergeConsecutiveMessages(
         [...kept, replacedMsg]
@@ -1977,5 +2099,6 @@ export function useIntakeChat({ proposalId, idea }: Props) {
     handleFileUploadDone,
     handleFileUploadSkipped,
     pickerHints,
+    estimatorBallpark,
   }
 }

@@ -14,6 +14,8 @@ type Props = {
   onResumeQuestions?: () => void
   /** Starting value for the scrubber. Default 1500. */
   initialValue?: number
+  /** Property type extracted in a previous question; used to pre-select a matching chip. */
+  propertyType?: string
 }
 
 // Realistic bounds for UAE residential + commercial fit-outs.
@@ -29,6 +31,24 @@ const STEPS = [
   { value: 6000, label: 'Large villa' },
   { value: 10000, label: 'Office floor' },
 ]
+
+function propertyTypeToSqft(t?: string): number | undefined {
+  if (!t) return undefined
+  const s = t.toLowerCase()
+  if (s.includes('large villa')) return 6000
+  if (s.includes('villa')) return 4000
+  if (s.includes('townhouse')) return 2500
+  if (s.includes('penthouse')) return 4000
+  if (s.includes('studio')) return 500
+  if (s.includes('1br') || s.includes('1 br') || s.includes('one bedroom')) return 800
+  if (s.includes('2br') || s.includes('2 br') || s.includes('two bedroom')) return 1200
+  if (s.includes('3br') || s.includes('3 br') || s.includes('three bedroom')) return 1800
+  if (s.includes('apartment') || s.includes('flat')) return 1200
+  if (s.includes('office')) return 10000
+  if (s.includes('warehouse')) return 10000
+  if (s.includes('retail')) return 2500
+  return undefined
+}
 
 function formatSqft(n: number): string {
   // Round to nearest 50 for tidiness
@@ -61,9 +81,11 @@ export default function SqftPicker({
   onPauseQuestions,
   isPaused,
   onResumeQuestions,
-  initialValue = 1500,
+  initialValue,
+  propertyType,
 }: Props) {
-  const [value, setValue] = useState(Math.max(MIN, Math.min(MAX, initialValue || 1500)))
+  const seed = initialValue ?? propertyTypeToSqft(propertyType) ?? 1500
+  const [value, setValue] = useState(Math.max(MIN, Math.min(MAX, seed)))
   const [isDragging, setIsDragging] = useState(false)
   const trackRef = useRef<HTMLDivElement>(null)
 

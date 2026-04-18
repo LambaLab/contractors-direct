@@ -6,6 +6,12 @@ import {
   PROJECT_TYPE_LABELS,
 } from '@/lib/estimator/rates'
 import type { EstimatorBreakdown, EstimatorInputs } from '@/lib/estimator/types'
+import {
+  formatRatePerArea,
+  sqmToDisplay,
+  unitLabel,
+  useEstimatorUnit,
+} from '@/lib/estimator/units'
 
 type Props = {
   inputs: EstimatorInputs
@@ -77,6 +83,8 @@ function MetaRow({ label, value }: { label: string; value: string }) {
 }
 
 export function EstimatorSummary({ inputs, breakdown }: Props) {
+  const { unit } = useEstimatorUnit()
+  const u = unitLabel(unit)
   const b = breakdown
 
   const basis =
@@ -102,8 +110,8 @@ export function EstimatorSummary({ inputs, breakdown }: Props) {
           </div>
           <p className="mt-2 text-xs text-muted-foreground">
             {b.budgetPerSqm > 0
-              ? `AED ${fmt(b.budgetPerSqm)} / sqm on ${fmt(inputs.builtUpAreaSqm)} sqm`
-              : 'Enter a built-up area to see a per-sqm figure'}
+              ? `AED ${formatRatePerArea(b.budgetPerSqm, unit)} / ${u} on ${fmt(sqmToDisplay(inputs.builtUpAreaSqm, unit))} ${u}`
+              : `Enter a built-up area to see a per-${u} figure`}
           </p>
         </div>
 

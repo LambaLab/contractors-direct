@@ -12,20 +12,30 @@ export async function POST(
   }
   const supabase = createServiceClient()
 
-  // Ownership check: caller's session must belong to a lead with the same email
+  // Look up the target lead. If it doesn't exist, treat the delete as a no-op
+  // success — the client will clear its local state regardless.
+  const { data: target } = await supabase
+    .from('leads')
+    .select('email, session_id')
+    .eq('id', leadId)
+    .single()
+
+  if (!target) {
+    return NextResponse.json({ success: true, note: 'lead not found' })
+  }
+
+  // Ownership: either (a) the caller's session is on a lead with the same
+  // verified email as the target, or (b) the target was created by this same
+  // anonymous session_id (no email yet on either side).
   const { data: callerLead } = await supabase
     .from('leads')
     .select('email')
     .eq('session_id', sessionId)
     .single()
 
-  const { data: target } = await supabase
-    .from('leads')
-    .select('email')
-    .eq('id', leadId)
-    .single()
-
-  if (!callerLead?.email || !target?.email || callerLead.email !== target.email) {
+  const sameEmail = !!(callerLead?.email && target.email && callerLead.email === target.email)
+  const sameAnonSession = target.session_id === sessionId
+  if (!sameEmail && !sameAnonSession) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 403 })
   }
 

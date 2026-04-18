@@ -32,6 +32,13 @@ import type {
   ProjectType,
   RoomType,
 } from '@/lib/estimator/types'
+import {
+  displayToSqm,
+  formatRatePerArea,
+  sqmToDisplay,
+  unitLabel,
+  useEstimatorUnit,
+} from '@/lib/estimator/units'
 
 type Props = {
   inputs: EstimatorInputs
@@ -100,10 +107,14 @@ const readonlyValueClass =
   'w-full h-9 flex items-center justify-end gap-1 pr-1 text-foreground/70 font-mono tabular-nums text-sm'
 
 export function EstimatorProjectInputs({ inputs, onChange }: Props) {
+  const { unit } = useEstimatorUnit()
   const update = <K extends keyof EstimatorInputs>(key: K, value: EstimatorInputs[K]) => {
     onChange({ ...inputs, [key]: value })
   }
   const showExtension = inputs.projectType === 'extension_remodelling'
+
+  const builtUpDisplay = Math.round(sqmToDisplay(inputs.builtUpAreaSqm, unit))
+  const extensionDisplay = Math.round(sqmToDisplay(inputs.extensionAreaSqm, unit))
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
@@ -158,23 +169,23 @@ export function EstimatorProjectInputs({ inputs, onChange }: Props) {
             </SelectContent>
           </Select>
         </Field>
-        <Field label="Built-up Area (sqm)">
+        <Field label={`Built-up Area (${unitLabel(unit)})`}>
           <Input
             type="number"
             min={0}
-            value={inputs.builtUpAreaSqm || ''}
-            onChange={(e) => update('builtUpAreaSqm', clampNum(e.target.value))}
+            value={builtUpDisplay || ''}
+            onChange={(e) => update('builtUpAreaSqm', displayToSqm(clampNum(e.target.value), unit))}
             placeholder="0"
             className={inputClass}
           />
         </Field>
         {showExtension && (
-          <Field label="Extension Area (sqm)">
+          <Field label={`Extension Area (${unitLabel(unit)})`}>
             <Input
               type="number"
               min={0}
-              value={inputs.extensionAreaSqm || ''}
-              onChange={(e) => update('extensionAreaSqm', clampNum(e.target.value))}
+              value={extensionDisplay || ''}
+              onChange={(e) => update('extensionAreaSqm', displayToSqm(clampNum(e.target.value), unit))}
               placeholder="0"
               className={inputClass}
             />
@@ -185,6 +196,8 @@ export function EstimatorProjectInputs({ inputs, onChange }: Props) {
 }
 
 export function EstimatorForm({ inputs, onChange }: Props) {
+  const { unit } = useEstimatorUnit()
+  const u = unitLabel(unit)
   const update = <K extends keyof EstimatorInputs>(key: K, value: EstimatorInputs[K]) => {
     onChange({ ...inputs, [key]: value })
   }
@@ -294,11 +307,11 @@ export function EstimatorForm({ inputs, onChange }: Props) {
               sublabel="auto for full renovations"
               primary={
                 <div className={readonlyValueClass}>
-                  <span>{fmt(flooringSqm)}</span>
-                  <span className="text-[11px] text-muted-foreground">sqm</span>
+                  <span>{fmt(sqmToDisplay(flooringSqm, unit))}</span>
+                  <span className="text-[11px] text-muted-foreground">{u}</span>
                 </div>
               }
-              rate={flooringRate}
+              rateDisplay={`AED ${formatRatePerArea(flooringRate, unit)}`}
               cost={flooringSqm * flooringRate}
             />
 
@@ -307,11 +320,11 @@ export function EstimatorForm({ inputs, onChange }: Props) {
               sublabel="auto · flat rate"
               primary={
                 <div className={readonlyValueClass}>
-                  <span>{fmt(paintingSqm)}</span>
-                  <span className="text-[11px] text-muted-foreground">sqm</span>
+                  <span>{fmt(sqmToDisplay(paintingSqm, unit))}</span>
+                  <span className="text-[11px] text-muted-foreground">{u}</span>
                 </div>
               }
-              rate={paintingRate}
+              rateDisplay={`AED ${formatRatePerArea(paintingRate, unit)}`}
               cost={paintingSqm * paintingRate}
             />
 
@@ -320,11 +333,11 @@ export function EstimatorForm({ inputs, onChange }: Props) {
               sublabel="auto for full renovations"
               primary={
                 <div className={readonlyValueClass}>
-                  <span>{fmt(ceilingsSqm)}</span>
-                  <span className="text-[11px] text-muted-foreground">sqm</span>
+                  <span>{fmt(sqmToDisplay(ceilingsSqm, unit))}</span>
+                  <span className="text-[11px] text-muted-foreground">{u}</span>
                 </div>
               }
-              rate={ceilingsRate}
+              rateDisplay={`AED ${formatRatePerArea(ceilingsRate, unit)}`}
               cost={ceilingsSqm * ceilingsRate}
             />
 
@@ -399,7 +412,7 @@ export function EstimatorForm({ inputs, onChange }: Props) {
 
             <ScopeRow
               label="Glazing replacement"
-              sublabel="per property sqm · finish-specific"
+              sublabel={`per property ${u} · finish-specific`}
               primary={
                 <Select
                   value={inputs.glazingReplacement ? 'yes' : 'no'}
@@ -414,7 +427,7 @@ export function EstimatorForm({ inputs, onChange }: Props) {
                   </SelectContent>
                 </Select>
               }
-              rate={glazingRate}
+              rateDisplay={`AED ${formatRatePerArea(glazingRate, unit)}`}
               cost={
                 inputs.glazingReplacement ? inputs.builtUpAreaSqm * glazingRate : 0
               }
@@ -422,7 +435,7 @@ export function EstimatorForm({ inputs, onChange }: Props) {
 
             <ScopeRow
               label="Façade painting"
-              sublabel="per property sqm · flat rate"
+              sublabel={`per property ${u} · flat rate`}
               primary={
                 <Select
                   value={inputs.facadePainting ? 'yes' : 'no'}
@@ -437,7 +450,7 @@ export function EstimatorForm({ inputs, onChange }: Props) {
                   </SelectContent>
                 </Select>
               }
-              rate={facadeRate}
+              rateDisplay={`AED ${formatRatePerArea(facadeRate, unit)}`}
               cost={inputs.facadePainting ? inputs.builtUpAreaSqm * facadeRate : 0}
             />
           </div>
@@ -453,13 +466,15 @@ function ScopeRow({
   primary,
   secondary,
   rate,
+  rateDisplay,
   cost,
 }: {
   label: string
   sublabel?: string
   primary: React.ReactNode
   secondary?: React.ReactNode
-  rate: number
+  rate?: number
+  rateDisplay?: string
   cost: number
 }) {
   return (
@@ -473,7 +488,7 @@ function ScopeRow({
       <div>{primary}</div>
       <div>{secondary ?? null}</div>
       <div className="text-right font-mono tabular-nums text-xs text-muted-foreground">
-        AED {fmt(rate)}
+        {rateDisplay ?? (rate != null ? `AED ${fmt(rate)}` : '')}
       </div>
       <div
         className={`text-right font-mono tabular-nums text-sm ${

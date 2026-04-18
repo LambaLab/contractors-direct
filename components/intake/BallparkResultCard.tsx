@@ -14,6 +14,10 @@ import {
   DialogTitle,
   DialogDescription,
 } from '@/components/ui/dialog'
+import { FINISH_LABELS, FINISH_ORDER } from '@/lib/estimator/rates'
+import type { FinishLevel } from '@/lib/estimator/types'
+import type { EstimatorBallparkPayload } from '@/hooks/useIntakeChat'
+import FinishLevelDetailsModal from './FinishLevelDetailsModal'
 
 type Props = {
   range: PriceRange
@@ -27,6 +31,7 @@ type Props = {
   onSaveLater: () => void
   isLast: boolean
   isStreaming: boolean
+  estimatorBallpark?: EstimatorBallparkPayload | null
 }
 
 function conditionLabel(condition: string): string {
@@ -222,7 +227,26 @@ function StyleScrubBar({
 
 // ── Main card ──
 
-export default function BallparkResultCard({
+export default function BallparkResultCard(props: Props) {
+  // When we have an estimator ballpark from the server, render the new
+  // calculator-driven card. Otherwise fall back to the legacy static-catalog
+  // card. Split into sibling components so hooks inside each are called
+  // unconditionally (React rules-of-hooks).
+  if (props.estimatorBallpark) {
+    return (
+      <EstimatorBallpark
+        payload={props.estimatorBallpark}
+        scopeIds={props.scopeIds}
+        onDigDeeper={props.onDigDeeper}
+        onSaveLater={props.onSaveLater}
+        showActions={props.isLast && !props.isStreaming}
+      />
+    )
+  }
+  return <LegacyBallpark {...props} />
+}
+
+function LegacyBallpark({
   range,
   scopeIds,
   propertyType,
@@ -469,6 +493,170 @@ export default function BallparkResultCard({
           )}
         </DialogContent>
       </Dialog>
+    </div>
+  )
+}
+
+// ── Estimator-based ballpark (new primary path) ──
+
+function fmtAed(n: number): string {
+  return Math.round(n).toLocaleString('en-US', { maximumFractionDigits: 0 })
+}
+
+function EstimatorBallpark({
+  payload,
+  scopeIds,
+  onDigDeeper,
+  onSaveLater,
+  showActions,
+}: {
+  payload: EstimatorBallparkPayload
+  scopeIds: string[]
+  onDigDeeper: () => void
+  onSaveLater: () => void
+  showActions: boolean
+}) {
+  const [modalTier, setModalTier] = useState<FinishLevel | null>(null)
+  const [scopeExpanded, setScopeExpanded] = useState(false)
+
+  const scopeNames = scopeIds
+    .map((id) => SCOPE_CATALOG.find((s) => s.id === id))
+    .filter(Boolean)
+    .map((s) => s!.name)
+
+  const { finalAed, perSqmAed, tiers, finishLevelUsed, locationUsed, assumedFinish, assumedLocation, inputs, factor } = payload
+
+  return (
+    <div className="w-full py-1">
+      {/* Divider */}
+      <div className="flex items-center gap-3 mb-5">
+        <div className="flex-1 h-px bg-[rgba(255,255,255,0.06)]" />
+        <span className="text-[10px] tracking-[0.2em] uppercase text-[rgba(255,255,255,0.3)] select-none">
+          quick estimate
+        </span>
+        <div className="flex-1 h-px bg-[rgba(255,255,255,0.06)]" />
+      </div>
+
+      {/* Assumption + summary chips. Public intake users always type sqft, so
+          the area + per-area metrics are displayed in sqft regardless of how
+          the calculator stores it internally. */}
+      <div className="flex flex-wrap items-center gap-1.5 mb-4">
+        <span className="text-[11px] px-2 py-1 rounded-full bg-[rgba(255,255,255,0.04)] text-[rgba(255,255,255,0.6)]">
+          {FINISH_LABELS[finishLevelUsed]} finish{assumedFinish ? ' (assumed)' : ''}
+        </span>
+        <span className="text-[11px] px-2 py-1 rounded-full bg-[rgba(255,255,255,0.04)] text-[rgba(255,255,255,0.6)]">
+          {locationUsed}{assumedLocation ? ' (assumed)' : ''}
+        </span>
+        {inputs.builtUpAreaSqm > 0 && (
+          <span className="text-[11px] px-2 py-1 rounded-full bg-[rgba(255,255,255,0.04)] text-[rgba(255,255,255,0.6)]">
+            {Math.round(inputs.builtUpAreaSqm * 10.7639).toLocaleString()} sqft
+          </span>
+        )}
+      </div>
+
+      {/* Hero price */}
+      <div className="mb-5">
+        <div className="flex items-baseline gap-2">
+          <span className="text-[11px] font-mono tracking-widest text-[#7367ff]/80">AED</span>
+          <span className="text-[32px] sm:text-[40px] font-bold text-white tracking-tight leading-none tabular-nums">
+            {fmtAed(finalAed)}
+          </span>
+        </div>
+        {perSqmAed > 0 && inputs.builtUpAreaSqm > 0 && (
+          <p className="text-sm text-[rgba(255,255,255,0.4)] mt-1">
+            AED {fmtAed(Math.round(finalAed / (inputs.builtUpAreaSqm * 10.7639)))} / sqft
+          </p>
+        )}
+      </div>
+
+      {/* Finish tier comparison */}
+      <div className="mb-5">
+        <p className="text-[10px] tracking-[0.2em] uppercase text-[rgba(255,255,255,0.3)] mb-2">
+          Compare finish levels
+        </p>
+        <div className="grid grid-cols-4 gap-1.5">
+          {FINISH_ORDER.map((tier) => {
+            const isActive = tier === finishLevelUsed
+            return (
+              <button
+                key={tier}
+                type="button"
+                onClick={() => setModalTier(tier)}
+                className={`flex flex-col items-start gap-0.5 px-2.5 py-2 rounded-lg border text-left transition-all cursor-pointer ${
+                  isActive
+                    ? 'bg-[rgba(115,103,255,0.14)] border-[rgba(115,103,255,0.45)] text-white'
+                    : 'border-[rgba(255,255,255,0.08)] text-[rgba(255,255,255,0.7)] hover:border-[rgba(115,103,255,0.3)] hover:text-white'
+                }`}
+              >
+                <span className="text-[10px] uppercase tracking-widest opacity-70">
+                  {FINISH_LABELS[tier]}
+                </span>
+                <span className="text-xs sm:text-sm font-mono tabular-nums whitespace-nowrap">
+                  <span className="text-[10px] text-[#7367ff]/80 mr-1">AED</span>
+                  {fmtAed(tiers[tier])}
+                </span>
+              </button>
+            )
+          })}
+        </div>
+        <p className="text-[11px] text-[rgba(255,255,255,0.35)] mt-2">
+          Tap a tier to see what it includes and the full breakdown.
+        </p>
+      </div>
+
+      {/* Scope row (read-only, from auto-select) */}
+      {scopeNames.length > 0 && (
+        <div className="mb-4">
+          <button
+            type="button"
+            onClick={() => setScopeExpanded(!scopeExpanded)}
+            className="flex items-center gap-1.5 text-sm text-[rgba(255,255,255,0.5)] hover:text-[rgba(255,255,255,0.8)] transition-colors cursor-pointer"
+          >
+            <span>{scopeNames.length} area{scopeNames.length !== 1 ? 's' : ''} included</span>
+            <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-200 ${scopeExpanded ? 'rotate-180' : ''}`} />
+          </button>
+          {scopeExpanded && (
+            <p className="text-sm text-[rgba(255,255,255,0.35)] mt-2 leading-relaxed">
+              {scopeNames.join(', ')}
+            </p>
+          )}
+        </div>
+      )}
+
+      {/* Caveat */}
+      <p className="text-[13px] text-[rgba(255,255,255,0.3)] leading-relaxed mb-5">
+        Ballpark from our internal rate card. A detailed consultation refines scope and tightens the number.
+      </p>
+
+      {/* CTAs */}
+      {showActions && (
+        <div className="flex flex-wrap gap-2.5">
+          <button
+            type="button"
+            onClick={onDigDeeper}
+            className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-medium transition-all cursor-pointer bg-[#7367ff] text-white hover:bg-[#8578ff] active:scale-[0.98]"
+          >
+            <Info className="w-4 h-4" />
+            Dig deeper
+          </button>
+          <button
+            type="button"
+            onClick={onSaveLater}
+            className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-medium transition-all cursor-pointer border border-[rgba(255,255,255,0.12)] text-[rgba(255,255,255,0.7)] hover:border-[rgba(115,103,255,0.4)] hover:text-white active:scale-[0.98]"
+          >
+            Save &amp; continue
+          </button>
+        </div>
+      )}
+
+      <FinishLevelDetailsModal
+        open={modalTier !== null}
+        onOpenChange={(o) => { if (!o) setModalTier(null) }}
+        tier={modalTier}
+        inputs={inputs}
+        locationFactor={factor}
+        locationName={locationUsed}
+      />
     </div>
   )
 }

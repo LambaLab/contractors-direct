@@ -10,9 +10,14 @@ type Props = {
   sessionId: string
   projectName?: string
   onClose: () => void
+  /** Optional secondary action shown only on the email step. Used when the
+   *  modal is gating something else (e.g. "New project") and the user should
+   *  be able to bypass the save and proceed anyway. */
+  onSkip?: () => void
+  skipLabel?: string
 }
 
-export default function SaveForLaterModal({ proposalId, sessionId, projectName, onClose }: Props) {
+export default function SaveForLaterModal({ proposalId, sessionId, projectName, onClose, onSkip, skipLabel }: Props) {
   const [step, setStep] = useState<Step>('email')
   const [email, setEmail] = useState('')
   const [otp, setOtp] = useState(['', '', '', '', '', ''])
@@ -191,6 +196,16 @@ export default function SaveForLaterModal({ proposalId, sessionId, projectName, 
             >
               {loading ? 'Sending…' : <><span>Send code</span><ArrowRight className="w-4 h-4" /></>}
             </button>
+
+            {onSkip && (
+              <button
+                onClick={onSkip}
+                disabled={loading}
+                className="w-full text-center text-xs text-[var(--ov-text-muted,#727272)] hover:text-[var(--ov-text,#ffffff)] transition-colors cursor-pointer disabled:cursor-not-allowed disabled:opacity-50"
+              >
+                {skipLabel || 'Continue without saving'}
+              </button>
+            )}
           </>
         )}
 

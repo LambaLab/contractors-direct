@@ -24,6 +24,12 @@ import {
   VILLA_NEW_BUILD_RATE_PER_SQM,
 } from '@/lib/estimator/rates'
 import type { FinishLevel } from '@/lib/estimator/types'
+import {
+  formatRatePerArea,
+  unitLabel,
+  useEstimatorUnit,
+  type AreaUnit,
+} from '@/lib/estimator/units'
 
 function fmt(n: number): string {
   return Math.round(n).toLocaleString('en-US', { maximumFractionDigits: 0 })
@@ -42,12 +48,15 @@ type Row = {
   category: string
   item: string
   unit: string
+  /** When true, the unit is per-area and both the unit label and rate values are converted based on the selected unit. */
+  areaBased?: boolean
   standard: number | null // null = no rate (label row)
   finishRates: Record<FinishLevel, number | null> // null = blank cell
   note?: string
 }
 
-function buildRows(): Row[] {
+function buildRows(unit: AreaUnit): Row[] {
+  const u = unitLabel(unit)
   const rows: Row[] = []
 
   for (const t of PROJECT_TYPE_ORDER) {
@@ -81,7 +90,8 @@ function buildRows(): Row[] {
   rows.push({
     category: 'Optional Scope',
     item: 'Flooring replacement',
-    unit: 'AED / sqm',
+    unit: `AED / ${u}`,
+    areaBased: true,
     standard: flooring,
     finishRates: {
       basic: flooring * FINISH_MULTIPLIERS.basic,
@@ -94,7 +104,8 @@ function buildRows(): Row[] {
   rows.push({
     category: 'Optional Scope',
     item: 'Painting (full repaint override)',
-    unit: 'AED / property sqm',
+    unit: `AED / property ${u}`,
+    areaBased: true,
     standard: painting,
     finishRates: {
       basic: painting,
@@ -108,7 +119,8 @@ function buildRows(): Row[] {
   rows.push({
     category: 'Optional Scope',
     item: 'Ceilings',
-    unit: 'AED / sqm',
+    unit: `AED / ${u}`,
+    areaBased: true,
     standard: ceilings,
     finishRates: {
       basic: ceilings * FINISH_MULTIPLIERS.basic,
@@ -154,7 +166,8 @@ function buildRows(): Row[] {
   rows.push({
     category: 'Optional Scope',
     item: 'Glazing replacement allowance',
-    unit: 'AED / property sqm',
+    unit: `AED / property ${u}`,
+    areaBased: true,
     standard: GLAZING_RATES_BY_FINISH.standard,
     finishRates: { ...GLAZING_RATES_BY_FINISH },
     note: 'Finish-specific rate, applied directly',
@@ -162,7 +175,8 @@ function buildRows(): Row[] {
   rows.push({
     category: 'External Works',
     item: 'Façade painting allowance',
-    unit: 'AED / property sqm',
+    unit: `AED / property ${u}`,
+    areaBased: true,
     standard: FACADE_RATE_PER_SQM,
     finishRates: {
       basic: FACADE_RATE_PER_SQM,
@@ -177,7 +191,8 @@ function buildRows(): Row[] {
   rows.push({
     category: 'Area-Based',
     item: 'Extension / remodelling works',
-    unit: 'AED / sqm',
+    unit: `AED / ${u}`,
+    areaBased: true,
     standard: EXTENSION_RATE_PER_SQM,
     finishRates: {
       basic: EXTENSION_RATE_PER_SQM * FINISH_MULTIPLIERS.basic,
@@ -189,7 +204,8 @@ function buildRows(): Row[] {
   rows.push({
     category: 'Area-Based',
     item: 'Villa, build new',
-    unit: 'AED / sqm',
+    unit: `AED / ${u}`,
+    areaBased: true,
     standard: VILLA_NEW_BUILD_RATE_PER_SQM,
     finishRates: {
       basic: VILLA_NEW_BUILD_RATE_PER_SQM * FINISH_MULTIPLIERS.basic,
@@ -207,7 +223,8 @@ const GRID =
   'grid-cols-[minmax(0,2fr)_140px_120px_repeat(4,minmax(90px,1fr))]'
 
 export function RateCardReference() {
-  const rows = buildRows()
+  const { unit } = useEstimatorUnit()
+  const rows = buildRows(unit)
 
   // Group consecutive rows by category for the section headers
   const sections: { label: string; rows: Row[] }[] = []
@@ -266,14 +283,18 @@ export function RateCardReference() {
                     </div>
                     <div className="text-[11px] text-muted-foreground">{r.unit}</div>
                     <div className="text-right font-mono tabular-nums text-sm text-foreground">
-                      {r.standard != null ? `AED ${fmt(r.standard)}` : '—'}
+                      {r.standard != null
+                        ? `AED ${r.areaBased ? formatRatePerArea(r.standard, unit) : fmt(r.standard)}`
+                        : '—'}
                     </div>
                     {FINISH_ORDER.map((f) => (
                       <div
                         key={f}
                         className="text-right font-mono tabular-nums text-sm text-foreground/80"
                       >
-                        {r.finishRates[f] != null ? `AED ${fmt(r.finishRates[f]!)}` : '—'}
+                        {r.finishRates[f] != null
+                          ? `AED ${r.areaBased ? formatRatePerArea(r.finishRates[f]!, unit) : fmt(r.finishRates[f]!)}`
+                          : '—'}
                       </div>
                     ))}
                   </div>

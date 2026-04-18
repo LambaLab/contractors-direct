@@ -12,7 +12,7 @@ import SqftPicker from './SqftPicker'
 import BudgetPicker from './BudgetPicker'
 import FileUploadWidget from './FileUploadWidget'
 import ScopeMultiSelectGrid from './ScopeMultiSelectGrid'
-import type { ChatMessage } from '@/hooks/useIntakeChat'
+import type { ChatMessage, EstimatorBallparkPayload } from '@/hooks/useIntakeChat'
 import type { QuickReplies as QuickRepliesType, UploadedFile } from '@/lib/intake-types'
 
 type Props = {
@@ -40,10 +40,11 @@ type Props = {
   onFileUploadDone?: (messageId: string) => void
   onFileUploadSkipped?: (messageId: string) => void
   onUpgradeToFull?: () => void
-  pickerHints?: { size_sqft?: number; budget_aed?: number }
+  pickerHints?: { size_sqft?: number; budget_aed?: number; property_type?: string }
+  estimatorBallpark?: EstimatorBallparkPayload | null
 }
 
-export default function ChatPanel({ messages, isStreaming, onSend, onEdit, onRequestViewProposal, onSaveLater, constrained = false, theme, isPaused, pausedQuestion, questionRevealed, onPauseQuestions, onResumeQuestions, onRevealPausedQuestion, onSkipQuestion, confidenceScore = 0, emailVerified, leadId, sessionId, onFileUploaded, onFileUploadDone, onFileUploadSkipped, onUpgradeToFull, pickerHints }: Props) {
+export default function ChatPanel({ messages, isStreaming, onSend, onEdit, onRequestViewProposal, onSaveLater, constrained = false, theme, isPaused, pausedQuestion, questionRevealed, onPauseQuestions, onResumeQuestions, onRevealPausedQuestion, onSkipQuestion, confidenceScore = 0, emailVerified, leadId, sessionId, onFileUploaded, onFileUploadDone, onFileUploadSkipped, onUpgradeToFull, pickerHints, estimatorBallpark }: Props) {
   const [input, setInput] = useState('')
   const [reEditingMessageId, setReEditingMessageId] = useState<string | null>(null)
   const [showScrollBtn, setShowScrollBtn] = useState(false)
@@ -227,6 +228,7 @@ const isCardsQR = lastQR?.style === 'cards' && !isConditionQR
                 onSaveLater={() => onSaveLater?.()}
                 isLast={isLastVisible}
                 isStreaming={isStreaming && isLastVisible}
+                estimatorBallpark={estimatorBallpark ?? null}
               />
             ) : msg.isPause ? (
               // Hide breather checkpoint while a paused question is temporarily revealed
@@ -256,6 +258,14 @@ const isCardsQR = lastQR?.style === 'cards' && !isConditionQR
                   // them be sent as plain messages; always treat them as UI actions.
                   if (value === '__view_proposal__' || value === '__submit__') {
                     onRequestViewProposal?.()
+                    return
+                  }
+                  if (value === '__save_later__') {
+                    onSaveLater?.()
+                    return
+                  }
+                  if (value === '__dig_deeper__' || value === '__upgrade_full__') {
+                    onUpgradeToFull?.()
                     return
                   }
                   onSend(value, label)
@@ -316,6 +326,14 @@ const isCardsQR = lastQR?.style === 'cards' && !isConditionQR
                     onRequestViewProposal?.()
                     return
                   }
+                  if (value === '__save_later__') {
+                    onSaveLater?.()
+                    return
+                  }
+                  if (value === '__dig_deeper__' || value === '__upgrade_full__') {
+                    onUpgradeToFull?.()
+                    return
+                  }
                   const answerDisplay = label || value
                   if (reEditingQR && reEditingMessageId) {
                     onEdit?.(reEditingMessageId, value, answerDisplay)
@@ -350,6 +368,7 @@ const isCardsQR = lastQR?.style === 'cards' && !isConditionQR
                 onResumeQuestions={!reEditingQR ? onResumeQuestions : undefined}
                 isPaused={isPaused}
                 initialValue={pickerHints?.size_sqft}
+                propertyType={pickerHints?.property_type}
               />
             ) : activeQR.style === 'budget' ? (
               <BudgetPicker
@@ -397,6 +416,14 @@ const isCardsQR = lastQR?.style === 'cards' && !isConditionQR
                   // Intercept reserved proposal actions — open the panel instead of sending.
                   if (value === '__view_proposal__' || value === '__submit__') {
                     onRequestViewProposal?.()
+                    return
+                  }
+                  if (value === '__save_later__') {
+                    onSaveLater?.()
+                    return
+                  }
+                  if (value === '__dig_deeper__' || value === '__upgrade_full__') {
+                    onUpgradeToFull?.()
                     return
                   }
                   // displayContent is just the answer label — question is shown separately above the bubble

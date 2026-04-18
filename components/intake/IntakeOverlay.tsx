@@ -66,6 +66,11 @@ export default function IntakeOverlay({ initialMessage, onClose }: Props) {
   const [addEmailModalOpen, setAddEmailModalOpen] = useState(false)
   const [sendingLink, setSendingLink] = useState(false)
 
+  // Action queued to run after the SaveForLaterModal completes a fresh
+  // verification. Used so "New project" can force-save the current draft
+  // before discarding it.
+  const pendingAfterVerifyRef = useRef<(() => void) | null>(null)
+
   const updateSlug = useCallback(async (proposalId: string, name: string) => {
     try {
       const res = await fetch(`/api/proposals/${proposalId}/slug`, {
@@ -296,9 +301,50 @@ export default function IntakeOverlay({ initialMessage, onClose }: Props) {
       const existingLocalMsgs = localStorage.getItem(`cd_msgs_${targetId}`)
       const existingProposalState = localStorage.getItem(`cd_proposal_${targetId}`)
 
+      type RestoreData = {
+        proposalId: string
+        sessionId: string
+        userId: string
+        brief: string
+        email: string | null
+        scope: unknown[]
+        confidenceScore: number
+        messages: { role: string; content: string; question?: string; quickReplies?: unknown }[]
+        metadata: Record<string, unknown> | null
+        slug: string | null
+      }
       const res = await fetch(`/api/proposals/${targetId}/restore`)
-      if (!res.ok) throw new Error('Failed to restore')
-      const data = await res.json()
+      // 404 = local-only proposal that was never persisted to the DB
+      // (anonymous session that hasn't synced yet). Fall back to whatever
+      // localStorage has so the user can still switch into it. If localStorage
+      // is also empty we synthesize a blank proposal — switching to a stale
+      // entry is preferable to leaving the user stuck on the old one.
+      let data: RestoreData
+      if (res.status === 404) {
+        const localState = (() => {
+          if (!existingProposalState) return {} as Record<string, unknown>
+          try { return JSON.parse(existingProposalState) as Record<string, unknown> } catch { return {} as Record<string, unknown> }
+        })()
+        const qf = (localState.qualifyingFields && typeof localState.qualifyingFields === 'object')
+          ? localState.qualifyingFields as Record<string, unknown>
+          : null
+        data = {
+          proposalId: targetId,
+          sessionId: session.sessionId,
+          userId: session.userId ?? '',
+          brief: getIdeaForSession(targetId) || '',
+          email: null,
+          scope: Array.isArray(localState.detectedScope) ? localState.detectedScope as unknown[] : [],
+          confidenceScore: typeof localState.confidenceScore === 'number' ? localState.confidenceScore : 0,
+          messages: [],
+          metadata: qf,
+          slug: null,
+        }
+      } else if (!res.ok) {
+        throw new Error('Failed to restore')
+      } else {
+        data = await res.json() as RestoreData
+      }
 
       // Hydrate all localStorage keys for the target proposal
       hydrateProposalFromRestore(data)
@@ -442,34 +488,52 @@ export default function IntakeOverlay({ initialMessage, onClose }: Props) {
     }
   }, [session, fetchProposals])
 
+  // ── Force-save the current draft before allowing a new project ──
+  // If the current proposal has any meaningful content and the user has not
+  // verified an email, queue handleNewProposal to run after the modal closes
+  // with a successful verification. Empty drafts skip the gate so the user
+  // can keep clicking "New project" on a blank canvas without friction.
+  const handleNewProposalGated = useCallback(() => {
+    const hasContent = liveConfidenceScore > 0 || liveScopeCount > 0
+    if (hasContent && !emailVerified) {
+      pendingAfterVerifyRef.current = () => { handleNewProposal() }
+      setSaveModalOpen(true)
+      return
+    }
+    handleNewProposal()
+  }, [emailVerified, liveConfidenceScore, liveScopeCount, handleNewProposal])
+
   // ── Delete a proposal ──
   const handleDeleteProposal = useCallback(async (targetId: string) => {
     if (!session) return
+    // Best-effort server delete. If it fails (anonymous proposal, network blip,
+    // server error) we still want to honour the user's intent and clean up
+    // local state — leaving a "ghost" entry in the drawer is worse than a
+    // stale DB row.
     try {
-      const res = await fetch(`/api/proposals/${targetId}/delete`, {
+      await fetch(`/api/proposals/${targetId}/delete`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ sessionId: session.sessionId }),
       })
-      if (!res.ok) throw new Error('Delete failed')
-
-      // Remove from local state
-      setProposals(prev => prev.filter(p => p.id !== targetId))
-      // Clear localStorage for deleted lead
-      clearProposalData(targetId)
-      removeKnownProposal(targetId)
-
-      // If we deleted the current lead, switch to first remaining or create new
-      if (targetId === session.proposalId) {
-        const remaining = proposals.filter(p => p.id !== targetId)
-        if (remaining.length > 0) {
-          switchToProposal(remaining[0].id)
-        } else {
-          handleNewProposal()
-        }
-      }
     } catch (err) {
-      console.error('Failed to delete lead:', err)
+      console.warn('Delete API call failed, proceeding with local cleanup:', err)
+    }
+
+    // Remove from local state
+    setProposals(prev => prev.filter(p => p.id !== targetId))
+    // Clear localStorage for deleted lead
+    clearProposalData(targetId)
+    removeKnownProposal(targetId)
+
+    // If we deleted the current lead, switch to first remaining or create new
+    if (targetId === session.proposalId) {
+      const remaining = proposals.filter(p => p.id !== targetId)
+      if (remaining.length > 0) {
+        switchToProposal(remaining[0].id)
+      } else {
+        handleNewProposal()
+      }
     }
   }, [session, proposals, switchToProposal, handleNewProposal])
 
@@ -551,12 +615,42 @@ export default function IntakeOverlay({ initialMessage, onClose }: Props) {
   }
 
   // ── Handle save modal close -> re-check email verified ──
+  // If verification just completed during this modal session, run any queued
+  // post-verify action (e.g. start a new project) and otherwise auto-open the
+  // proposal panel as a "reveal" moment so the user immediately sees what
+  // they just unlocked.
   function handleSaveModalClose() {
     setSaveModalOpen(false)
     if (session && localStorage.getItem(`cd_email_verified_${session.proposalId}`)) {
+      const wasVerified = emailVerified
       setEmailVerified(true)
+      if (!wasVerified) {
+        const pending = pendingAfterVerifyRef.current
+        pendingAfterVerifyRef.current = null
+        if (pending) {
+          pending()
+        } else {
+          setProposalOpen(true)
+        }
+      }
+    } else {
+      // Modal closed without verifying — drop any queued action so we don't
+      // run it later by surprise.
+      pendingAfterVerifyRef.current = null
     }
   }
+
+  // ── Open the proposal panel, gating on email verification ──
+  // Quick-estimate users must capture their email before the full proposal
+  // panel (scope, breakdown, project overview) is unlocked. Until then,
+  // tapping View Proposal opens the SaveForLaterModal instead.
+  const requestViewProposal = useCallback(() => {
+    if (!emailVerified) {
+      setSaveModalOpen(true)
+      return
+    }
+    setProposalOpen(p => !p)
+  }, [emailVerified])
 
   // ── Email management handlers ──
   async function handleRemoveEmail(emailId: string) {
@@ -721,12 +815,16 @@ export default function IntakeOverlay({ initialMessage, onClose }: Props) {
                 </button>
               )}
 
-              {/* View / Hide Proposal button — desktop only, mobile uses bottom drawer */}
+              {/* View / Hide Proposal button — desktop only, mobile uses bottom drawer.
+                  Unverified users see "Save proposal" which opens the email-capture
+                  modal; the full proposal panel stays locked until OTP succeeds. */}
               <button
-                onClick={() => setProposalOpen(p => !p)}
+                onClick={requestViewProposal}
                 className="hidden md:flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-all cursor-pointer border border-[var(--ov-border,rgba(255,255,255,0.10))] hover:border-[var(--ov-text-muted,rgba(255,255,255,0.20))] bg-transparent text-[var(--ov-text,#ffffff)]"
               >
-                {proposalOpen ? (
+                {!emailVerified ? (
+                  <>Save proposal <span className="text-brand-purple">{liveConfidenceScore}%</span></>
+                ) : proposalOpen ? (
                   'Hide proposal'
                 ) : (
                   <>View Proposal <span className="text-brand-purple">{liveConfidenceScore}%</span></>
@@ -763,7 +861,7 @@ export default function IntakeOverlay({ initialMessage, onClose }: Props) {
             onReset={doReset}
             theme={theme}
             proposalOpen={proposalOpen}
-            onProposalToggle={() => setProposalOpen(p => !p)}
+            onProposalToggle={requestViewProposal}
             onSaveLater={() => setSaveModalOpen(true)}
             emailVerified={emailVerified}
             leadEmails={leadEmails}
@@ -785,7 +883,7 @@ export default function IntakeOverlay({ initialMessage, onClose }: Props) {
             proposals={proposals}
             loading={loadingProposals}
             onSwitchProposal={switchToProposal}
-            onNewProposal={handleNewProposal}
+            onNewProposal={handleNewProposalGated}
             onDeleteProposal={handleDeleteProposal}
             onSaveEmail={() => {
               setDrawerOpen(false)
@@ -811,6 +909,13 @@ export default function IntakeOverlay({ initialMessage, onClose }: Props) {
           sessionId={session.sessionId}
           projectName={appName || undefined}
           onClose={handleSaveModalClose}
+          onSkip={pendingAfterVerifyRef.current ? () => {
+            const pending = pendingAfterVerifyRef.current
+            pendingAfterVerifyRef.current = null
+            setSaveModalOpen(false)
+            pending?.()
+          } : undefined}
+          skipLabel="Continue without saving"
         />
       )}
 

@@ -106,9 +106,19 @@ export const UPDATE_PROPOSAL_TOOL: Anthropic.Tool = {
         enum: ['villa', 'apartment', 'townhouse', 'penthouse', 'office', 'retail', 'warehouse', ''],
         description: 'Type of property. Residential: villa, apartment, townhouse, penthouse. Commercial: office, retail, warehouse. Empty string if not yet known.',
       },
+      project_nature: {
+        type: 'string',
+        enum: ['refresh', 'partial_renovation', 'full_renovation', 'extension', 'new_build', ''],
+        description: 'What the user is doing to the property. "refresh" = light cosmetic updates only. "partial_renovation" = reworking one or two rooms. "full_renovation" = gut renovation of the whole unit. "extension" = adding floor area to an existing property. "new_build" = building from the ground up (typically a villa). Extract aggressively from the first message: "I want to build" -> new_build, "I want to renovate my villa completely" -> full_renovation, "just a fresh coat of paint" -> refresh, "knocking down a wall between two rooms" -> partial_renovation. Empty string if not yet known or clearly implied.',
+      },
+      finish_level: {
+        type: 'string',
+        enum: ['basic', 'standard', 'premium', 'luxury', ''],
+        description: 'Finish tier. "basic" = developer-grade / budget-conscious. "standard" = mid-range, typical UAE default. "premium" = high-end finishes, branded appliances, stone surfaces. "luxury" = top-tier imported materials, custom joinery, bespoke. Extract from phrases the user uses: "premium finishes" -> premium, "top of the line" / "luxury" -> luxury, "basic" / "cheap" / "budget" -> basic, otherwise default to standard only after confirming with the user. Empty string if not yet known.',
+      },
       location: {
         type: 'string',
-        description: 'UAE area/community (e.g. Dubai Marina, JBR, Arabian Ranches, Al Reem Island, DIFC). Empty string if not yet known.',
+        description: 'UAE area/community (e.g. Dubai Marina, JBR, Arabian Ranches, Al Reem Island, DIFC). ONLY set this when the user explicitly states a city, emirate, or community name. NEVER infer or default to "Dubai" or any other city just because it is common — leave this empty if the user has not named a specific location. Empty string is the correct value when not yet stated.',
       },
       size_sqft: {
         type: 'number',

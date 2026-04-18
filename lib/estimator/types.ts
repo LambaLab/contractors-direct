@@ -37,6 +37,20 @@ export interface EstimatorInputs {
   acUnits: number
   glazingReplacement: boolean
   facadePainting: boolean
+  /** Override the flat AUTHORITY_FEE (default 20k AED). Used by intake to
+   *  scale fees down for single-room or cosmetic projects where the full
+   *  permit fee is disproportionate. Defaults to AUTHORITY_FEE if undefined. */
+  authorityFee?: number
+  /** Override the per-sqm area-based rate for extension_remodelling
+   *  projects. Used to route commercial fit-outs through their own (lower
+   *  than 5,000 AED/sqm extension build) rate without adding new project
+   *  types. Defaults to EXTENSION_RATE_PER_SQM if undefined. */
+  areaBaseRate?: number
+  /** Override the project base cost for the chosen project type. Used by
+   *  intake to drop the base for paint-only or light commercial refresh
+   *  scopes where the standard base is disproportionate. Defaults to the
+   *  PROJECT_BASE_COSTS entry if undefined. */
+  projectBaseOverride?: number
 }
 
 export interface RoomCostLine {

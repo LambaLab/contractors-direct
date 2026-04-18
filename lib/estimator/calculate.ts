@@ -62,14 +62,15 @@ export function calculateEstimate(inputs: EstimatorInputs): EstimatorBreakdown {
 
   let areaBasedCost = 0
   if (inputs.projectType === 'extension_remodelling') {
-    areaBasedCost = extensionArea * EXTENSION_RATE_PER_SQM * finishFactor
+    const rate = inputs.areaBaseRate ?? EXTENSION_RATE_PER_SQM
+    areaBasedCost = extensionArea * rate * finishFactor
   } else if (isNewBuild) {
     areaBasedCost = area * VILLA_NEW_BUILD_RATE_PER_SQM * finishFactor
   }
 
   const projectBaseCost = isNewBuild
     ? 0
-    : PROJECT_BASE_COSTS[inputs.projectType] * finishFactor
+    : (inputs.projectBaseOverride ?? PROJECT_BASE_COSTS[inputs.projectType]) * finishFactor
 
   const coreConstructionCost = isNewBuild
     ? areaBasedCost + optionalScopeTotal
@@ -88,7 +89,7 @@ export function calculateEstimate(inputs: EstimatorInputs): EstimatorBreakdown {
   const directAllowancesTotal = painting + acHvac + glazing + facade
 
   const pmFee = (adjustedCoreCost + directAllowancesTotal) * PM_FEE_RATE
-  const authorityFee = AUTHORITY_FEE
+  const authorityFee = inputs.authorityFee ?? AUTHORITY_FEE
   const subtotalBeforeContingency =
     adjustedCoreCost + directAllowancesTotal + pmFee + authorityFee
   const contingency = subtotalBeforeContingency * CONTINGENCY_RATE

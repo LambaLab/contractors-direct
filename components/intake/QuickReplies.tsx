@@ -105,11 +105,11 @@ export default function QuickReplies({ quickReplies, onSelect, disabled, questio
   if (style === 'pills') {
     return (
       <div className="mt-3 flex flex-wrap gap-2">
-        {options.map((opt) => {
+        {options.map((opt, i) => {
           const isChecked = selected.includes(opt.value)
           return (
             <button
-              key={opt.value}
+              key={`${i}-${opt.value}`}
               onClick={() => multiSelect ? toggleSelected(opt.value) : handleSingleSelect(opt)}
               disabled={disabled}
               className={`px-3 py-1.5 rounded-full border text-sm transition-all cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed ${
@@ -303,7 +303,7 @@ export default function QuickReplies({ quickReplies, onSelect, disabled, questio
         const option = opt as QuickReplyOption
         return (
           <button
-            key={option.value}
+            key={`${i}-${option.value}`}
             onClick={() => multiSelect ? toggleSelected(option.value) : handleSingleSelect(option)}
             disabled={disabled}
             className={`w-full flex items-start justify-between px-4 py-3 hover:bg-[var(--ov-surface-subtle,rgba(255,255,255,0.05))] transition-colors text-left border-t border-[var(--ov-border,rgba(255,255,255,0.10))] first:border-t-0 disabled:opacity-50 cursor-pointer disabled:cursor-not-allowed ${

@@ -58,6 +58,7 @@ export default function IntakeLayout({ proposalId, initialMessage, onStateChange
     handleFileUploadDone,
     handleFileUploadSkipped,
     pickerHints,
+    estimatorBallpark,
   } = useIntakeChat({ proposalId, idea: initialMessage })
 
   // Session ID for direct-to-Supabase file uploads. The stored session is
@@ -121,13 +122,18 @@ export default function IntakeLayout({ proposalId, initialMessage, onStateChange
   // Ref to programmatically open MobileBottomDrawer
   const mobileDrawerRef = useRef<{ open: () => void }>(null)
 
-  // Opens the proposal panel (used by PauseCheckpoint "Get ballpark estimate" pill)
+  // Opens the proposal panel (used by PauseCheckpoint "Get ballpark estimate" pill).
+  // Routes through onProposalToggle on the parent, which gates on email
+  // verification — unverified users get the SaveForLaterModal instead of
+  // having the mobile drawer reveal scope/breakdown content.
   const openProposal = useCallback(() => {
-    // Desktop: toggle the side panel
+    if (!emailVerified) {
+      onProposalToggle()
+      return
+    }
     if (!proposalOpen) onProposalToggle()
-    // Mobile: open the bottom drawer
     mobileDrawerRef.current?.open()
-  }, [proposalOpen, onProposalToggle])
+  }, [emailVerified, proposalOpen, onProposalToggle])
 
   const onStateChangeRef = useRef(onStateChange)
   useEffect(() => { onStateChangeRef.current = onStateChange })
@@ -184,6 +190,7 @@ export default function IntakeLayout({ proposalId, initialMessage, onStateChange
             onFileUploadSkipped={handleFileUploadSkipped}
             onUpgradeToFull={upgradeToFull}
             pickerHints={pickerHints}
+            estimatorBallpark={estimatorBallpark}
           />
         </div>
 
@@ -258,6 +265,7 @@ export default function IntakeLayout({ proposalId, initialMessage, onStateChange
             onFileUploadSkipped={handleFileUploadSkipped}
             onUpgradeToFull={upgradeToFull}
             pickerHints={pickerHints}
+            estimatorBallpark={estimatorBallpark}
           />
         </div>
         <MobileBottomDrawer
