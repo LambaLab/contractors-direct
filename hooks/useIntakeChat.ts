@@ -1572,6 +1572,9 @@ export function useIntakeChat({ proposalId, idea }: Props) {
                 // so the admin dashboard can see the lead as soon as AI starts analyzing it.
                 const storedSession = getStoredSession()
                 if (storedSession?.sessionId) {
+                  // Snapshot the AI-extracted intake fields so admin sees them
+                  // on the lead row immediately (instead of waiting for OTP).
+                  const qfNow = qualifyingFieldsRef.current
                   fetch(`/api/proposals/${proposalId}/sync-metadata`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
@@ -1580,9 +1583,18 @@ export function useIntakeChat({ proposalId, idea }: Props) {
                       confidenceScore: newScore,
                       modules: newScope,
                       brief: savedBrief,
+                      // Core Four — go to top-level lead columns
+                      propertyType: qfNow.property_type ?? null,
+                      sizeSqft: typeof qfNow.size_sqft === 'number' ? qfNow.size_sqft : null,
+                      location: qfNow.location ?? null,
+                      condition: qfNow.condition ?? null,
+                      stylePreference: qfNow.style_preference ?? null,
+                      // Estimator-only fields ride along inside metadata
                       metadata: {
                         ...(savedProjectName ? { projectName: savedProjectName } : {}),
                         ...(savedOverview ? { projectOverview: savedOverview } : {}),
+                        ...(qfNow.project_nature ? { project_nature: qfNow.project_nature } : {}),
+                        ...(qfNow.finish_level ? { finish_level: qfNow.finish_level } : {}),
                       },
                     }),
                   }).catch(() => { /* best-effort, ignore errors */ })

@@ -245,7 +245,7 @@ export default function LeadEditor({ lead, onUpdate }: Props) {
       </div>
 
       {/* ─── Desktop: Vertical tabs layout ─── */}
-      <div className="hidden md:flex min-h-[400px]">
+      <div className="hidden md:flex">
         {/* Tab list — left side */}
         <div className="w-44 shrink-0 border-r border-border/40">
           {SECTIONS.map((section, index) => {

@@ -9,7 +9,7 @@ import LeadEditor from './LeadEditor'
 import BoqTab from './BoqTab'
 import TrackerTab from './TrackerTab'
 import ChatTab from './ChatTab'
-import BudgetTab from './BudgetTab'
+import AdminEstimateSection from './AdminEstimateSection'
 
 type Lead = Database['public']['Tables']['leads']['Row']
 
@@ -239,9 +239,12 @@ export default function LeadDetail({ lead, onBack, onLeadUpdate, isMobileFullscr
         <div className={`${isExpanded ? 'max-w-4xl mx-auto w-full' : ''} ${activeTab === 'chat' ? 'flex-1 min-h-0 flex flex-col' : 'overflow-y-auto flex-1'}`}>
           <div className={activeTab === 'lead' ? '' : 'hidden'}>
             <LeadEditor lead={lead} onUpdate={onLeadUpdate} />
-            {/* Budget section within Proposal tab */}
+            {/* Client-facing budget estimate + admin disclosure */}
             <div className="border-t">
-              <BudgetTab leadId={lead.id} leadEmail={lead.email} leadSlug={lead.slug} />
+              <AdminEstimateSection
+                leadId={lead.id}
+                onSwitchToBoq={() => setActiveTab('boq')}
+              />
             </div>
           </div>
           <div className={activeTab === 'boq' ? 'flex-1 min-h-0 flex flex-col' : 'hidden'}>

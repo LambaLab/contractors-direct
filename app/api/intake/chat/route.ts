@@ -4,40 +4,7 @@ import { UPDATE_PROPOSAL_TOOL } from '@/lib/ai/tools'
 import { SYSTEM_PROMPT } from '@/lib/ai/system-prompt'
 import { getPricingSummary } from '@/lib/pricing/historical'
 import type { HistoricalPricingStat } from '@/lib/pricing/historical'
-import { calculateEstimate } from '@/lib/estimator/calculate'
-import { intakeToEstimatorInputs, type ProjectNature } from '@/lib/estimator/fromIntake'
-import type { FinishLevel } from '@/lib/estimator/types'
-
-// Location cost factor, matches lib/pricing/engine.ts LOCATION_FACTORS.
-// Duplicated here because engine's applyLocationFactor works on PriceRange, not scalar.
-const LOCATION_FACTORS: Record<string, number> = {
-  dubai: 1.0,
-  abu_dhabi: 0.95,
-  sharjah: 0.85,
-  ajman: 0.80,
-  ras_al_khaimah: 0.80,
-  fujairah: 0.75,
-  umm_al_quwain: 0.75,
-}
-
-function locationFactor(location: string): number {
-  const lower = location.toLowerCase()
-  for (const [key, val] of Object.entries(LOCATION_FACTORS)) {
-    if (lower.includes(key.replace(/_/g, ' ')) || lower.includes(key.replace(/_/g, ''))) {
-      return val
-    }
-  }
-  return 1.0
-}
-
-const VALID_NATURES: ProjectNature[] = [
-  'refresh',
-  'partial_renovation',
-  'full_renovation',
-  'extension',
-  'new_build',
-]
-const VALID_FINISH: FinishLevel[] = ['basic', 'standard', 'premium', 'luxury']
+import { inferEstimate } from '@/lib/estimator/intakeInference'
 
 // Extend Vercel serverless function timeout to 60 s (max on Hobby, well within Pro).
 // Without this, Vercel's default 10 s timeout kills the function mid-stream and
@@ -691,263 +658,53 @@ When suggesting to resume, always frame it as an invitation, not a demand. "Want
                 // Compute estimator ballpark if the 3 hard keys are present
                 // (merging this turn's tool output with fields already known).
                 if (currentToolName === 'update_proposal') {
-                  const rawNature = typeof input.project_nature === 'string' && input.project_nature
-                    ? input.project_nature
-                    : (typeof kf.project_nature === 'string' ? kf.project_nature : '')
-                  const rawProperty = typeof input.property_type === 'string' && input.property_type
-                    ? input.property_type
-                    : (typeof kf.property_type === 'string' ? kf.property_type : '')
-                  const rawSize = typeof input.size_sqft === 'number' && input.size_sqft > 0
-                    ? input.size_sqft
-                    : (typeof kf.size_sqft === 'number' ? kf.size_sqft : 0)
-                  const rawFinish = typeof input.finish_level === 'string' && input.finish_level
-                    ? input.finish_level
-                    : (typeof kf.finish_level === 'string' ? kf.finish_level : '')
-                  const rawLocation = typeof input.location === 'string' && input.location
-                    ? input.location
-                    : (typeof kf.location === 'string' ? kf.location : '')
-
-                  // Project nature: prefer the AI's value, otherwise infer from
-                  // the question's free-text reply, otherwise fall back to a safe
-                  // default. We deliberately do NOT gate the ballpark on nature
-                  // being explicitly set — Haiku often drops it, and the user
-                  // expects to see a card as soon as property + size are in.
-                  const conversationBlob = messages
+                  const knownFields = {
+                    project_nature:
+                      typeof input.project_nature === 'string' && input.project_nature
+                        ? input.project_nature
+                        : (typeof kf.project_nature === 'string' ? kf.project_nature : ''),
+                    property_type:
+                      typeof input.property_type === 'string' && input.property_type
+                        ? input.property_type
+                        : (typeof kf.property_type === 'string' ? kf.property_type : ''),
+                    size_sqft:
+                      typeof input.size_sqft === 'number' && input.size_sqft > 0
+                        ? input.size_sqft
+                        : (typeof kf.size_sqft === 'number' ? kf.size_sqft : 0),
+                    finish_level:
+                      typeof input.finish_level === 'string' && input.finish_level
+                        ? input.finish_level
+                        : (typeof kf.finish_level === 'string' ? kf.finish_level : ''),
+                    location:
+                      typeof input.location === 'string' && input.location
+                        ? input.location
+                        : (typeof kf.location === 'string' ? kf.location : ''),
+                  }
+                  const conversationText = messages
                     .filter((m: { role: string }) => m.role === 'user')
                     .map((m: { content: unknown }) => typeof m.content === 'string' ? m.content : '')
                     .join(' ')
-                    .toLowerCase()
 
-                  let nature: ProjectNature | null = VALID_NATURES.includes(rawNature as ProjectNature)
-                    ? (rawNature as ProjectNature)
-                    : null
-                  if (!nature) {
-                    // Scan the conversation for strong nature signals.
-                    if (/new\s*build|build (a|an|the)?\s*(villa|home|house)|ground.up/.test(conversationBlob)) nature = 'new_build'
-                    else if (/extension|extend|add (a|an)?\s*(room|floor)/.test(conversationBlob)) nature = 'extension'
-                    else if (/full (reno|overhaul|renovation)|gut|complete reno/.test(conversationBlob)) nature = 'full_renovation'
-                    else if (/light refresh|just paint|cosmetic|refresh/.test(conversationBlob)) nature = 'refresh'
-                    else if (/partial|kitchen reno|bathroom reno|specific rooms/.test(conversationBlob)) nature = 'partial_renovation'
-                  }
-                  const natureUsed: ProjectNature = nature ?? 'partial_renovation'
-                  const assumedNature = !nature
-                  const finish = VALID_FINISH.includes(rawFinish as FinishLevel)
-                    ? (rawFinish as FinishLevel)
-                    : 'standard'
-
-                  // Single-room scope detection. The user might be talking about
-                  // ONE room (not a whole property). Without this guard the
-                  // calculator counts every room in the property and produces
-                  // wildly inflated numbers (e.g. AED 433k for a "kitchen
-                  // revamp" because it priced the whole 5-room townhouse).
-                  //
-                  // Room-action verbs that indicate single-room intent. Broad
-                  // on purpose — covers revamp, redo, reno, renovation, refresh,
-                  // remodel, upgrade, makeover. The size is NOT a gate: the
-                  // user's stated sqft is usually the whole-property size, not
-                  // the room they want to touch.
-                  const ROOM_VERBS = '(?:revamp|redo|reno|renovate|renovation|refresh|remodel|upgrade|makeover|only|update|fix(?:ing)? up|paint(?:ing)?|repaint|touch[\\s-]?up|spruce[\\s-]?up|freshen[\\s-]?up|do[\\s-]?up|overhaul)'
-                  // Modifier slot: lets phrasings like "the master bedroom",
-                  // "my guest bath", "the kids room", "the downstairs powder
-                  // room" all match without needing a regex per combination.
-                  const ROOM_MODIFIER = '(?:master\\s+|guest\\s+|kids?\\s+|main\\s+|spare\\s+|downstairs\\s+|upstairs\\s+|second\\s+|small\\s+|big\\s+|new\\s+)?'
-                  let singleRoomKitchen    = new RegExp(`\\b(?:kitchen)\\s+${ROOM_VERBS}\\b|\\bjust\\s+the\\s+kitchen\\b|\\b${ROOM_VERBS}\\s+(?:the\\s+|my\\s+)?${ROOM_MODIFIER}kitchen\\b`).test(conversationBlob)
-                  // Powder room is a separate, smaller scope than a full bathroom
-                  // (no shower, smaller footprint). Detect first so the bathroom
-                  // path doesn't subsume it.
-                  let singleRoomPowderRoom = new RegExp(`\\bpowder\\s+room\\s+${ROOM_VERBS}\\b|\\bjust\\s+the\\s+powder\\s+room\\b|\\b${ROOM_VERBS}\\s+(?:the\\s+|my\\s+)?${ROOM_MODIFIER}powder\\s+room\\b`).test(conversationBlob)
-                  let singleRoomBathroom   = !singleRoomPowderRoom && new RegExp(`\\b(?:bathroom|guest\\s+bath|master\\s+bath)\\s+${ROOM_VERBS}\\b|\\bjust\\s+the\\s+bathroom\\b|\\b${ROOM_VERBS}\\s+(?:the\\s+|my\\s+)?${ROOM_MODIFIER}(?:bathroom|bath)\\b`).test(conversationBlob)
-                  // Maid's room uses maid_room rate (16k), not bedroom (18k) +
-                  // wardrobe. Detect first so the bedroom path doesn't catch it.
-                  // "maid's quarters", "servant room", "nanny room" included as
-                  // synonyms.
-                  let singleRoomMaid       = new RegExp(`\\b(?:maid['\u2019]?s?\\s+(?:room|quarters)|servant['\u2019]?s?\\s+room|nanny['\u2019]?s?\\s+room|helper['\u2019]?s?\\s+room)\\s+${ROOM_VERBS}\\b|\\b${ROOM_VERBS}\\s+(?:the\\s+|my\\s+)?(?:maid['\u2019]?s?\\s+(?:room|quarters)|servant['\u2019]?s?\\s+room|nanny['\u2019]?s?\\s+room|helper['\u2019]?s?\\s+room)\\b`).test(conversationBlob)
-                  let singleRoomBedroom    = !singleRoomMaid && new RegExp(`\\b(?:bedroom|master\\s+bed|guest\\s+bed|kids?\\s+room)\\s+${ROOM_VERBS}\\b|\\bjust\\s+the\\s+bedroom\\b|\\b${ROOM_VERBS}\\s+(?:the\\s+|my\\s+)?${ROOM_MODIFIER}bedroom\\b`).test(conversationBlob)
-                  let singleRoomLiving     = new RegExp(`\\b(?:living\\s+room|lounge|family\\s+room|sitting\\s+room)\\s+${ROOM_VERBS}\\b|\\bjust\\s+the\\s+living\\s+room\\b|\\b${ROOM_VERBS}\\s+(?:the\\s+|my\\s+)?${ROOM_MODIFIER}(?:living\\s+room|lounge|family\\s+room|sitting\\s+room)\\b`).test(conversationBlob)
-                  let singleRoomDining     = new RegExp(`\\b(?:dining\\s+room)\\s+${ROOM_VERBS}\\b|\\bjust\\s+the\\s+dining\\s+room\\b|\\b${ROOM_VERBS}\\s+(?:the\\s+|my\\s+)?${ROOM_MODIFIER}dining\\s+room\\b`).test(conversationBlob)
-                  const singleRoomGeneric  = /\b(one room|single room|just\s+(the\s+)?room|(the\s+|my\s+)?room\s+(revamp|redo|refresh|reno|renovation|remodel|upgrade|makeover)|redo\s+(the\s+|my\s+)?room)\b/.test(conversationBlob)
-
-                  // Multi-room "just the X and Y" mode. The verb-anchored
-                  // regexes above don't fire when room names appear in a list
-                  // joined by "and"/"&"/","/"plus" — there's no verb after
-                  // each room. So when the user opens with "just the/my", scan
-                  // for room mentions and OR them in.
-                  //
-                  // Important: the `!singleRoomPowderRoom` / `!singleRoomMaid`
-                  // guards are NOT applied here — in a list ("just the powder
-                  // room and bathroom"), both rooms should fire independently.
-                  // The guards exist only on the verb-anchored direct-match
-                  // branches above to avoid double-firing on "powder room
-                  // remodel" (which also satisfies the bathroom regex).
-                  if (/\bjust\s+(?:the|my)\b/.test(conversationBlob)) {
-                    if (/\bpowder\s+room\b/.test(conversationBlob)) singleRoomPowderRoom = true
-                    if (/\b(?:bathroom|guest\s+bath|master\s+bath)\b/.test(conversationBlob)) singleRoomBathroom = true
-                    if (/\bkitchen\b/.test(conversationBlob)) singleRoomKitchen = true
-                    if (/\b(?:maid['\u2019]?s?\s+(?:room|quarters)|servant['\u2019]?s?\s+room|nanny['\u2019]?s?\s+room|helper['\u2019]?s?\s+room)\b/.test(conversationBlob)) singleRoomMaid = true
-                    if (/\b(?:bedroom|master\s+bed|guest\s+bed|kids?\s+room)\b/.test(conversationBlob)) singleRoomBedroom = true
-                    if (/\b(?:living\s+room|lounge|family\s+room|sitting\s+room)\b/.test(conversationBlob)) singleRoomLiving = true
-                    if (/\bdining\s+room\b/.test(conversationBlob)) singleRoomDining = true
-                  }
-
-                  // Structural change keyword often names the room being opened
-                  // up — "open up the kitchen", "open up the living room". When
-                  // it does, treat the named room as also-in-scope so single-
-                  // room + structural compose instead of one silently dropping
-                  // the other. (E.g. "open up the kitchen and renovate the
-                  // master bathroom" should price both kitchen + bathroom.)
-                  if (/\bopen\s+up\s+(?:the\s+)?kitchen\b/.test(conversationBlob)) singleRoomKitchen = true
-                  if (/\bopen\s+up\s+(?:the\s+)?living\b/.test(conversationBlob)) singleRoomLiving = true
-                  if (/\bopen\s+up\s+(?:the\s+)?dining\b/.test(conversationBlob)) singleRoomDining = true
-
-                  // Structural-change-only scope (knock down a wall, open up the
-                  // kitchen, etc.). No rooms touched, just a single structural
-                  // intervention with optional repaint of the affected area.
-                  const isStructuralChange = /\b(knock(?:ing)?\s+down\s+(?:a\s+|the\s+)?wall|tear(?:ing)?\s+down\s+(?:a\s+|the\s+)?wall|remove\s+(?:a\s+|the\s+)?wall|open\s+up\s+(?:the\s+)?(?:kitchen|living|dining|space)|open[\s-]plan|create\s+(?:an?\s+)?open[\s-]plan)\b/.test(conversationBlob)
-
-                  // Paint-only signal: any single-room or whole-property scope
-                  // where the intent is paint, not a renovation. When true we
-                  // strip out the wardrobe / door / project-base costs that
-                  // assume someone is rebuilding the room. Covers transitive
-                  // forms ("paint the bedroom"), noun-verb pairs ("bedroom
-                  // paint"), and "paint just one X" / "touch up X".
-                  const ROOM_NOUNS = '(?:bedroom|bathroom|bath|kitchen|living\\s+room|lounge|family\\s+room|sitting\\s+room|dining\\s+room|powder\\s+room|maid[\'\u2019]?s?\\s+room|room|walls?)'
-                  const isPaintOnly =
-                    /\b(?:just\s+(?:paint|painting|repaint)|paint(?:ing)?\s+(?:only|the\s+walls)|repaint(?:ing)?|fresh\s+coat|whole\s+(?:place|house|apartment|villa)\s+(?:paint|painting|repaint)|just\s+paint|touch[\s-]?up)\b/.test(conversationBlob) ||
-                    new RegExp(`\\bpaint(?:ing)?\\s+(?:just\\s+)?(?:the\\s+|my\\s+|one\\s+)?${ROOM_MODIFIER}${ROOM_NOUNS}\\b`).test(conversationBlob) ||
-                    new RegExp(`\\b${ROOM_MODIFIER}${ROOM_NOUNS}\\s+paint(?:ing)?\\b`).test(conversationBlob)
-
-                  const matchedRoomCount =
-                    Number(singleRoomKitchen) + Number(singleRoomBathroom) + Number(singleRoomPowderRoom) +
-                    Number(singleRoomBedroom) + Number(singleRoomMaid) + Number(singleRoomLiving) +
-                    Number(singleRoomDining) + Number(singleRoomGeneric)
-                  const isSingleRoom = matchedRoomCount > 0
-
-                  // For a single-room or structural scope, downgrade property
-                  // type to apartment so the calculator uses the lighter
-                  // project base (25k vs villa 70k).
-                  const propertyForCalc = (isSingleRoom || isStructuralChange) ? 'apartment' : rawProperty
-
-                  if (rawProperty && rawSize > 0) {
-                    const estInputs = intakeToEstimatorInputs({
-                      projectNature: natureUsed,
-                      propertyType: propertyForCalc,
-                      sizeSqft: rawSize,
-                      finishLevel: finish,
-                    })
-
-                    const emptyRooms = {
-                      bedroom: 0,
-                      bathroom: 0,
-                      kitchen: 0,
-                      living_room: 0,
-                      dining_room: 0,
-                      maid_room: 0,
-                      utility_laundry: 0,
-                      corridor_entry: 0,
-                    }
-                    // Typical single-room footprints in sqm. Powder room is
-                    // smaller than a full bathroom; maid's room is smaller than
-                    // a master bedroom; living/dining a bit larger.
-                    const ROOM_AREA_SQM = { kitchen: 25, bathroom: 12, powderRoom: 8, bedroom: 25, maidRoom: 10, living: 35, dining: 20, generic: 25 }
-
-                    // Structural-change-only: zero rooms, keep property area for
-                    // repaint scope. Authority fee scaled down (single permit).
-                    if (isStructuralChange && !isSingleRoom) {
-                      estInputs.rooms = { ...emptyRooms }
-                      estInputs.doors = 0
-                      estInputs.wardrobes = 0
-                      estInputs.authorityFee = 5_000
-                      // Keep builtUpAreaSqm as the user's stated property size
-                      // so the painting allowance covers the affected area.
-                    }
-
-                    // Multi-room or single-room scope: accumulate matched rooms
-                    // so "kitchen and bathroom" prices both, not just the first.
-                    if (isSingleRoom) {
-                      const rooms = { ...emptyRooms }
-                      let area = 0
-                      let doors = 0
-                      let wardrobes = 0
-
-                      if (singleRoomKitchen)    { rooms.kitchen = 1;     area += ROOM_AREA_SQM.kitchen;    doors += 1 }
-                      if (singleRoomBathroom)   { rooms.bathroom = 1;    area += ROOM_AREA_SQM.bathroom;   doors += 1 }
-                      if (singleRoomPowderRoom) { /* no room rate, project base + small painting */ area += ROOM_AREA_SQM.powderRoom; doors += 1 }
-                      if (singleRoomBedroom)    { rooms.bedroom = 1;     area += ROOM_AREA_SQM.bedroom;    doors += 1; wardrobes += 1 }
-                      if (singleRoomMaid)       { rooms.maid_room = 1;   area += ROOM_AREA_SQM.maidRoom;   doors += 1 }
-                      if (singleRoomLiving)     { rooms.living_room = 1; area += ROOM_AREA_SQM.living;     doors += 1 }
-                      if (singleRoomDining)     { rooms.dining_room = 1; area += ROOM_AREA_SQM.dining;     doors += 1 }
-                      if (singleRoomGeneric && area === 0) {
-                        rooms.bedroom = 1; area = ROOM_AREA_SQM.generic; doors = 1; wardrobes = 1
-                      }
-
-                      // Paint-only overrides: when the verb is paint/repaint and
-                      // there's no other reno signal, drop wardrobes (no joinery)
-                      // and authority (no permit needed for paint). Keep room
-                      // rate at half so we capture prep + labor without
-                      // pricing a full reno.
-                      if (isPaintOnly) {
-                        wardrobes = 0
-                        // Half the room base rate by zeroing entries; then add a
-                        // flat per-room paint allowance via doors=0.
-                        estInputs.rooms = { ...emptyRooms }
-                        estInputs.doors = 0
-                        estInputs.wardrobes = 0
-                        estInputs.builtUpAreaSqm = area
-                        estInputs.authorityFee = 0
-                      } else {
-                        estInputs.rooms = rooms
-                        estInputs.builtUpAreaSqm = area
-                        estInputs.doors = doors
-                        estInputs.wardrobes = wardrobes
-                        // Single-room scope rarely needs full DM/Trakhees permit.
-                        // Scale fee down: 0 for paint-only, 5k for one room with
-                        // light utilities, 10k when 2+ rooms touched.
-                        estInputs.authorityFee = matchedRoomCount >= 2 ? 10_000 : 5_000
-                      }
-                    } else if (isPaintOnly) {
-                      // Whole-property paint job ("just paint my apartment"):
-                      // strip the room stack, keep the property area for the
-                      // painting allowance, drop authority + wardrobes + doors.
-                      estInputs.rooms = { ...emptyRooms }
-                      estInputs.doors = 0
-                      estInputs.wardrobes = 0
-                      estInputs.authorityFee = 0
-                    }
-                    const locationUsed = rawLocation || 'Dubai'
-                    const factor = locationFactor(locationUsed)
-
-                    // Compute the full breakdown at the selected finish tier...
-                    const selectedBreakdown = calculateEstimate(estInputs)
-
-                    // ...and also the final total at each finish tier, so the client
-                    // can render the 4-up comparison row without another round trip.
-                    const tiers: Record<FinishLevel, number> = {
-                      basic: 0,
-                      standard: 0,
-                      premium: 0,
-                      luxury: 0,
-                    }
-                    for (const tier of VALID_FINISH) {
-                      const tierBreakdown = calculateEstimate({ ...estInputs, finishLevel: tier })
-                      tiers[tier] = Math.round(tierBreakdown.finalBudgetAed * factor)
-                    }
-
+                  const result = inferEstimate({ knownFields, conversationText })
+                  if (result) {
+                    // Preserve the original SSE shape (no breaking changes for
+                    // the client). New `signals` and `overrides` fields are
+                    // added but the client ignores unknown keys.
                     send('estimator_ballpark', {
-                      inputs: estInputs,
-                      breakdown: selectedBreakdown,
-                      factor,
-                      finalAed: Math.round(selectedBreakdown.finalBudgetAed * factor),
-                      perSqmAed:
-                        estInputs.builtUpAreaSqm > 0
-                          ? Math.round((selectedBreakdown.finalBudgetAed * factor) / estInputs.builtUpAreaSqm)
-                          : 0,
-                      tiers,
-                      finishLevelUsed: finish,
-                      locationUsed,
-                      natureUsed,
-                      assumedFinish: !rawFinish,
-                      assumedLocation: !rawLocation,
-                      assumedNature,
+                      inputs: result.inputs,
+                      breakdown: result.breakdown,
+                      factor: result.factor,
+                      finalAed: result.finalAed,
+                      perSqmAed: result.perSqmAed,
+                      tiers: result.tiers,
+                      finishLevelUsed: result.finishLevelUsed,
+                      locationUsed: result.locationUsed,
+                      natureUsed: result.natureUsed,
+                      assumedFinish: result.assumedFinish,
+                      assumedLocation: result.assumedLocation,
+                      assumedNature: result.assumedNature,
+                      signals: result.signals,
+                      overrides: result.overrides,
                     })
                   }
                 }

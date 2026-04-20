@@ -289,16 +289,18 @@ function AdminDashboardContent() {
                 </div>
               ) : (
                 <Tooltip>
-                  <TooltipTrigger>
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      className="h-8 w-8 shrink-0 cursor-pointer rounded-lg"
-                      onClick={() => { setSearchOpen(true); setTimeout(() => searchInputRef.current?.focus(), 50) }}
-                    >
-                      <Search className="h-4 w-4" />
-                    </Button>
-                  </TooltipTrigger>
+                  <TooltipTrigger
+                    render={
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        className="h-8 w-8 shrink-0 cursor-pointer rounded-lg"
+                        onClick={() => { setSearchOpen(true); setTimeout(() => searchInputRef.current?.focus(), 50) }}
+                      >
+                        <Search className="h-4 w-4" />
+                      </Button>
+                    }
+                  />
                   <TooltipContent side="bottom">Search</TooltipContent>
                 </Tooltip>
               )}
@@ -335,38 +337,38 @@ function AdminDashboardContent() {
 
               {/* Sort icon */}
               <Tooltip>
-                <TooltipTrigger>
-                  <div>
-                    <Select value={sortKey} onValueChange={(v) => setSortKey(v as SortKey)}>
-                      <SelectTrigger className="h-8 w-8 p-0 border-0 shadow-none justify-center cursor-pointer rounded-lg hover:bg-accent [&>svg:last-child]:hidden">
-                        <ArrowUpDown className="h-4 w-4" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {SORT_OPTIONS.map((opt) => (
-                          <SelectItem key={opt.value} value={opt.value} className="text-xs">
-                            {opt.label}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </div>
+                <TooltipTrigger render={<span className="inline-flex" />}>
+                  <Select value={sortKey} onValueChange={(v) => setSortKey(v as SortKey)}>
+                    <SelectTrigger className="h-8 w-8 p-0 border-0 shadow-none justify-center cursor-pointer rounded-lg hover:bg-accent [&>svg:last-child]:hidden">
+                      <ArrowUpDown className="h-4 w-4" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {SORT_OPTIONS.map((opt) => (
+                        <SelectItem key={opt.value} value={opt.value} className="text-xs">
+                          {opt.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
                 </TooltipTrigger>
                 <TooltipContent side="bottom">Sort</TooltipContent>
               </Tooltip>
 
               {/* Refresh */}
               <Tooltip>
-                <TooltipTrigger>
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    className="h-8 w-8 shrink-0 cursor-pointer rounded-lg"
-                    onClick={handleRefresh}
-                    disabled={refreshing}
-                  >
-                    <RefreshCw className={`h-4 w-4 ${refreshing ? 'animate-spin' : ''}`} />
-                  </Button>
-                </TooltipTrigger>
+                <TooltipTrigger
+                  render={
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="h-8 w-8 shrink-0 cursor-pointer rounded-lg"
+                      onClick={handleRefresh}
+                      disabled={refreshing}
+                    >
+                      <RefreshCw className={`h-4 w-4 ${refreshing ? 'animate-spin' : ''}`} />
+                    </Button>
+                  }
+                />
                 <TooltipContent side="bottom">Refresh</TooltipContent>
               </Tooltip>
             </div>

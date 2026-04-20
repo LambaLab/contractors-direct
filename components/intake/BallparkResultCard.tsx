@@ -14,10 +14,11 @@ import {
   DialogTitle,
   DialogDescription,
 } from '@/components/ui/dialog'
-import { FINISH_LABELS, FINISH_ORDER } from '@/lib/estimator/rates'
+import { FINISH_LABELS } from '@/lib/estimator/rates'
 import type { FinishLevel } from '@/lib/estimator/types'
 import type { EstimatorBallparkPayload } from '@/hooks/useIntakeChat'
 import FinishLevelDetailsModal from './FinishLevelDetailsModal'
+import FinishTierComparison from './FinishTierComparison'
 
 type Props = {
   range: PriceRange
@@ -574,31 +575,12 @@ function EstimatorBallpark({
         <p className="text-[10px] tracking-[0.2em] uppercase text-[rgba(255,255,255,0.3)] mb-2">
           Compare finish levels
         </p>
-        <div className="grid grid-cols-4 gap-1.5">
-          {FINISH_ORDER.map((tier) => {
-            const isActive = tier === finishLevelUsed
-            return (
-              <button
-                key={tier}
-                type="button"
-                onClick={() => setModalTier(tier)}
-                className={`flex flex-col items-start gap-0.5 px-2.5 py-2 rounded-lg border text-left transition-all cursor-pointer ${
-                  isActive
-                    ? 'bg-[rgba(115,103,255,0.14)] border-[rgba(115,103,255,0.45)] text-white'
-                    : 'border-[rgba(255,255,255,0.08)] text-[rgba(255,255,255,0.7)] hover:border-[rgba(115,103,255,0.3)] hover:text-white'
-                }`}
-              >
-                <span className="text-[10px] uppercase tracking-widest opacity-70">
-                  {FINISH_LABELS[tier]}
-                </span>
-                <span className="text-xs sm:text-sm font-mono tabular-nums whitespace-nowrap">
-                  <span className="text-[10px] text-[#7367ff]/80 mr-1">AED</span>
-                  {fmtAed(tiers[tier])}
-                </span>
-              </button>
-            )
-          })}
-        </div>
+        <FinishTierComparison
+          tiers={tiers}
+          active={finishLevelUsed}
+          onSelect={(tier) => setModalTier(tier)}
+          theme="intake"
+        />
         <p className="text-[11px] text-[rgba(255,255,255,0.35)] mt-2">
           Tap a tier to see what it includes and the full breakdown.
         </p>
